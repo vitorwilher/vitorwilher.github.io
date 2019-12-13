@@ -1,0 +1,237 @@
+---
+title: "A Educação Superior sob a perspectiva liberal"
+subtitle: "IMIL Na Sala de Aula - Universidade Federal do Ceará"
+author: "Vítor Wilher"
+output: 
+  beamer_presentation:
+    #theme: "Boadilla"
+    slide_level: 2
+    fig_width: 8
+    fig_height: 4
+    fig_caption: true
+    citation_package: 'natbib'
+    includes:
+      in_header: beamer.txt
+      before_body: toc.txt
+bibliography: 'references.bib'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+```
+
+
+# Introdução 
+## Introdução
+
+Existem **três grandes mecanismos** pelos quais os mais ricos se apropriaram do Estado brasileiro de forma a tomar renda do conjunto da população. Chamamos isso de `rent-seeking`. São eles:
+
+- Aposentadorias generosas para servidores públicos;
+- Empréstimos subsidiados via bancos estatais;
+- Vagas em universidades estatais;
+
+Os dois primeiros mecanismos estão sendo ou foram atacados com a reforma da previdência e com a estipulação da TLP no BNDES. E o terceiro?
+
+# Um pouco de HPE
+## Um pouco de HPE
+
+Era uma vez um país que adotou o **modelo de substituição de importações** entre 1930-1980, inspirado por uma teoria desenvolvimentista que poucas linhas teceu sobre educação. Quando o governo federal investia em educação, era sempre em **educação superior**... 
+
+## Um pouco de HPE
+
+![Para começar a discussão...](figura01.png)
+
+## Um pouco de HPE
+
+No gráfico acima pode-se ver que em 1957 *esse país gastava por aluno estarrecedores 126 vezes mais em educação superior do que em educação fundamental*.^[A referência do gráfico pode ser vista em \href{http://bibliotecadigital.fgv.br/dspace/bitstream/handle/10438/110/2284.pdf?sequence=1}{\emph{Taxas de matrículas e gastos em educação no Brasil}}.] 
+
+## Um pouco de HPE
+
+A falta de investimento em educação básica, em conjunto com a hiperinflação, produziram uma das sociedades mais desiguais do mundo. Foi só, afinal, nos anos 1990 que o Brasil decidiu aprovar fundo específico [FUNDEF] para universalizar o acesso à educação fundamental. Atraso secular não apenas frente os países desenvolvidos, mas também em relação aos nossos vizinhos Argentina e Chile.
+
+# O estado atual
+## O estado atual
+
+Podemos pegar os dados da **OCDE** de modo a verificar o gasto com ensino superior e com ensino primário. A partir disso, podemos verificar como o Brasil se compara com a média de gastos desses países nos dois níveis de ensino.
+
+![Brasil gasta de forma errada](ocde.png)
+
+## O estado atual
+
+Por outro ângulo, podemos pegar agora Os dados do **INEP** e verificar a razão entre gasto com ensino superior e com ensino básico.
+
+```{r, echo=F, eval=T, results='asis', fig.width=8, fig.height=4, fig.align='center', out.width="1\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+inep = read.csv('inep.csv', header=TRUE, sep=';', dec=',')
+
+library(ggplot2)
+ggplot(inep, aes(ano, razao))+
+  geom_bar(stat="identity", colour='blue', fill='blue', width = .6)+
+  xlab('')+ylab('Razão')+
+  labs(title='Razão entre gastos públicos em ensino superior e básico',
+       subtitle='Fonte: Elaboração própria com dados do INEP')
+
+```
+
+## O estado atual
+
+Segundo o INEP, em 2015 (último dado disponível) o Estado brasileiro gastou cerca de R\$ 23.215 por aluno no ensino superior, enquanto no ensino básico esse gasto foi de R\$ 6.381. 
+
+\bigskip
+
+Como sugere a comparação internacional, há algo de errado com essa razão desproporcional...
+
+## O estado atual
+
+Brasil investe de forma errada, contrariando as evidências da literatura de economia da educação...
+
+![A Curva de Heckman](heckman.png)
+
+## O estado atual
+
+Para deixar claro: problema da educação básica no Brasil não é dinheiro, é má alocação de recursos. Como mostra o gráfico abaixo, nosso país já gasta mais do que a média da OCDE em educação. Mas continua gastando muito com educação superior e pouco com educação primária, como mostrado anteriormente. 
+
+\bigskip
+
+```{r, echo=F, eval=T, results='asis', fig.width=8, fig.height=4, fig.align='center', out.width="1\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+ocde = read.csv('ocde.csv',header=TRUE, sep=';', dec=',')
+ocde = ocde[complete.cases(ocde),]
+
+ggplot(ocde, aes(paises, totalgoverno))+
+  geom_bar(stat="identity", colour='blue', 
+           fill='blue', 
+           width = .6)+
+  geom_hline(yintercept=mean(ocde$totalgoverno), colour='red')+
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  xlab('')+ylab('% PIB')+
+  labs(title='Gasto público com educação (% PIB)',
+       subtitle='Fonte: Elaboração própria com dados da OCDE')
+```
+
+# O problema do bem público e das externalidades
+## O problema do bem público e das externalidades
+
+O gasto exagerado há décadas do Brasil feito em educação superior foi ineficaz para causar mais desenvolvimento e também acabou contribuindo com a construção de uma sociedade extremamente desigual. Por quê? 
+
+## O problema do bem público e das externalidades
+
+Em primeiro lugar, é preciso entender que a **educação superior** não pode ser considerada um **bem/serviço público**, pois não atende duas condições básicas relacionadas a tais bens:
+
+- o custo adicional por um indivíduo a mais se beneficiar do bem ser zero; 
+- ser muito difícil (senão impossível), excluir uma pessoa que esteja interessada em se beneficiar do bem.
+
+## O problema do bem público e das externalidades
+
+A iluminação de uma rua pode ser considerada um bem público, pois pouco importa se cem ou duzentas pessoas a utilizam: não há custo adicional por pessoa para prover a mesma. Além disso, é muito difícil excluir alguém de se beneficiar de tal iluminação. **Se não é um bem/serviço público, não deve ser financiado com impostos**.
+
+## O problema do bem público e das externalidades
+
+Isso dito, um ponto bastante citado entre os defensores do ensino superior gratuito é o de que o mesmo geraria externalidades positivas para o desenvolvimento econômico. Há, entretanto, um problema grave com essa tese. A forma de avaliar o impacto social da oferta de um determinado bem/serviço é comparando custos com benefícios. 
+
+## O problema do bem público e das externalidades
+
+Se os benefícios para a sociedade forem maiores do que os custos, faz sentido investir em um determinado bem/serviço. **O problema é que os benefícios do ensino superior são, em sua maioria, privadamente apropriados, dado um maior prêmio salarial auferido após a conclusão do curso**.
+
+## O problema do bem público e das externalidades
+
+Já que não é um bem público e os benefícios gerados pelo mesmo são, em sua maioria, privadamente apropriados, não faz o menor sentido subsidiar **todos os alunos** das universidades estatais.
+
+## O problema do bem público e das externalidades
+
+Ainda mais grave é financiar esse bem para apenas uma parcela menor das matrículas no ensino superior...
+
+\bigskip
+
+- Em 2002, Brasil tinha 3.479.913 matrículas no superior. Dessas, 30% eram em instituições públicas;
+
+- Em 2016, o número de matrículas avançou para 6.554.283. Dessas, 28,49% eram em instituições públicas. 
+
+\bigskip
+
+Mesmo com todos os investimentos feitos nas universidades estatais, o aumento líquido de matrículas entre 2002 e 2016 foi de apenas 815.822, enquanto na iniciativa privada esse aumento foi de 2.258.548.
+
+## O problema do bem público e das externalidades
+
+Subsidiar um bem tipicamente privado para pouco mais de um quarto das matrículas de ensino superior perpetua a desigualdade entre ricos e pobres. Enquanto aqueles se preparam em escolas básicas caras, tendo acesso às universidades estatais gratuitas, aos pobres restam as universidades privadas e os programas de financiamento.
+
+## O problema do bem público e das externalidades
+
+![Fonte: \href{http://mercadopopular.org/wp-content/uploads/2016/05/Goes-Duque-NPP-IMP.pdf}{Instituto Mercado Popular}](figura02.png)
+
+## O problema do bem público e das externalidades
+
+Além disso,
+
+\bigskip
+
+- limita as estratégias das universidades privadas. Como os alunos de maior renda conseguem as vagas das universidades estatais gratuitas, às privadas resta competir via preço pelos alunos mais pobres;
+
+- ao gastar mais de R$ 23 mil em termos per capita no ensino superior, sobra menos dinheiro para investir em educação básica, **onde estão concentradas as externalidades para o desenvolvimento econômico**.
+
+# O problema da restrição de recursos
+## O problema da restrição de recursos
+
+O problema se torna ainda mais grave na difícil conjuntura fiscal...
+
+![Gastos Públicos cresceram 6% a.a. em termos reais nos últimos 20 anos](figura03.png)
+
+## O problema da restrição de recursos
+
+![5 anos de déficit primário](figura04.png)
+
+
+# Cobrança de mensalidades é justa e justificável 
+## Cobrança de mensalidades é justa e justificável 
+
+O financiamento indevido de um bem que não é público, tendo seus benefícios apropriados de forma privada, em sua maioria, causa enormes distorções sobre o tecido econômico e social. Logo, **faz todo o sentido dissociar gratuidade de acesso ao ensino superior estatal, fazendo com que os mais ricos paguem pelo serviço**.
+
+## Cobrança de mensalidades é justa e justificável 
+
+Aos mais pobres, que não podem pagar, continuaria sendo dada a opção de gratuidade. Além de aliviar os cofres públicos, isso geraria maior competição entre as instituições, melhorando o serviço por elas prestado. 
+\bigskip
+
+Estimativas feitas pelo economista Gustavo Ioschpe dão conta de que a cobrança de mensalidades **para quem pode pagar** poderia gerar algo como R$ 7,4 bilhões.^[Ver o cálculo em \href{https://analisemacro.com.br/educacao/indicacao-de-leitura-sobre-educacao/universidade-gratuita-para-aluno-rico-e-aberracao-brasileira-por-gustavo-ioschpe/}{http://analisemacro.com.br}.] 
+
+# Conclusões
+## Conclusões
+
+- Brasil já gasta mais do que a OCDE em educação. O problema é que a razão entre gasto com ensino superior e ensino básico é desproporcional;
+
+- Por não ser um **bem público**, educação superior estatal deveria ser cobrada de quem pode pagar por ela;
+
+- Mesmo no auge do investimento público em educaçao superior no Brasil, aumento no número de matrículas deixou a desejar porque o sistema de educação estatal tem um custo por aluno muito elevado;
+
+- Cobrança de mensalidades em universidades estatais teria grande impacto no mercado privado, aumentando as opções estratégicas das universidades privadas.
+
+## Conclusões
+
+Por fim...
+
+\bigskip
+
+- Cobrar mensalidades em universidades estatais não tem nada a ver com privatização, tem a ver com resolver uma má alocação de recursos e com tornar o modelo educacional menos desigual;
+
+- Investir pesadamente em educação básica terá impactos significativos sobre o **desenvolvimento econômico** do país e sobre **igualdade de oportunidades**.
+
+# Slides disponíveis
+## Slides disponíveis
+
+\begin{center}
+\large{Obrigado!}
+\end{center}
+
+\bigskip
+
+\begin{center}
+Os slides e códigos dessa apresentação estarão disponíveis no Blog da Análise Macro amanhã:
+http://analisemacro.com.br/blog
+\end{center}
+
+![](logo.jpg)
