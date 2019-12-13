@@ -1,4 +1,5 @@
 ---
+---
 title: "A Educação Superior sob a perspectiva liberal"
 collection: talks
 type: "Palestra"
