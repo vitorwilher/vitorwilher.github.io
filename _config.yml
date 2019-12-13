@@ -73,7 +73,7 @@ analytics:
 # Site Author
 author:
   name             : "Vitor Wilher"
-  avatar           : "vweconomista.jpeg"
+  avatar           : "vweconomista.jpg"
   bio              : "Bacharel e Mestre em Economia, Especialista em Data Science, com foco em modelagem e previsão."
   location         : "Rio de Janeiro"
   employer         : "Análise Macro"
@@ -95,7 +95,7 @@ author:
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "vitorwilher"
-  orcid            : "http://orcid.org/yourorcidurl"
+  orcid            : 
   pinterest        :
   soundcloud       :
   stackoverflow    : # http://stackoverflow.com/users/123456/username
