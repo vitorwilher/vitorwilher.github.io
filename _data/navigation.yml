@@ -1,22 +1,16 @@
 # main links links
 main:
-  - title: "Publications"
+  - title: "Exercícios de Análise de Dados"
     url: /publications/
 
-  - title: "Talks"
+  - title: "Palestras"
     url: /talks/    
 
-  - title: "Teaching"
+  - title: "Cursos"
     url: /teaching/    
-    
-  - title: "Portfolio"
-    url: /portfolio/
-        
-  - title: "Blog Posts"
-    url: /year-archive/
-    
+      
   - title: "CV"
     url: /cv/
     
-  - title: "Guide"
+  - title: "Comentários de Conjuntura"
     url: /markdown/
