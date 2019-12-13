@@ -15,9 +15,9 @@ Formação
 * Mestre em Economia, Universidade Federal Fluminense, 2015
 * Especialista em Data Science, Johns Hopkins University, 2016
 
-Principais Experiências
+Últimas Experiências
 ======
-* 2015-Atual: Fundador e Cientista de Dados
+* 2015-Atual: Sócio-Fundador e Cientista de Dados
   * **Análise Macro**
 
 * 2015-2019: Conselheiro
