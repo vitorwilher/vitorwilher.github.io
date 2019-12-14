@@ -9,8 +9,6 @@ redirect_from:
 
 {% include base_path %}
 
-&nbsp;
-
 <h2><b>Vítor Wilher</b>, <i>Mestre em Economia e Cientista de Dados</i></h2>
 
 &nbsp;
