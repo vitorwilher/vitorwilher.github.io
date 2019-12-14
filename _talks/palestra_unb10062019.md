@@ -1,12 +1,12 @@
 ---
-title: "Por que cobrar mensalidades em universidades
-estatais?"
+title: "Mais Brasil, menos Brasília: um roteiro para o
+desenvolvimento econômico sustentável"
 collection: talks
 type: "Palestra"
-permalink: /talks/palestra_ufpel24042019
-venue: "Universidade Federal de Pelotas (UFPel)"
-date: 2019-04-24
-location: "Pelotas, PE"
+permalink: /talks/palestra_unb10062019
+venue: "Universidade de Brasília (UNB)"
+date: 2019-06-10
+location: "Brasília, DF"
 ---
 
-Palestra sobre por que cobrar mensalidades em universidades estatais. [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/ufpel24042019){:target="_blank"}.
+Palestra sobre desenvolvimento econômico. [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/ufpel24042019){:target="_blank"}.
