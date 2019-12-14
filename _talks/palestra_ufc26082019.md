@@ -8,4 +8,4 @@ date: 2019-08-26
 location: "Fortaleza, CE"
 ---
 
-Palestra sobre a educação superior no Brasil [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/ufc26082019).
+Palestra sobre a educação superior no Brasil [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/ufc26082019){:target="_blank"}.
