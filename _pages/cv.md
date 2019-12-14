@@ -11,7 +11,7 @@ redirect_from:
 
 &nbsp;
 
-<h2><b>Vítor Wilher</b>, <i>Mestre em Economia e Cientista de Dados</i></h2>
+<h2><b>Vítor Wilher</b></h2>, <h4><i>Mestre em Economia e Cientista de Dados</i></h4>
 
 &nbsp;
 
