@@ -1,7 +1,7 @@
 ---
 title: "Curso de Introdução ao R para Análise de Dados"
 collection: teaching
-type: "Curso Livre"
+type: "Curso de Data Science"
 permalink: /teaching/introd_ao_r
 venue: "Análise Macro"
 date: 2020-01-06
