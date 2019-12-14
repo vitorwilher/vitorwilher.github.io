@@ -4,7 +4,7 @@ collection: teaching
 type: "Curso Livre"
 permalink: /teaching/introd_ao_r
 venue: "Análise Macro"
-date: 2019-03-01
+date: 2020-01-06
 location: "On-line"
 ---
 
