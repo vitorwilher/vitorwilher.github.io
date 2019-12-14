@@ -9,6 +9,12 @@ redirect_from:
 
 {% include base_path %}
 
+Contatos
+======
+* **E-mail**: vitorwilher@analisemacro.com.br
+* **Telefone**: +55(21)96721-6813
+* **Endereço**: Rua Professor Avezedo Marques, 15/405, Leblon, Rio de Janeiro, CEP: 22430-030
+
 Formação
 ======
 * Bacharel em Economia, Universidade Federal Fluminense, 2012
@@ -40,19 +46,19 @@ Habilidades
 * Análise de Dados
   
 
-Publicações
+Exercícios de Análise de Dados
 ======
   <ul>{% for post in site.publications %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
   
-Palestras
+Palestras e Debates
 ======
   <ul>{% for post in site.talks %}
     {% include archive-single-talk-cv.html %}
   {% endfor %}</ul>
   
-Cursos
+Cursos Ministrados
 ======
   <ul>{% for post in site.teaching %}
     {% include archive-single-cv.html %}
