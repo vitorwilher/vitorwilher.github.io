@@ -9,4 +9,4 @@ date: 2019-06-10
 location: "Brasília, DF"
 ---
 
-Palestra sobre desenvolvimento econômico. [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/ufpel24042019){:target="_blank"}.
+Palestra sobre desenvolvimento econômico. [Material disponível aqui](https://github.com/vitorwilher/palestras/tree/master/unb10062019){:target="_blank"}.
