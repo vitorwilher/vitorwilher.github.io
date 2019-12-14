@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Exercícios"
+title: "Exercícios de Análise de Dados"
 permalink: /publications/
 author_profile: true
 ---
