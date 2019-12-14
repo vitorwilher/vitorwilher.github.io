@@ -3,7 +3,7 @@ title: "Violência no Rio: a economia importa?"
 collection: publications
 type: "Publicações"
 permalink: /publications/exercicio_cc69
-venue: "Edição 69 do `Clube do Código`"
+venue: "Edição 69 do Clube do Código"
 date: 2019-12-13
 ---
 
