@@ -11,8 +11,6 @@ redirect_from:
 
 <h2><b>Vítor Wilher</b>, <i>Mestre em Economia e Cientista de Dados</i></h2>
 
-&nbsp;
-
 Contatos
 ======
 * **E-mail**: vitorwilher@analisemacro.com.br
