@@ -19,11 +19,15 @@ Contatos
 * **Endereço Residencial**: Rua Professor Avezedo Marques, 15/405, Leblon, Rio de Janeiro, CEP 22430-030
 * **Endereço Profissional**: Rua Almirante Barroso, 81, 32º andar, Sala 32B114, Centro, Rio de Janeiro, CEP 20031-004
 
+&nbsp;
+
 Formação
 ======
 * Bacharel em Economia, Universidade Federal Fluminense, 2012
 * Mestre em Economia, Universidade Federal Fluminense, 2015
 * Especialista em Data Science, Johns Hopkins University, 2016
+
+&nbsp;
 
 Últimas Experiências
 ======
@@ -38,7 +42,9 @@ Formação
 
 * 2013-2014: Coordenador
   * **GECE/UFF**
-  
+
+&nbsp;
+
 Habilidades
 ======
 * R
@@ -49,19 +55,24 @@ Habilidades
 * Estatística
 * Análise de Dados
   
+&nbsp;
 
 Exercícios de Análise de Dados
 ======
   <ul>{% for post in site.publications %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-  
+
+&nbsp;
+
 Palestras e Debates
 ======
   <ul>{% for post in site.talks %}
     {% include archive-single-talk-cv.html %}
   {% endfor %}</ul>
-  
+
+&nbsp;
+
 Cursos Ministrados
 ======
   <ul>{% for post in site.teaching %}
