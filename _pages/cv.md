@@ -9,11 +9,14 @@ redirect_from:
 
 {% include base_path %}
 
+\\
+
 Contatos
 ======
 * **E-mail**: vitorwilher@analisemacro.com.br
 * **Telefone**: +55(21)96721-6813
-* **Endereço**: Rua Professor Avezedo Marques, 15/405, Leblon, Rio de Janeiro, CEP: 22430-030
+* **Endereço Residencial**: Rua Professor Avezedo Marques, 15/405, Leblon, Rio de Janeiro, CEP 22430-030
+* **Endereço Profissional**: Rua Almirante Barroso, 81, 32º andar, Sala 32B114, Centro, Rio de Janeiro, CEP 20031-004
 
 Formação
 ======
