@@ -12,11 +12,11 @@ redirect_from:
 
 ## Principais Atribuições atuais
 
-- Dá aulas `on-line` e `in-company` de econometria, estatística, análise de dados, macroeconomia e macroeconometria;
+- [Dá aulas](https://analisemacro.com.br/cursos/) `on-line` e `in-company` de econometria, estatística, análise de dados, macroeconomia e macroeconometria;
 - Escreve exercícios de análise de dados para o [Clube do Código](http://analisemacro.com.br/clube-do-código);
 - Escreve um [comentário de conjuntura](https://analisemacro.com.br/category/economia/comentario-de-conjuntura/) semanal, com foco educativo, de modo a mostrar como usar o R para analisar dados macroeconômicos;
-- Presta Consultoria em Análise de Dados;
-- Dá palestras sobre data science e conjuntura econômica.
+- Presta [Consultoria](https://analisemacro.com.br/para-sua-empresa/) em Análise de Dados;
+- Dá [palestras](https://vitorwilher.github.io/talks/) sobre data science e conjuntura econômica.
 
 ## Principais habilidades
 
