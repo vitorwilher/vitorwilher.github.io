@@ -9,7 +9,11 @@ redirect_from:
 
 {% include base_path %}
 
+&nbsp;
 
+**Vítor Wilher**, *Mestre em Economia e Cientista de Dados*
+
+&nbsp;
 
 Contatos
 ======
