@@ -3,14 +3,9 @@ main:
   - title: "Exercícios de Análise de Dados"
     url: /publications/
 
-  - title: "Palestras"
-    url: /talks/    
-
   - title: "Cursos"
     url: /teaching/    
       
   - title: "CV"
     url: /cv/
     
-  - title: "Comentário de Conjuntura"
-    url: /conjuntura/
