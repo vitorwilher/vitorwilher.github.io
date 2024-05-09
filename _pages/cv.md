@@ -17,7 +17,7 @@ Contatos
 * **E-mail**: vitorwilher@analisemacro.com.br
 * **Telefone**: +55(21)96721-6813
 * **Endereço Residencial**: Rua Professor Azevedo Marques, 15/405, Leblon, Rio de Janeiro, CEP 22430-030
-* **Endereço Profissional**: Rua Almirante Barroso, 81, 32º andar, Sala 32B114, Centro, Rio de Janeiro, CEP 20031-004
+* **Endereço Profissional**: Rua Visconde de Pirajá, 414, Sala 718, Ipanema, Rio de Janeiro – RJ – CEP: 22410-002
 
 &nbsp;
 
@@ -25,7 +25,8 @@ Formação
 ======
 * Bacharel em Economia, Universidade Federal Fluminense, 2012
 * Mestre em Economia, Universidade Federal Fluminense, 2015
-* Especialista em Data Science, Johns Hopkins University, 2016
+* Especialização em Data Science com Linguagem R, Johns Hopkins University [On-line], 2016
+* Business Intelligence Master - Sistemas Inteligentes de Apoio à Decisão em Negócios, PUC-Rio, 2025
 
 &nbsp;
 
