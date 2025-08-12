@@ -49,7 +49,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               : vitorwilherbr
+  username               : #vitorwilherbr
 facebook:
   username               : 
   app_id                 :
@@ -91,7 +91,7 @@ author:
   github           : "vitorwilher"
   google_plus      :
   keybase          :
-  instagram        : "vitorwilher"
+  instagram        : #"vitorwilher"
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "vitorwilher"
@@ -101,11 +101,11 @@ author:
   stackoverflow    : # http://stackoverflow.com/users/123456/username
   steam            :
   tumblr           :
-  twitter          : "vitorwilherbr"
+  twitter          : #"vitorwilherbr"
   vine             :
   weibo            :
   xing             :
-  youtube          :
+  youtube          : 
   wikipedia        :
 
 
