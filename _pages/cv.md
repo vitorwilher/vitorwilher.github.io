@@ -26,7 +26,8 @@ Formação
 * Bacharel em Economia, Universidade Federal Fluminense, 2012
 * Mestre em Economia, Universidade Federal Fluminense, 2015
 * Especialização em Data Science com Linguagem R, Johns Hopkins University [On-line], 2016
-* Business Intelligence Master - Sistemas Inteligentes de Apoio à Decisão em Negócios, PUC-Rio, 2025
+* Business Intelligence Master - Sistemas Inteligentes de Apoio à Decisão em Negócios, PUC-Rio, 2026
+* Master em IA Generativa & LLM, PUC-Rio, 2026
 
 &nbsp;
 
@@ -55,28 +56,8 @@ Habilidades
 * Machine Learning
 * Estatística
 * Análise de Dados
+* Inteligência Artificial
+* LLM
   
 &nbsp;
 
-Exercícios de Análise de Dados
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-
-&nbsp;
-
-Palestras e Debates
-======
-  <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
-  {% endfor %}</ul>
-
-&nbsp;
-
-Cursos Ministrados
-======
-  <ul>{% for post in site.teaching %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
