@@ -1,7 +1,7 @@
 ---
 permalink: /
 title: ""
-excerpt: "Vítor Wilher, *Mestre em Economia e Cientista de Dados*"
+excerpt: "Vítor Wilher, *Cientista de Dados e Mestre em Economia*"
 author_profile: true
 redirect_from: 
   - /about/
