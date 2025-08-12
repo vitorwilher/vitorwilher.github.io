@@ -8,23 +8,13 @@ redirect_from:
   - /about.html
 ---
 
-**Vítor Wilher** é Bacharel e Mestre em Economia, pela Universidade Federal Fluminense e Especialista em Data Science. Sua dissertação de mestrado foi na área de política monetária, titulada "Clareza da Comunicação do Banco Central e Expectativas de Inflação: evidências para o Brasil", defendida perante banca composta pelos professores Gustavo H. B. Franco (PUC-RJ), Gabriel Montes Caldas (UFF), Carlos Enrique Guanziroli (UFF) e Luciano Vereda Oliveira (UFF). Já trabalhou em grandes empresas, nas áreas de telecomunicações, energia elétrica, consultoria financeira e consultoria macroeconômica. Atualmente, é o Fundador e Cientista-Chefe da [Análise Macro](http://analisemacro.com.br).
+**Vítor Wilher** é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.
 
-## Principais Atribuições atuais
+Hard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa
 
-- [Dá aulas](https://analisemacro.com.br/cursos/) `on-line` e `in-company` de econometria, estatística, análise de dados, macroeconomia e macroeconometria;
-- Escreve exercícios de análise de dados para o [Clube AM](https://conteudosam.com.br/clube-am/);
-- Presta [Consultoria](https://analisemacro.com.br/para-sua-empresa/) em Análise de Dados;
+Soft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor
 
-## Principais habilidades
-
-- R
-- Python
-- SQL
-- Estatística
-- Econometria
-- Machine Learning
-- Análise de Dados
+Principal Interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.
 
 ## Consultas/Parcerias
 
