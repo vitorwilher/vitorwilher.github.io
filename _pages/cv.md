@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-<h2><b>Vítor Wilher</b>, <i>Mestre em Economia e Cientista de Dados</i></h2>
+<h2><b>Vítor Wilher</b>, <i>Cientista de Dados | Mestre em Economia | IA Generativa aplicada em Economia e Finanças </i></h2>
 &nbsp;
 
 Contatos
