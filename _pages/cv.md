@@ -33,7 +33,7 @@ Formação
 
 Últimas Experiências
 ======
-* 2015-Atual: Sócio-Fundador e Cientista de Dados
+* 2015-Atual: Cientista de Dados Chefe
   * **Análise Macro**
 
 * 2015-2019: Conselheiro
