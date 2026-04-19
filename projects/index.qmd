@@ -2,7 +2,6 @@
 title: "Projetos de Dados"
 listing:
   contents: "*.qmd"
-  exclude: index.qmd
   type: grid
   sort: "date desc"
   categories: true

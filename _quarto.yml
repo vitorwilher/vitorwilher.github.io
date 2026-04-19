@@ -4,6 +4,7 @@ project:
 
 website:
   title: "Portfólio do VW"
+  site-url: https://vitorwilher.github.io
   description: "Vítor Wilher — Cientista de Dados & Mestre em Economia"
   favicon: images/profile.png
   navbar:
