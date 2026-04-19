@@ -1,0 +1,22 @@
+[
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/posts/exemplo-rmd.html"
+    ]
+  },
+  {
+    "listing": "/research/index.html",
+    "items": []
+  },
+  {
+    "listing": "/projects/index.html",
+    "items": [
+      "/projects/bcb-dados.html"
+    ]
+  },
+  {
+    "listing": "/teaching/index.html",
+    "items": []
+  }
+]

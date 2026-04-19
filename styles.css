@@ -1,0 +1,27 @@
+/* Navbar */
+.navbar {
+  font-weight: 500;
+}
+
+/* Home - about template */
+#quarto-content .about-entity .about-image {
+  border-radius: 50%;
+  max-width: 200px;
+}
+
+/* Cards de projetos */
+.quarto-grid-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.quarto-grid-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+.nav-footer {
+  font-size: 0.85rem;
+  color: #666;
+}

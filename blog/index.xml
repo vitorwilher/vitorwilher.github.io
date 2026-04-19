@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Portfólio do VW</title>
+<link>https://vitorwilher.github.io/blog/</link>
+<atom:link href="https://vitorwilher.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
+<description>Vítor Wilher — Cientista de Dados &amp; Mestre em Economia</description>
+<generator>quarto-1.9.36</generator>
+<lastBuildDate>Sun, 19 Apr 2026 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Exemplo: Post em R Markdown</title>
+  <link>https://vitorwilher.github.io/blog/posts/exemplo-rmd.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Este é um post de exemplo em <code>.Rmd</code>. Você pode usar código R diretamente:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(mtcars, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> wt, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> mpg)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb1-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb1-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Peso vs Consumo"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Peso"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Milhas/galão"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb1-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://vitorwilher.github.io/blog/posts/exemplo-rmd_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Para adicionar um novo post, basta criar um arquivo <code>.qmd</code> ou <code>.Rmd</code> nesta pasta (<code>blog/posts/</code>) com o frontmatter acima.</p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <category>Exemplo</category>
+  <guid>https://vitorwilher.github.io/blog/posts/exemplo-rmd.html</guid>
+  <pubDate>Sun, 19 Apr 2026 03:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>
