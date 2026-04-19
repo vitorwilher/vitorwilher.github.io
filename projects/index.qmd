@@ -1,0 +1,12 @@
+---
+title: "Projetos de Dados"
+listing:
+  contents: "*.qmd"
+  exclude: index.qmd
+  type: grid
+  sort: "date desc"
+  categories: true
+  grid-columns: 2
+page-layout: full
+title-block-banner: false
+---

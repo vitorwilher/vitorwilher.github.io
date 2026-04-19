@@ -1,2 +1,10 @@
-_site/
+/_site/
+/.quarto/
+/_freeze/
+.Rproj.user
+.Rhistory
+.RData
+*.Rproj
+__pycache__/
+.DS_Store
 

@@ -1,0 +1,52 @@
+---
+title: "Curriculum Vitae"
+---
+
+## Vítor Wilher
+*Cientista de Dados | Mestre em Economia | IA Generativa aplicada em Economia e Finanças*
+
+---
+
+## Contatos
+
+- **E-mail**: vitorwilher@analisemacro.com.br
+- **LinkedIn**: [linkedin.com/in/vitorwilher](https://linkedin.com/in/vitorwilher)
+- **GitHub**: [github.com/vitorwilher](https://github.com/vitorwilher)
+- **Localização**: Rio de Janeiro, RJ
+
+---
+
+## Formação
+
+| Ano | Título | Instituição |
+|-----|--------|-------------|
+| 2026 | Master em IA Generativa & LLM | PUC-Rio |
+| 2026 | Business Intelligence Master | PUC-Rio |
+| 2016 | Especialização em Data Science com R | Johns Hopkins University (on-line) |
+| 2015 | Mestre em Economia | Universidade Federal Fluminense |
+| 2012 | Bacharel em Economia | Universidade Federal Fluminense |
+
+---
+
+## Experiência
+
+### Cientista de Dados Chefe · Análise Macro *(2015 – atual)*
+Liderança técnica de projetos de ciência de dados aplicados à economia e finanças, com foco crescente em IA Generativa e LLMs.
+
+### Conselheiro · Instituto Millenium *(2015 – 2019)*
+
+### Professor Visitante · Universidade Veiga de Almeida *(2015 – 2016)*
+
+### Coordenador · GECE/UFF *(2013 – 2014)*
+
+---
+
+## Habilidades
+
+**Linguagens**: R · Python · SQL
+
+**Métodos**: Econometria · Machine Learning · NLP · Deep Learning · Séries Temporais
+
+**IA**: Prompt Engineering · LLMs · IA Generativa · RAG · Agentes
+
+**Ferramentas**: Quarto · Git · Docker

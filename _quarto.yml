@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Portfólio do VW"
+  description: "Vítor Wilher — Cientista de Dados & Mestre em Economia"
+  favicon: images/profile.png
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: cv.qmd
+        text: CV
+      - href: blog/index.qmd
+        text: Blog
+      - href: projects/index.qmd
+        text: Projetos
+      - href: teaching/index.qmd
+        text: Cursos
+      - href: research/index.qmd
+        text: Pesquisas
+    right:
+      - icon: github
+        href: https://github.com/vitorwilher
+      - icon: linkedin
+        href: https://linkedin.com/in/vitorwilher
+  page-footer:
+    center: "© 2026 Vítor Wilher · [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br)"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 2
+
+execute:
+  freeze: auto

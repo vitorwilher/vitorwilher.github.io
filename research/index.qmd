@@ -1,0 +1,11 @@
+---
+title: "Pesquisas"
+listing:
+  contents: "*.qmd"
+  exclude: index.qmd
+  type: default
+  sort: "date desc"
+  categories: true
+page-layout: full
+title-block-banner: false
+---
