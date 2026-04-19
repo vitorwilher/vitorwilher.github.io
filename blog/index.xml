@@ -9,8 +9,8 @@
 <link>https://vitorwilher.github.io/blog/</link>
 <atom:link href="https://vitorwilher.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Vítor Wilher — Cientista de Dados &amp; Mestre em Economia</description>
-<generator>quarto-1.9.36</generator>
-<lastBuildDate>Sun, 19 Apr 2026 03:00:00 GMT</lastBuildDate>
+<generator>quarto-1.9.37</generator>
+<lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Exemplo: Post em R Markdown</title>
   <link>https://vitorwilher.github.io/blog/posts/exemplo-rmd.html</link>
@@ -77,7 +77,7 @@ font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
   <category>R</category>
   <category>Exemplo</category>
   <guid>https://vitorwilher.github.io/blog/posts/exemplo-rmd.html</guid>
-  <pubDate>Sun, 19 Apr 2026 03:00:00 GMT</pubDate>
+  <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

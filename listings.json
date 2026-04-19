@@ -1,11 +1,5 @@
 [
   {
-    "listing": "/blog/index.html",
-    "items": [
-      "/blog/posts/exemplo-rmd.html"
-    ]
-  },
-  {
     "listing": "/research/index.html",
     "items": []
   },
@@ -18,5 +12,11 @@
   {
     "listing": "/teaching/index.html",
     "items": []
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/posts/exemplo-rmd.html"
+    ]
   }
 ]

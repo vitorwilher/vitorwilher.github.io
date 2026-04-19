@@ -1,5 +1,68 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Portfólio do VW",
+    "section": "",
+    "text": "Vítor Wilher é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.\n\nCaso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail vitorwilher@analisemacro.com.br."
+  },
+  {
+    "objectID": "blog/posts/exemplo-rmd.html",
+    "href": "blog/posts/exemplo-rmd.html",
+    "title": "Exemplo: Post em R Markdown",
+    "section": "",
+    "text": "Este é um post de exemplo em .Rmd. Você pode usar código R diretamente:\n\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point() +\n  labs(title = \"Peso vs Consumo\", x = \"Peso\", y = \"Milhas/galão\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPara adicionar um novo post, basta criar um arquivo .qmd ou .Rmd nesta pasta (blog/posts/) com o frontmatter acima."
+  },
+  {
+    "objectID": "research/index.html",
+    "href": "research/index.html",
+    "title": "Pesquisas",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
+    "objectID": "projects/index.html",
+    "href": "projects/index.html",
+    "title": "Projetos de Dados",
+    "section": "",
+    "text": "Dados do Banco Central do Brasil\n\n\n\nR\n\nBCB\n\nMacroeconomia\n\n\n\nColeta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).\n\n\n\n\n\n\nJan 1, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/bcb-dados.html",
+    "href": "projects/bcb-dados.html",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "",
+    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
+  },
+  {
+    "objectID": "projects/bcb-dados.html#sobre-o-projeto",
+    "href": "projects/bcb-dados.html#sobre-o-projeto",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "",
+    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
+  },
+  {
+    "objectID": "projects/bcb-dados.html#tecnologias",
+    "href": "projects/bcb-dados.html#tecnologias",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "Tecnologias",
+    "text": "Tecnologias\n\nR com pacotes rbcb, tidyverse e ggplot2\nAutomação de coleta via API REST"
+  },
+  {
+    "objectID": "projects/bcb-dados.html#repositório",
+    "href": "projects/bcb-dados.html#repositório",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "Repositório",
+    "text": "Repositório\ngithub.com/vitorwilher/bcb-dados"
+  },
+  {
+    "objectID": "teaching/index.html",
+    "href": "teaching/index.html",
+    "title": "Cursos",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
     "objectID": "cv.html",
     "href": "cv.html",
     "title": "Curriculum Vitae",
@@ -47,68 +110,5 @@
     "title": "Blog",
     "section": "",
     "text": "Exemplo: Post em R Markdown\n\n\n\nR\n\nExemplo\n\n\n\nPost de exemplo mostrando como usar .Rmd no blog.\n\n\n\n\n\nApr 19, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Portfólio do VW",
-    "section": "",
-    "text": "Vítor Wilher é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.\n\nCaso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail vitorwilher@analisemacro.com.br."
-  },
-  {
-    "objectID": "projects/bcb-dados.html",
-    "href": "projects/bcb-dados.html",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
-  },
-  {
-    "objectID": "projects/bcb-dados.html#sobre-o-projeto",
-    "href": "projects/bcb-dados.html#sobre-o-projeto",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
-  },
-  {
-    "objectID": "projects/bcb-dados.html#tecnologias",
-    "href": "projects/bcb-dados.html#tecnologias",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "Tecnologias",
-    "text": "Tecnologias\n\nR com pacotes rbcb, tidyverse e ggplot2\nAutomação de coleta via API REST"
-  },
-  {
-    "objectID": "projects/bcb-dados.html#repositório",
-    "href": "projects/bcb-dados.html#repositório",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "Repositório",
-    "text": "Repositório\ngithub.com/vitorwilher/bcb-dados"
-  },
-  {
-    "objectID": "research/index.html",
-    "href": "research/index.html",
-    "title": "Pesquisas",
-    "section": "",
-    "text": "No matching items"
-  },
-  {
-    "objectID": "projects/index.html",
-    "href": "projects/index.html",
-    "title": "Projetos de Dados",
-    "section": "",
-    "text": "Dados do Banco Central do Brasil\n\n\n\nR\n\nBCB\n\nMacroeconomia\n\n\n\nColeta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).\n\n\n\n\n\n\nJan 1, 2026\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "blog/posts/exemplo-rmd.html",
-    "href": "blog/posts/exemplo-rmd.html",
-    "title": "Exemplo: Post em R Markdown",
-    "section": "",
-    "text": "Este é um post de exemplo em .Rmd. Você pode usar código R diretamente:\n\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point() +\n  labs(title = \"Peso vs Consumo\", x = \"Peso\", y = \"Milhas/galão\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPara adicionar um novo post, basta criar um arquivo .qmd ou .Rmd nesta pasta (blog/posts/) com o frontmatter acima."
-  },
-  {
-    "objectID": "teaching/index.html",
-    "href": "teaching/index.html",
-    "title": "Cursos",
-    "section": "",
-    "text": "No matching items"
   }
 ]
