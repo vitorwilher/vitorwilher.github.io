@@ -1,0 +1,41 @@
+---
+title: "ROI Diagnóstico — Dashboard de Marketing & Vendas"
+date: "2026-04-21"
+categories: [Python, Shiny, Marketing, CRM, Dados]
+description: "Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI."
+image: "../images/profile.png"
+---
+
+## Sobre o projeto
+
+O **ROI Diagnóstico** é um dashboard executivo construído em Python + Shiny for Python que consolida dados de múltiplas plataformas em uma única interface, permitindo análise integrada de marketing, vendas e relacionamento com clientes.
+
+## Funcionalidades
+
+- **Finanças** — Receita bruta, taxas Pagarme, lucro líquido e ROI mensal
+- **Produtos** — Análise por curso, top/bottom 5 e evolução mensal dos 10 principais produtos
+- **Marketing** — Google Analytics (sessões, canais, landing pages), Tráfego Pago (ROAS, CAC, campanhas ativas) e E-mail (ConvertKit)
+- **Comercial** — Funil de vendas por coorte, leads por mês e cruzamento CRM × WooCommerce
+- **Clientes** — Busca por e-mail, LTV, Ticket Médio e classificação (Premium / Mediano / Iniciante)
+
+## Integrações
+
+| Plataforma | Dados |
+|---|---|
+| WooCommerce | Pedidos, receita, produtos, clientes |
+| Pagarme | Taxas, antecipações, recebíveis |
+| Meta Ads | Campanhas, gasto, ROAS, CAC |
+| Google Analytics 4 | Sessões, canais, landing pages |
+| Kommo CRM | Leads, funil, taxa de conversão |
+| ConvertKit | Broadcasts, open rate, base de assinantes |
+
+## Tecnologias
+
+- **Python** — Shiny for Python, Pandas, Matplotlib, NumPy
+- **APIs REST** — WooCommerce, Pagarme v5, Meta Graph API, Kommo, ConvertKit
+- **Google Analytics** — Data API v1 (service account)
+- **Cache** — Parquet com TTL de 6 horas
+
+## Repositório
+
+[github.com/vitorwilher/vitorwilher.github.io](https://github.com/vitorwilher/vitorwilher.github.io)
