@@ -1,22 +1,17 @@
 [
   {
-    "listing": "/research/index.html",
-    "items": []
-  },
-  {
-    "listing": "/projects/index.html",
-    "items": [
-      "/projects/bcb-dados.html"
-    ]
-  },
-  {
     "listing": "/teaching/index.html",
     "items": []
   },
   {
-    "listing": "/blog/index.html",
+    "listing": "/research/index.html",
+    "items": []
+  },
+  {
+    "listing": "/projetos/index.html",
     "items": [
-      "/blog/posts/exemplo-rmd.html"
+      "/projetos/exemplo-rmd.html",
+      "/projetos/bcb-dados.html"
     ]
   }
 ]
