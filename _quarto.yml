@@ -13,9 +13,7 @@ website:
         text: Home
       - href: cv.qmd
         text: CV
-      - href: blog/index.qmd
-        text: Blog
-      - href: projects/index.qmd
+      - href: projetos/index.qmd
         text: Projetos
       - href: teaching/index.qmd
         text: Cursos

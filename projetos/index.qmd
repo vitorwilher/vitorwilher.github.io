@@ -1,10 +1,12 @@
 ---
-title: "Projetos de Dados"
+title: "Projetos"
 listing:
-  contents: "*.qmd"
-  type: grid
+  contents: "*.{qmd,Rmd}"
   sort: "date desc"
+  type: grid
   categories: true
+  sort-ui: true
+  filter-ui: true
   grid-columns: 2
 page-layout: full
 title-block-banner: false

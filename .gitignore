@@ -7,6 +7,13 @@
 *.Rproj
 __pycache__/
 .DS_Store
+.env
 
 
 **/*.quarto_ipynb
+
+# ROI Diagnostico — dados sensíveis e cache
+projetos/ROI_Diagnostico/data/*.parquet
+projetos/ROI_Diagnostico/ga4_credentials.json
+projetos/ROI_Diagnostico/__pycache__/
+projetos/ROI_Diagnostico/**/__pycache__/
