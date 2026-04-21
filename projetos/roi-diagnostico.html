@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-04-21">
+<meta name="description" content="Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.">
 
-<title>Projetos – Portfólio do VW</title>
+<title>ROI Diagnóstico — Dashboard de Marketing &amp; Vendas – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -34,8 +36,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/profile.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,65 +73,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -162,7 +104,7 @@ window.Quarto = {
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../projetos/index.html" aria-current="page"> 
+    <a class="nav-link" href="../projetos/index.html"> 
 <span class="menu-text">Projetos</span></a>
   </li>  
   <li class="nav-item">
@@ -193,25 +135,53 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q1JN">CRM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGFkb3M=">Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RXhlbXBsbw==">Exemplo <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFya2V0aW5n">Marketing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(2)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sobre-o-projeto" id="toc-sobre-o-projeto" class="nav-link active" data-scroll-target="#sobre-o-projeto">Sobre o projeto</a></li>
+  <li><a href="#funcionalidades" id="toc-funcionalidades" class="nav-link" data-scroll-target="#funcionalidades">Funcionalidades</a></li>
+  <li><a href="#integrações" id="toc-integrações" class="nav-link" data-scroll-target="#integrações">Integrações</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#repositório" id="toc-repositório" class="nav-link" data-scroll-target="#repositório">Repositório</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Projetos</h1>
+<h1 class="title">ROI Diagnóstico — Dashboard de Marketing &amp; Vendas</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Shiny</div>
+    <div class="quarto-category">Marketing</div>
+    <div class="quarto-category">CRM</div>
+    <div class="quarto-category">Dados</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 21, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,139 +191,74 @@ window.Quarto = {
 </header>
 
 
+<section id="sobre-o-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-projeto">Sobre o projeto</h2>
+<p>O <strong>ROI Diagnóstico</strong> é um dashboard executivo construído em Python + Shiny for Python que consolida dados de múltiplas plataformas em uma única interface, permitindo análise integrada de marketing, vendas e relacionamento com clientes.</p>
+</section>
+<section id="funcionalidades" class="level2">
+<h2 class="anchored" data-anchor-id="funcionalidades">Funcionalidades</h2>
+<ul>
+<li><strong>Finanças</strong> — Receita bruta, taxas Pagarme, lucro líquido e ROI mensal</li>
+<li><strong>Produtos</strong> — Análise por curso, top/bottom 5 e evolução mensal dos 10 principais produtos</li>
+<li><strong>Marketing</strong> — Google Analytics (sessões, canais, landing pages), Tráfego Pago (ROAS, CAC, campanhas ativas) e E-mail (ConvertKit)</li>
+<li><strong>Comercial</strong> — Funil de vendas por coorte, leads por mês e cruzamento CRM × WooCommerce</li>
+<li><strong>Clientes</strong> — Busca por e-mail, LTV, Ticket Médio e classificação (Premium / Mediano / Iniciante)</li>
+</ul>
+</section>
+<section id="integrações" class="level2">
+<h2 class="anchored" data-anchor-id="integrações">Integrações</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Plataforma</th>
+<th>Dados</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>WooCommerce</td>
+<td>Pedidos, receita, produtos, clientes</td>
+</tr>
+<tr class="even">
+<td>Pagarme</td>
+<td>Taxas, antecipações, recebíveis</td>
+</tr>
+<tr class="odd">
+<td>Meta Ads</td>
+<td>Campanhas, gasto, ROAS, CAC</td>
+</tr>
+<tr class="even">
+<td>Google Analytics 4</td>
+<td>Sessões, canais, landing pages</td>
+</tr>
+<tr class="odd">
+<td>Kommo CRM</td>
+<td>Leads, funil, taxa de conversão</td>
+</tr>
+<tr class="even">
+<td>ConvertKit</td>
+<td>Broadcasts, open rate, base de assinantes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<ul>
+<li><strong>Python</strong> — Shiny for Python, Pandas, Matplotlib, NumPy</li>
+<li><strong>APIs REST</strong> — WooCommerce, Pagarme v5, Meta Graph API, Kommo, ConvertKit</li>
+<li><strong>Google Analytics</strong> — Data API v1 (service account)</li>
+<li><strong>Cache</strong> — Parquet com TTL de 6 horas</li>
+</ul>
+</section>
+<section id="repositório" class="level2">
+<h2 class="anchored" data-anchor-id="repositório">Repositório</h2>
+<p><a href="https://github.com/vitorwilher/vitorwilher.github.io">github.com/vitorwilher/vitorwilher.github.io</a></p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-    <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-    <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-      <option value="" disabled="" selected="" hidden="">Order By</option>
-      <option value="index" data-direction="asc">Default</option>
-      <option value="listing-title" data-direction="asc">
-        Title
-      </option>
-      <option value="listing-date-sort" data-direction="asc">
-        Date - Oldest
-      </option>
-      <option value="listing-date-sort" data-direction="desc">
-        Date - Newest
-      </option>
-      <option value="listing-author" data-direction="asc">
-        Author
-      </option>
-    </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDU2hpbnklMkNNYXJrZXRpbmclMkNDUk0lMkNEYWRvcw==" data-listing-date-sort="1776729600000" data-listing-file-modified-sort="1776769975385" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="197">
-<a href="../projetos/roi-diagnostico.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../images/profile.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-ROI Diagnóstico — Dashboard de Marketing &amp; Vendas
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U2hpbnk='); return false;">Shiny</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFya2V0aW5n'); return false;">Marketing</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q1JN'); return false;">CRM</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGFkb3M='); return false;">Dados</div>
-
-</div>
-<div class="card-text listing-description delink">
-<p>Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.</p>
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-
-</div>
-<div class="listing-date">
-Apr 21, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="UiUyQ0V4ZW1wbG8=" data-listing-date-sort="1776556800000" data-listing-file-modified-sort="1776769975385" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="59">
-<a href="../projetos/exemplo-rmd.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="exemplo-rmd_files/figure-html/unnamed-chunk-1-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Exemplo: Post em R Markdown
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RXhlbXBsbw=='); return false;">Exemplo</div>
-
-</div>
-<div class="card-text listing-description delink">
-<p>Post de exemplo mostrando como usar .Rmd no blog.</p>
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-
-</div>
-<div class="listing-date">
-Apr 19, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="UiUyQ0JDQiUyQ01hY3JvZWNvbm9taWE=" data-listing-date-sort="1767225600000" data-listing-file-modified-sort="1776769975385" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="40">
-<a href="../projetos/bcb-dados.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../images/profile.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Dados do Banco Central do Brasil
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QkNC'); return false;">BCB</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-</div>
-<div class="card-text listing-description delink">
-<p>Coleta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).</p>
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-
-</div>
-<div class="listing-date">
-Jan 1, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

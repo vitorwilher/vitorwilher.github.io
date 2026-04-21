@@ -2,30 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://vitorwilher.github.io/index.html</loc>
-    <lastmod>2026-04-21T11:11:26.306Z</lastmod>
+    <lastmod>2026-04-21T11:12:55.382Z</lastmod>
   </url>
   <url>
-    <loc>https://vitorwilher.github.io/projetos/bcb-dados.html</loc>
-    <lastmod>2026-04-21T11:11:26.308Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorwilher.github.io/cv.html</loc>
-    <lastmod>2026-04-21T11:11:26.303Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorwilher.github.io/teaching/index.html</loc>
-    <lastmod>2026-04-21T11:11:26.308Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorwilher.github.io/research/index.html</loc>
-    <lastmod>2026-04-21T11:11:26.308Z</lastmod>
+    <loc>https://vitorwilher.github.io/projetos/roi-diagnostico.html</loc>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
   </url>
   <url>
     <loc>https://vitorwilher.github.io/projetos/exemplo-rmd.html</loc>
-    <lastmod>2026-04-21T11:11:26.308Z</lastmod>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorwilher.github.io/research/index.html</loc>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorwilher.github.io/teaching/index.html</loc>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorwilher.github.io/cv.html</loc>
+    <lastmod>2026-04-21T11:12:55.381Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorwilher.github.io/projetos/bcb-dados.html</loc>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
   </url>
   <url>
     <loc>https://vitorwilher.github.io/projetos/index.html</loc>
-    <lastmod>2026-04-21T11:11:26.308Z</lastmod>
+    <lastmod>2026-04-21T11:12:55.385Z</lastmod>
   </url>
 </urlset>

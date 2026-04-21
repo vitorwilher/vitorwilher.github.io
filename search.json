@@ -7,32 +7,67 @@
     "text": "Vítor Wilher é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.\n\nCaso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail vitorwilher@analisemacro.com.br."
   },
   {
-    "objectID": "projetos/bcb-dados.html",
-    "href": "projetos/bcb-dados.html",
-    "title": "Dados do Banco Central do Brasil",
+    "objectID": "projetos/roi-diagnostico.html",
+    "href": "projetos/roi-diagnostico.html",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
     "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
+    "text": "O ROI Diagnóstico é um dashboard executivo construído em Python + Shiny for Python que consolida dados de múltiplas plataformas em uma única interface, permitindo análise integrada de marketing, vendas e relacionamento com clientes."
   },
   {
-    "objectID": "projetos/bcb-dados.html#sobre-o-projeto",
-    "href": "projetos/bcb-dados.html#sobre-o-projeto",
-    "title": "Dados do Banco Central do Brasil",
+    "objectID": "projetos/roi-diagnostico.html#sobre-o-projeto",
+    "href": "projetos/roi-diagnostico.html#sobre-o-projeto",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
     "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
+    "text": "O ROI Diagnóstico é um dashboard executivo construído em Python + Shiny for Python que consolida dados de múltiplas plataformas em uma única interface, permitindo análise integrada de marketing, vendas e relacionamento com clientes."
   },
   {
-    "objectID": "projetos/bcb-dados.html#tecnologias",
-    "href": "projetos/bcb-dados.html#tecnologias",
-    "title": "Dados do Banco Central do Brasil",
+    "objectID": "projetos/roi-diagnostico.html#funcionalidades",
+    "href": "projetos/roi-diagnostico.html#funcionalidades",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
+    "section": "Funcionalidades",
+    "text": "Funcionalidades\n\nFinanças — Receita bruta, taxas Pagarme, lucro líquido e ROI mensal\nProdutos — Análise por curso, top/bottom 5 e evolução mensal dos 10 principais produtos\nMarketing — Google Analytics (sessões, canais, landing pages), Tráfego Pago (ROAS, CAC, campanhas ativas) e E-mail (ConvertKit)\nComercial — Funil de vendas por coorte, leads por mês e cruzamento CRM × WooCommerce\nClientes — Busca por e-mail, LTV, Ticket Médio e classificação (Premium / Mediano / Iniciante)"
+  },
+  {
+    "objectID": "projetos/roi-diagnostico.html#integrações",
+    "href": "projetos/roi-diagnostico.html#integrações",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
+    "section": "Integrações",
+    "text": "Integrações\n\n\n\nPlataforma\nDados\n\n\n\n\nWooCommerce\nPedidos, receita, produtos, clientes\n\n\nPagarme\nTaxas, antecipações, recebíveis\n\n\nMeta Ads\nCampanhas, gasto, ROAS, CAC\n\n\nGoogle Analytics 4\nSessões, canais, landing pages\n\n\nKommo CRM\nLeads, funil, taxa de conversão\n\n\nConvertKit\nBroadcasts, open rate, base de assinantes"
+  },
+  {
+    "objectID": "projetos/roi-diagnostico.html#tecnologias",
+    "href": "projetos/roi-diagnostico.html#tecnologias",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
     "section": "Tecnologias",
-    "text": "Tecnologias\n\nR com pacotes rbcb, tidyverse e ggplot2\nAutomação de coleta via API REST"
+    "text": "Tecnologias\n\nPython — Shiny for Python, Pandas, Matplotlib, NumPy\nAPIs REST — WooCommerce, Pagarme v5, Meta Graph API, Kommo, ConvertKit\nGoogle Analytics — Data API v1 (service account)\nCache — Parquet com TTL de 6 horas"
   },
   {
-    "objectID": "projetos/bcb-dados.html#repositório",
-    "href": "projetos/bcb-dados.html#repositório",
-    "title": "Dados do Banco Central do Brasil",
+    "objectID": "projetos/roi-diagnostico.html#repositório",
+    "href": "projetos/roi-diagnostico.html#repositório",
+    "title": "ROI Diagnóstico — Dashboard de Marketing & Vendas",
     "section": "Repositório",
-    "text": "Repositório\ngithub.com/vitorwilher/bcb-dados"
+    "text": "Repositório\ngithub.com/vitorwilher/vitorwilher.github.io"
+  },
+  {
+    "objectID": "projetos/exemplo-rmd.html",
+    "href": "projetos/exemplo-rmd.html",
+    "title": "Exemplo: Post em R Markdown",
+    "section": "",
+    "text": "Este é um post de exemplo em .Rmd. Você pode usar código R diretamente:\n\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point() +\n  labs(title = \"Peso vs Consumo\", x = \"Peso\", y = \"Milhas/galão\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPara adicionar um novo post, basta criar um arquivo .qmd ou .Rmd nesta pasta (blog/posts/) com o frontmatter acima."
+  },
+  {
+    "objectID": "research/index.html",
+    "href": "research/index.html",
+    "title": "Pesquisas",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
+    "objectID": "teaching/index.html",
+    "href": "teaching/index.html",
+    "title": "Cursos",
+    "section": "",
+    "text": "No matching items"
   },
   {
     "objectID": "cv.html",
@@ -77,31 +112,38 @@
     "text": "Habilidades\nLinguagens: R · Python · SQL\nMétodos: Econometria · Machine Learning · NLP · Deep Learning · Séries Temporais\nIA: Prompt Engineering · LLMs · IA Generativa · RAG · Agentes\nFerramentas: Quarto · Git · Docker"
   },
   {
-    "objectID": "teaching/index.html",
-    "href": "teaching/index.html",
-    "title": "Cursos",
+    "objectID": "projetos/bcb-dados.html",
+    "href": "projetos/bcb-dados.html",
+    "title": "Dados do Banco Central do Brasil",
     "section": "",
-    "text": "No matching items"
+    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
   },
   {
-    "objectID": "research/index.html",
-    "href": "research/index.html",
-    "title": "Pesquisas",
+    "objectID": "projetos/bcb-dados.html#sobre-o-projeto",
+    "href": "projetos/bcb-dados.html#sobre-o-projeto",
+    "title": "Dados do Banco Central do Brasil",
     "section": "",
-    "text": "No matching items"
+    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
   },
   {
-    "objectID": "projetos/exemplo-rmd.html",
-    "href": "projetos/exemplo-rmd.html",
-    "title": "Exemplo: Post em R Markdown",
-    "section": "",
-    "text": "Este é um post de exemplo em .Rmd. Você pode usar código R diretamente:\n\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point() +\n  labs(title = \"Peso vs Consumo\", x = \"Peso\", y = \"Milhas/galão\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPara adicionar um novo post, basta criar um arquivo .qmd ou .Rmd nesta pasta (blog/posts/) com o frontmatter acima."
+    "objectID": "projetos/bcb-dados.html#tecnologias",
+    "href": "projetos/bcb-dados.html#tecnologias",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "Tecnologias",
+    "text": "Tecnologias\n\nR com pacotes rbcb, tidyverse e ggplot2\nAutomação de coleta via API REST"
+  },
+  {
+    "objectID": "projetos/bcb-dados.html#repositório",
+    "href": "projetos/bcb-dados.html#repositório",
+    "title": "Dados do Banco Central do Brasil",
+    "section": "Repositório",
+    "text": "Repositório\ngithub.com/vitorwilher/bcb-dados"
   },
   {
     "objectID": "projetos/index.html",
     "href": "projetos/index.html",
     "title": "Projetos",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nExemplo: Post em R Markdown\n\n\n\nR\n\nExemplo\n\n\n\nPost de exemplo mostrando como usar .Rmd no blog.\n\n\n\n\n\n\nApr 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nDados do Banco Central do Brasil\n\n\n\nR\n\nBCB\n\nMacroeconomia\n\n\n\nColeta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).\n\n\n\n\n\n\nJan 1, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nROI Diagnóstico — Dashboard de Marketing & Vendas\n\n\n\nPython\n\nShiny\n\nMarketing\n\nCRM\n\nDados\n\n\n\nDashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.\n\n\n\n\n\n\nApr 21, 2026\n\n\n\n\n\n\n\n\n\n\n\nExemplo: Post em R Markdown\n\n\n\nR\n\nExemplo\n\n\n\nPost de exemplo mostrando como usar .Rmd no blog.\n\n\n\n\n\n\nApr 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nDados do Banco Central do Brasil\n\n\n\nR\n\nBCB\n\nMacroeconomia\n\n\n\nColeta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).\n\n\n\n\n\n\nJan 1, 2026\n\n\n\n\n\n\nNo matching items"
   }
 ]

@@ -1,15 +1,16 @@
 [
   {
-    "listing": "/teaching/index.html",
+    "listing": "/research/index.html",
     "items": []
   },
   {
-    "listing": "/research/index.html",
+    "listing": "/teaching/index.html",
     "items": []
   },
   {
     "listing": "/projetos/index.html",
     "items": [
+      "/projetos/roi-diagnostico.html",
       "/projetos/exemplo-rmd.html",
       "/projetos/bcb-dados.html"
     ]
