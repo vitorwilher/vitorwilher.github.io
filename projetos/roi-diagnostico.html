@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-04-21">
-<meta name="description" content="Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.">
+<meta name="dcterms.date" content="2026-04-22">
+<meta name="description" content="Arquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e dashboard interativo em Shiny for Python.">
 
-<title>ROI Diagnóstico — Dashboard de Marketing &amp; Vendas – Portfólio do VW</title>
+<title>ROI Diagnóstico — Plataforma de Inteligência Comercial – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,6 +24,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -143,11 +178,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#sobre-o-projeto" id="toc-sobre-o-projeto" class="nav-link active" data-scroll-target="#sobre-o-projeto">Sobre o projeto</a></li>
-  <li><a href="#funcionalidades" id="toc-funcionalidades" class="nav-link" data-scroll-target="#funcionalidades">Funcionalidades</a></li>
-  <li><a href="#integrações" id="toc-integrações" class="nav-link" data-scroll-target="#integrações">Integrações</a></li>
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
+  <li><a href="#arquitetura-de-dados" id="toc-arquitetura-de-dados" class="nav-link" data-scroll-target="#arquitetura-de-dados">Arquitetura de Dados</a></li>
+  <li><a href="#orquestração-github-actions" id="toc-orquestração-github-actions" class="nav-link" data-scroll-target="#orquestração-github-actions">Orquestração — GitHub Actions</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#dashboard-abas" id="toc-dashboard-abas" class="nav-link" data-scroll-target="#dashboard-abas">Dashboard — Abas</a></li>
+  <li><a href="#infraestrutura-de-deploy" id="toc-infraestrutura-de-deploy" class="nav-link" data-scroll-target="#infraestrutura-de-deploy">Infraestrutura de Deploy</a></li>
+  <li><a href="#problemas-resolvidos" id="toc-problemas-resolvidos" class="nav-link" data-scroll-target="#problemas-resolvidos">Problemas Resolvidos</a></li>
   <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
-  <li><a href="#repositório" id="toc-repositório" class="nav-link" data-scroll-target="#repositório">Repositório</a></li>
+  <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos Passos</a></li>
   </ul>
 </nav>
     </div>
@@ -156,19 +198,22 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ROI Diagnóstico — Dashboard de Marketing &amp; Vendas</h1>
+<h1 class="title">ROI Diagnóstico — Plataforma de Inteligência Comercial</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Shiny</div>
+    <div class="quarto-category">Engenharia de Dados</div>
+    <div class="quarto-category">DuckDB</div>
+    <div class="quarto-category">GCS</div>
+    <div class="quarto-category">GitHub Actions</div>
     <div class="quarto-category">Marketing</div>
     <div class="quarto-category">CRM</div>
-    <div class="quarto-category">Dados</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Dashboard interativo que integra WooCommerce, Meta Ads, GA4, Pagarme, Kommo CRM e ConvertKit para diagnóstico completo de ROI.
+    Arquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e dashboard interativo em Shiny for Python.
   </div>
 </div>
 
@@ -179,7 +224,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 21, 2026</p>
+      <p class="date">April 22, 2026</p>
     </div>
   </div>
   
@@ -191,69 +236,573 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sobre-o-projeto" class="level2">
-<h2 class="anchored" data-anchor-id="sobre-o-projeto">Sobre o projeto</h2>
-<p>O <strong>ROI Diagnóstico</strong> é um dashboard executivo construído em Python + Shiny for Python que consolida dados de múltiplas plataformas em uma única interface, permitindo análise integrada de marketing, vendas e relacionamento com clientes.</p>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>O <strong>ROI Diagnóstico</strong> é uma plataforma de inteligência comercial construída para consolidar em um único ambiente interativo os dados de vendas, tráfego pago, analytics, CRM, gateway de pagamento e e-mail marketing de um negócio digital de educação.</p>
+<p>O projeto cobre o ciclo completo de engenharia de dados: <strong>coleta → validação → armazenamento → processamento → visualização</strong>, com infraestrutura 100% em nuvem e pipeline automatizado.</p>
+<hr>
 </section>
-<section id="funcionalidades" class="level2">
-<h2 class="anchored" data-anchor-id="funcionalidades">Funcionalidades</h2>
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<p>Negócios digitais que vendem cursos e infoprodutos operam com dados espalhados em seis ou mais plataformas distintas. Cada uma tem seu próprio painel, suas próprias métricas e sua própria lógica de atribuição. O problema prático: nenhuma se fala.</p>
+<p>O resultado é que o gestor precisa abrir seis abas, exportar planilhas manualmente e ainda não tem certeza se está comparando o mesmo período, a mesma definição de “receita” ou o mesmo cliente. O ROI Diagnóstico resolve isso consolidando tudo em uma interface única, atualizada diariamente e acessível de qualquer dispositivo.</p>
+<p><strong>Perguntas respondidas pelo dashboard:</strong></p>
 <ul>
-<li><strong>Finanças</strong> — Receita bruta, taxas Pagarme, lucro líquido e ROI mensal</li>
-<li><strong>Produtos</strong> — Análise por curso, top/bottom 5 e evolução mensal dos 10 principais produtos</li>
-<li><strong>Marketing</strong> — Google Analytics (sessões, canais, landing pages), Tráfego Pago (ROAS, CAC, campanhas ativas) e E-mail (ConvertKit)</li>
-<li><strong>Comercial</strong> — Funil de vendas por coorte, leads por mês e cruzamento CRM × WooCommerce</li>
-<li><strong>Clientes</strong> — Busca por e-mail, LTV, Ticket Médio e classificação (Premium / Mediano / Iniciante)</li>
+<li>Qual o ROI real das campanhas, descontando taxas de processamento e antecipação?</li>
+<li>Quais cursos geraram mais receita? Qual o ticket médio e LTV por produto?</li>
+<li>Quão eficiente é o funil de vendas — de lead a cliente convertido?</li>
+<li>Quem são os clientes de maior LTV e como contatá-los?</li>
+<li>Qual landing page converte mais sessões em receita?</li>
 </ul>
+<hr>
 </section>
-<section id="integrações" class="level2">
-<h2 class="anchored" data-anchor-id="integrações">Integrações</h2>
+<section id="metodologia-crisp-dm" class="level2">
+<h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
+<p>O projeto foi estruturado seguindo o processo <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), adaptado para engenharia de dados e analytics operacional.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="crisp_dm.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Diagrama CRISP-DM — ROI Diagnóstico</figcaption>
+</figure>
+</div>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Plataforma</th>
-<th>Dados</th>
+<th>Fase</th>
+<th>Aplicação no Projeto</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>WooCommerce</td>
-<td>Pedidos, receita, produtos, clientes</td>
+<td><strong>1. Entendimento do Negócio</strong></td>
+<td>Mapeamento das 6 plataformas, definição das métricas-chave (ROI, ROAS, LTV, CAC, taxa de conversão) e das perguntas que o dashboard precisa responder</td>
 </tr>
 <tr class="even">
-<td>Pagarme</td>
-<td>Taxas, antecipações, recebíveis</td>
+<td><strong>2. Entendimento dos Dados</strong></td>
+<td>Exploração das APIs, identificação de schemas divergentes, granularidades diferentes (pedido vs.&nbsp;sessão vs.&nbsp;lead) e lacunas históricas</td>
 </tr>
 <tr class="odd">
-<td>Meta Ads</td>
-<td>Campanhas, gasto, ROAS, CAC</td>
+<td><strong>3. Preparação dos Dados</strong></td>
+<td>Pipeline com validação Pandera, refresh incremental com sobreposição de 3 dias, deduplicação por chave natural, normalização de tipos de data</td>
 </tr>
 <tr class="even">
-<td>Google Analytics 4</td>
-<td>Sessões, canais, landing pages</td>
+<td><strong>4. Modelagem</strong></td>
+<td>Queries SQL via DuckDB sobre Parquet: ROI diário, ROAS por campanha, LTV por cliente, funil de conversão, JOIN CRM × WooCommerce</td>
 </tr>
 <tr class="odd">
-<td>Kommo CRM</td>
-<td>Leads, funil, taxa de conversão</td>
+<td><strong>5. Avaliação</strong></td>
+<td>Validação dos KPIs com stakeholders, identificação e correção de bugs (taxas negativas de reembolso, incompatibilidades de tipo Pandera 0.31, merge de datas heterogêneas)</td>
 </tr>
 <tr class="even">
-<td>ConvertKit</td>
-<td>Broadcasts, open rate, base de assinantes</td>
+<td><strong>6. Implantação</strong></td>
+<td>GitHub Actions (cron diário), Google Cloud Storage (persistência), shinyapps.io (dashboard público)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="arquitetura-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura-de-dados">Arquitetura de Dados</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="architecture_pipeline.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Pipeline de Dados — ROI Diagnóstico</figcaption>
+</figure>
+</div>
+<p>O pipeline é composto por <strong>cinco camadas independentes</strong>:</p>
+<section id="camada-1-fontes-de-dados" class="level3">
+<h3 class="anchored" data-anchor-id="camada-1-fontes-de-dados">Camada 1 — Fontes de Dados</h3>
+<p>Seis APIs REST cobertas por conectores Python dedicados, cada um encapsulando autenticação, paginação e parsing de resposta:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fonte</th>
+<th>API</th>
+<th>Dados Coletados</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>WooCommerce</strong></td>
+<td>REST API v3</td>
+<td>Pedidos, receita, produtos, e-mail e telefone do cliente</td>
+</tr>
+<tr class="even">
+<td><strong>Pagarme</strong></td>
+<td>API v5</td>
+<td>Taxas de processamento, antecipações, recebíveis por competência</td>
+</tr>
+<tr class="odd">
+<td><strong>Meta Ads</strong></td>
+<td>Graph API v19</td>
+<td>Campanhas, investimento, impressões, cliques, compras atribuídas, ROAS</td>
+</tr>
+<tr class="even">
+<td><strong>Google Analytics 4</strong></td>
+<td>Data API v1</td>
+<td>Sessões, usuários, canais de aquisição, conversões, landing pages</td>
+</tr>
+<tr class="odd">
+<td><strong>Kommo CRM</strong></td>
+<td>REST API</td>
+<td>Leads, status do funil, data de criação, e-mail do contato</td>
+</tr>
+<tr class="even">
+<td><strong>ConvertKit</strong></td>
+<td>API v3</td>
+<td>Broadcasts, open rate, click rate, tamanho da base</td>
+</tr>
+</tbody>
+</table>
+<p>Histórico disponível desde <strong>janeiro de 2019</strong> (WooCommerce/Pagarme) e <strong>janeiro de 2024</strong> (Meta Ads, GA4, Kommo, ConvertKit).</p>
+</section>
+<section id="camada-2-ingestão-e-validação" class="level3">
+<h3 class="anchored" data-anchor-id="camada-2-ingestão-e-validação">Camada 2 — Ingestão e Validação</h3>
+<p>Cada conector retorna um <code>pd.DataFrame</code> validado por um schema <strong>Pandera</strong>. O <code>data/loader.py</code> implementa <strong>refresh incremental</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lê data máxima do cache → busca apenas dados novos</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> latest_date_in_cache <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">3</span>)  <span class="co"># 3 dias de sobreposição</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> connector.fetch(start, today)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df     <span class="op">=</span> merge_incremental(df_existing, df_new, dedup_cols<span class="op">=</span>[<span class="st">"order_id"</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>save(df)  <span class="co"># persiste localmente e no GCS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Vantagem: o primeiro refresh é completo (histórico desde 2019); os subsequentes buscam apenas dias recentes, levando segundos.</p>
+</section>
+<section id="camada-3-armazenamento-google-cloud-storage" class="level3">
+<h3 class="anchored" data-anchor-id="camada-3-armazenamento-google-cloud-storage">Camada 3 — Armazenamento (Google Cloud Storage)</h3>
+<p>Os dados são persistidos em <strong>Google Cloud Storage</strong> no formato Parquet, permitindo que qualquer instância do app (local ou no servidor) carregue os dados sem depender de chamadas de API:</p>
+<pre><code>gs://roi-diagnostico-parquet/
+└── raw/
+    ├── woo/latest.parquet
+    ├── pagarme/latest.parquet
+    ├── meta/latest.parquet
+    ├── ga4/latest.parquet
+    ├── ga4_pages/latest.parquet
+    ├── payables/latest.parquet
+    ├── kommo/latest.parquet
+    ├── convertkit/latest.parquet
+    └── woo_items/latest.parquet</code></pre>
+<p>A camada <code>storage/gcs.py</code> abstrai completamente o acesso, com fallback para disco local via variável <code>ROI_STORAGE</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># local (desenvolvimento)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ROI_STORAGE<span class="op">=</span>local   → data<span class="op">/*</span>.parquet</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># produção</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ROI_STORAGE<span class="op">=</span>gcs     → gs:<span class="op">//</span>roi<span class="op">-</span>diagnostico<span class="op">-</span>parquet<span class="op">/</span>raw<span class="op">/*/</span>latest.parquet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>No startup do servidor (cold start), o app detecta ausência de Parquet local e carrega automaticamente do GCS — sem intervenção manual.</p>
+</section>
+<section id="camada-4-processamento-duckdb" class="level3">
+<h3 class="anchored" data-anchor-id="camada-4-processamento-duckdb">Camada 4 — Processamento (DuckDB)</h3>
+<p>O módulo <code>db/models.py</code> substitui o <code>metrics/calculator.py</code> original por queries SQL executadas via <strong>DuckDB in-process</strong> diretamente sobre os arquivos Parquet locais:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> query_roi(start: date, end: date) <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _q(<span class="ss">f"""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ss">    WITH orders AS (</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ss">        SELECT date, SUM(total) AS revenue</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ss">        FROM read_parquet('</span><span class="sc">{</span>_p(<span class="st">"woo"</span>)<span class="sc">}</span><span class="ss">')</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ss">        WHERE date BETWEEN '</span><span class="sc">{</span>start<span class="sc">}</span><span class="ss">' AND '</span><span class="sc">{</span>end<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ss">        GROUP BY date</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ss">    ),</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ss">    fees AS (</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ss">        SELECT date,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ss">               SUM(fee) AS pagarme_fee,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ss">               SUM(anticipation_fee) AS anticipation_fee</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ss">        FROM read_parquet('</span><span class="sc">{</span>_p(<span class="st">"payables"</span>)<span class="sc">}</span><span class="ss">')</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ss">        WHERE date BETWEEN '</span><span class="sc">{</span>start<span class="sc">}</span><span class="ss">' AND '</span><span class="sc">{</span>end<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="ss">        GROUP BY date</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ss">    ),</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="ss">    ...</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="ss">    """</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>DuckDB elimina a necessidade de carregar todos os dados em memória — executa filtros e agregações diretamente no Parquet, com desempenho comparável a bancos colunares.</p>
+<p><strong>Queries implementadas:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>query_roi(start, end)</code></td>
+<td>Receita, taxas, lucro líquido, ROI por dia</td>
+</tr>
+<tr class="even">
+<td><code>query_summary(start, end)</code></td>
+<td>KPIs consolidados do período</td>
+</tr>
+<tr class="odd">
+<td><code>query_roas(start, end)</code></td>
+<td>ROAS, CPC, CPA por campanha</td>
+</tr>
+<tr class="even">
+<td><code>query_channels(start, end)</code></td>
+<td>Sessões e conversões por canal GA4</td>
+</tr>
+<tr class="odd">
+<td><code>query_leads(start, end)</code></td>
+<td>Funil CRM por coorte de criação</td>
+</tr>
+<tr class="even">
+<td><code>query_crm_woo()</code></td>
+<td>JOIN leads × pedidos (email matching)</td>
+</tr>
+<tr class="odd">
+<td><code>query_client(email)</code></td>
+<td>Perfil completo do cliente</td>
+</tr>
+<tr class="even">
+<td><code>query_top_products(start, end, n)</code></td>
+<td>Ranking de produtos por receita</td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="camada-5-serving-shiny-for-python" class="level3">
+<h3 class="anchored" data-anchor-id="camada-5-serving-shiny-for-python">Camada 5 — Serving (Shiny for Python)</h3>
+<p>O <code>app.py</code> original de 1.300+ linhas foi refatorado para ~170 linhas usando o <strong>sistema de módulos do Shiny for Python</strong>. Cada aba é um módulo independente com sua própria UI e servidor:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># app.py — registro de módulos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>server_financas (<span class="st">"fin"</span>,  start_date<span class="op">=</span>start_date, end_date<span class="op">=</span>end_date, loaded<span class="op">=</span>loaded)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>server_produtos (<span class="st">"prod"</span>, loaded<span class="op">=</span>loaded)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>server_marketing(<span class="st">"mkt"</span>,  start_date<span class="op">=</span>start_date, end_date<span class="op">=</span>end_date,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 loaded<span class="op">=</span>loaded, campanhas<span class="op">=</span>campanhas)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>server_comercial(<span class="st">"crm"</span>,  loaded<span class="op">=</span>loaded)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>server_clientes (<span class="st">"cli"</span>,  loaded<span class="op">=</span>loaded)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="orquestração-github-actions" class="level2">
+<h2 class="anchored" data-anchor-id="orquestração-github-actions">Orquestração — GitHub Actions</h2>
+<p>O pipeline de ingestão diária roda no <strong>GitHub Actions</strong> (free tier), sem necessidade de servidor dedicado:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .github/workflows/daily_pipeline.yml</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">schedule</span><span class="kw">:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">cron</span><span class="kw">:</span><span class="at"> </span><span class="st">"0 12 * * *"</span><span class="co">   # 09:00 BRT = 12:00 UTC</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span><span class="co">         # disparo manual via UI</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingest</span><span class="kw">:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-python@v5</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">python-version</span><span class="kw">:</span><span class="at"> </span><span class="st">"3.13"</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> pip install -r requirements.txt</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> echo '${{ secrets.GCS_CREDENTIALS_JSON }}' &gt; ga4_credentials.json</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> python pipeline/run_pipeline.py</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Todas as credenciais estão armazenadas como <strong>GitHub Secrets</strong> — nenhuma chave é versionada no repositório.</p>
+<p><strong>Resultado:</strong> 9 fontes de dados atualizadas diariamente às 09:00 BRT, com logs de execução públicos e alertas de falha por e-mail.</p>
+<hr>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>ROI_Diagnostico/
+│
+├── app.py                       # Shiny app (~170 linhas, modular)
+│
+├── connectors/                  # Conectores por fonte de dados
+│   ├── woocommerce.py           # WooCommerce REST API v3 + WooOrderSchema
+│   ├── pagarme.py               # Pagarme API v5 + PagarmeOrderSchema
+│   ├── meta_ads.py              # Meta Graph API v19 + check_token()
+│   ├── ga4.py                   # GA4 Data API v1 + GA4TrafficSchema
+│   ├── kommo.py                 # Kommo CRM REST API + KommoLeadSchema
+│   └── convertkit.py            # ConvertKit API v3 + ConvertKitSchema
+│
+├── data/
+│   └── loader.py                # Cache GCS/local + refresh incremental
+│
+├── db/
+│   ├── engine.py                # DuckDB connection factory
+│   └── models.py                # Queries SQL sobre Parquet
+│
+├── storage/
+│   └── gcs.py                   # Abstração GCS/local (ROI_STORAGE env)
+│
+├── modules/                     # Módulos Shiny por aba
+│   ├── financas.py
+│   ├── produtos.py
+│   ├── marketing.py
+│   ├── comercial.py
+│   ├── clientes.py
+│   └── utils.py                 # fmt_brl(), kpi_card(), big_kpi()
+│
+├── pipeline/
+│   └── run_pipeline.py          # Script do GitHub Actions
+│
+├── .github/
+│   └── workflows/
+│       └── daily_pipeline.yml   # Cron 09:00 BRT
+│
+├── requirements.txt
+└── .env                         # Credenciais (não versionado)</code></pre>
+<hr>
+</section>
+<section id="dashboard-abas" class="level2">
+<h2 class="anchored" data-anchor-id="dashboard-abas">Dashboard — Abas</h2>
+<section id="finanças" class="level3">
+<h3 class="anchored" data-anchor-id="finanças">1. Finanças</h3>
+<p>Visão macro do negócio no período selecionado.</p>
+<p><strong>KPIs:</strong> Receita Bruta · Taxa Pagarme · Taxa de Antecipação · Receita Líquida · Lucro Bruto (margem 30%) · Gasto em Ads · Lucro Líquido · ROI · ROAS · Total de Pedidos · Sessões</p>
+<p><strong>Fórmulas:</strong></p>
+<pre><code>Receita Líquida = Receita Bruta − Taxa Pagarme − Taxa Antecipação
+Lucro Bruto     = Receita Líquida × 0.30
+Lucro Líquido   = Lucro Bruto − Gasto em Ads
+ROI             = Lucro Líquido / Gasto em Ads × 100
+ROAS            = Receita Atribuída Meta / Gasto em Ads</code></pre>
+<p><strong>Gráfico:</strong> Barras mensais com receita, taxas, lucro e gasto sobrepostos.</p>
+<hr>
+</section>
+<section id="produtos" class="level3">
+<h3 class="anchored" data-anchor-id="produtos">2. Produtos</h3>
+<p><strong>Bloco 1 — Análise por Curso:</strong> Receita total, quantidade vendida, ticket médio e evolução mensal do curso selecionado.</p>
+<p><strong>Bloco 2 — Top 5 / Bottom 5:</strong> Ranking de produtos mais e menos vendidos no período.</p>
+<p><strong>Bloco 3 — Top 10 Histórico:</strong> Área empilhada com os 10 cursos de maior receita, mostrando composição ao longo do tempo.</p>
+<hr>
+</section>
+<section id="marketing" class="level3">
+<h3 class="anchored" data-anchor-id="marketing">3. Marketing</h3>
+<p><strong>Google Analytics:</strong> KPIs de sessões e conversões; gráfico de canais ao longo do tempo; tabela de top landing pages.</p>
+<p><strong>Tráfego Pago (Meta Ads):</strong> Tabela de campanhas do mês corrente com investimento, vendas, receita atribuída, CAC e ROAS (código de cores verde/amarelo/vermelho); gráfico investimento vs.&nbsp;receita por mês.</p>
+<p><strong>E-mail (ConvertKit):</strong> KPIs de base, open rate médio e click rate médio; tabela de broadcasts.</p>
+<hr>
+</section>
+<section id="comercial-crm" class="level3">
+<h3 class="anchored" data-anchor-id="comercial-crm">4. Comercial (CRM)</h3>
+<p>Análise de funil por <strong>coorte de criação de lead</strong>: dos leads criados no período, qual é o status atual?</p>
+<p><strong>KPIs:</strong> Total de leads · Convertidos · Taxa de conversão · Em aberto · Em negociação · Perdidos</p>
+<p><strong>Gráfico de Funil:</strong> 5 etapas com percentuais sobre o total da coorte.</p>
+<p><strong>Gráfico de Leads por Mês:</strong> Evolução mensal de criação de leads, separados por status.</p>
+<hr>
+</section>
+<section id="clientes" class="level3">
+<h3 class="anchored" data-anchor-id="clientes">5. Clientes</h3>
+<p>Busca individual por e-mail com perfil completo: nome, telefone/WhatsApp, classificação (Premium / Mediano / Iniciante), LTV, ticket médio, número de pedidos e histórico de cursos adquiridos.</p>
+<hr>
+</section>
+</section>
+<section id="infraestrutura-de-deploy" class="level2">
+<h2 class="anchored" data-anchor-id="infraestrutura-de-deploy">Infraestrutura de Deploy</h2>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│              INFRAESTRUTURA DE PRODUÇÃO                 │
+├──────────────────┬──────────────────┬───────────────────┤
+│  GitHub Actions  │  Google Cloud    │  shinyapps.io     │
+│  (Orquestração)  │  Storage (GCS)   │  (Dashboard)      │
+├──────────────────┼──────────────────┼───────────────────┤
+│  Cron 09:00 BRT  │  9 Parquets      │  Shiny for Python │
+│  Python 3.13     │  ~2 MB total     │  Free tier        │
+│  19 secrets      │  Service account │  vitorwilher      │
+│  Free tier       │  basedosdados-   │  .shinyapps.io    │
+│                  │  343517          │                   │
+└──────────────────┴──────────────────┴───────────────────┘</code></pre>
+<p><strong>Fluxo de atualização:</strong></p>
+<pre><code>GitHub Actions (09:00 BRT)
+  └── Busca APIs com refresh incremental
+  └── Valida schemas com Pandera
+  └── Salva Parquet no GCS
+
+shinyapps.io (cold start)
+  └── Detecta data/ vazio
+  └── Baixa Parquet do GCS via gcsfs
+  └── DuckDB queries sobre Parquet local
+  └── Dashboard renderizado</code></pre>
+<p><strong>Redeploy do dashboard</strong> (quando necessário):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rsconnect</span> deploy shiny . <span class="at">-n</span> vitorwilher <span class="at">--title</span> <span class="st">"ROI Diagnóstico"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="problemas-resolvidos" class="level2">
+<h2 class="anchored" data-anchor-id="problemas-resolvidos">Problemas Resolvidos</h2>
+<section id="app.py-monolítico-1.300-linhas" class="level3">
+<h3 class="anchored" data-anchor-id="app.py-monolítico-1.300-linhas">1. app.py monolítico (1.300+ linhas)</h3>
+<p><strong>Problema:</strong> Todo o código de UI, servidor, gráficos e cálculos em um único arquivo, impossível de manter.</p>
+<p><strong>Solução:</strong> Refatoração para sistema de módulos Shiny (<code>@module.ui</code> / <code>@module.server</code>). Cada aba virou um módulo independente; o <code>app.py</code> caiu para ~170 linhas.</p>
+<hr>
+</section>
+<section id="parquet-local-perdido-no-redeploy" class="level3">
+<h3 class="anchored" data-anchor-id="parquet-local-perdido-no-redeploy">2. Parquet local perdido no redeploy</h3>
+<p><strong>Problema:</strong> Os arquivos <code>.parquet</code> precisavam ser empacotados junto com o deploy no shinyapps.io. A cada novo deploy (ou reinício do servidor), os dados se perdiam.</p>
+<p><strong>Solução:</strong> Google Cloud Storage como camada de persistência. No cold start, o app detecta <code>data/</code> vazio e carrega automaticamente do GCS. O bundle de deploy não precisa incluir dados.</p>
+<hr>
+</section>
+<section id="refresh-manual-sem-pipeline-automatizado" class="level3">
+<h3 class="anchored" data-anchor-id="refresh-manual-sem-pipeline-automatizado">3. Refresh manual sem pipeline automatizado</h3>
+<p><strong>Problema:</strong> A atualização dos dados dependia de o usuário clicar no botão “Atualizar dados” no dashboard.</p>
+<p><strong>Solução:</strong> GitHub Actions com cron diário às 09:00 BRT. O pipeline roda independentemente do dashboard estar aberto ou não.</p>
+<hr>
+</section>
+<section id="token-meta-ads-expirando-silenciosamente" class="level3">
+<h3 class="anchored" data-anchor-id="token-meta-ads-expirando-silenciosamente">4. Token Meta Ads expirando silenciosamente</h3>
+<p><strong>Problema:</strong> O token da Meta Graph API tem validade de ~60 dias. Com o token expirado, as chamadas falhavam silenciosamente — o cache antigo era usado sem aviso.</p>
+<p><strong>Solução:</strong> - <code>check_token()</code> em <code>connectors/meta_ads.py</code>: consulta o endpoint <code>/debug_token</code> da Meta e retorna dias restantes - <code>meta_token_banner</code> no <code>app.py</code>: banner vermelho (≤ 7 dias ou inválido) ou laranja (≤ 14 dias) - <code>token_exchange.sh</code>: troca automática de token curto por long-lived token (60 dias) via Graph API</p>
+<hr>
+</section>
+<section id="pandera-0.31-incompatibilidade-de-tipo-pa.date" class="level3">
+<h3 class="anchored" data-anchor-id="pandera-0.31-incompatibilidade-de-tipo-pa.date">5. Pandera 0.31 — incompatibilidade de tipo <code>pa.Date</code></h3>
+<p><strong>Problema:</strong> <code>pa.Date</code> com <code>coerce=True</code> no Pandera 0.31 não conseguia coagir <code>datetime.date</code> (object dtype) nem strings ISO — lançava <code>"cannot be converted to int"</code>.</p>
+<p><strong>Solução:</strong> Uso de <code>pa.DateTime</code> no schema do ConvertKit (sem <code>pa.Date</code>); normalização de datas para string ISO antes do merge incremental via <code>_normalize_dates()</code>.</p>
+<hr>
+</section>
+<section id="taxas-de-reembolso-quebrando-validação" class="level3">
+<h3 class="anchored" data-anchor-id="taxas-de-reembolso-quebrando-validação">6. Taxas de reembolso quebrando validação</h3>
+<p><strong>Problema:</strong> O Pagarme retorna taxas negativas em payables de reembolso. O schema definia <code>fee: Series[float] = pa.Field(ge=0)</code>, causando falha de validação nesses registros.</p>
+<p><strong>Solução:</strong> Remoção da constraint <code>ge=0</code> nas colunas <code>fee</code> e <code>anticipation_fee</code> — taxas negativas são válidas e representam devoluções de cobranças.</p>
+<hr>
+</section>
+<section id="queries-lentas-com-pandas-puro" class="level3">
+<h3 class="anchored" data-anchor-id="queries-lentas-com-pandas-puro">7. Queries lentas com Pandas puro</h3>
+<p><strong>Problema:</strong> Cálculos de ROI com múltiplos merges e groupby em DataFrames de 10k+ linhas causavam latência perceptível ao mudar o filtro de data.</p>
+<p><strong>Solução:</strong> Substituição dos cálculos Pandas por queries SQL via DuckDB. O DuckDB executa filtros e agregações diretamente no Parquet (lazy evaluation), com desempenho 3-10× melhor para as queries típicas do dashboard.</p>
+<hr>
+</section>
+</section>
 <section id="tecnologias" class="level2">
 <h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Tecnologia</th>
+<th>Versão</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Framework web</strong></td>
+<td>Shiny for Python</td>
+<td>latest</td>
+</tr>
+<tr class="even">
+<td><strong>Validação de dados</strong></td>
+<td>Pandera</td>
+<td>0.31</td>
+</tr>
+<tr class="odd">
+<td><strong>Query engine</strong></td>
+<td>DuckDB</td>
+<td>≥ 0.10</td>
+</tr>
+<tr class="even">
+<td><strong>Persistência</strong></td>
+<td>Google Cloud Storage + gcsfs</td>
+<td>latest</td>
+</tr>
+<tr class="odd">
+<td><strong>Orquestração</strong></td>
+<td>GitHub Actions</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>Visualização</strong></td>
+<td>Matplotlib</td>
+<td>latest</td>
+</tr>
+<tr class="odd">
+<td><strong>Dados</strong></td>
+<td>Pandas, NumPy, PyArrow</td>
+<td>latest</td>
+</tr>
+<tr class="even">
+<td><strong>Deploy</strong></td>
+<td>rsconnect-python → shinyapps.io</td>
+<td>latest</td>
+</tr>
+<tr class="odd">
+<td><strong>Auth Google</strong></td>
+<td>google-auth, google-cloud-storage</td>
+<td>latest</td>
+</tr>
+<tr class="even">
+<td><strong>APIs</strong></td>
+<td>requests</td>
+<td>latest</td>
+</tr>
+<tr class="odd">
+<td><strong>Ambiente</strong></td>
+<td>python-dotenv</td>
+<td>latest</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="como-executar-localmente" class="level2">
+<h2 class="anchored" data-anchor-id="como-executar-localmente">Como Executar Localmente</h2>
+<section id="pré-requisitos" class="level3">
+<h3 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h3>
 <ul>
-<li><strong>Python</strong> — Shiny for Python, Pandas, Matplotlib, NumPy</li>
-<li><strong>APIs REST</strong> — WooCommerce, Pagarme v5, Meta Graph API, Kommo, ConvertKit</li>
-<li><strong>Google Analytics</strong> — Data API v1 (service account)</li>
-<li><strong>Cache</strong> — Parquet com TTL de 6 horas</li>
+<li>Python 3.11+</li>
+<li>Acesso às APIs (credenciais no <code>.env</code>)</li>
+<li><code>ga4_credentials.json</code> (service account do Google Cloud)</li>
 </ul>
 </section>
-<section id="repositório" class="level2">
-<h2 class="anchored" data-anchor-id="repositório">Repositório</h2>
-<p><a href="https://github.com/vitorwilher/vitorwilher.github.io">github.com/vitorwilher/vitorwilher.github.io</a></p>
+<section id="instalação" class="level3">
+<h3 class="anchored" data-anchor-id="instalação">Instalação</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/vitorwilher/roi-diagnostico.git</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> roi-diagnostico</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># edite .env com suas credenciais</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="execução" class="level3">
+<h3 class="anchored" data-anchor-id="execução">Execução</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">shiny</span> run app.py <span class="at">--port</span> 8080</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Na primeira execução sem cache local, o app carrega os dados do GCS (se <code>ROI_STORAGE=gcs</code>) ou exibe dados vazios aguardando o clique em <strong>“Atualizar dados”</strong>.</p>
+</section>
+<section id="variáveis-de-ambiente" class="level3">
+<h3 class="anchored" data-anchor-id="variáveis-de-ambiente">Variáveis de Ambiente</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pagarme</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="va">PAGARME_SECRET_KEY</span><span class="op">=</span>sk_xxxxxxxxxxxxx</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># WooCommerce</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="va">WC_URL</span><span class="op">=</span>https://seusite.com.br</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="va">WC_CONSUMER_KEY</span><span class="op">=</span>ck_xxxxxxxxxxxxx</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="va">WC_CONSUMER_SECRET</span><span class="op">=</span>cs_xxxxxxxxxxxxx</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Meta Ads</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="va">META_ACCESS_TOKEN</span><span class="op">=</span>EAARxxxxxxxxxx</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="va">META_AD_ACCOUNT_ID</span><span class="op">=</span>act_xxxxxxxxxx</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="va">META_APP_ID</span><span class="op">=</span>xxxxxxxxxx</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="va">META_APP_SECRET</span><span class="op">=</span>xxxxxxxxxx</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Kommo CRM</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="va">KOMMO_SUBDOMAIN</span><span class="op">=</span>seusubdominio</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="va">KOMMO_LONG_TOKEN</span><span class="op">=</span>xxxxxxxxxxxxxxxxx</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ConvertKit</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="va">CONVERTKIT_API_KEY</span><span class="op">=</span>xxxxxxxxxxxxxxxxx</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="va">CONVERTKIT_API_SECRET</span><span class="op">=</span>xxxxxxxxxxxxxxxxx</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Google Cloud Storage (opcional — default: local)</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="va">ROI_STORAGE</span><span class="op">=</span>gcs</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="va">GCS_BUCKET</span><span class="op">=</span>seu-bucket</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="va">GCS_CREDENTIALS_PATH</span><span class="op">=</span>ga4_credentials.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O arquivo <code>ga4_credentials.json</code> deve ser um JSON de service account do Google Cloud com permissão <code>roles/bigquery.dataViewer</code> na propriedade GA4 e <code>roles/storage.objectAdmin</code> no bucket GCS.</p>
+<hr>
+</section>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
+<ul>
+<li>Alertas automáticos por e-mail quando ROI cair abaixo de threshold configurável</li>
+<li>Exportação de relatórios em PDF/Excel direto do dashboard</li>
+<li>Suporte a múltiplas contas de Meta Ads</li>
+<li>Integração com Hotmart ou outras plataformas de entrega de cursos</li>
+<li>Testes automatizados para conectores e queries (<code>pytest</code>)</li>
+<li>Indicador de data de última atualização no dashboard</li>
+</ul>
 
 
 </section>
