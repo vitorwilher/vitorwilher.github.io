@@ -3,7 +3,7 @@ title: "ROI Diagnóstico — Plataforma de Inteligência Comercial"
 date: "2026-04-22"
 categories: [Python, Shiny, Engenharia de Dados, DuckDB, GCS, GitHub Actions, Marketing, CRM]
 description: "Arquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e dashboard interativo em Shiny for Python."
-image: "../images/profile.png"
+image: "architecture_pipeline.png"
 execute:
   eval: false
   echo: true
