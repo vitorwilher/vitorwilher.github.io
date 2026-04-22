@@ -4,15 +4,13 @@
     "items": []
   },
   {
-    "listing": "/teaching/index.html",
-    "items": []
-  },
-  {
     "listing": "/projetos/index.html",
     "items": [
-      "/projetos/roi-diagnostico.html",
-      "/projetos/exemplo-rmd.html",
-      "/projetos/bcb-dados.html"
+      "/projetos/roi-diagnostico.html"
     ]
+  },
+  {
+    "listing": "/teaching/index.html",
+    "items": []
   }
 ]

@@ -7,6 +7,20 @@
     "text": "Vítor Wilher é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.\n\nCaso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail vitorwilher@analisemacro.com.br."
   },
   {
+    "objectID": "research/index.html",
+    "href": "research/index.html",
+    "title": "Pesquisas",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
+    "objectID": "projetos/index.html",
+    "href": "projetos/index.html",
+    "title": "Projetos",
+    "section": "",
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nROI Diagnóstico — Plataforma de Inteligência Comercial\n\n\n\nPython\n\nShiny\n\nEngenharia de Dados\n\nDuckDB\n\nGCS\n\nGitHub Actions\n\nMarketing\n\nCRM\n\n\n\nArquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e…\n\n\n\n\n\n\nApr 22, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "projetos/roi-diagnostico.html",
     "href": "projetos/roi-diagnostico.html",
     "title": "ROI Diagnóstico — Plataforma de Inteligência Comercial",
@@ -98,27 +112,6 @@
     "text": "Próximos Passos\n\nAlertas automáticos por e-mail quando ROI cair abaixo de threshold configurável\nExportação de relatórios em PDF/Excel direto do dashboard\nSuporte a múltiplas contas de Meta Ads\nIntegração com Hotmart ou outras plataformas de entrega de cursos\nTestes automatizados para conectores e queries (pytest)\nIndicador de data de última atualização no dashboard"
   },
   {
-    "objectID": "projetos/exemplo-rmd.html",
-    "href": "projetos/exemplo-rmd.html",
-    "title": "Exemplo: Post em R Markdown",
-    "section": "",
-    "text": "Este é um post de exemplo em .Rmd. Você pode usar código R diretamente:\n\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point() +\n  labs(title = \"Peso vs Consumo\", x = \"Peso\", y = \"Milhas/galão\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPara adicionar um novo post, basta criar um arquivo .qmd ou .Rmd nesta pasta (blog/posts/) com o frontmatter acima."
-  },
-  {
-    "objectID": "research/index.html",
-    "href": "research/index.html",
-    "title": "Pesquisas",
-    "section": "",
-    "text": "No matching items"
-  },
-  {
-    "objectID": "teaching/index.html",
-    "href": "teaching/index.html",
-    "title": "Cursos",
-    "section": "",
-    "text": "No matching items"
-  },
-  {
     "objectID": "cv.html",
     "href": "cv.html",
     "title": "Curriculum Vitae",
@@ -161,38 +154,10 @@
     "text": "Habilidades\nLinguagens: R · Python · SQL\nMétodos: Econometria · Machine Learning · NLP · Deep Learning · Séries Temporais\nIA: Prompt Engineering · LLMs · IA Generativa · RAG · Agentes\nFerramentas: Quarto · Git · Docker"
   },
   {
-    "objectID": "projetos/bcb-dados.html",
-    "href": "projetos/bcb-dados.html",
-    "title": "Dados do Banco Central do Brasil",
+    "objectID": "teaching/index.html",
+    "href": "teaching/index.html",
+    "title": "Cursos",
     "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
-  },
-  {
-    "objectID": "projetos/bcb-dados.html#sobre-o-projeto",
-    "href": "projetos/bcb-dados.html#sobre-o-projeto",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "",
-    "text": "Projeto de acesso e análise de dados do Banco Central do Brasil via API do SGS, cobrindo séries macroeconômicas como SELIC, IPCA, câmbio e crédito."
-  },
-  {
-    "objectID": "projetos/bcb-dados.html#tecnologias",
-    "href": "projetos/bcb-dados.html#tecnologias",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "Tecnologias",
-    "text": "Tecnologias\n\nR com pacotes rbcb, tidyverse e ggplot2\nAutomação de coleta via API REST"
-  },
-  {
-    "objectID": "projetos/bcb-dados.html#repositório",
-    "href": "projetos/bcb-dados.html#repositório",
-    "title": "Dados do Banco Central do Brasil",
-    "section": "Repositório",
-    "text": "Repositório\ngithub.com/vitorwilher/bcb-dados"
-  },
-  {
-    "objectID": "projetos/index.html",
-    "href": "projetos/index.html",
-    "title": "Projetos",
-    "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nROI Diagnóstico — Plataforma de Inteligência Comercial\n\n\n\nPython\n\nShiny\n\nEngenharia de Dados\n\nDuckDB\n\nGCS\n\nGitHub Actions\n\nMarketing\n\nCRM\n\n\n\nArquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e…\n\n\n\n\n\n\nApr 22, 2026\n\n\n\n\n\n\n\n\n\n\n\nExemplo: Post em R Markdown\n\n\n\nR\n\nExemplo\n\n\n\nPost de exemplo mostrando como usar .Rmd no blog.\n\n\n\n\n\n\nApr 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nDados do Banco Central do Brasil\n\n\n\nR\n\nBCB\n\nMacroeconomia\n\n\n\nColeta, tratamento e visualização de dados do BCB via API do SGS (Sistema Gerenciador de Séries Temporais).\n\n\n\n\n\n\nJan 1, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "No matching items"
   }
 ]
