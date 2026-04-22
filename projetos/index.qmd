@@ -1,7 +1,8 @@
 ---
 title: "Projetos"
 listing:
-  contents: "*.{qmd,Rmd}"
+  contents:
+    - "*.{qmd,Rmd}"
   sort: "date desc"
   type: grid
   categories: true
