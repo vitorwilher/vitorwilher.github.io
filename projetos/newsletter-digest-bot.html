@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-23">
+<meta name="description" content="Pipeline que coleta newsletters via IMAP, gera resumo temático com Claude Opus 4.7, renderiza PDF e entrega no WhatsApp toda manhã de domingo — alimentando a redação do Boletim AM da Análise Macro.">
+
+<title>Newsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-92ccca19d14c0bd04edafc1952284584.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#entendimento-do-negócio-business-understanding" id="toc-entendimento-do-negócio-business-understanding" class="nav-link" data-scroll-target="#entendimento-do-negócio-business-understanding">1. Entendimento do Negócio (<em>Business Understanding</em>)</a></li>
+  <li><a href="#entendimento-dos-dados-data-understanding" id="toc-entendimento-dos-dados-data-understanding" class="nav-link" data-scroll-target="#entendimento-dos-dados-data-understanding">2. Entendimento dos Dados (<em>Data Understanding</em>)</a></li>
+  <li><a href="#preparação-dos-dados-data-preparation" id="toc-preparação-dos-dados-data-preparation" class="nav-link" data-scroll-target="#preparação-dos-dados-data-preparation">3. Preparação dos Dados (<em>Data Preparation</em>)</a></li>
+  <li><a href="#modelagem" id="toc-modelagem" class="nav-link" data-scroll-target="#modelagem">4. Modelagem</a></li>
+  <li><a href="#avaliação" id="toc-avaliação" class="nav-link" data-scroll-target="#avaliação">5. Avaliação</a></li>
+  <li><a href="#implantação-deployment" id="toc-implantação-deployment" class="nav-link" data-scroll-target="#implantação-deployment">6. Implantação (<em>Deployment</em>)</a></li>
+  <li><a href="#monitoramento-e-próximos-passos" id="toc-monitoramento-e-próximos-passos" class="nav-link" data-scroll-target="#monitoramento-e-próximos-passos">7. Monitoramento e Próximos Passos</a></li>
+  <li><a href="#anexo-a-inventário-técnico" id="toc-anexo-a-inventário-técnico" class="nav-link" data-scroll-target="#anexo-a-inventário-técnico">Anexo A — Inventário técnico</a></li>
+  <li><a href="#anexo-b-estrutura-do-repositório" id="toc-anexo-b-estrutura-do-repositório" class="nav-link" data-scroll-target="#anexo-b-estrutura-do-repositório">Anexo B — Estrutura do repositório</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Newsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Claude API</div>
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">GitHub Actions</div>
+    <div class="quarto-category">Meta Graph API</div>
+    <div class="quarto-category">WhatsApp</div>
+    <div class="quarto-category">IMAP</div>
+    <div class="quarto-category">Automação</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Pipeline que coleta newsletters via IMAP, gera resumo temático com Claude Opus 4.7, renderiza PDF e entrega no WhatsApp toda manhã de domingo — alimentando a redação do Boletim AM da Análise Macro.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 23, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="newsletter_digest_pipeline.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Arquitetura — Newsletter Digest Bot</figcaption>
+</figure>
+</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto implementa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), o pipeline construído para automatizar o resumo semanal de newsletters que alimenta a redação do <strong>Boletim AM</strong> (Análise Macro).</p>
+<p>As seis fases do CRISP-DM foram adaptadas ao contexto deste projeto, que não é estritamente uma aplicação de <em>data mining</em>, mas um pipeline de <strong>síntese informacional</strong> com LLM. O mapeamento é direto: a “modelagem” aqui é <em>prompt engineering</em> e escolha de modelo generativo; a “avaliação” é validação qualitativa do resumo produzido; o “deployment” é o agendamento semanal em nuvem com entrega em múltiplos canais.</p>
+<hr>
+</section>
+<section id="entendimento-do-negócio-business-understanding" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-do-negócio-business-understanding">1. Entendimento do Negócio (<em>Business Understanding</em>)</h2>
+<section id="problema" class="level3">
+<h3 class="anchored" data-anchor-id="problema">1.1 Problema</h3>
+<p>Toda semana, o autor recebe newsletters de diferentes fontes sobre IA, dados, tecnologia e mercado financeiro. O tempo para ler todas manualmente antes de escrever o Boletim AM aos domingos é escasso, e informações relevantes são perdidas.</p>
+</section>
+<section id="objetivo-de-negócio" class="level3">
+<h3 class="anchored" data-anchor-id="objetivo-de-negócio">1.2 Objetivo de negócio</h3>
+<p>Produzir, <strong>todo domingo às 7h (horário de Brasília)</strong>, um resumo temático das newsletters recebidas na semana, entregue em dois canais:</p>
+<ul>
+<li><strong>PDF</strong> arquivado localmente para consulta (versão final);</li>
+<li><strong>WhatsApp</strong> para leitura rápida no celular, com o PDF anexo.</li>
+</ul>
+<p>O resumo deve:</p>
+<ol type="1">
+<li>Agrupar conteúdos <strong>organicamente por tema</strong>, não por fonte;</li>
+<li>Destacar <strong>implicações para macroeconomia e mercados</strong>, criando a ponte direta com o Boletim AM;</li>
+<li>Usar tom editorial direto, sem floreio;</li>
+<li>Citar a newsletter-origem ao final de cada ponto para rastreabilidade.</li>
+</ol>
+</section>
+<section id="critérios-de-sucesso" class="level3">
+<h3 class="anchored" data-anchor-id="critérios-de-sucesso">1.3 Critérios de sucesso</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Critério</th>
+<th>Meta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entrega automática</td>
+<td>Domingo 07:00 BRT, sem intervenção humana</td>
+</tr>
+<tr class="even">
+<td>Cobertura</td>
+<td>100% das newsletters assinadas</td>
+</tr>
+<tr class="odd">
+<td>Qualidade do resumo</td>
+<td>Claude Opus 4.7 com <em>adaptive thinking</em> em <code>effort: high</code></td>
+</tr>
+<tr class="even">
+<td>Formato final</td>
+<td>PDF renderizado via Quarto + LaTeX</td>
+</tr>
+<tr class="odd">
+<td>Custo operacional</td>
+<td>&lt; US$ 1/mês</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="restrições-identificadas" class="level3">
+<h3 class="anchored" data-anchor-id="restrições-identificadas">1.4 Restrições identificadas</h3>
+<ul>
+<li><strong>Janela de 24h da Meta WhatsApp Cloud API</strong>: mensagens <em>free-form</em> só são entregues se houver conversa ativa nos últimos 24h. Solução: usar <em>message template</em> pré-aprovado (em análise pela Meta no momento desta redação).</li>
+<li><strong>Segurança dois-admins do Business Portfolio</strong>: impediu criar <em>System User Token</em> permanente. Solução: <em>User Access Token</em> de 60 dias, renovação manual bimestral.</li>
+<li><strong>Infraestrutura local dependente do Mac ligado</strong>: resolvido migrando agendamento para <strong>GitHub Actions</strong> (execução na nuvem).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="entendimento-dos-dados-data-understanding" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-dos-dados-data-understanding">2. Entendimento dos Dados (<em>Data Understanding</em>)</h2>
+<section id="fontes" class="level3">
+<h3 class="anchored" data-anchor-id="fontes">2.1 Fontes</h3>
+<p>Newsletters assinadas em um e-mail dedicado do <strong>Zoho Mail</strong> (conjunto evolui com o tempo — exemplos já cobertos pelo pipeline):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Newsletter</th>
+<th>Remetente</th>
+<th>Cadência</th>
+<th>Temática</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Data Hackers</td>
+<td><code>newsletter@mail.datahackers.com.br</code></td>
+<td>Semanal</td>
+<td>IA e dados, Brasil</td>
+</tr>
+<tr class="even">
+<td>TechDrop</td>
+<td><code>newsletter@mail.techdrop.news</code></td>
+<td>Seg/Qua/Sex 6h</td>
+<td>Tecnologia e negócios</td>
+</tr>
+<tr class="odd">
+<td>MoneyDrop</td>
+<td><code>newsletter@mail.moneydrop.news</code></td>
+<td>Ter/Qui 10h</td>
+<td>Mercado financeiro</td>
+</tr>
+<tr class="even">
+<td>AiDrop</td>
+<td><code>newsletter@mail.aidrop.news</code></td>
+<td>Quintas</td>
+<td>Inteligência artificial</td>
+</tr>
+<tr class="odd">
+<td>AI Whisper</td>
+<td><code>aiwhisperbr@mail.beehiiv.com</code></td>
+<td>Semanal</td>
+<td>IA, curadoria Brasil</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>A conta Zoho serve exclusivamente como caixa de entrada dessas newsletters — separada do e-mail pessoal/profissional para evitar ruído e facilitar a extração programática.</p>
+</blockquote>
+</section>
+<section id="estrutura-dos-dados" class="level3">
+<h3 class="anchored" data-anchor-id="estrutura-dos-dados">2.2 Estrutura dos dados</h3>
+<ul>
+<li><strong>Protocolo de acesso</strong>: IMAP (<code>imap.zoho.com:993</code>, SSL), autenticação via <em>App Password</em>.</li>
+<li><strong>Pasta inspecionada</strong>: <code>Newsletter</code>. O filtro nativo do Zoho (<em>Newsletters / Subscriptions / Automated email alerts</em>) roteia automaticamente novas assinaturas para essa pasta, sem exigir ajuste no código.</li>
+<li><strong>Formato</strong>: MIME multipart. A maioria dos corpos vem em <code>text/html</code>; presença ocasional de <code>text/plain</code>.</li>
+</ul>
+</section>
+<section id="volumetria-esperada" class="level3">
+<h3 class="anchored" data-anchor-id="volumetria-esperada">2.3 Volumetria esperada</h3>
+<ul>
+<li>~4 a 10 e-mails por semana (variando com frequência de cada newsletter).</li>
+<li>Corpos típicos: 2.000 a 20.000 caracteres por mensagem após <em>stripping</em> de HTML.</li>
+<li>Janela deslizante: últimos 7 dias (parametrizável via <code>--dias</code>).</li>
+</ul>
+</section>
+<section id="qualidade" class="level3">
+<h3 class="anchored" data-anchor-id="qualidade">2.4 Qualidade</h3>
+<ul>
+<li><strong>Sinal x ruído</strong>: os e-mails trazem HTML pesado (tracking pixels, imagens, botões). Necessário extrair apenas o texto relevante.</li>
+<li><strong>Codificação</strong>: UTF-8 consistente; sem problemas de encoding observados.</li>
+<li><strong>Duplicação</strong>: cada mensagem tem UID único dentro da pasta <code>Newsletter</code>; não há necessidade de <em>dedup</em> explícito na arquitetura atual (fonte única).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="preparação-dos-dados-data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="preparação-dos-dados-data-preparation">3. Preparação dos Dados (<em>Data Preparation</em>)</h2>
+<section id="coleta-via-imap" class="level3">
+<h3 class="anchored" data-anchor-id="coleta-via-imap">3.1 Coleta via IMAP</h3>
+<p>Biblioteca utilizada: <a href="https://github.com/ikvk/imap_tools"><code>imap_tools</code></a> — API idiomática sobre <code>imaplib</code> com suporte a filtros declarativos (<code>AND(date_gte=...)</code>).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> MailBox(<span class="st">"imap.zoho.com"</span>, <span class="dv">993</span>).login(user, password) <span class="im">as</span> mailbox:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    mailbox.folder.<span class="bu">set</span>(<span class="st">"Newsletter"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> msg <span class="kw">in</span> mailbox.fetch(AND(date_gte<span class="op">=</span>since), reverse<span class="op">=</span><span class="va">True</span>, mark_seen<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ponto relevante: <strong><code>mark_seen=False</code></strong> para não marcar as mensagens como lidas no Zoho — o usuário continua lendo a caixa normalmente.</p>
+</section>
+<section id="filtragem-por-pasta-delegada-ao-zoho" class="level3">
+<h3 class="anchored" data-anchor-id="filtragem-por-pasta-delegada-ao-zoho">3.2 Filtragem por pasta (delegada ao Zoho)</h3>
+<p>A triagem do que é ou não newsletter é delegada ao próprio Zoho, que possui um filtro nativo pré-configurado:</p>
+<blockquote class="blockquote">
+<p><em>“Newsletters / Subscriptions / Automated email alerts → Move to folder: Newsletter”</em></p>
+</blockquote>
+<p>O script lê exclusivamente a pasta <code>Newsletter</code>. A consequência prática é que <strong>novas assinaturas são capturadas automaticamente</strong> — não é necessário editar código nem redeploy. A manutenção do conjunto de fontes passa a ser 100% no painel do Zoho (assinar/desassinar newsletter, ou mover manualmente um e-mail para dentro/fora da pasta).</p>
+<p>Benefícios dessa arquitetura:</p>
+<ul>
+<li><strong>Zero acoplamento</strong> entre o código Python e a lista de newsletters ativas;</li>
+<li><strong>Contrato claro</strong>: tudo na pasta <code>Newsletter</code> entra no resumo da semana;</li>
+<li><strong>Fácil de estender</strong>: assinar uma nova newsletter é um evento operacional, não um <em>deploy</em>.</li>
+</ul>
+</section>
+<section id="normalização-html-texto" class="level3">
+<h3 class="anchored" data-anchor-id="normalização-html-texto">3.3 Normalização HTML → texto</h3>
+<p>Biblioteca: <code>BeautifulSoup4</code>. Remoção explícita de <code>&lt;script&gt;</code> e <code>&lt;style&gt;</code> antes da extração:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> html_to_text(html: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    soup <span class="op">=</span> BeautifulSoup(html, <span class="st">"html.parser"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tag <span class="kw">in</span> soup([<span class="st">"script"</span>, <span class="st">"style"</span>]):</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        tag.decompose()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> soup.get_text(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>, strip<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cada corpo é truncado em <strong>20.000 caracteres</strong> (<code>MAX_BODY_CHARS</code>) para evitar estouro de tokens em casos anômalos.</p>
+</section>
+<section id="estrutura-de-entrada-para-o-llm" class="level3">
+<h3 class="anchored" data-anchor-id="estrutura-de-entrada-para-o-llm">3.4 Estrutura de entrada para o LLM</h3>
+<p>Itens coletados são concatenados em um único <em>user message</em> com separadores explícitos:</p>
+<pre><code>### Newsletter 1
+- De: newsletter@mail.datahackers.com.br
+- Assunto: 🧠 Você agora faz parte da Newsletter do Data Hackers!
+- Data: 2026-04-23T...
+
+&lt;corpo em texto limpo&gt;
+
+---
+
+### Newsletter 2
+...</code></pre>
+<p>Essa estrutura ajuda o modelo a <strong>atribuir corretamente as citações</strong> no resumo final.</p>
+<hr>
+</section>
+</section>
+<section id="modelagem" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem">4. Modelagem</h2>
+<section id="escolha-do-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="escolha-do-modelo">4.1 Escolha do modelo</h3>
+<p><strong>Claude Opus 4.7</strong> (<code>claude-opus-4-7</code>) foi escolhido por:</p>
+<ul>
+<li>Qualidade editorial em pt-BR;</li>
+<li><em>Adaptive thinking</em> nativo — modelo decide quanto raciocinar por tarefa;</li>
+<li>Janela de contexto de 1M tokens (folga para semanas com muito material);</li>
+<li>Custo compatível com uso semanal (~US$ 0,10 a 0,30 por execução).</li>
+</ul>
+</section>
+<section id="configurações" class="level3">
+<h3 class="anchored" data-anchor-id="configurações">4.2 Configurações</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>client.messages.stream(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"claude-opus-4-7"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    max_tokens<span class="op">=</span><span class="dv">8000</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    thinking<span class="op">=</span>{<span class="st">"type"</span>: <span class="st">"adaptive"</span>},</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    output_config<span class="op">=</span>{<span class="st">"effort"</span>: <span class="st">"high"</span>},</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    system<span class="op">=</span>SYSTEM_PROMPT,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: build_user_message(items)}],</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Streaming foi usado para evitar <em>timeout</em> HTTP em respostas longas (recomendação do SDK da Anthropic para <code>max_tokens</code> altos ou <em>input</em> longo).</p>
+</section>
+<section id="prompt-engineering-o-system-prompt" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-engineering-o-system-prompt">4.3 Prompt engineering — o <em>system prompt</em></h3>
+<p>Princípios do prompt:</p>
+<ol type="1">
+<li><strong>Persona explícita</strong>: “assistente especializado em síntese para economista sênior que escreve o Boletim AM”. Isso calibra registro e profundidade.</li>
+<li><strong>Agrupamento orgânico</strong> (não categorias fixas): o modelo detecta temas a partir do conteúdo semanal, refletindo o que a semana de fato trouxe.</li>
+<li><strong>Citação obrigatória da fonte</strong> ao final de cada bullet — rastreabilidade.</li>
+<li><strong>Seção fixa de implicações macro</strong>: força o <em>bridge</em> para o Boletim AM.</li>
+<li><strong>Restrições de tom</strong>: sem emoji, sem preâmbulo, sem jargão desnecessário.</li>
+</ol>
+<p>Trecho-chave do prompt:</p>
+<blockquote class="blockquote">
+<p><em>“Use títulos de nível 2 (##) para cada TEMA identificado organicamente a partir do conteúdo. Não force categorias pré-definidas. Ao final, adicione uma seção ‘Implicações para macroeconomia e mercados’ com 3 a 5 bullets conectando os temas da semana a possíveis impactos em política monetária, inflação, mercados financeiros, atividade econômica ou geopolítica.”</em></p>
+</blockquote>
+</section>
+<section id="formato-de-saída" class="level3">
+<h3 class="anchored" data-anchor-id="formato-de-saída">4.4 Formato de saída</h3>
+<p>O modelo retorna Markdown compatível com <strong>Quarto</strong>. O script concatena:</p>
+<ol type="1">
+<li>Frontmatter YAML (título, autor, data, configurações de HTML e PDF);</li>
+<li>Corpo gerado pelo modelo;</li>
+<li>Apêndice com lista de fontes (subject + remetente).</li>
+</ol>
+<p>O arquivo final é gravado em <code>digests/resumo-YYYY-MM-DD.qmd</code>.</p>
+<hr>
+</section>
+</section>
+<section id="avaliação" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação">5. Avaliação</h2>
+<section id="testes-locais-mac" class="level3">
+<h3 class="anchored" data-anchor-id="testes-locais-mac">5.1 Testes locais (Mac)</h3>
+<p>Primeira execução com janela de 30 dias devolveu 4 newsletters — todas mensagens de boas-vindas (sem conteúdo editorial real). O modelo foi <strong>honesto</strong>: identificou a ausência de conteúdo substantivo e declarou isso explicitamente, em vez de alucinar síntese. Esse é um sinal positivo de calibração.</p>
+<blockquote class="blockquote">
+<p>Trecho do primeiro resumo: <em>“As quatro mensagens recebidas nesta semana são e-mails de boas-vindas e confirmação de assinatura, sem conteúdo editorial substantivo para resumir.”</em></p>
+</blockquote>
+</section>
+<section id="simplificação-da-arquitetura-de-filtragem" class="level3">
+<h3 class="anchored" data-anchor-id="simplificação-da-arquitetura-de-filtragem">5.2 Simplificação da arquitetura de filtragem</h3>
+<p>A versão inicial usava uma lista de <em>substrings</em> (<code>SENDER_PATTERNS</code>) para decidir quais e-mails eram newsletters. Esse desenho tinha dois problemas:</p>
+<ol type="1">
+<li><strong>Fragilidade</strong>: erros sutis como <code>techdrops</code> (com <code>s</code>) vs.&nbsp;<code>techdrop.news</code> (sem <code>s</code>) silenciavam fontes inteiras;</li>
+<li><strong>Acoplamento</strong>: assinar uma newsletter nova exigia editar código, commitar e dar push.</li>
+</ol>
+<p>Ao descobrir que o <strong>Zoho tem um filtro nativo</strong> que roteia automaticamente qualquer <em>Newsletter / Subscription / Automated alert</em> para a pasta <code>Newsletter</code>, a arquitetura foi simplificada: o script passou a ler apenas essa pasta, sem filtro de remetente. Assinar uma newsletter nova deixa de ser um evento de engenharia.</p>
+</section>
+<section id="teste-end-to-end-na-ci" class="level3">
+<h3 class="anchored" data-anchor-id="teste-end-to-end-na-ci">5.3 Teste end-to-end na CI</h3>
+<p>Workflow disparado manualmente (<em>workflow_dispatch</em>) concluiu em <strong>2m 22s</strong> com todas as etapas verdes:</p>
+<ol type="1">
+<li>Checkout → Setup Python → Setup Quarto+TinyTeX;</li>
+<li>Instalação de dependências;</li>
+<li>Fetch IMAP + síntese Claude + render PDF + envio WhatsApp;</li>
+<li>Commit do digest de volta no repo.</li>
+</ol>
+</section>
+<section id="descoberta-crítica-janela-de-24h-do-whatsapp" class="level3">
+<h3 class="anchored" data-anchor-id="descoberta-crítica-janela-de-24h-do-whatsapp">5.4 Descoberta crítica: janela de 24h do WhatsApp</h3>
+<p>Na primeira execução, a API da Meta retornou <strong>200 OK com <code>message_id</code> válido</strong>, mas o PDF <strong>não chegou</strong> no WhatsApp. Após investigação via logging da resposta:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"messaging_product"</span><span class="fu">:</span> <span class="st">"whatsapp"</span><span class="fu">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"contacts"</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span><span class="dt">"input"</span><span class="fu">:</span> <span class="st">"***"</span><span class="fu">,</span> <span class="dt">"wa_id"</span><span class="fu">:</span> <span class="st">"***"</span><span class="fu">}</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"messages"</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span><span class="dt">"id"</span><span class="fu">:</span> <span class="st">"wamid.HBgN..."</span><span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O request foi aceito, mas a Meta <strong>descartou silenciosamente</strong> a entrega por estar fora da janela de sessão de 24h. Ao enviar um “olá” do WhatsApp pessoal para o número de teste, a sessão foi aberta e o PDF pendente chegou imediatamente.</p>
+<p><strong>Implicação arquitetural</strong>: para operação sem intervenção humana, o <em>free-form message</em> não é viável. Caminho: <strong>template de mensagem pré-aprovado</strong>, que a Meta entrega a qualquer hora sem exigir sessão ativa.</p>
+<hr>
+</section>
+</section>
+<section id="implantação-deployment" class="level2">
+<h2 class="anchored" data-anchor-id="implantação-deployment">6. Implantação (<em>Deployment</em>)</h2>
+<section id="arquitetura" class="level3">
+<h3 class="anchored" data-anchor-id="arquitetura">6.1 Arquitetura</h3>
+<pre><code>┌─────────────┐
+│  Cron (GH)  │  Domingo 10:00 UTC = 07:00 BRT
+└──────┬──────┘
+       │ workflow_dispatch
+       ▼
+┌─────────────────────────────────┐
+│  GitHub Actions (Ubuntu-latest) │
+│  • Python 3.12                  │
+│  • Quarto + TinyTeX             │
+└──────┬──────────────────────────┘
+       │
+       ▼
+┌─────────────────┐      ┌──────────────────┐
+│  Zoho IMAP      │─────▶│  Claude Opus 4.7 │
+│  (newsletters)  │      │  (síntese)       │
+└─────────────────┘      └────────┬─────────┘
+                                  │
+                                  ▼
+                         ┌──────────────────┐
+                         │  .qmd → .pdf     │
+                         │  (Quarto+LaTeX)  │
+                         └────────┬─────────┘
+                                  │
+                   ┌──────────────┴──────────────┐
+                   ▼                             ▼
+          ┌────────────────┐          ┌──────────────────┐
+          │  git commit    │          │  Meta WhatsApp   │
+          │  (arquivo PDF  │          │  Cloud API       │
+          │   + .qmd)      │          │  (documento)     │
+          └────────────────┘          └──────────────────┘</code></pre>
+</section>
+<section id="agendamento" class="level3">
+<h3 class="anchored" data-anchor-id="agendamento">6.2 Agendamento</h3>
+<p>Arquivo <code>.github/workflows/sunday-digest.yml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">schedule</span><span class="kw">:</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">cron</span><span class="kw">:</span><span class="at"> </span><span class="st">"0 10 * * 0"</span><span class="co">   # domingo 10:00 UTC = 07:00 BRT</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span><span class="co">        # botão manual sempre disponível</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="renderização-pdf" class="level3">
+<h3 class="anchored" data-anchor-id="renderização-pdf">6.3 Renderização PDF</h3>
+<ul>
+<li><strong>Quarto 1.9+</strong> com <em>engine</em> LuaLaTeX (via TinyTeX na CI).</li>
+<li>Frontmatter do <code>.qmd</code> declara dois formatos (<code>html</code> e <code>pdf</code>), permitindo renderizar qualquer um com <code>quarto render --to pdf</code>.</li>
+<li>Babel-portuges e hyphen-portuguese instalados automaticamente pelo Quarto quando detectado <code>lang: pt-BR</code>.</li>
+</ul>
+</section>
+<section id="distribuição-via-whatsapp" class="level3">
+<h3 class="anchored" data-anchor-id="distribuição-via-whatsapp">6.4 Distribuição via WhatsApp</h3>
+<p><strong>Meta WhatsApp Cloud API</strong> com:</p>
+<ul>
+<li><strong>Número remetente</strong>: número de teste gratuito (+1 555 149 6709);</li>
+<li><strong>Destinatário</strong>: WhatsApp pessoal verificado na lista de teste (limite de 5 destinatários por app de teste);</li>
+<li><strong>Upload de mídia</strong>: <code>POST /v20.0/{phone_id}/media</code> retorna <code>media_id</code>;</li>
+<li><strong>Envio</strong>: <code>POST /v20.0/{phone_id}/messages</code> com <code>type: "document"</code> e <code>media_id</code>.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> httpx.Client(timeout<span class="op">=</span><span class="fl">60.0</span>) <span class="im">as</span> c:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. upload do PDF → media_id</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    resp <span class="op">=</span> c.post(<span class="ss">f"</span><span class="sc">{</span>base<span class="sc">}</span><span class="ss">/media"</span>, headers<span class="op">=</span>headers, ...)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    media_id <span class="op">=</span> resp.json()[<span class="st">"id"</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. envio do documento com legenda</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    resp <span class="op">=</span> c.post(<span class="ss">f"</span><span class="sc">{</span>base<span class="sc">}</span><span class="ss">/messages"</span>, headers<span class="op">=</span>headers, json<span class="op">=</span>{</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"messaging_product"</span>: <span class="st">"whatsapp"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"to"</span>: to,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"type"</span>: <span class="st">"document"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"document"</span>: {<span class="st">"id"</span>: media_id, <span class="st">"filename"</span>: ..., <span class="st">"caption"</span>: ...},</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A legenda é construída dinamicamente a partir dos títulos <code>##</code> do resumo (até 5 temas), funcionando como <em>teaser</em> no chat antes do PDF.</p>
+</section>
+<section id="gerenciamento-de-segredos" class="level3">
+<h3 class="anchored" data-anchor-id="gerenciamento-de-segredos">6.5 Gerenciamento de segredos</h3>
+<p>Seis <em>secrets</em> no GitHub (<code>Settings → Secrets and variables → Actions</code>):</p>
+<ul>
+<li><code>ZOHO_EMAIL</code>, <code>ZOHO_APP_PASSWORD</code></li>
+<li><code>ANTHROPIC_API_KEY</code></li>
+<li><code>WHATSAPP_TOKEN</code>, <code>WHATSAPP_PHONE_NUMBER_ID</code>, <code>WHATSAPP_TO_NUMBER</code></li>
+</ul>
+<p>Upload em lote via <code>gh secret set -f .env</code>, lendo o arquivo <code>.env</code> local — o CLI faz o envio sem expor os valores em logs.</p>
+</section>
+<section id="desafios-e-soluções" class="level3">
+<h3 class="anchored" data-anchor-id="desafios-e-soluções">6.6 Desafios e soluções</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Obstáculo</th>
+<th>Solução</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IMAP do Zoho desabilitado por default</td>
+<td>Habilitar em Settings → Mail Accounts → IMAP</td>
+</tr>
+<tr class="even">
+<td>Senha normal não autentica via IMAP com 2FA</td>
+<td>Gerar <em>App Password</em> específica</td>
+</tr>
+<tr class="odd">
+<td>Newsletters em pasta separada (<code>Newsletter</code>)</td>
+<td>Varredura múltipla de pastas com dedup por UID</td>
+</tr>
+<tr class="even">
+<td>Categorização do template como <em>Marketing</em> pela Meta</td>
+<td>Aprovação costuma sair em horas; não afeta entrega ao número de teste</td>
+</tr>
+<tr class="odd">
+<td>Regra de 24h da Meta para <em>free-form</em></td>
+<td><strong>Migração para template pré-aprovado</strong> (em curso)</td>
+</tr>
+<tr class="even">
+<td>Bloqueio de criação de <em>System User Token</em> (2-admin policy)</td>
+<td>Fallback para <em>User Access Token</em> de 60 dias</td>
+</tr>
+<tr class="odd">
+<td>Rate limit de 1 System User Admin por Business</td>
+<td>Criar como <code>Funcionário</code> com recursos atribuídos — não foi necessário dada a escolha anterior</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="monitoramento-e-próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="monitoramento-e-próximos-passos">7. Monitoramento e Próximos Passos</h2>
+<section id="itens-abertos" class="level3">
+<h3 class="anchored" data-anchor-id="itens-abertos">7.1 Itens abertos</h3>
+<ol type="1">
+<li><strong>Aprovação do template <code>resumo_newsletters</code></strong> pela Meta (status <code>PENDING</code> na data deste documento). Quando aprovado, a função <code>send_whatsapp_pdf</code> será ajustada para usar <code>type: "template"</code> com parâmetro de documento no cabeçalho.</li>
+<li><strong>Renovação do token a cada ~55 dias</strong>: próxima janela em <strong>meados de junho/2026</strong>. Processo: gerar token curto no Graph API Explorer, trocar por token longo via endpoint <code>oauth/access_token</code>, atualizar <em>secret</em> no GitHub.</li>
+<li><strong>Assinatura da newsletter “IA sob Controle”</strong>: filtro já plantado, aguarda primeira edição.</li>
+</ol>
+</section>
+<section id="métricas-a-acompanhar" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-a-acompanhar">7.2 Métricas a acompanhar</h3>
+<ul>
+<li><strong>Tempo de execução do workflow</strong> (meta: &lt; 5 minutos).</li>
+<li><strong>Taxa de entrega WhatsApp</strong> (meta: 100% após aprovação do template).</li>
+<li><strong>Custo Claude API</strong> (meta: &lt; US$ 5 / mês).</li>
+<li><strong>Uso de tokens</strong> (<code>usage.input_tokens</code>, <code>usage.output_tokens</code> no retorno — logar se necessário).</li>
+</ul>
+</section>
+<section id="evoluções-possíveis" class="level3">
+<h3 class="anchored" data-anchor-id="evoluções-possíveis">7.3 Evoluções possíveis</h3>
+<ul>
+<li><strong>Expansão do conjunto de fontes</strong>: adicionar newsletters de macro/mercado (Brazil Journal, The Brief, Bloomberg Evening Briefing) para enriquecer a seção de implicações.</li>
+<li><strong>Histórico consultável</strong>: usar o acervo de <code>digests/*.qmd</code> como corpus para busca semântica (RAG) quando escrever edições futuras do Boletim AM.</li>
+<li><strong>Publicação no Quarto Pub</strong>: renderizar como site estático e hospedar os resumos semanais publicamente (opcional, depende de estratégia editorial).</li>
+<li><strong>Templates dinâmicos de legenda</strong>: se a Meta aprovar, variar a legenda conforme volume/tom da semana (semanas de recessão vs.&nbsp;semanas de euforia).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="anexo-a-inventário-técnico" class="level2">
+<h2 class="anchored" data-anchor-id="anexo-a-inventário-técnico">Anexo A — Inventário técnico</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Componente</th>
+<th>Tecnologia</th>
+<th>Versão / Modelo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Coleta de e-mails</td>
+<td>IMAP + <code>imap_tools</code></td>
+<td>Zoho Mail / 1.7+</td>
+</tr>
+<tr class="even">
+<td>Extração de HTML</td>
+<td>BeautifulSoup4</td>
+<td>4.12+</td>
+</tr>
+<tr class="odd">
+<td>Síntese</td>
+<td>Anthropic Claude API</td>
+<td>Opus 4.7 (1M context)</td>
+</tr>
+<tr class="even">
+<td>Renderização</td>
+<td>Quarto + LaTeX</td>
+<td>1.9+ / LuaHBTeX</td>
+</tr>
+<tr class="odd">
+<td>Entrega</td>
+<td>Meta WhatsApp Cloud API</td>
+<td>v20.0</td>
+</tr>
+<tr class="even">
+<td>Agendamento</td>
+<td>GitHub Actions</td>
+<td><code>ubuntu-latest</code>, Python 3.12</td>
+</tr>
+<tr class="odd">
+<td>Versionamento</td>
+<td>Git + GitHub (repo privado)</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Linguagem principal</td>
+<td>Python</td>
+<td>3.12+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="anexo-b-estrutura-do-repositório" class="level2">
+<h2 class="anchored" data-anchor-id="anexo-b-estrutura-do-repositório">Anexo B — Estrutura do repositório</h2>
+<pre><code>Newsletters/
+├── .env                          # credenciais locais (gitignored)
+├── .env.example                  # template público
+├── .github/
+│   └── workflows/
+│       └── sunday-digest.yml     # cron + dispatch manual
+├── .gitignore
+├── digests/                      # .qmd e .pdf gerados (versionados)
+│   ├── resumo-2026-04-23.qmd
+│   └── resumo-2026-04-23.pdf
+├── newsletter_bot_documentacao.qmd   # este documento
+├── requirements.txt
+└── resumo.py                     # script principal</code></pre>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
