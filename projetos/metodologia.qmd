@@ -92,7 +92,7 @@ Por serem **relatórios oficiais** com estrutura padronizada (mesmo *template* E
 
 Implementado em [`src/index.py`](https://github.com/vitorwilher/agente_ia_saude/blob/main/src/index.py), executado **uma única vez** (e refeito apenas quando os PDFs mudam):
 
-```{python}
+```python
 loader = DirectoryLoader(
     path=database_dir, glob="*.pdf", loader_cls=PyPDFLoader
 )
