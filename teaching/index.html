@@ -83,9 +83,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -198,7 +198,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QXR0ZW50aW9u">Attention <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5zaW5v">Ensino <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUElMjBHZW5lcmF0aXZh">IA Generativa <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TUJB">MBA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TXVsdGltb2RhbGlkYWRl">Multimodalidade <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UkxIRg==">RLHF <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJhbnNmb3JtZXI=">Transformer <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content column-page-left" id="quarto-document-content">
 
@@ -227,7 +227,47 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="TExNJTJDVHJhbnNmb3JtZXIlMkNJQSUyMEdlbmVyYXRpdmElMkNFbnNpbm8lMkNNQkElMkNBdHRlbnRpb24lMkNSTEhGJTJDTXVsdGltb2RhbGlkYWRl" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1777030978091" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2959">
+<div class="thumbnail"><a href="../teaching/transformers-llms.html" class="no-external">
 
+<img loading="lazy" src="../teaching/transformers_cover.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../teaching/transformers-llms.html" class="no-external">Transformers &amp; Large Language Models — MBA IA for Business 2026</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('TExN'); return false;">LLM</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VHJhbnNmb3JtZXI='); return false;">Transformer</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SUElMjBHZW5lcmF0aXZh'); return false;">IA Generativa</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('RW5zaW5v'); return false;">Ensino</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TUJB'); return false;">MBA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QXR0ZW50aW9u'); return false;">Attention</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UkxIRg=='); return false;">RLHF</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TXVsdGltb2RhbGlkYWRl'); return false;">Multimodalidade</div>
+
+</div>
+<div class="delink listing-description"><a href="../teaching/transformers-llms.html" class="no-external">
+<p>Curso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../teaching/transformers-llms.html" class="no-external">
+<div class="listing-date">
+Apr 7, 2026
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->

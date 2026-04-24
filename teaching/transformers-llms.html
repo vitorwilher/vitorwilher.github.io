@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-07">
+<meta name="description" content="Curso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.">
+
+<title>Transformers &amp; Large Language Models — MBA IA for Business 2026 – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#apresentação" id="toc-apresentação" class="nav-link active" data-scroll-target="#apresentação">Apresentação</a></li>
+  <li><a href="#aula-01-de-modelos-de-linguagem-a-grandes-modelos-de-linguagem" id="toc-aula-01-de-modelos-de-linguagem-a-grandes-modelos-de-linguagem" class="nav-link" data-scroll-target="#aula-01-de-modelos-de-linguagem-a-grandes-modelos-de-linguagem">Aula 01 — De Modelos de Linguagem a Grandes Modelos de Linguagem</a></li>
+  <li><a href="#aula-02-tokens-embeddings-e-atenção" id="toc-aula-02-tokens-embeddings-e-atenção" class="nav-link" data-scroll-target="#aula-02-tokens-embeddings-e-atenção">Aula 02 — Tokens, Embeddings e Atenção</a></li>
+  <li><a href="#aula-03-a-arquitetura-transformer-por-dentro" id="toc-aula-03-a-arquitetura-transformer-por-dentro" class="nav-link" data-scroll-target="#aula-03-a-arquitetura-transformer-por-dentro">Aula 03 — A Arquitetura Transformer por Dentro</a></li>
+  <li><a href="#aula-04-o-modelo-de-negócios-dos-llms" id="toc-aula-04-o-modelo-de-negócios-dos-llms" class="nav-link" data-scroll-target="#aula-04-o-modelo-de-negócios-dos-llms">Aula 04 — O Modelo de Negócios dos LLMs</a></li>
+  <li><a href="#leitura-e-referências-centrais" id="toc-leitura-e-referências-centrais" class="nav-link" data-scroll-target="#leitura-e-referências-centrais">Leitura e referências centrais</a></li>
+  <li><a href="#material-do-curso" id="toc-material-do-curso" class="nav-link" data-scroll-target="#material-do-curso">Material do curso</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Transformers &amp; Large Language Models — MBA IA for Business 2026</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">Transformer</div>
+    <div class="quarto-category">IA Generativa</div>
+    <div class="quarto-category">Ensino</div>
+    <div class="quarto-category">MBA</div>
+    <div class="quarto-category">Attention</div>
+    <div class="quarto-category">RLHF</div>
+    <div class="quarto-category">Multimodalidade</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Curso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 7, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="transformers_cover.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Arquitetura Transformer — capa do curso</figcaption>
+</figure>
+</div>
+<section id="apresentação" class="level2">
+<h2 class="anchored" data-anchor-id="apresentação">Apresentação</h2>
+<p>Este curso foi ministrado em <strong>quatro encontros de ~3h40</strong> (26/03, 31/03, 02/04 e 07/04 de 2026) para a turma de <strong>MBA IA for Business</strong>. O fio condutor é simples: explicar, sem matemática pesada, <strong>por que</strong> a arquitetura Transformer destravou a revolução da IA generativa em linguagem, <strong>como</strong> ela funciona internamente, e <strong>quais</strong> as consequências econômicas e estratégicas disso para o mercado.</p>
+<blockquote class="blockquote">
+<p>Ementa resumida — detalhar a arquitetura Transformer e os LLMs, a tecnologia específica que impulsionou a revolução da IA generativa em linguagem. Compreender como esses modelos funcionam é essencial para usá-los estrategicamente.</p>
+</blockquote>
+<section id="temas-abordados-ao-longo-das-quatro-aulas" class="level3">
+<h3 class="anchored" data-anchor-id="temas-abordados-ao-longo-das-quatro-aulas">Temas abordados ao longo das quatro aulas</h3>
+<ul>
+<li><strong>Panorama geral da IA</strong>: cronologia e oportunidades;</li>
+<li><strong>Arquitetura Transformer</strong>: atenção, tokens e embeddings (sem matemática);</li>
+<li><strong>Como LLMs são treinados</strong>: dados, RLHF e alinhamento com intenção humana;</li>
+<li><strong>Capacidades emergentes</strong>: raciocínio, geração de código e multimodalidade;</li>
+<li><strong>Contexto e memória</strong>: limitações de janela de contexto e estratégias de contorno;</li>
+<li><strong>Principais LLMs do mercado</strong>: GPT, Claude, Gemini, Llama — diferenças e posicionamento.</li>
+</ul>
+</section>
+<section id="avaliação" class="level3">
+<h3 class="anchored" data-anchor-id="avaliação">Avaliação</h3>
+<ul>
+<li>Trabalho aplicado sobre temas vistos na disciplina — <strong>80%</strong> da nota;</li>
+<li>Participação nas aulas — <strong>20%</strong>;</li>
+<li>Entrega via Google Classroom até <strong>17 de abril</strong>.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="aula-01-de-modelos-de-linguagem-a-grandes-modelos-de-linguagem" class="level2">
+<h2 class="anchored" data-anchor-id="aula-01-de-modelos-de-linguagem-a-grandes-modelos-de-linguagem">Aula 01 — De Modelos de Linguagem a Grandes Modelos de Linguagem</h2>
+<blockquote class="blockquote">
+<p><em>26 de março de 2026</em></p>
+</blockquote>
+<p>A primeira aula situou o aluno no mapa. IA não é mágica — <strong>é estatística com ambição</strong>. Sobreposta a essa definição, existe uma hierarquia que é útil manter à mão:</p>
+<ul>
+<li><strong>IA</strong> — qualquer sistema que “pensa” ou decide como um humano (Netflix, Waze, ChatGPT);</li>
+<li><strong>Machine Learning</strong> — a máquina aprende padrões a partir de dados, em vez de receber regras prontas;</li>
+<li><strong>Redes neurais</strong> — modelos inspirados no cérebro, conectando “neurônios” artificiais para padrões complexos;</li>
+<li><strong>Deep learning</strong> — redes neurais muito maiores e mais profundas;</li>
+<li><strong>IA generativa</strong> — IA que <em>cria</em> (texto, imagem, código, música);</li>
+<li><strong>LLMs</strong> — modelos treinados com enormes quantidades de texto para entender e gerar linguagem.</li>
+</ul>
+<p>A tese central, emprestada de <strong>Chip Huyen</strong>, é que a palavra que define a IA pós-2020 é <strong>escala</strong>. Essa escala tem duas consequências:</p>
+<ol type="1">
+<li>Modelos cada vez mais capazes permitem que mais pessoas e equipes gerem produtividade e valor econômico.</li>
+<li>Treinar LLMs exige dados, computação e talento que só algumas organizações conseguem bancar — e daí surge o <strong>modelo como serviço</strong>: os LLMs são disponibilizados por API para que todo mundo construa aplicações sem precisar treinar o seu próprio.</li>
+</ol>
+<blockquote class="blockquote">
+<p><em>A demanda por aplicações de IA aumentou, enquanto a barreira de entrada caiu — e a engenharia de IA virou uma das disciplinas que mais crescem.</em></p>
+</blockquote>
+<section id="tokens-vocabulário-e-tokenização" class="level3">
+<h3 class="anchored" data-anchor-id="tokens-vocabulário-e-tokenização">Tokens, vocabulário e tokenização</h3>
+<p>A unidade básica de um modelo de linguagem é o <strong>token</strong> — pode ser um caractere, uma palavra inteira, ou uma parte de palavra como <code>-tion</code>. O GPT-4, por exemplo, divide “You can’t judge an ice cream by its flavor” em 9 tokens, com ~¾ de palavra por token em média. O conjunto de todos os tokens reconhecidos pelo modelo é o seu <strong>vocabulário</strong> (32.000 no Mixtral 8x7B; 100.256 no GPT-4).</p>
+<p>Por que token e não palavra? Três motivos:</p>
+<ol type="1">
+<li><strong>Composicionalidade</strong> — <code>cooking</code> → <code>cook</code> + <code>ing</code> preserva significado;</li>
+<li><strong>Eficiência</strong> — menos tokens únicos do que palavras únicas, logo vocabulário menor;</li>
+<li><strong>Robustez</strong> — palavras inventadas como <code>chatgpting</code> ganham uma estrutura legível.</li>
+</ol>
+</section>
+<section id="duas-famílias-de-modelos-de-linguagem" class="level3">
+<h3 class="anchored" data-anchor-id="duas-famílias-de-modelos-de-linguagem">Duas famílias de modelos de linguagem</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>O que prevê</th>
+<th>Exemplo</th>
+<th>Uso típico</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mascarado</strong></td>
+<td>Token ausente em qualquer posição (contexto dos dois lados)</td>
+<td>BERT</td>
+<td>Classificação, NER, recuperação</td>
+</tr>
+<tr class="even">
+<td><strong>Autorregressivo</strong></td>
+<td>Próximo token, usando apenas os anteriores</td>
+<td>GPT</td>
+<td>Geração de texto</td>
+</tr>
+</tbody>
+</table>
+<p>Os autorregressivos dominam porque geram texto continuamente — e a “conclusão” é uma operação incrivelmente geral: tradução, resumo, código e resolução de problemas podem todos ser enquadrados como completar um prompt.</p>
+</section>
+<section id="autosupervisão-a-virada-de-chave" class="level3">
+<h3 class="anchored" data-anchor-id="autosupervisão-a-virada-de-chave">Autosupervisão — a virada de chave</h3>
+<p>O sucesso dos modelos de IA da década de 2010 (AlexNet et al.) dependia de rotulagem <strong>supervisionada</strong>: rotular 1 milhão de imagens a 5 centavos cada custa US$ 50 mil. Escalar a 1 milhão de categorias, US$ 50 milhões. Inviável.</p>
+<p>A modelagem de linguagem é <strong>autosupervisionada</strong>: cada sequência de texto já carrega os rótulos (o próximo token) dentro de si. Isso elimina o gargalo da rotulagem — e é por isso que LLMs escalaram de forma que modelos de visão computacional <em>supervisionados</em> nunca conseguiram.</p>
+</section>
+<section id="de-llms-a-modelos-de-fundação" class="level3">
+<h3 class="anchored" data-anchor-id="de-llms-a-modelos-de-fundação">De LLMs a “Modelos de Fundação”</h3>
+<p>Linguagem sozinha não basta para operar no mundo real: é preciso ver, ouvir e processar outras modalidades. Daí surgem os <strong>modelos de fundação</strong> (GPT-4V, Claude 3, Gemini) que aceitam texto + imagem + às vezes áudio, vídeo, 3D, proteínas. Um modelo multimodal generativo também é chamado <strong>LMM</strong> (<em>Large Multimodal Model</em>).</p>
+<hr>
+</section>
+</section>
+<section id="aula-02-tokens-embeddings-e-atenção" class="level2">
+<h2 class="anchored" data-anchor-id="aula-02-tokens-embeddings-e-atenção">Aula 02 — Tokens, Embeddings e Atenção</h2>
+<blockquote class="blockquote">
+<p><em>31 de março de 2026</em></p>
+</blockquote>
+<p>A segunda aula mergulha em <strong>como o modelo representa linguagem numericamente</strong> e <strong>por que a atenção mudou tudo</strong>.</p>
+<section id="do-bag-of-words-ao-word2vec" class="level3">
+<h3 class="anchored" data-anchor-id="do-bag-of-words-ao-word2vec">Do Bag of Words ao word2vec</h3>
+<p>A forma mais ingênua de transformar texto em número é o <strong>bag of words</strong>: tokeniza, monta um vocabulário e conta quantas vezes cada palavra aparece em cada frase. Funciona, mas ignora completamente o significado — é literalmente um saco.</p>
+<p>O <strong>word2vec</strong> (2013) foi a primeira tentativa bem-sucedida de capturar o <strong>significado</strong> das palavras em vetores. A ideia: treinar uma rede neural pequena para prever se duas palavras são vizinhas em uma frase. Se são vizinhas com frequência, seus vetores (<em>embeddings</em>) ficam próximos no espaço. O resultado surpreendente é que propriedades semânticas emergem naturalmente — “bebê” e “recém-nascido” ficam próximos; “banco” fica em algum lugar entre “instituição financeira” e “margem de rio”.</p>
+<p>Embeddings permitem <strong>medir semelhança semântica</strong> com métricas de distância vetorial — é assim que sistemas de busca e recomendação modernos funcionam por baixo dos panos.</p>
+</section>
+<section id="o-limite-do-word2vec-representações-estáticas" class="level3">
+<h3 class="anchored" data-anchor-id="o-limite-do-word2vec-representações-estáticas">O limite do word2vec: representações estáticas</h3>
+<p>word2vec gera embeddings <strong>estáticos</strong>: a palavra “banco” tem sempre o mesmo vetor, independentemente de estar em “banco central” ou “banco do rio”. Isso é um problema — o significado deveria mudar com o contexto.</p>
+</section>
+<section id="contexto-com-rnns" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-com-rnns">Contexto com RNNs</h3>
+<p>Um primeiro passo em direção ao contexto foi dado pelas <strong>Redes Neurais Recorrentes (RNNs)</strong>, usadas em arquiteturas <em>encoder-decoder</em> para tradução automática. O encoder lê a frase palavra por palavra e comprime tudo em um vetor de contexto; o decoder, a partir desse vetor, gera a tradução token a token de forma autorregressiva.</p>
+<p>O problema: comprimir uma frase inteira em um único vetor é cruel para frases longas — o modelo esquece o começo quando chega no fim.</p>
+</section>
+<section id="atenção-2014-e-attention-is-all-you-need-2017" class="level3">
+<h3 class="anchored" data-anchor-id="atenção-2014-e-attention-is-all-you-need-2017">Atenção (2014) e “Attention Is All You Need” (2017)</h3>
+<p>Em 2014, surgiu a <strong>atenção</strong>: em vez de passar um único vetor de contexto ao decoder, passam-se os estados ocultos de <strong>todas</strong> as palavras de entrada, e o decoder aprende a “prestar atenção” seletivamente nas partes relevantes para cada token que está gerando.</p>
+<p>Em 2017, Vaswani et al.&nbsp;publicam <strong>“Attention Is All You Need”</strong> e propõem o <strong>Transformer</strong>: uma arquitetura que <strong>elimina a recorrência</strong> e usa exclusivamente atenção. Duas consequências imediatas:</p>
+<ol type="1">
+<li><strong>Paralelização</strong> — sem a dependência sequencial do RNN, o treinamento pode rodar em paralelo em GPUs, acelerando tremendamente;</li>
+<li><strong>Self-attention</strong> — cada token atende a todos os outros da mesma sequência simultaneamente, capturando dependências de longo alcance sem degradação.</li>
+</ol>
+<p>O bloco básico do Transformer tem duas partes: <strong>self-attention</strong> seguida de uma <strong>rede feedforward (MLP)</strong>. O decoder adiciona uma camada extra que atende à saída do encoder. Essa arquitetura é a base de BERT, GPT e virtualmente tudo que veio depois.</p>
+<hr>
+</section>
+</section>
+<section id="aula-03-a-arquitetura-transformer-por-dentro" class="level2">
+<h2 class="anchored" data-anchor-id="aula-03-a-arquitetura-transformer-por-dentro">Aula 03 — A Arquitetura Transformer por Dentro</h2>
+<blockquote class="blockquote">
+<p><em>2 de abril de 2026</em></p>
+</blockquote>
+<p>A terceira aula desmonta o Transformer peça por peça e amarra tudo com um exemplo concreto em português macroeconômico.</p>
+<section id="encoder-decoder-e-três-arquiteturas-derivadas" class="level3">
+<h3 class="anchored" data-anchor-id="encoder-decoder-e-três-arquiteturas-derivadas">Encoder, Decoder e três arquiteturas derivadas</h3>
+<p>O Transformer original é <strong>encoder-decoder</strong>:</p>
+<ul>
+<li><strong>Encoder</strong> (o “leitor”) — processa toda a sequência de entrada e produz uma representação rica em contexto, token por token;</li>
+<li><strong>Decoder</strong> (o “escritor”) — consome essa representação e gera a sequência de saída autorregressivamente.</li>
+</ul>
+<p>A arquitetura se desdobrou em três variantes, cada uma otimizada para uma classe de tarefas:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquitetura</th>
+<th>Tarefas</th>
+<th>Modelos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Só encoder</strong></td>
+<td>Compreensão: classificação, análise de sentimento, NER, busca</td>
+<td>BERT</td>
+</tr>
+<tr class="even">
+<td><strong>Só decoder</strong></td>
+<td>Geração autorregressiva de texto</td>
+<td>GPT, Claude, Gemini, Llama</td>
+</tr>
+<tr class="odd">
+<td><strong>Encoder-decoder</strong></td>
+<td>Tradução, sumarização</td>
+<td>T5, BART</td>
+</tr>
+</tbody>
+</table>
+<p>Cada um desses modelos é uma <strong>pilha de blocos Transformer</strong> — 6 no artigo original, mais de 100 nos LLMs modernos.</p>
+</section>
+<section id="um-bloco-transformer-por-dentro" class="level3">
+<h3 class="anchored" data-anchor-id="um-bloco-transformer-por-dentro">Um bloco Transformer por dentro</h3>
+<pre><code>Input tokens → Embeddings + Positional Encoding
+             ↓
+     ┌─────────────────────────┐
+     │  Multi-Head Self-Attn   │
+     └─────────────┬───────────┘
+                   ↓
+             Add &amp; Norm  (residual + layernorm)
+                   ↓
+     ┌─────────────────────────┐
+     │  Feed-Forward (MLP)     │
+     └─────────────┬───────────┘
+                   ↓
+             Add &amp; Norm
+                   ↓
+            (próximo bloco ou LM Head)</code></pre>
+<section id="tokenização-e-embedding" class="level4">
+<h4 class="anchored" data-anchor-id="tokenização-e-embedding">1. Tokenização e embedding</h4>
+<p>O texto vira tokens, e cada token vira um vetor numérico de alta dimensão — o <strong>embedding</strong>. Geometria passa a ser a linguagem de trabalho: palavras com significados parecidos ficam próximas no espaço vetorial.</p>
+</section>
+<section id="self-attention-o-coração-do-transformer" class="level4">
+<h4 class="anchored" data-anchor-id="self-attention-o-coração-do-transformer">2. Self-attention — o coração do Transformer</h4>
+<p>A cada token a rede calcula três vetores:</p>
+<ul>
+<li><strong>Query (Q)</strong> — o token que “pergunta” quais outros tokens são relevantes para ele;</li>
+<li><strong>Key (K)</strong> — o que cada token “é”, o que ele oferece como conteúdo;</li>
+<li><strong>Value (V)</strong> — a informação propriamente dita, caso a Key seja considerada relevante.</li>
+</ul>
+<p>O produto Q × K determina <strong>pesos de atenção</strong>; esses pesos combinam os V’s para formar a nova representação contextualizada de cada token. <strong>Atenção é relevância contextual dinâmica</strong> — o mesmo token pode atender a coisas diferentes dependendo da frase.</p>
+</section>
+<section id="positional-encoding" class="level4">
+<h4 class="anchored" data-anchor-id="positional-encoding">3. Positional Encoding</h4>
+<p>Self-attention puro não sabe a ordem dos tokens — para ele, “o gato dorme” e “dorme o gato” são iguais. O <strong>Positional Encoding</strong> soma aos embeddings uma assinatura numérica única por posição, fazendo com que a ordem volte a importar.</p>
+</section>
+<section id="feed-forward-mlp" class="level4">
+<h4 class="anchored" data-anchor-id="feed-forward-mlp">4. Feed-Forward (MLP)</h4>
+<p>Depois da atenção, cada token passa por uma MLP aplicada posição a posição. É onde o modelo <strong>refina localmente</strong> a representação global gerada pela atenção — captando padrões não-lineares e nuances sutis.</p>
+</section>
+<section id="multi-head-attention" class="level4">
+<h4 class="anchored" data-anchor-id="multi-head-attention">5. Multi-Head Attention</h4>
+<p>Em vez de uma única operação de atenção, o Transformer roda <strong>várias em paralelo</strong> (multi-head). Cada cabeça aprende a capturar um tipo de relação:</p>
+<ul>
+<li>uma foca em dependências curtas (“o gato” → “dorme”);</li>
+<li>outra rastreia coreferências longas (“ela” → “Maria” 12 tokens atrás);</li>
+<li>outra pega relações semânticas ou gramaticais.</li>
+</ul>
+</section>
+<section id="saída-linear-softmax" class="level4">
+<h4 class="anchored" data-anchor-id="saída-linear-softmax">6. Saída: Linear + Softmax</h4>
+<p>A saída do último bloco passa por uma camada linear que projeta no tamanho do vocabulário, e uma <strong>softmax</strong> converte em uma distribuição de probabilidades sobre o próximo token.</p>
+</section>
+</section>
+<section id="um-exemplo-concreto-macroeconomia-em-português" class="level3">
+<h3 class="anchored" data-anchor-id="um-exemplo-concreto-macroeconomia-em-português">Um exemplo concreto — macroeconomia em português</h3>
+<p>Frase de entrada:</p>
+<blockquote class="blockquote">
+<p><strong>“O Banco Central aumentou a taxa de juros porque…”</strong></p>
+</blockquote>
+<p>Passando pelo <strong>encoder</strong>:</p>
+<ol type="1">
+<li><strong>Embeddings</strong> — <code>["O", "Banco", "Central", "aumentou", "a", "taxa", "de", "juros", "porque"]</code> vira uma matriz de vetores. “Banco Central”, “juros” e “aumentou” ficam próximos no espaço — o modelo vê política monetária.</li>
+<li><strong>Positional Encoding</strong> — “aumentou juros” ≠ “juros aumentaram o Banco Central” (caos macroeconômico).</li>
+<li><strong>Multi-head attention</strong> — “porque” espera causalidade; “Banco Central” se conecta a “juros”; o modelo identifica que estamos em <em>policy making</em>.</li>
+<li><strong>Add &amp; Norm</strong> — estabiliza o aprendizado (o Copom tentando não perder o controle).</li>
+<li><strong>MLP</strong> — refina: <em>“isso aqui é sobre decisão de política monetária em reação a algo”</em>.</li>
+</ol>
+<p>No <strong>decoder</strong>:</p>
+<ol type="1">
+<li><strong>Masked self-attention</strong> — só olha para o passado gerado (não pode espiar o gabarito);</li>
+<li><strong>Attention cruzada com o encoder</strong> — “qual parte da entrada explica o próximo token?”;</li>
+<li><strong>Linear + softmax</strong> — distribuição sobre o vocabulário:
+<ul>
+<li><code>inflação: 80%</code></li>
+<li><code>desemprego: 10%</code></li>
+<li><code>câmbio: 10%</code></li>
+</ul></li>
+</ol>
+<p>Saída: <strong>“a inflação estava acima da meta”</strong>.</p>
+</section>
+<section id="treinamento-rlhf-e-raciocínio" class="level3">
+<h3 class="anchored" data-anchor-id="treinamento-rlhf-e-raciocínio">Treinamento, RLHF e raciocínio</h3>
+<ul>
+<li><strong>Pré-treino</strong> — prever o próximo token em bilhões de exemplos; ajustar pesos por gradiente descendente. <em>“Não tem consciência, tem otimização.”</em></li>
+<li><strong>RLHF</strong> (<em>Reinforcement Learning with Human Feedback</em>) — humanos avaliam respostas, o modelo aprende o que é útil, seguro e claro. <em>“É onde o modelo aprende a parecer inteligente.”</em></li>
+<li><strong>Raciocínio</strong> — quando o modelo responde <em>“…porque a inflação estava acima da meta”</em>, o que parece raciocínio é na verdade padrão aprendido + cadeia de probabilidade. <em>O modelo não pensa, ele simula pensamento.</em></li>
+</ul>
+</section>
+<section id="multimodalidade-contexto-e-memória" class="level3">
+<h3 class="anchored" data-anchor-id="multimodalidade-contexto-e-memória">Multimodalidade, contexto e memória</h3>
+<ul>
+<li><strong>Multimodalidade</strong> — texto, imagem e áudio viram embeddings no <strong>mesmo espaço vetorial</strong>, e o modelo gera o próximo token condicionado a qualquer mistura.</li>
+<li><strong>Contexto</strong> — o modelo enxerga apenas o que está dentro da <strong>janela de contexto</strong> (ex.: 8k, 200k, 1M tokens). Fora disso, esquece. Não é memória real, é contexto temporário.</li>
+<li><strong>Estratégias para contornar a janela</strong>:
+<ul>
+<li><strong>RAG</strong> (<em>Retrieval-Augmented Generation</em>) — buscar documentos externos e injetar no prompt;</li>
+<li><strong>Resumos iterativos</strong> — comprimir o histórico antigo;</li>
+<li><strong>Chunking</strong> — quebrar texto longo em pedaços;</li>
+<li><strong>Chain of thought</strong> — forçar raciocínio passo a passo;</li>
+<li><strong>Agentes</strong> — loops de decisão que decidem o que buscar/recordar (o hype atual).</li>
+</ul></li>
+</ul>
+<blockquote class="blockquote">
+<p><em>Transformers não entendem o mundo. Eles entendem padrões. E, surpreendentemente, isso é suficiente para parecer inteligência.</em></p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="aula-04-o-modelo-de-negócios-dos-llms" class="level2">
+<h2 class="anchored" data-anchor-id="aula-04-o-modelo-de-negócios-dos-llms">Aula 04 — O Modelo de Negócios dos LLMs</h2>
+<blockquote class="blockquote">
+<p><em>7 de abril de 2026</em></p>
+</blockquote>
+<p>A última aula tira o Transformer do laboratório e coloca no mercado: quem ganha dinheiro com isso, onde está a cadeia de valor, e o que isso significa para a carreira de quem está escutando.</p>
+<section id="modelo-como-serviço-retomada" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-como-serviço-retomada">Modelo como Serviço — retomada</h3>
+<p>A escala dos LLMs tem duas consequências econômicas já discutidas na Aula 01:</p>
+<ol type="1">
+<li>A IA fica mais poderosa → mais aplicações possíveis;</li>
+<li>Treinar LLMs custa tanto que só umas poucas organizações conseguem — e elas passam a <em>vender o modelo como serviço</em> via API.</li>
+</ol>
+</section>
+<section id="o-que-é-um-llm-de-verdade" class="level3">
+<h3 class="anchored" data-anchor-id="o-que-é-um-llm-de-verdade">O que é um LLM “de verdade”</h3>
+<ul>
+<li><strong>Tokens, embeddings, atenção</strong> — as três pernas técnicas;</li>
+<li>O que torna o modelo <strong>grande</strong> são quatro eixos: <em>parâmetros</em>, <em>dados</em>, <em>contexto</em> e <em>capacidade de generalização</em>;</li>
+</ul>
+<blockquote class="blockquote">
+<p><em>LLM não entende. Ele prevê. E isso já é suficiente para mudar o mundo.</em></p>
+</blockquote>
+</section>
+<section id="cadeia-de-valor-dos-llms" class="level3">
+<h3 class="anchored" data-anchor-id="cadeia-de-valor-dos-llms">Cadeia de valor dos LLMs</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Quem está lá</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Infraestrutura</strong></td>
+<td>NVIDIA (GPUs); AWS, Azure, GCP (cloud)</td>
+<td>Vende o “picareta e pá”</td>
+</tr>
+<tr class="even">
+<td><strong>Modelos fundacionais</strong></td>
+<td>OpenAI, Anthropic, Google, Meta, xAI, Mistral</td>
+<td>Treina e opera os LLMs</td>
+</tr>
+<tr class="odd">
+<td><strong>Aplicações</strong></td>
+<td>Chatbots, copilots, agentes, verticais</td>
+<td>Monta produtos sobre as APIs</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><em>Quem controla a infraestrutura controla o jogo. Quem controla o modelo define as regras.</em></p>
+</blockquote>
+</section>
+<section id="os-principais-players" class="level3">
+<h3 class="anchored" data-anchor-id="os-principais-players">Os principais players</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Força</th>
+<th>Fraqueza</th>
+<th>Estratégia</th>
+<th>Posicionamento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GPT</strong> (OpenAI)</td>
+<td>Equilíbrio geral, ecossistema forte (API + apps)</td>
+<td>Dependência da Microsoft; custo</td>
+<td>Produto + plataforma</td>
+<td><em>“Apple da IA — controle de experiência”</em></td>
+</tr>
+<tr class="even">
+<td><strong>Claude</strong> (Anthropic)</td>
+<td>Raciocínio limpo, contexto longo absurdo, foco em segurança</td>
+<td>Menos popular no varejo</td>
+<td>Segurança + contexto</td>
+<td><em>“O filósofo da turma — pensa antes de falar”</em></td>
+</tr>
+<tr class="odd">
+<td><strong>Gemini</strong> (Google)</td>
+<td>Multimodalidade forte, dados, distribuição</td>
+<td>Inconsistência</td>
+<td>Integração total com ecossistema</td>
+<td><em>“Não precisa ganhar. Só não pode perder.”</em></td>
+</tr>
+<tr class="even">
+<td><strong>Llama</strong> (Meta)</td>
+<td>Flexibilidade, customização</td>
+<td>Performance de ponta menor</td>
+<td>Open-source (quase)</td>
+<td><em>“Linux da IA”</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="guerra-futuro-e-oportunidade" class="level3">
+<h3 class="anchored" data-anchor-id="guerra-futuro-e-oportunidade">Guerra, futuro e oportunidade</h3>
+<p>Três eixos de disputa simultâneos:</p>
+<ul>
+<li><strong>Open vs.&nbsp;fechado</strong> — Llama, Mistral, DeepSeek vs.&nbsp;OpenAI, Anthropic, Google;</li>
+<li><strong>Big Tech vs.&nbsp;startups</strong> — quem absorve quem;</li>
+<li><strong>Infra vs.&nbsp;aplicação</strong> — onde fica a margem.</li>
+</ul>
+<blockquote class="blockquote">
+<p><em>LLM não é produto final. É commodity em formação.</em></p>
+</blockquote>
+<p><strong>Tendências:</strong></p>
+<ul>
+<li><strong>Agentes</strong> — autonomia ganhando espaço sobre chat;</li>
+<li><strong>Modelos menores e especializados</strong> — fine-tune &gt; um-tamanho-serve-todos;</li>
+<li><strong>Integração com dados proprietários</strong> — <em>moat</em> real está nos dados;</li>
+<li><strong>Fine-tuning vs.&nbsp;prompting</strong> — prompting resolve mais do que parece.</li>
+</ul>
+<blockquote class="blockquote">
+<p><em>Quem não tem dado próprio vai virar usuário — não player.</em></p>
+</blockquote>
+</section>
+<section id="o-que-isso-significa-para-a-carreira" class="level3">
+<h3 class="anchored" data-anchor-id="o-que-isso-significa-para-a-carreira">O que isso significa para a carreira</h3>
+<p>Sem romantismo, três perfis que sobrevivem à transição:</p>
+<ol type="1">
+<li><strong>Construtores</strong> — criam sistemas com LLMs (engenharia de IA aplicada);</li>
+<li><strong>Tradutores</strong> — conectam negócio ↔︎ tecnologia (quem decide <em>onde</em> usar);</li>
+<li><strong>Donos de dados</strong> — têm acesso exclusivo a corpora que ninguém mais tem.</li>
+</ol>
+<blockquote class="blockquote">
+<p><em>Aprender ferramenta é tática. Entender o jogo é estratégia.</em></p>
+</blockquote>
+</section>
+<section id="dois-exemplos-aplicados" class="level3">
+<h3 class="anchored" data-anchor-id="dois-exemplos-aplicados">Dois exemplos aplicados</h3>
+<p>A aula fecha com dois estudos de caso trazidos da prática da Análise Macro:</p>
+<ul>
+<li><strong>Exemplo 1 — IA vs.&nbsp;modelos clássicos</strong>: quando um LLM bate um modelo estatístico tradicional (e quando não bate). A comparação força a aula a descer do hype: LLMs são poderosíssimos em linguagem, mas não substituem um modelo econométrico bem especificado para previsão de série temporal estacionária.</li>
+<li><strong>Exemplo 2 — Agente de Saúde</strong>: um agente construído para operar no domínio médico, articulando busca, raciocínio e ações. Mostra na prática o salto do “chat” para “agente” e como a metodologia CRISP-DM se adapta quando o “modelo” é um LLM orquestrado.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="leitura-e-referências-centrais" class="level2">
+<h2 class="anchored" data-anchor-id="leitura-e-referências-centrais">Leitura e referências centrais</h2>
+<p>Material-base usado na preparação das aulas:</p>
+<ul>
+<li><strong>Vaswani et al.&nbsp;(2017)</strong>, <em>“Attention Is All You Need”</em> — o artigo que definiu a arquitetura;</li>
+<li><strong>Chip Huyen</strong>, <em>“AI Engineering: Building Applications with Foundation Models”</em> — referência para o enquadramento de engenharia de IA e modelo como serviço;</li>
+<li><strong>Jay Alammar &amp; Maarten Grootendorst</strong>, <em>“Hands-On Large Language Models”</em> — referência para as visualizações de tokens, embeddings e atenção;</li>
+<li><strong>Shannon (1951)</strong>, <em>“Prediction and Entropy of Printed English”</em> — raiz histórica da modelagem estatística de linguagem;</li>
+<li>Documentação técnica dos LLMs discutidos: <strong>OpenAI GPT</strong>, <strong>Anthropic Claude</strong>, <strong>Google Gemini</strong> e <strong>Meta Llama</strong>.</li>
+</ul>
+<hr>
+</section>
+<section id="material-do-curso" class="level2">
+<h2 class="anchored" data-anchor-id="material-do-curso">Material do curso</h2>
+<p>Os slides originais das quatro aulas estão disponíveis em PDF e PPTX no diretório <code>teaching/Transformers/</code> deste repositório:</p>
+<ul>
+<li><code>Aula01_26032026</code> — Panorama da IA, Modelos de Linguagem a LLMs, Modelos de Fundação;</li>
+<li><code>Aula02_31032026</code> — Tokens, Embeddings, Atenção e o artigo <em>Attention Is All You Need</em>;</li>
+<li><code>Aula03_02042026</code> — Arquitetura Transformer por dentro, exemplo macroeconômico, RLHF e memória;</li>
+<li><code>Aula04_07042026</code> — Modelo como serviço, cadeia de valor, principais players e oportunidades de carreira.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

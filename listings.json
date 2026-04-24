@@ -5,7 +5,9 @@
   },
   {
     "listing": "/teaching/index.html",
-    "items": []
+    "items": [
+      "/teaching/transformers-llms.html"
+    ]
   },
   {
     "listing": "/projetos/index.html",
