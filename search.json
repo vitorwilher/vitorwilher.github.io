@@ -193,14 +193,14 @@
     "href": "cv.html",
     "title": "Curriculum Vitae",
     "section": "",
-    "text": "Cientista de Dados | Mestre em Economia | IA Generativa aplicada em Economia e Finanças"
+    "text": "Cientista de Dados Sênior e Tech Lead"
   },
   {
     "objectID": "cv.html#vítor-wilher",
     "href": "cv.html#vítor-wilher",
     "title": "Curriculum Vitae",
     "section": "",
-    "text": "Cientista de Dados | Mestre em Economia | IA Generativa aplicada em Economia e Finanças"
+    "text": "Cientista de Dados Sênior e Tech Lead"
   },
   {
     "objectID": "cv.html#contatos",
@@ -210,25 +210,39 @@
     "text": "Contatos\n\nE-mail: vitorwilher@analisemacro.com.br\nLinkedIn: linkedin.com/in/vitorwilher\nGitHub: github.com/vitorwilher\nLocalização: Rio de Janeiro, RJ"
   },
   {
-    "objectID": "cv.html#formação",
-    "href": "cv.html#formação",
+    "objectID": "cv.html#resumo-das-habilidades",
+    "href": "cv.html#resumo-das-habilidades",
     "title": "Curriculum Vitae",
-    "section": "Formação",
-    "text": "Formação\n\n\n\n\n\n\n\n\nAno\nTítulo\nInstituição\n\n\n\n\n2026\nMaster em IA Generativa & LLM\nPUC-Rio\n\n\n2026\nBusiness Intelligence Master\nPUC-Rio\n\n\n2016\nEspecialização em Data Science com R\nJohns Hopkins University (on-line)\n\n\n2015\nMestre em Economia\nUniversidade Federal Fluminense\n\n\n2012\nBacharel em Economia\nUniversidade Federal Fluminense"
+    "section": "Resumo das Habilidades",
+    "text": "Resumo das Habilidades\nCientista de Dados com sólida formação em Economia e Estatística e mais de 10 anos de experiência com engenharia, análise e ciência de dados. Apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa.\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor.\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças. Atualmente é o Tech Lead da Análise Macro, empresa especializada em treinamento e consultoria em análise de dados."
   },
   {
-    "objectID": "cv.html#experiência",
-    "href": "cv.html#experiência",
+    "objectID": "cv.html#formação-educacional",
+    "href": "cv.html#formação-educacional",
     "title": "Curriculum Vitae",
-    "section": "Experiência",
-    "text": "Experiência\n\nCientista de Dados Chefe · Análise Macro (2015 – atual)\nLiderança técnica de projetos de ciência de dados aplicados à economia e finanças, com foco crescente em IA Generativa e LLMs.\n\n\nConselheiro · Instituto Millenium (2015 – 2019)\n\n\nProfessor Visitante · Universidade Veiga de Almeida (2015 – 2016)\n\n\nCoordenador · GECE/UFF (2013 – 2014)"
+    "section": "Formação Educacional",
+    "text": "Formação Educacional\n\nDoutorado em Economia · EPGE/FGV · 2026 – 2030\n\nTese em torno do uso de IA Generativa para previsão de séries econômicas e financeiras.\n\n\n\nPós-Graduação em LLMs e IA Generativa · PUC-Rio · 2025 – 2026\n\nTrabalho de Conclusão de Curso em torno do uso de IA Generativa para previsão de séries temporais.\n\n\n\nMestrado em Economia · UFF · 2013 – 2015\n\nCoordenador do Grupo de Estudos sobre Conjuntura Econômica (GECE/UFF);\nTutor da disciplina Conjuntura e Cenários Macroeconômicos;\nDissertação defendida com o título “Clareza da Comunicação do Banco Central e Expectativas de Inflação: evidências para o Brasil” perante banca composta pelos professores Gustavo H. B. Franco, Gabriel Montes Caldas, Luciano Vereda Oliveira e Carlos Enrique Guanziroli.\n\n\n\nGraduação em Economia · UFF · 2010 – 2012\n\nMonitor da disciplina Macroeconomia I;\nMonografia de Final de Curso: A nova política monetária brasileira no contexto da grande recessão.\n\n\n\nGraduação em Economia · UFRJ · 2007 – 2009\n\n\nTécnico de Telecomunicações · ETE Ferreira Viana · 1998 – 2000"
   },
   {
-    "objectID": "cv.html#habilidades",
-    "href": "cv.html#habilidades",
+    "objectID": "cv.html#experiência-profissional",
+    "href": "cv.html#experiência-profissional",
     "title": "Curriculum Vitae",
-    "section": "Habilidades",
-    "text": "Habilidades\nLinguagens: R · Python · SQL\nMétodos: Econometria · Machine Learning · NLP · Deep Learning · Séries Temporais\nIA: Prompt Engineering · LLMs · IA Generativa · RAG · Agentes\nFerramentas: Quarto · Git · Docker"
+    "section": "Experiência Profissional",
+    "text": "Experiência Profissional\n\nCientista de Dados Sênior e Tech Lead · Análise Macro · 2015 – atual\n\nConstrução de Agentes de IA com uso de RAG, ajuste de prompts, monitoramento e avaliação de performance com LangSmith e QA-Eval, orquestração com LangGraph;\nUso de técnicas de NLP para desenvolvimento de análise de sentimentos aplicada às atas do COPOM;\nConstrução e automatização de pipelines de ETL com SQL, R e Python para coleta e tratamento automatizado de dados econômicos e financeiros de fontes como B3, Banco Central e SIDRA/IBGE;\nAplicação de modelos econométricos, de machine learning e deep learning para fins preditivos de variáveis macroeconômicas como IPCA, Câmbio, Juros e PIB;\nLiderança técnica no design e desenvolvimento de mais de 40 cursos e programas de treinamento focados em R, Python e SQL;\nPrestação de treinamento e consultoria em análise de dados para empresas do mercado financeiro;\nLiderança no desenvolvimento de mais de 700 exercícios avançados de análise de dados no Clube AM — plataforma proprietária para publicação de desafios de ponta em R e Python;\nAplicação de metodologias ágeis para a criação de novos produtos digitais;\nMentoria para alunos das Formações da Análise Macro.\n\n\n\nMembro do Comitê de Gestão · Instituto Millenium · 2008 – 2018\n\nAtuou como membro do Conselho de Gestão da instituição;\nMinistrou palestras em todo o Brasil sobre perspectivas econômicas e análise de dados.\n\n\n\nProfessor · Universidade Veiga de Almeida · 2015\n\n[a preencher — bullets do PDF estão duplicados da seção Instituto Millenium]\n\n\n\nCoordenador · GECE/UFF · 2013 – 2014\n\nCoordenei alunos de graduação no desenvolvimento de análises de perspectivas econômicas;\nOrganizei e apresentei palestras com palestrantes renomados, incluindo o Professor Gustavo Franco e a Professora Mônica de Bolle.\n\n\n\nEstagiário Middle Office Comercial · Endesa · 2009 – 2010\nAtuação no middle office da área comercial da Endesa Geração de Energia. A atividade principal envolvia a elaboração de estudos e relatórios sobre o mercado de energia elétrica brasileiro, com o auxílio de modelos matemáticos (NEWAVE, principalmente) e acesso a regulamentos da ANEEL e da CCEE e publicações da EPE e da ONS. Além disso, era responsável pela elaboração de microestudos sobre a viabilidade financeira de operações de compra e venda de energia elétrica, sempre comparando o negócio proposto com o custo de oportunidade representado pelo PLD. Fiz uso intensivo de macros e VBA no Excel, além de operação do NEWAVE — modelo matemático responsável por gerar cenários de tendência para o preço da energia elétrica no Brasil.\n\n\nEstagiário · Incubadora de Empresas COPPE/UFRJ · 2009\nAtuação como Estagiário de Economia na assessoria econômico-financeira às empresas incubadas e na implementação e gerenciamento do Desafio Universitário Empreendedor Sebrae.\n\n\nEstagiário · RC Consultores · 2008\n\n[a preencher — descrição do PDF está duplicada da seção COPPE/UFRJ]\n\n\n\nEstagiário · Brechbuhler Consultoria · 2008\nAtuação como Estagiário de Economia na elaboração de rotinas de administração financeira de uma empresa (fluxo de caixa, DRE, balanço patrimonial etc.); elaboração de business plan; estruturação e obtenção de financiamento de longo prazo junto ao BNDES; estudos de viabilidade econômica; concepção e estruturação de project finance; entre outras atividades correlacionadas.\n\n\nTécnico de Gerência de Redes Sênior · Oi / Telemar · 2000 – 2007\nTrabalhou na Gerência de Redes Nacional da operadora como especialista na programação de centrais telefônicas de grande porte EWSD/Siemens. As atividades principais envolviam a configuração das centrais EWSD/Siemens da planta e resolução de falhas da rede doméstica (voz e sinalização) envolvendo principalmente protocolos TUP, ISUP e MFC-R2. Também era responsável pelo suporte e treinamento a outros membros da equipe. As habilidades necessárias eram saber programar em CHILL, conhecer redes/protocolos de telecomunicações e hardware da central EWSD/Siemens."
+  },
+  {
+    "objectID": "cv.html#idiomas",
+    "href": "cv.html#idiomas",
+    "title": "Curriculum Vitae",
+    "section": "Idiomas",
+    "text": "Idiomas\n\nInglês — Avançado\nEspanhol — Intermediário"
+  },
+  {
+    "objectID": "cv.html#habilidades-principais",
+    "href": "cv.html#habilidades-principais",
+    "title": "Curriculum Vitae",
+    "section": "Habilidades Principais",
+    "text": "Habilidades Principais\n\nComunicação e Liderança\nR\nPython\nSQL\nEconometria\nMachine Learning\nEstatística\nAnálise de Dados\nNLP\nRAG\nAgentes de Inteligência Artificial"
   },
   {
     "objectID": "projetos/index.html",
