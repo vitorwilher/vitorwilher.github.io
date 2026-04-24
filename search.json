@@ -7,13 +7,6 @@
     "text": "Vítor Wilher é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.\nHard Skills: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa\nSoft Skills: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor\nPrincipal interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.\n\nCaso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail vitorwilher@analisemacro.com.br."
   },
   {
-    "objectID": "research/index.html",
-    "href": "research/index.html",
-    "title": "Pesquisas",
-    "section": "",
-    "text": "No matching items"
-  },
-  {
     "objectID": "projetos/newsletter-digest-bot.html",
     "href": "projetos/newsletter-digest-bot.html",
     "title": "Newsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM",
@@ -182,11 +175,18 @@
     "text": "Próximos Passos\n\nAlertas automáticos por e-mail quando ROI cair abaixo de threshold configurável\nExportação de relatórios em PDF/Excel direto do dashboard\nSuporte a múltiplas contas de Meta Ads\nIntegração com Hotmart ou outras plataformas de entrega de cursos\nTestes automatizados para conectores e queries (pytest)\nIndicador de data de última atualização no dashboard"
   },
   {
-    "objectID": "projetos/index.html",
-    "href": "projetos/index.html",
-    "title": "Projetos",
+    "objectID": "research/index.html",
+    "href": "research/index.html",
+    "title": "Pesquisas",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nNewsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM\n\n\n\nPython\n\nClaude API\n\nLLM\n\nQuarto\n\nGitHub Actions\n\nMeta Graph API\n\nWhatsApp\n\nIMAP\n\nAutomação\n\n\n\nPipeline que coleta newsletters via IMAP, gera resumo temático com Claude Opus 4.7, renderiza PDF e entrega no WhatsApp toda manhã de domingo — alimentando a redação do…\n\n\n\n\n\n\nApr 23, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nROI Diagnóstico — Plataforma de Inteligência Comercial\n\n\n\nPython\n\nShiny\n\nEngenharia de Dados\n\nDuckDB\n\nGCS\n\nGitHub Actions\n\nMarketing\n\nCRM\n\n\n\nArquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e…\n\n\n\n\n\n\nApr 22, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "No matching items"
+  },
+  {
+    "objectID": "teaching/index.html",
+    "href": "teaching/index.html",
+    "title": "Cursos",
+    "section": "",
+    "text": "No matching items"
   },
   {
     "objectID": "cv.html",
@@ -231,10 +231,80 @@
     "text": "Habilidades\nLinguagens: R · Python · SQL\nMétodos: Econometria · Machine Learning · NLP · Deep Learning · Séries Temporais\nIA: Prompt Engineering · LLMs · IA Generativa · RAG · Agentes\nFerramentas: Quarto · Git · Docker"
   },
   {
-    "objectID": "teaching/index.html",
-    "href": "teaching/index.html",
-    "title": "Cursos",
+    "objectID": "projetos/index.html",
+    "href": "projetos/index.html",
+    "title": "Projetos",
     "section": "",
-    "text": "No matching items"
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nAgente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC\n\n\n\nPython\n\nGoogle Gemini\n\nLLM\n\nRAG\n\nLangGraph\n\nLangChain\n\nChroma\n\nShiny\n\nshinyapps.io\n\nAgente\n\nSaúde\n\n\n\nAgente conversacional ReAct (LangGraph + Gemini 2.5 Flash) sobre relatórios epidemiológicos da ECDC — recuperação contextual via Chroma e UI Shiny publicada em shinyapps.io.\n\n\n\n\n\n\nApr 24, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNewsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM\n\n\n\nPython\n\nClaude API\n\nLLM\n\nQuarto\n\nGitHub Actions\n\nMeta Graph API\n\nWhatsApp\n\nIMAP\n\nAutomação\n\n\n\nPipeline que coleta newsletters via IMAP, gera resumo temático com Claude Opus 4.7, renderiza PDF e entrega no WhatsApp toda manhã de domingo — alimentando a redação do…\n\n\n\n\n\n\nApr 23, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nROI Diagnóstico — Plataforma de Inteligência Comercial\n\n\n\nPython\n\nShiny\n\nEngenharia de Dados\n\nDuckDB\n\nGCS\n\nGitHub Actions\n\nMarketing\n\nCRM\n\n\n\nArquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e…\n\n\n\n\n\n\nApr 22, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projetos/metodologia.html",
+    "href": "projetos/metodologia.html",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "",
+    "text": "Agente de IA da Saúde — RAG sobre relatórios da ECDC com Gemini 2.5 Flash"
+  },
+  {
+    "objectID": "projetos/metodologia.html#visão-geral",
+    "href": "projetos/metodologia.html#visão-geral",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "Visão Geral",
+    "text": "Visão Geral\nEste projeto implementa, seguindo a metodologia CRISP-DM (Cross-Industry Standard Process for Data Mining), um agente de IA conversacional que responde perguntas de profissionais de saúde com base em relatórios epidemiológicos do European Centre for Disease Prevention and Control (ECDC) de 2021 sobre Zika, Sífilis e Tuberculose.\nAs seis fases do CRISP-DM foram adaptadas para um sistema de IA generativa com RAG e agente ReAct: a “modelagem” aqui é a composição agente + retriever + LLM com prompt engineering anti-alucinação; a “avaliação” é validação de precisão factual contra os PDFs de origem; o “deployment” é publicação em ambiente PaaS gerenciado.\n\n\n\n\n\n\nTipAplicação no ar\n\n\n\nDisponível em https://analisemacro.shinyapps.io/agente_ia_saude_poc/ — código-fonte em https://github.com/vitorwilher/agente_ia_saude."
+  },
+  {
+    "objectID": "projetos/metodologia.html#entendimento-do-negócio-business-understanding",
+    "href": "projetos/metodologia.html#entendimento-do-negócio-business-understanding",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "1. Entendimento do Negócio (Business Understanding)",
+    "text": "1. Entendimento do Negócio (Business Understanding)\n\n1.1 Problema\nProfissionais de saúde — principalmente médicos — precisam consultar dados epidemiológicos oficiais (incidência, taxas, faixas etárias, coinfecções, recomendações) com agilidade, mas os relatórios da ECDC são longos, em inglês e densos em tabelas. A leitura manual é lenta e propensa a erro de transcrição.\n\n\n1.2 Objetivo\nConstruir um assistente conversacional que:\n\nAceita perguntas em linguagem natural (PT/EN);\nRetorna respostas factuais e ancoradas nos relatórios;\nRecusa responder quando a informação não estiver nas fontes;\nMantém memória de conversa para perguntas de follow-up.\n\n\n\n1.3 Critérios de sucesso\n\n\n\n\n\n\n\nCritério\nMeta\n\n\n\n\nPrecisão factual\nNúmeros citados conferem com o PDF de origem\n\n\nAnti-alucinação\nRecusa explícita quando o contexto não cobre a pergunta\n\n\nIdioma\nResposta no idioma da pergunta\n\n\nLatência\nResposta em menos de 10s no free tier\n\n\nCusto operacional\nUS$ 0 (free tier do Gemini)\n\n\n\n\n\n1.4 Restrições identificadas\n\nAPI: free tier do Google Gemini → limites de RPM e modelos disponíveis.\nHospedagem: shinyapps.io Free → limite de horas-instância e ausência de gestão de variáveis de ambiente via painel.\nConhecimento fechado: o agente não deve responder com conhecimento genérico do LLM, apenas a partir dos PDFs."
+  },
+  {
+    "objectID": "projetos/metodologia.html#entendimento-dos-dados-data-understanding",
+    "href": "projetos/metodologia.html#entendimento-dos-dados-data-understanding",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "2. Entendimento dos Dados (Data Understanding)",
+    "text": "2. Entendimento dos Dados (Data Understanding)\n\n2.1 Fontes\nTrês relatórios anuais da ECDC publicados em 2021, totalizando 22 páginas:\n\n\n\n\n\n\n\n\nDocumento\nPáginas\nTema\n\n\n\n\nZika virus disease — annual epidemiological report 2021\n~7\nZika\n\n\nSyphilis — annual epidemiological report 2021\n~10\nSífilis\n\n\nTuberculosis — annual epidemiological report 2021\n~5\nTuberculose\n\n\nTotal\n22\n\n\n\n\n\n\n2.2 Características relevantes\n\nTexto estruturado em seções (epidemiologia, idade/gênero, transmissão, recomendações);\nTabelas e quadros com números absolutos e taxas por 100.000 habitantes;\nIdioma: inglês;\nDomínio fechado: ano-base 2021, escopo geográfico UE/EEE.\n\n\n\n\n\n\n\nTipInsight de Data Understanding\n\n\n\nPor serem relatórios oficiais com estrutura padronizada (mesmo template ECDC), os PDFs se beneficiam de chunking baseado em separadores naturais (parágrafos, seções) — daí a escolha do RecursiveCharacterTextSplitter à frente."
+  },
+  {
+    "objectID": "projetos/metodologia.html#preparação-dos-dados-data-preparation",
+    "href": "projetos/metodologia.html#preparação-dos-dados-data-preparation",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "3. Preparação dos Dados (Data Preparation)",
+    "text": "3. Preparação dos Dados (Data Preparation)\n\n3.1 Pipeline de indexação\nImplementado em src/index.py, executado uma única vez (e refeito apenas quando os PDFs mudam):\nloader = DirectoryLoader(\n    path=database_dir, glob=\"*.pdf\", loader_cls=PyPDFLoader\n)\ndocuments = loader.load()  # 22 páginas\n\nsplitter = RecursiveCharacterTextSplitter(\n    chunk_size=1500,\n    chunk_overlap=200,\n)\nchunks = splitter.split_documents(documents)  # 52 chunks\n\nChroma.from_documents(\n    documents=chunks,\n    embedding=get_embeddings(),\n    collection_name=\"health_reports\",\n    persist_directory=\"chroma_db\",\n)\n\n\n3.2 Decisões de preparação\n\n\n\n\n\n\n\n\nHiperparâmetro\nValor\nJustificativa\n\n\n\n\nchunk_size\n1500\nCaptura parágrafo inteiro sem perder precisão de retrieval\n\n\nchunk_overlap\n200\nEvita perder contexto em fronteiras de chunk\n\n\nembedding_model\ngemini-embedding-001\nModelo estável atual do Google (3072 dimensões)\n\n\nVetor store\nChroma persistente\nLocal, sem custo, ideal para POC\n\n\n\n\n\n\n\n\n\nWarningMigração forçada de modelo\n\n\n\nO modelo originalmente escolhido — text-embedding-004 — foi descontinuado pelo Google durante a evolução do projeto. Migrou-se para gemini-embedding-001, que produz embeddings com 3072 dimensões (vs 768 antigos), aumentando o tamanho do índice em ~4×.\n\n\n\n\n3.3 Separação build × runtime\nDecisão arquitetural importante: a indexação foi separada do código de runtime.\n\nsrc/index.py → executado offline, gera chroma_db/;\nsrc/rag.py → executado a cada cold start, apenas carrega o índice persistido.\n\nBenefício: cold start em segundos em vez de minutos, e zero chamadas de embedding em produção."
+  },
+  {
+    "objectID": "projetos/metodologia.html#modelagem-modeling",
+    "href": "projetos/metodologia.html#modelagem-modeling",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "4. Modelagem (Modeling)",
+    "text": "4. Modelagem (Modeling)\n\n4.1 Arquitetura: Agente ReAct + RAG\n\nflowchart TB\n  U([Usuário])\n  UI[Shiny Chat UI]\n  AG{LangGraph&lt;br&gt;ReAct Agent&lt;br&gt;gemini-2.5-flash}\n  T[Tool:&lt;br&gt;search_health_documents]\n  R[Retriever MMR&lt;br&gt;k=7]\n  VS[(Chroma&lt;br&gt;chroma_db/)]\n  MEM[(MemorySaver&lt;br&gt;thread_id)]\n\n  U &lt;--&gt; UI\n  UI &lt;--&gt; AG\n  AG &lt;--&gt;|decide se busca| T\n  T --&gt; R\n  R --&gt; VS\n  AG &lt;--&gt; MEM\n\n\n\n\n\n\n\n\n\n\n\n\n4.2 Por que um agente, e não RAG puro?\nEm um RAG clássico, toda pergunta dispara retrieval + LLM. Isso é desnecessário para saudações (“oi”), perguntas fora de escopo ou perguntas que o agente já respondeu antes na conversa.\nO agente ReAct decide dinamicamente:\n\n“Quantos casos de Zika em 2021?” → chama a tool, busca, responde.\n“Bom dia!” → responde direto, sem busca.\n“E nas mulheres?” (follow-up) → reformula a query da tool com contexto da conversa.\n\n\n\n4.3 Hiperparâmetros do LLM\n\n\n\nParâmetro\nValor\n\n\n\n\nModelo\ngemini-2.5-flash\n\n\ntemperature\n0\n\n\ntop_p\n0.9\n\n\ntop_k\n40\n\n\nmax_output_tokens\n5000\n\n\n\ntemperature = 0 é deliberada: queremos respostas determinísticas e factuais, não criativas.\n\n\n4.4 System prompt (anti-alucinação)\nTrecho do configs.json:\n\n“Você tem acesso a uma ferramenta search_health_documents. Use-a sempre que a pergunta exigir dados factuais. Nunca invente dados. Se o contexto recuperado não cobrir a pergunta, diga que não sabe. Cite números exatos. Responda no idioma da pergunta.”\n\n\n\n4.5 Memória de conversa\nMemorySaver do LangGraph persiste o histórico por thread_id. No app Shiny, o thread_id = session.id, garantindo que cada usuário tem sua própria conversa isolada."
+  },
+  {
+    "objectID": "projetos/metodologia.html#avaliação-evaluation",
+    "href": "projetos/metodologia.html#avaliação-evaluation",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "5. Avaliação (Evaluation)",
+    "text": "5. Avaliação (Evaluation)\n\n5.1 Validação end-to-end\nTeste de fumaça com pergunta canônica do PDF de Zika:\n\nPergunta: “Quantos casos de Zika foram registrados na União Europeia em 2021?”\nResposta: “Em 2021, foram registrados 7 casos de doença do vírus Zika em países da União Europeia/Espaço Econômico Europeu (UE/EEE). Os casos foram notificados pela Espanha (n=4), Alemanha (n=2) e Luxemburgo (n=1).”\n\nValidação: confere com o PDF original (página 1, tabela “Number of cases by reporting country”).\n\n\n5.2 Critérios qualitativos atingidos\n\n✅ Precisão numérica\n✅ Granularidade preservada (breakdown por país)\n✅ Idioma da pergunta (PT)\n✅ Sem alucinação\n✅ Latência menor que 5s em chamada quente\n\n\n\n5.3 Limitações conhecidas\n\nNão cita explicitamente qual PDF + página abaixo da resposta (o metadado existe, só não é exposto no Shiny);\nSem avaliação automatizada (golden set de Q&A);\nSem observabilidade de runtime (latência, taxa de uso da tool, etc.)."
+  },
+  {
+    "objectID": "projetos/metodologia.html#deployment",
+    "href": "projetos/metodologia.html#deployment",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "6. Deployment",
+    "text": "6. Deployment\n\n6.1 Stack de produção\n\n\n\nCamada\nTecnologia\n\n\n\n\nUI\nShiny for Python (shiny.express)\n\n\nOrquestração de agente\nLangGraph (create_react_agent)\n\n\nLLM\nGoogle Gemini API (gemini-2.5-flash)\n\n\nVetor DB\nChroma (persistência local)\n\n\nHospedagem\nshinyapps.io\n\n\nDeploy\nrsconnect-python\n\n\n\n\n\n6.2 Comando de deploy\nrsconnect deploy shiny . \\\n  -n analisemacro \\\n  --entrypoint src/app \\\n  --exclude '.DS_Store' \\\n  --exclude '__pycache__' \\\n  --exclude 'rsconnect-python' \\\n  --exclude '.git'\n\n\n\n\n\n\nImportantLições aprendidas no deploy\n\n\n\n\nPara shinyapps.io use -n &lt;nickname&gt;, não --server ou --account sozinhos — falham silenciosamente.\nVariáveis de ambiente (ex: GOOGLE_API_KEY) só são gerenciáveis via painel em planos pagos. No Free, a alternativa é incluir o .env no bundle.\ngemini-2.0-flash saiu do free tier — atualmente é necessário usar gemini-2.5-flash ou gemini-2.5-flash-lite.\nchroma_db/ ultrapassa o limite de 100MB do GitHub — gitignored; quem clonar precisa rodar python src/index.py localmente.\n\n\n\n\n\n6.3 Ciclo de manutenção\n\nflowchart LR\n  A[PDFs novos&lt;br&gt;ou atualizados] --&gt; B[python src/index.py --force]\n  B --&gt; C[Teste local&lt;br&gt;shiny run src/app.py]\n  C --&gt; D[git commit&lt;br&gt;+ git push]\n  D --&gt; E[rsconnect deploy]\n  E --&gt; F([Produção])"
+  },
+  {
+    "objectID": "projetos/metodologia.html#trabalhos-futuros",
+    "href": "projetos/metodologia.html#trabalhos-futuros",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "Trabalhos futuros",
+    "text": "Trabalhos futuros\n\nMostrar fontes abaixo de cada resposta (PDF + página);\nAvaliação automatizada: golden set de Q&A com ragas ou langsmith;\nObservabilidade: integrar com LangSmith / Phoenix para rastrear latência, taxa de uso da tool, qualidade das respostas;\nExpandir base: incluir mais relatórios da ECDC e de outras agências (CDC, OMS);\nCaching de respostas para perguntas frequentes."
+  },
+  {
+    "objectID": "projetos/metodologia.html#referências",
+    "href": "projetos/metodologia.html#referências",
+    "title": "Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC",
+    "section": "Referências",
+    "text": "Referências\n\nECDC. Annual Epidemiological Reports 2021. https://www.ecdc.europa.eu\nWirth, R.; Hipp, J. (2000). CRISP-DM: Towards a Standard Process Model for Data Mining.\nLangChain. LangGraph ReAct Agent. https://langchain-ai.github.io/langgraph/\nPosit. Shiny for Python. https://shiny.posit.co/py/"
   }
 ]

@@ -4,14 +4,15 @@
     "items": []
   },
   {
+    "listing": "/teaching/index.html",
+    "items": []
+  },
+  {
     "listing": "/projetos/index.html",
     "items": [
+      "/projetos/metodologia.html",
       "/projetos/newsletter-digest-bot.html",
       "/projetos/roi-diagnostico.html"
     ]
-  },
-  {
-    "listing": "/teaching/index.html",
-    "items": []
   }
 ]
