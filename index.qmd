@@ -11,9 +11,6 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com/in/vitorwilher
-    - icon: envelope
-      text: E-mail
-      href: mailto:vitorwilher@analisemacro.com.br
 ---
 
 **Vítor Wilher** é Cientista de Dados com sólida formação em Economia e Estatística e experiência prática em análise de dados econômicos e financeiros usando R, Python e IA Generativa. Um apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.
