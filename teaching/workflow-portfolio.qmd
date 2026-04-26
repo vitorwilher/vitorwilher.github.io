@@ -45,7 +45,49 @@ Nem tudo do projeto vai público. A regra é simples:
 
 ### 3. Um conjunto curto de frases-gatilho
 
-Em vez de memorizar comandos `git`, caminhos de pasta e ordem de operações, basta **dizer uma frase** e o agente executa o *workflow* completo. As frases ficam em memória e funcionam tanto a partir do diretório do projeto quanto a partir do `Github_Portfolio`.
+Em vez de memorizar comandos `git`, caminhos de pasta e ordem de operações, basta **dizer uma frase** e o agente executa o *workflow* completo. As frases ficam em **memória persistente do agente**, no nível pai `~/Dropbox/Portfolio/` (ver seção *Painel de controle único* abaixo).
+
+---
+
+## Painel de controle único
+
+::: {.callout-important}
+## Cwd padrão de trabalho: `~/Dropbox/Portfolio/`
+
+Todo o *workflow* de portfólio é operado a partir do diretório **pai** que contém todos os subprojetos:
+
+```
+~/Dropbox/Portfolio/        ← abrir o VS Code AQUI
+├── Sentimento_COPOM/
+├── ROI_Diagnostico/
+├── Github_Portfolio/
+├── <futuros projetos>/
+└── ...
+```
+:::
+
+A escolha é deliberada: se eu abro o VS Code dentro de um subprojeto (ex: `Sentimento_COPOM/`), o agente só enxerga as memórias específicas daquele projeto. Como as frases-gatilho são genéricas e atravessam projetos, elas vivem em uma **camada acima** — a memória do diretório pai `~/Dropbox/Portfolio/`.
+
+Concretamente, o agente carrega quatro memórias compartilhadas a partir desse cwd:
+
+| Memória | Conteúdo |
+|---|---|
+| `user_profile.md` | Quem é o autor, área de atuação, idioma de trabalho |
+| `portfolio_workflow.md` | Convenção da pasta `portfolio/` e da subpasta `research/` |
+| `github_portfolio_repos.md` | Caminhos locais, URLs dos remotos, *branch defaults* |
+| `portfolio_frases_gatilho.md` | Lista completa das frases e o que cada uma executa |
+
+A partir desse painel, o agente:
+
+- Cria pastas de subprojetos novos via *path* absoluto (`~/Dropbox/Portfolio/<NomeNovo>/`).
+- Sincroniza qualquer subprojeto existente com o site público em `Github_Portfolio/`.
+- Mantém memórias específicas de subprojeto (como o sistema de *releases* do Sentimento COPOM) **dentro** das pastas individuais — só as memórias de *workflow geral* sobem para o nível pai.
+
+::: {.callout-tip}
+## Por que **não** colocar tudo em memória global do usuário?
+
+Memórias globais (`~/.claude/CLAUDE.md`) seriam carregadas em **todas** as sessões, incluindo trabalhos completamente fora do portfólio. A camada `~/Dropbox/Portfolio/` é o escopo correto: acima dos subprojetos, abaixo do usuário-todo.
+:::
 
 ---
 
@@ -89,23 +131,27 @@ Github_Portfolio/
 
 ---
 
-## Fluxo de informação: três pontas, uma fonte
+## Fluxo de informação: painel, fonte de verdade, duas pontas
 
 ```{mermaid}
 flowchart LR
+  C["🎛️ ~/Dropbox/Portfolio/<br><b>PAINEL DE CONTROLE</b><br>cwd do VS Code<br>memórias compartilhadas"]
   P["📁 projeto/portfolio/<br><b>FONTE DE VERDADE</b>"]
   R[("🔒 GitHub<br>repo privado")]
   S(("🌐 vitorwilher.github.io<br>público"))
+
+  C -->|frases-gatilho| P
   P -->|README.md + código| R
   P -->|.qmd + imagens| S
   P -->|PDF público + página HTML<br><i>opcional, se virar paper</i>| S
 
+  style C fill:#e1f0ff,stroke:#1f6feb,stroke-width:2px
   style P fill:#fff4d6,stroke:#d4a017,stroke-width:2px
   style R fill:#fde2e2,stroke:#c0392b
   style S fill:#d4edda,stroke:#27ae60
 ```
 
-A pasta `portfolio/` no projeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.
+O painel de controle é onde você opera (cwd `~/Dropbox/Portfolio/`). A pasta `portfolio/` de cada subprojeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.
 
 ---
 
@@ -113,10 +159,12 @@ A pasta `portfolio/` no projeto é a única fonte que se edita. O agente sincron
 
 **Frase-gatilho:** *"vamos abrir o projeto `<nome>`"* (ou *"abrir projeto `<slug>`"*)
 
+**Onde você está quando diz isso:** com o VS Code aberto em `~/Dropbox/Portfolio/` (o painel de controle). O agente já tem todas as memórias do *workflow* carregadas — não precisa replicar nada para a pasta nova.
+
 ```{mermaid}
 flowchart TB
-  A([💬 'vamos abrir o projeto X']) --> B[Cria pasta projeto/]
-  B --> C[Cria portfolio/ com<br>slug.qmd, README.md,<br>_TEMPLATE.md]
+  A([💬 'vamos abrir o projeto X']) --> B[Cria pasta<br>~/Dropbox/Portfolio/X/]
+  B --> C[Cria X/portfolio/ com<br>slug.qmd, README.md,<br>_TEMPLATE.md]
   C --> D[Cria .gitignore<br>blindado]
   D --> E[git init -b main<br>+ primeiro commit]
   E --> F{Criar repo<br>privado<br>agora?}
@@ -127,13 +175,13 @@ flowchart TB
 
 **O que o agente faz automaticamente:**
 
-1. Cria pasta `~/Dropbox/Portfolio/<nome>/`
+1. Cria pasta `~/Dropbox/Portfolio/<nome>/` (continuando no cwd do painel)
 2. Cria `<nome>/portfolio/` com `<slug>.qmd` no template CRISP-DM (6 fases já estruturadas), `README.md` enxuto, `_TEMPLATE.md` (referência)
 3. Cria `.gitignore` blindado: `.env`, `.quarto/`, `_freeze/`, `__pycache__/`, `_rollback/`, `archive/`, `.venv/`, `.DS_Store`
 4. `git init -b main` + primeiro commit
 5. Pergunta se cria repo privado já agora (criar repo é ação visível, requer confirmação)
 
-**Sua responsabilidade:** desenvolver o projeto. Edita o `.qmd` do `portfolio/` à medida que as fases CRISP-DM amadurecem.
+**Sua responsabilidade:** desenvolver o projeto. Edita o `.qmd` do `portfolio/` à medida que as fases CRISP-DM amadurecem. Tudo continua a partir do mesmo cwd `~/Dropbox/Portfolio/` — o agente alcança qualquer subprojeto via *path* absoluto.
 
 ---
 
