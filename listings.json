@@ -9,13 +9,15 @@
     ]
   },
   {
+    "listing": "/research/index.html",
+    "items": [
+      "/research/sentimento-copom.html"
+    ]
+  },
+  {
     "listing": "/teaching/index.html",
     "items": [
       "/teaching/transformers-llms.html"
     ]
-  },
-  {
-    "listing": "/research/index.html",
-    "items": []
   }
 ]

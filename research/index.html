@@ -83,9 +83,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -198,7 +198,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw==">Análise de Texto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V29ya2luZyUyMFBhcGVy">Working Paper <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content column-page-left" id="quarto-document-content">
 
@@ -227,7 +227,51 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTExNcyUyQ05MUCUyQ0FuJUMzJUExbGlzZSUyMGRlJTIwVGV4dG8lMkNNYWNyb2Vjb25vbWlhJTJDV29ya2luZyUyMFBhcGVy" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1777238257024" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1346">
+<div class="thumbnail"><a href="../research/sentimento-copom.html" class="no-external">
 
+<img loading="lazy" src="../research/sentimento_copom_indice.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../research/sentimento-copom.html" class="no-external">Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs</a>
+</h3>
+<div class="listing-subtitle">
+<a href="../research/sentimento-copom.html" class="no-external">Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini</a>
+</div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QmFuY28lMjBDZW50cmFs'); return false;">Banco Central</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">NLP</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw=='); return false;">Análise de Texto</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
+
+</div>
+<div class="delink listing-description"><a href="../research/sentimento-copom.html" class="no-external">
+<p>Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../research/sentimento-copom.html" class="no-external">
+<div class="listing-date">
+Apr 26, 2026
+</div>
+<div class="listing-author">
+Vitor Wilher, Luiz Henrique Barbosa Filho
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->

@@ -6,8 +6,12 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Vitor Wilher">
+<meta name="author" content="Luiz Henrique Barbosa Filho">
+<meta name="dcterms.date" content="2026-04-26">
+<meta name="description" content="Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).">
 
-<title>Cursos – Portfólio do VW</title>
+<title>Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,6 +27,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -34,8 +73,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/profile.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,35 +110,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -166,7 +174,7 @@ window.Quarto = {
 <span class="menu-text">Projetos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../teaching/index.html" aria-current="page"> 
+    <a class="nav-link" href="../teaching/index.html"> 
 <span class="menu-text">Cursos</span></a>
   </li>  
   <li class="nav-item">
@@ -193,25 +201,78 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QXR0ZW50aW9u">Attention <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5zaW5v">Ensino <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUElMjBHZW5lcmF0aXZh">IA Generativa <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TUJB">MBA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TXVsdGltb2RhbGlkYWRl">Multimodalidade <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UkxIRg==">RLHF <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJhbnNmb3JtZXI=">Transformer <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#resumo" id="toc-resumo" class="nav-link active" data-scroll-target="#resumo">Resumo</a></li>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#histórico-de-versões" id="toc-histórico-de-versões" class="nav-link" data-scroll-target="#histórico-de-versões">Histórico de versões</a></li>
+  <li><a href="#como-citar" id="toc-como-citar" class="nav-link" data-scroll-target="#como-citar">Como citar</a></li>
+  <li><a href="#comentários-críticas-e-diálogo" id="toc-comentários-críticas-e-diálogo" class="nav-link" data-scroll-target="#comentários-críticas-e-diálogo">Comentários, críticas e diálogo</a></li>
+  <li><a href="#veja-também" id="toc-veja-também" class="nav-link" data-scroll-target="#veja-também">Veja também</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Cursos</h1>
+<h1 class="title">Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs</h1>
+<p class="subtitle lead">Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">LLMs</div>
+    <div class="quarto-category">NLP</div>
+    <div class="quarto-category">Análise de Texto</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">Working Paper</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).
+  </div>
 </div>
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Vitor Wilher <a href="mailto:vitorwilher@analisemacro.com.br" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Análise Macro
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Luiz Henrique Barbosa Filho </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Análise Macro
+          </p>
+      </div>
+  </div>
 
+<div class="quarto-title-meta">
 
-<div class="quarto-title-meta column-page-left">
-
-    
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 26, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,56 +282,104 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TExNJTJDVHJhbnNmb3JtZXIlMkNJQSUyMEdlbmVyYXRpdmElMkNFbnNpbm8lMkNNQkElMkNBdHRlbnRpb24lMkNSTEhGJTJDTXVsdGltb2RhbGlkYWRl" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1777238257127" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2959">
-<div class="thumbnail"><a href="../teaching/transformers-llms.html" class="no-external">
-
-<img loading="lazy" src="../teaching/transformers_cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../teaching/transformers-llms.html" class="no-external">Transformers &amp; Large Language Models — MBA IA for Business 2026</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExN'); return false;">LLM</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VHJhbnNmb3JtZXI='); return false;">Transformer</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('SUElMjBHZW5lcmF0aXZh'); return false;">IA Generativa</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RW5zaW5v'); return false;">Ensino</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TUJB'); return false;">MBA</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QXR0ZW50aW9u'); return false;">Attention</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UkxIRg=='); return false;">RLHF</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TXVsdGltb2RhbGlkYWRl'); return false;">Multimodalidade</div>
-
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="delink listing-description"><a href="../teaching/transformers-llms.html" class="no-external">
-<p>Curso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../teaching/transformers-llms.html" class="no-external">
-<div class="listing-date">
-Apr 7, 2026
-</div>
-</a>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Working paper · em desenvolvimento contínuo
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>Este é um <em>working paper</em> publicado em modelo de <strong>paper vivo</strong>: cada release vem acompanhada de um <em>changelog</em> explícito com o que mudou, o porquê e que evidências foram acrescentadas. <strong>Comentários e críticas são muito bem-vindos</strong> — se você é pesquisador(a) da área e quer dialogar sobre o exercício, escreva direto para <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a>.</p>
 </div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</div>
+<div style="text-align: center; margin: 2em 0;">
+<p><a href="sentimento_copom_IA_publico.pdf" class="btn btn-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📄 Baixar PDF (versão atual — v1.0)</strong></a></p>
+</div>
+<hr>
+<section id="resumo" class="level2">
+<h2 class="anchored" data-anchor-id="resumo">Resumo</h2>
+<p>A comunicação dos bancos centrais é, em si, um instrumento de política monetária, e as atas do Comitê de Política Monetária (Copom) do Banco Central do Brasil concentram, em escolhas sutis de linguagem, informação relevante sobre a direção futura da Selic. Este trabalho constrói um Índice de Tom das atas do Copom utilizando <strong>três modelos de linguagem de grande porte (LLMs)</strong> — Gemini Flash Lite (Google), Claude Haiku 4.5 (Anthropic) e GPT-4.1-mini (OpenAI) — em um <em>pipeline</em> reprodutível em Python, com saída estruturada via Pydantic e cache local incremental que torna a publicação contínua do índice viável a custo marginal próximo de zero. O mesmo <em>prompt</em> é aplicado aos mesmos textos pelos três provedores, e os <em>scores</em> brutos são calibrados em pontos percentuais equivalentes da Selic via regressão linear simples.</p>
+<p>A robustez do exercício é testada em <strong>três camadas complementares de validação empírica</strong>: inferência formal <em>in-sample</em> (com erros-padrão, <em>p</em>-valores e intervalos de confiança para <span class="math inline">\(\hat{\beta}\)</span>), <em>holdout</em> das últimas seis reuniões e validação cruzada <em>walk-forward</em> sobre toda a amostra. Para o histórico iniciado na reunião 232 do Copom (agosto de 2020), o GPT-4.1-mini lidera tanto <em>in-sample</em> (<span class="math inline">\(R^2 \approx 0{,}66\)</span>) quanto <em>out-of-sample</em> na <em>walk-forward</em> (RMSE 0,357, cerca de 32% melhor que o <em>baseline</em> léxico), seguido do Claude Haiku 4.5 (<span class="math inline">\(R^2 \approx 0{,}43\)</span>, com a maior sensibilidade <em>in-sample</em>, <span class="math inline">\(\hat{\beta} \approx +0{,}62\)</span>) e do Gemini Flash Lite (<span class="math inline">\(R^2 \approx 0{,}35\)</span>, com a leitura mais conservadora); Claude e Gemini empatam <em>out-of-sample</em>, evidenciando que maior sensibilidade <em>in-sample</em> não compra poder preditivo.</p>
+<p>As correlações entre os <em>scores</em> brutos (0,67–0,78) revelam que os três modelos <strong>concordam sobre a direção</strong> do tom — qual ata é mais <em>hawkish</em> (sinaliza juros mais altos) ou <em>dovish</em> (sinaliza juros mais baixos) — mas <strong>divergem sobre a intensidade</strong> com que essa direção se traduz em variação da Selic: a sensibilidade <span class="math inline">\(\hat{\beta}\)</span> varia de <span class="math inline">\(+0{,}36\)</span> a <span class="math inline">\(+0{,}62\)</span> p.p. por unidade de <em>score</em>, uma diferença de mais de 70%. Para classificar viradas de ciclo monetário, qualquer um dos três modelos serve; para usar o índice como variável quantitativa em um modelo macroeconômico — uma regra de Taylor, por exemplo — a escolha do provedor altera o resultado de forma material.</p>
+<p><strong>Palavras-chave:</strong> Política Monetária; Banco Central do Brasil; Copom; Modelos de Linguagem de Grande Porte; Análise de Texto; Índice de Tom <em>Hawkish-Dovish</em>; Selic.</p>
+<p><strong>Códigos JEL:</strong> E52, E58, C45, C55.</p>
+<hr>
+</section>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>Central bank communication is, in itself, a monetary policy instrument, and the minutes of Brazil’s Monetary Policy Committee (<em>Copom</em>) concentrate, in subtle language choices, meaningful information about the future path of the Selic rate. This paper builds a Tone Index of Copom minutes using <strong>three large language models (LLMs)</strong> — Gemini Flash Lite (Google), Claude Haiku 4.5 (Anthropic), and GPT-4.1-mini (OpenAI) — within a reproducible Python <em>pipeline</em> featuring Pydantic-based structured output and incremental local caching, which makes continuous publication of the index viable at near-zero marginal cost. The same <em>prompt</em> is applied to the same texts by all three providers, and the resulting raw <em>scores</em> are calibrated in basis-points-equivalent of the Selic rate via simple linear regression.</p>
+<p>The exercise is validated through <strong>three complementary empirical layers</strong>: formal <em>in-sample</em> inference (with standard errors, <em>p</em>-values, and confidence intervals for <span class="math inline">\(\hat{\beta}\)</span>), <em>holdout</em> of the last six meetings, and <em>walk-forward</em> cross-validation over the full sample. Over the sample starting from Copom meeting 232 (August 2020), GPT-4.1-mini leads both <em>in-sample</em> (<span class="math inline">\(R^2 \approx 0.66\)</span>) and <em>out-of-sample</em> in <em>walk-forward</em> (RMSE 0.357, around 32% better than the lexicon baseline), followed by Claude Haiku 4.5 (<span class="math inline">\(R^2 \approx 0.43\)</span>, with the highest <em>in-sample</em> sensitivity, <span class="math inline">\(\hat{\beta} \approx +0.62\)</span>) and Gemini Flash Lite (<span class="math inline">\(R^2 \approx 0.35\)</span>, with the most conservative reading); Claude and Gemini tie <em>out-of-sample</em>, showing that higher <em>in-sample</em> sensitivity does not buy predictive power.</p>
+<p>Correlations among the raw <em>scores</em> (0.67–0.78) reveal that the three models <strong>agree on the direction</strong> of the tone — which minutes are more <em>hawkish</em> (signaling higher interest rates) or more <em>dovish</em> (signaling lower interest rates) — but <strong>diverge on the intensity</strong> with which this direction translates into Selic-rate variation: the sensitivity <span class="math inline">\(\hat{\beta}\)</span> ranges from <span class="math inline">\(+0.36\)</span> to <span class="math inline">\(+0.62\)</span> percentage points per unit of <em>score</em>, a gap of more than 70%. For classifying turning points in the monetary cycle, any of the three models suffices; for using the index as a quantitative variable in a macroeconomic model — a Taylor rule, for instance — the choice of provider materially changes the outcome.</p>
+<p><strong>Keywords:</strong> Monetary Policy; Central Bank of Brazil; Copom; Large Language Models; Text Analysis; Hawkish-Dovish Tone Index; Selic.</p>
+<hr>
+</section>
+<section id="histórico-de-versões" class="level2">
+<h2 class="anchored" data-anchor-id="histórico-de-versões">Histórico de versões</h2>
+<p>Cada release do <em>paper</em> é acompanhada de um sumário explícito do que mudou, do porquê e das evidências empíricas acrescentadas. Snapshots completos de cada versão são preservados internamente para garantir reprodutibilidade.</p>
+<section id="v1.0-26-de-abril-de-2026" class="level3">
+<h3 class="anchored" data-anchor-id="v1.0-26-de-abril-de-2026">[v1.0] — 26 de abril de 2026</h3>
+<p>Primeira versão completa do <em>paper</em>, com tese empiricamente sustentada em três camadas de validação.</p>
+<p><strong>Estrutura:</strong> Introdução, Revisão da Literatura (quatro ondas + literatura brasileira), Metodologia e Dados (com justificativa explícita do recorte amostral), Implementação, Análise dos Resultados, Surpresa de Comunicação (z-score), Próximos Passos, Conclusão e Referências.</p>
+<p><strong>Pipeline empírico:</strong> coleta automatizada das atas do Copom via API do BCB a partir da reunião 232 (agosto de 2020); pré-processamento com extração das seções A (diagnóstico) e B (cenários e riscos); <em>scoring</em> via três LLMs em paralelo (<code>gemini-flash-lite-latest</code>, <code>claude-haiku-4-5</code>, <code>gpt-4.1-mini</code>); saída estruturada via Pydantic; <em>baseline</em> metodológico com léxico <em>hawkish/dovish</em> em português adaptado ao Copom (espírito Loughran-McDonald).</p>
+<p><strong>Validação empírica em três camadas:</strong></p>
+<ol type="1">
+<li><strong>Inferência <em>in-sample</em></strong> via <code>statsmodels.OLS</code> — reporta <span class="math inline">\(\hat{\beta}\)</span>, SE, <span class="math inline">\(t\)</span>, <span class="math inline">\(p\)</span>, IC 95%, <span class="math inline">\(R^2\)</span> e <span class="math inline">\(R^2_{\text{adj}}\)</span> para os 4 modelos.</li>
+<li><strong>Holdout</strong> das últimas 6 reuniões (RMSE e MAE).</li>
+<li><strong>Validação cruzada <em>walk-forward</em></strong> com janela expansiva e treino mínimo de 20 atas (<span class="math inline">\(n_{\text{pred}} = 26\)</span>).</li>
+</ol>
+<p><strong>Achados centrais:</strong></p>
+<ul>
+<li>OpenAI GPT-4.1-mini lidera nos três exercícios (<span class="math inline">\(R^2 \approx 0{,}66\)</span> <em>in-sample</em>; RMSE <em>walk-forward</em> 0,357).</li>
+<li>Claude Haiku 4.5 com maior sensibilidade <em>in-sample</em> (<span class="math inline">\(\hat{\beta} \approx +0{,}62\)</span>) mas <em>overfit</em> claro (RMSE quase dobra fora da amostra).</li>
+<li>Gemini Flash Lite com leitura mais conservadora; empata com Claude <em>out-of-sample</em>.</li>
+<li><em>Baseline</em> léxico ganha o <em>holdout</em> (artefato de janela calma) mas volta ao último na <em>walk-forward</em> — confirma que a vantagem dos LLMs é genuína sobre o ciclo completo.</li>
+<li><strong>Tese consolidada:</strong> “concordam sobre a direção do tom, divergem sobre a intensidade”.</li>
+</ul>
+<p><strong>Bibliografia:</strong> 11 entradas cobrindo comunicação de bancos centrais (Blinder et al.&nbsp;2008, Woodford 2003), literatura de dicionários (Loughran &amp; McDonald 2011, Apel &amp; Grimaldi 2012), modelos de tópicos (Hansen, McMahon &amp; Prat 2018, Picault &amp; Renault 2017, Bholat et al.&nbsp;2015, Hubert &amp; Labondance 2021), LLMs em comunicação de BC (Hansen &amp; Kazinnik 2023, Hansen &amp; McMahon 2016) e literatura brasileira (Caruso 2026).</p>
+</section>
+<section id="próximas-versões" class="level3">
+<h3 class="anchored" data-anchor-id="próximas-versões">Próximas versões</h3>
+<p>A v2.0 está em planejamento e atacará prioritariamente: capacidade antecedente <span class="math inline">\(t \to t+1\)</span> (regressão preditiva), robustez a perturbações de <em>prompt</em> + variância entre execuções, e o índice <em>ensemble</em>.</p>
+<hr>
+</section>
+</section>
+<section id="como-citar" class="level2">
+<h2 class="anchored" data-anchor-id="como-citar">Como citar</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">@unpublished</span>{<span class="ot">wilher_barbosa_2026_sentimento_copom</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span>    = {Wilher, Vitor and Barbosa Filho, Luiz Henrique},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>     = {Mesmo Sinal, Calibra<span class="ch">\c</span>{c}<span class="ch">\~</span>oes Diferentes:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               Um <span class="ch">\'</span>Indice de Tom das Atas do Copom com M<span class="ch">\'</span>ultiplos LLMs},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>      = {Working paper, vers<span class="ch">\~</span>ao 1.0},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">month</span>     = {abr},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">url</span>       = {https://vitorwilher.github.io/research/sentimento-copom.html}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="comentários-críticas-e-diálogo" class="level2">
+<h2 class="anchored" data-anchor-id="comentários-críticas-e-diálogo">Comentários, críticas e diálogo</h2>
+<p>Este <em>paper</em> é mantido em modelo aberto à crítica acadêmica. Se você é pesquisador(a), praticante de mercado ou estudante e quer comentar, criticar, replicar ou estender o exercício, escreva diretamente para:</p>
+<p>📧 <strong><a href="mailto:vitorwilher@analisemacro.com.br?subject=Sentimento%20COPOM%20—%20comentários">vitorwilher@analisemacro.com.br</a></strong></p>
+<p>Sugestões metodológicas, indicações de literatura adicional, replicações em outros bancos centrais ou perídodos, e críticas aos critérios de validação empírica são particularmente bem-vindas.</p>
+<hr>
+</section>
+<section id="veja-também" class="level2">
+<h2 class="anchored" data-anchor-id="veja-também">Veja também</h2>
+<ul>
+<li>🛠️ <strong>Ficha técnica do projeto</strong> (metodologia CRISP-DM, arquitetura, sistema de versões): <a href="../projetos/sentimento-copom.html">Sentimento COPOM — projeto</a></li>
+</ul>
+<hr>
+<div class="text-muted" style="font-size: 0.85em;">
+<p><em>O código-fonte do pipeline é mantido privado. As decisões metodológicas, fórmulas, </em>prompts* e resultados estão integralmente documentados no PDF acima.*</p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
