@@ -1,0 +1,122 @@
+---
+title: "Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs"
+subtitle: "Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini"
+date: "2026-04-26"
+author:
+  - name: Vitor Wilher
+    affiliation: Análise Macro
+    email: vitorwilher@analisemacro.com.br
+  - name: Luiz Henrique Barbosa Filho
+    affiliation: Análise Macro
+categories: [Política Monetária, Banco Central, LLMs, NLP, Análise de Texto, Macroeconomia, Working Paper]
+description: "Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward)."
+image: "sentimento_copom_indice.png"
+---
+
+::: {.callout-note}
+## Working paper · em desenvolvimento contínuo
+
+Este é um *working paper* publicado em modelo de **paper vivo**: cada release vem acompanhada de um *changelog* explícito com o que mudou, o porquê e que evidências foram acrescentadas. **Comentários e críticas são muito bem-vindos** — se você é pesquisador(a) da área e quer dialogar sobre o exercício, escreva direto para [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br).
+:::
+
+<div style="text-align: center; margin: 2em 0;">
+[**📄 Baixar PDF (versão atual — v1.0)**](sentimento_copom_IA_publico.pdf){.btn .btn-primary role="button" style="font-size: 1.1em; padding: 0.8em 2em;"}
+</div>
+
+---
+
+## Resumo
+
+A comunicação dos bancos centrais é, em si, um instrumento de política monetária, e as atas do Comitê de Política Monetária (Copom) do Banco Central do Brasil concentram, em escolhas sutis de linguagem, informação relevante sobre a direção futura da Selic. Este trabalho constrói um Índice de Tom das atas do Copom utilizando **três modelos de linguagem de grande porte (LLMs)** — Gemini Flash Lite (Google), Claude Haiku 4.5 (Anthropic) e GPT-4.1-mini (OpenAI) — em um *pipeline* reprodutível em Python, com saída estruturada via Pydantic e cache local incremental que torna a publicação contínua do índice viável a custo marginal próximo de zero. O mesmo *prompt* é aplicado aos mesmos textos pelos três provedores, e os *scores* brutos são calibrados em pontos percentuais equivalentes da Selic via regressão linear simples.
+
+A robustez do exercício é testada em **três camadas complementares de validação empírica**: inferência formal *in-sample* (com erros-padrão, *p*-valores e intervalos de confiança para $\hat{\beta}$), *holdout* das últimas seis reuniões e validação cruzada *walk-forward* sobre toda a amostra. Para o histórico iniciado na reunião 232 do Copom (agosto de 2020), o GPT-4.1-mini lidera tanto *in-sample* ($R^2 \approx 0{,}66$) quanto *out-of-sample* na *walk-forward* (RMSE 0,357, cerca de 32% melhor que o *baseline* léxico), seguido do Claude Haiku 4.5 ($R^2 \approx 0{,}43$, com a maior sensibilidade *in-sample*, $\hat{\beta} \approx +0{,}62$) e do Gemini Flash Lite ($R^2 \approx 0{,}35$, com a leitura mais conservadora); Claude e Gemini empatam *out-of-sample*, evidenciando que maior sensibilidade *in-sample* não compra poder preditivo.
+
+As correlações entre os *scores* brutos (0,67–0,78) revelam que os três modelos **concordam sobre a direção** do tom — qual ata é mais *hawkish* (sinaliza juros mais altos) ou *dovish* (sinaliza juros mais baixos) — mas **divergem sobre a intensidade** com que essa direção se traduz em variação da Selic: a sensibilidade $\hat{\beta}$ varia de $+0{,}36$ a $+0{,}62$ p.p. por unidade de *score*, uma diferença de mais de 70%. Para classificar viradas de ciclo monetário, qualquer um dos três modelos serve; para usar o índice como variável quantitativa em um modelo macroeconômico — uma regra de Taylor, por exemplo — a escolha do provedor altera o resultado de forma material.
+
+**Palavras-chave:** Política Monetária; Banco Central do Brasil; Copom; Modelos de Linguagem de Grande Porte; Análise de Texto; Índice de Tom *Hawkish-Dovish*; Selic.
+
+**Códigos JEL:** E52, E58, C45, C55.
+
+---
+
+## Abstract
+
+Central bank communication is, in itself, a monetary policy instrument, and the minutes of Brazil's Monetary Policy Committee (*Copom*) concentrate, in subtle language choices, meaningful information about the future path of the Selic rate. This paper builds a Tone Index of Copom minutes using **three large language models (LLMs)** — Gemini Flash Lite (Google), Claude Haiku 4.5 (Anthropic), and GPT-4.1-mini (OpenAI) — within a reproducible Python *pipeline* featuring Pydantic-based structured output and incremental local caching, which makes continuous publication of the index viable at near-zero marginal cost. The same *prompt* is applied to the same texts by all three providers, and the resulting raw *scores* are calibrated in basis-points-equivalent of the Selic rate via simple linear regression.
+
+The exercise is validated through **three complementary empirical layers**: formal *in-sample* inference (with standard errors, *p*-values, and confidence intervals for $\hat{\beta}$), *holdout* of the last six meetings, and *walk-forward* cross-validation over the full sample. Over the sample starting from Copom meeting 232 (August 2020), GPT-4.1-mini leads both *in-sample* ($R^2 \approx 0.66$) and *out-of-sample* in *walk-forward* (RMSE 0.357, around 32% better than the lexicon baseline), followed by Claude Haiku 4.5 ($R^2 \approx 0.43$, with the highest *in-sample* sensitivity, $\hat{\beta} \approx +0.62$) and Gemini Flash Lite ($R^2 \approx 0.35$, with the most conservative reading); Claude and Gemini tie *out-of-sample*, showing that higher *in-sample* sensitivity does not buy predictive power.
+
+Correlations among the raw *scores* (0.67–0.78) reveal that the three models **agree on the direction** of the tone — which minutes are more *hawkish* (signaling higher interest rates) or more *dovish* (signaling lower interest rates) — but **diverge on the intensity** with which this direction translates into Selic-rate variation: the sensitivity $\hat{\beta}$ ranges from $+0.36$ to $+0.62$ percentage points per unit of *score*, a gap of more than 70%. For classifying turning points in the monetary cycle, any of the three models suffices; for using the index as a quantitative variable in a macroeconomic model — a Taylor rule, for instance — the choice of provider materially changes the outcome.
+
+**Keywords:** Monetary Policy; Central Bank of Brazil; Copom; Large Language Models; Text Analysis; Hawkish-Dovish Tone Index; Selic.
+
+---
+
+## Histórico de versões
+
+Cada release do *paper* é acompanhada de um sumário explícito do que mudou, do porquê e das evidências empíricas acrescentadas. Snapshots completos de cada versão são preservados internamente para garantir reprodutibilidade.
+
+### [v1.0] — 26 de abril de 2026
+
+Primeira versão completa do *paper*, com tese empiricamente sustentada em três camadas de validação.
+
+**Estrutura:** Introdução, Revisão da Literatura (quatro ondas + literatura brasileira), Metodologia e Dados (com justificativa explícita do recorte amostral), Implementação, Análise dos Resultados, Surpresa de Comunicação (z-score), Próximos Passos, Conclusão e Referências.
+
+**Pipeline empírico:** coleta automatizada das atas do Copom via API do BCB a partir da reunião 232 (agosto de 2020); pré-processamento com extração das seções A (diagnóstico) e B (cenários e riscos); *scoring* via três LLMs em paralelo (`gemini-flash-lite-latest`, `claude-haiku-4-5`, `gpt-4.1-mini`); saída estruturada via Pydantic; *baseline* metodológico com léxico *hawkish/dovish* em português adaptado ao Copom (espírito Loughran-McDonald).
+
+**Validação empírica em três camadas:**
+
+1. **Inferência *in-sample*** via `statsmodels.OLS` — reporta $\hat{\beta}$, SE, $t$, $p$, IC 95%, $R^2$ e $R^2_{\text{adj}}$ para os 4 modelos.
+2. **Holdout** das últimas 6 reuniões (RMSE e MAE).
+3. **Validação cruzada *walk-forward*** com janela expansiva e treino mínimo de 20 atas ($n_{\text{pred}} = 26$).
+
+**Achados centrais:**
+
+- OpenAI GPT-4.1-mini lidera nos três exercícios ($R^2 \approx 0{,}66$ *in-sample*; RMSE *walk-forward* 0,357).
+- Claude Haiku 4.5 com maior sensibilidade *in-sample* ($\hat{\beta} \approx +0{,}62$) mas *overfit* claro (RMSE quase dobra fora da amostra).
+- Gemini Flash Lite com leitura mais conservadora; empata com Claude *out-of-sample*.
+- *Baseline* léxico ganha o *holdout* (artefato de janela calma) mas volta ao último na *walk-forward* — confirma que a vantagem dos LLMs é genuína sobre o ciclo completo.
+- **Tese consolidada:** "concordam sobre a direção do tom, divergem sobre a intensidade".
+
+**Bibliografia:** 11 entradas cobrindo comunicação de bancos centrais (Blinder et al. 2008, Woodford 2003), literatura de dicionários (Loughran & McDonald 2011, Apel & Grimaldi 2012), modelos de tópicos (Hansen, McMahon & Prat 2018, Picault & Renault 2017, Bholat et al. 2015, Hubert & Labondance 2021), LLMs em comunicação de BC (Hansen & Kazinnik 2023, Hansen & McMahon 2016) e literatura brasileira (Caruso 2026).
+
+### Próximas versões
+
+A v2.0 está em planejamento e atacará prioritariamente: capacidade antecedente $t \to t+1$ (regressão preditiva), robustez a perturbações de *prompt* + variância entre execuções, e o índice *ensemble*.
+
+---
+
+## Como citar
+
+```bibtex
+@unpublished{wilher_barbosa_2026_sentimento_copom,
+  author    = {Wilher, Vitor and Barbosa Filho, Luiz Henrique},
+  title     = {Mesmo Sinal, Calibra\c{c}\~oes Diferentes:
+               Um \'Indice de Tom das Atas do Copom com M\'ultiplos LLMs},
+  note      = {Working paper, vers\~ao 1.0},
+  year      = {2026},
+  month     = {abr},
+  url       = {https://vitorwilher.github.io/research/sentimento-copom.html}
+}
+```
+
+---
+
+## Comentários, críticas e diálogo
+
+Este *paper* é mantido em modelo aberto à crítica acadêmica. Se você é pesquisador(a), praticante de mercado ou estudante e quer comentar, criticar, replicar ou estender o exercício, escreva diretamente para:
+
+📧 **[vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br?subject=Sentimento%20COPOM%20—%20comentários)**
+
+Sugestões metodológicas, indicações de literatura adicional, replicações em outros bancos centrais ou perídodos, e críticas aos critérios de validação empírica são particularmente bem-vindas.
+
+---
+
+## Veja também
+
+- 🛠️ **Ficha técnica do projeto** (metodologia CRISP-DM, arquitetura, sistema de versões): [Sentimento COPOM — projeto](../projetos/sentimento-copom.html)
+
+---
+
+::: {.text-muted style="font-size: 0.85em;"}
+*O código-fonte do pipeline é mantido privado. As decisões metodológicas, fórmulas, *prompts* e resultados estão integralmente documentados no PDF acima.*
+:::

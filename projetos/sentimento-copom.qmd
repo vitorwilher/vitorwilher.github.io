@@ -11,6 +11,12 @@ execute:
 
 ![Índice de Tom calibrado das atas do Copom — três LLMs em paralelo](sentimento_copom_indice.png){width=100%}
 
+::: {.callout-note}
+## 📄 Working paper
+
+Esta é a **ficha técnica do projeto** (metodologia CRISP-DM, arquitetura, sistema de versões). Para o *working paper* completo com abstract, *changelog* público e PDF para download, veja [**Sentimento COPOM — paper**](../research/sentimento-copom.html).
+:::
+
 ## Visão Geral
 
 Este projeto implementa, seguindo a metodologia **CRISP-DM** (*Cross-Industry Standard Process for Data Mining*), um *pipeline* completo para construir um **Índice de Tom *hawkish-dovish*** das atas do Comitê de Política Monetária (Copom) do Banco Central do Brasil utilizando **três modelos de linguagem de grande porte (LLMs)** em paralelo:
