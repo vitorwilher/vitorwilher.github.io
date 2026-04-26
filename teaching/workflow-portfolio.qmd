@@ -1,0 +1,320 @@
+---
+title: "Workflow de Portfólio Pessoal — Guia Operacional"
+subtitle: "Como organizar projetos e papers entre repos privados e o site público com fricção mínima"
+date: "2026-04-26"
+author: "Vitor Wilher"
+categories: [Workflow, Quarto, Git, GitHub, Portfólio, Produtividade]
+description: "Guia prático e replicável para abrir projetos, publicar no portfólio, lançar papers acadêmicos e versionar releases — usando uma única pasta-template e um conjunto curto de frases-gatilho."
+image: "../images/site-logo.png"
+toc: true
+toc-depth: 3
+---
+
+## Por que este guia existe
+
+Quem trabalha em vários projetos paralelos — alguns que viram papers acadêmicos, outros que viram cursos, outros que ficam apenas no portfólio — enfrenta um problema clássico de **fricção operacional**: cada projeto tem seu próprio repositório, seu próprio README, e ainda precisa virar uma página no site pessoal e, eventualmente, um *working paper* público. Mantida à mão, essa cadeia se desincroniza rapidamente: o README diverge da documentação do site, o PDF público fica defasado em relação à versão técnica, e cada novo projeto reinventa a roda.
+
+Este guia documenta o **fluxo unificado** que adoto desde o projeto Sentimento COPOM (abril/2026), construído ao redor de **três decisões fundamentais**:
+
+1. **Uma pasta `portfolio/` por projeto** funciona como fonte de verdade para tudo o que vai público (site, README do repo, PDF do *working paper*).
+2. **Metodologia CRISP-DM** estrutura cada `.qmd` de divulgação em seis fases padronizadas — torna a curva de aprendizado próxima de zero quando um novo projeto é iniciado.
+3. **Código privado, conhecimento público** — repositórios dos projetos seguem privados; o site oferece prosa, metodologia, PDF de *working paper* e CHANGELOG, mas nunca o código-fonte executável.
+
+O resultado é um conjunto curto de **frases-gatilho** que disparam *workflows* completos sem precisar lembrar de comandos, caminhos ou ordem de operações.
+
+---
+
+## Filosofia em três princípios
+
+### 1. Fonte de verdade única
+
+Toda documentação pública de um projeto vive em **um único arquivo `.qmd`** dentro de `<projeto>/portfolio/`. Esse arquivo é editado, e suas cópias para o site e para o README do repositório são geradas a partir dele. **Editar a cópia diretamente é proibido** — só editar a fonte e re-sincronizar.
+
+### 2. Privacidade granular
+
+Nem tudo do projeto vai público. A regra é simples:
+
+| Artefato | Vai para o site? | Vai para o repo público? |
+|---|---|---|
+| Código (`.py`, `.qmd` com chunks) | ❌ Nunca | ❌ Repo é privado |
+| `.qmd` técnico do paper (com `echo: true`) | ❌ Nunca | ❌ Repo é privado |
+| Prosa CRISP-DM do projeto | ✅ Sim | ✅ Como README |
+| **PDF público** do paper (com `echo: false`) | ✅ Sim | — |
+| CHANGELOG | ✅ Sim (em prosa) | ✅ Sim (técnico) |
+| Imagens e diagramas | ✅ Sim | ✅ Sim |
+
+### 3. Um conjunto curto de frases-gatilho
+
+Em vez de memorizar comandos `git`, caminhos de pasta e ordem de operações, basta **dizer uma frase** e o agente executa o *workflow* completo. As frases ficam em memória e funcionam tanto a partir do diretório do projeto quanto a partir do `Github_Portfolio`.
+
+---
+
+## A estrutura padrão
+
+Todo projeto adota a mesma estrutura:
+
+```
+<projeto>/
+├── <código do projeto>             ← parte privada
+├── <paper técnico>.qmd             ← com chunks, privado
+│
+├── portfolio/                      ← fonte de verdade do material público
+│   ├── <slug>.qmd                  ← documentação CRISP-DM (vai para projetos/)
+│   ├── README.md                   ← versão enxuta (vai para README do repo)
+│   ├── _TEMPLATE.md                ← documenta a convenção
+│   ├── *.png                       ← imagens de capa
+│   └── research/                   ← OPCIONAL, quando vira paper
+│       ├── <slug>.qmd              ← página HTML (vai para research/)
+│       ├── <slug>_publico.pdf      ← PDF da edição do leitor
+│       └── <slug>_indice.png
+│
+├── CHANGELOG.md                    ← histórico técnico
+├── versions/vX.Y_AAAA-MM-DD/       ← snapshots por release
+└── _rollback/                      ← checkpoints ad-hoc (não vai pro repo)
+```
+
+E o destino no `Github_Portfolio`:
+
+```
+Github_Portfolio/
+├── projetos/
+│   ├── <slug>.qmd                  ← cópia de portfolio/<slug>.qmd
+│   ├── <slug>_*.png                ← cópias das imagens
+│   └── ...
+└── research/                       ← criada quando o projeto vira paper
+    ├── <slug>.qmd                  ← cópia de portfolio/research/<slug>.qmd
+    ├── <slug>_publico.pdf          ← cópia do PDF público
+    └── ...
+```
+
+---
+
+## Fluxo de informação: três pontas, uma fonte
+
+```{mermaid}
+flowchart LR
+  P["📁 projeto/portfolio/<br><b>FONTE DE VERDADE</b>"]
+  R[("🔒 GitHub<br>repo privado")]
+  S(("🌐 vitorwilher.github.io<br>público"))
+  P -->|README.md + código| R
+  P -->|.qmd + imagens| S
+  P -->|PDF público + página HTML<br><i>opcional, se virar paper</i>| S
+
+  style P fill:#fff4d6,stroke:#d4a017,stroke-width:2px
+  style R fill:#fde2e2,stroke:#c0392b
+  style S fill:#d4edda,stroke:#27ae60
+```
+
+A pasta `portfolio/` no projeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.
+
+---
+
+## Cenário 1 — Abrir projeto novo
+
+**Frase-gatilho:** *"vamos abrir o projeto `<nome>`"* (ou *"abrir projeto `<slug>`"*)
+
+```{mermaid}
+flowchart TB
+  A([💬 'vamos abrir o projeto X']) --> B[Cria pasta projeto/]
+  B --> C[Cria portfolio/ com<br>slug.qmd, README.md,<br>_TEMPLATE.md]
+  C --> D[Cria .gitignore<br>blindado]
+  D --> E[git init -b main<br>+ primeiro commit]
+  E --> F{Criar repo<br>privado<br>agora?}
+  F -->|sim| G[gh repo create<br>privado + push]
+  F -->|depois| H[Pronto]
+  G --> H
+```
+
+**O que o agente faz automaticamente:**
+
+1. Cria pasta `~/Dropbox/Portfolio/<nome>/`
+2. Cria `<nome>/portfolio/` com `<slug>.qmd` no template CRISP-DM (6 fases já estruturadas), `README.md` enxuto, `_TEMPLATE.md` (referência)
+3. Cria `.gitignore` blindado: `.env`, `.quarto/`, `_freeze/`, `__pycache__/`, `_rollback/`, `archive/`, `.venv/`, `.DS_Store`
+4. `git init -b main` + primeiro commit
+5. Pergunta se cria repo privado já agora (criar repo é ação visível, requer confirmação)
+
+**Sua responsabilidade:** desenvolver o projeto. Edita o `.qmd` do `portfolio/` à medida que as fases CRISP-DM amadurecem.
+
+---
+
+## Cenário 2 — Publicar/atualizar projeto no site (sem paper)
+
+**Frase-gatilho:** *"publica `<slug>` no portfólio"* ou *"atualiza `<slug>` no site"*
+
+```{mermaid}
+flowchart LR
+  A([💬 'publica X<br>no portfólio']) --> B[cp portfolio/.qmd<br>+ imagens →<br>Github_Portfolio/projetos/]
+  B --> C[git stash<br>cv, blog, etc.]
+  C --> D[git add slug<br>+ commit]
+  D --> E[git pull --rebase<br>+ git push]
+  E --> F[git stash pop]
+  F --> G([✅ Site atualiza<br>via CI ~2min])
+```
+
+**O que o agente faz automaticamente:**
+
+1. Copia `<projeto>/portfolio/<slug>.qmd` + imagens → `Github_Portfolio/projetos/<slug>.qmd`
+2. Stash de mudanças não-relacionadas em `Github_Portfolio` (`cv.qmd`, `blog/`, `cv.pdf` são típicos)
+3. `git add` apenas dos arquivos do `<slug>`, commit no estilo *"Projetos: ..."*
+4. `git pull --rebase origin master` + `git push origin master`
+5. Restaura stash com `git stash pop`
+6. Confirma resultado do CI e dá URL final
+
+---
+
+## Cenário 3 — Projeto virou paper (primeira release pública)
+
+**Frase-gatilho:** *"`<slug>` vai virar paper"* ou *"abrir paper de `<slug>`"*
+
+```{mermaid}
+flowchart TB
+  A([💬 'X vai virar paper']) --> B[Cria portfolio/research/<br>com slug.qmd<br>baseado no template]
+  B --> C[Copia PDF público<br>+ imagem de capa]
+  C --> D[Replica em<br>Github_Portfolio/research/]
+  D --> E[Adiciona callout cruzado<br>em projetos/slug.qmd]
+  E --> F[Commit + push<br>nos dois repos]
+  F --> G([✅ Paper vivo<br>publicado])
+```
+
+**O que o agente faz automaticamente:**
+
+1. Cria `<projeto>/portfolio/research/<slug>.qmd` baseado no template do Sentimento COPOM:
+   - Callout *"working paper · em desenvolvimento contínuo"*
+   - Botão **📄 Baixar PDF**
+   - **Abstract bilíngue** PT/EN
+   - **Histórico de versões** em prosa
+   - **Como citar** (BibTeX)
+   - **Contato** para diálogo acadêmico
+   - **Cross-link** para `projetos/<slug>.html`
+   - Nota explícita: *"O código-fonte é mantido privado"*
+2. Copia `<paper>_publico.pdf` (edição do leitor, com `echo: false`) + imagem de capa
+3. Replica em `Github_Portfolio/research/`
+4. Adiciona callout cruzado em `projetos/<slug>.qmd` apontando para a pesquisa
+5. Commit + push em ambos os repos
+
+**Pré-requisito:** o `_publico.pdf` precisa existir. **Você renderiza** — auto mode não autoriza render.
+
+---
+
+## Cenário 4 — Nova versão do paper
+
+**Frase-gatilho:** *"fechar v`X.Y` do `<slug>`"*
+
+```{mermaid}
+flowchart TB
+  A([💬 'fechar v1.1<br>de X']) --> B[Atualiza titlepage<br>remove 'em desenvolvimento']
+  B --> C[Finaliza CHANGELOG<br>técnico no projeto]
+  C --> D[Cria snapshot<br>versions/v1.1_DATA/]
+  D --> E[Sugere render<br>do PDF público]
+  E --> F[Copia PDF público<br>atualizado para research/]
+  F --> G[Atualiza histórico<br>de versões em prosa<br>no research/.qmd]
+  G --> H[Atualiza BibTeX<br>versão e mês/ano]
+  H --> I[Commit + push<br>nos dois repos]
+  I --> J([✅ v1.1 fechada<br>e pública])
+```
+
+**O que o agente faz automaticamente:**
+
+1. Atualiza titlepage do `.qmd` técnico (remove sufixo *"em desenvolvimento"*)
+2. Finaliza entrada da `vX.Y` no `CHANGELOG.md` técnico
+3. Cria snapshot em `versions/vX.Y_AAAA-MM-DD/`
+4. Sugere que você renderize os PDFs
+5. **(Novo)** Copia PDF público atualizado para `portfolio/research/` e `Github_Portfolio/research/`
+6. **(Novo)** Atualiza *"Histórico de versões"* do `<slug>.qmd` em `research/` com a entrada da nova versão (em prosa, mais legível que o CHANGELOG técnico)
+7. **(Novo)** Atualiza o BibTeX (campo `note = {Working paper, versão X.Y}` e mês/ano)
+8. Commit + push em ambos os repos
+
+---
+
+## Cenário 5 — Edição pequena no site
+
+**Frase-gatilho:** *"corrige `<descrição>` no site"* ou *"sincroniza `<slug>`"*
+
+```{mermaid}
+flowchart LR
+  A([💬 'corrige typo<br>em X']) --> B[Edita<br>portfolio/slug.qmd]
+  B --> C[Sincroniza<br>para Github_Portfolio]
+  C --> D[Commit + push]
+  D --> E([✅ Site atualiza])
+```
+
+Para mudanças pontuais (typo, ajuste de prosa) — eu sincronizo `portfolio/<slug>.qmd` (e/ou `portfolio/research/<slug>.qmd`) para `Github_Portfolio/`, commit + push.
+
+---
+
+## Cheat sheet — onde edito o quê
+
+| Quero editar… | Edito em… |
+|---|---|
+| Código do *pipeline* / paper técnico (com chunks) | `<projeto>/<paper>_base.qmd` |
+| Prosa do projeto para o portfólio (CRISP-DM) | `<projeto>/portfolio/<slug>.qmd` |
+| README do repo GitHub do projeto | `<projeto>/portfolio/README.md` |
+| *Working paper* público (abstract, *changelog*, contato) | `<projeto>/portfolio/research/<slug>.qmd` |
+| **Nunca edito direto:** `Github_Portfolio/...` (o agente sincroniza) | — |
+
+---
+
+## Tabela completa de frases-gatilho
+
+| Você diz | Eu faço |
+|---|---|
+| **"vamos abrir o projeto X"** | Cria estrutura padrão (pasta + `portfolio/` + git + opção de repo privado) |
+| **"publica X no portfólio"** | Sincroniza prosa do projeto → `Github_Portfolio/projetos/` + push |
+| **"X vai virar paper"** | Cria `portfolio/research/` com PDF público + página HTML + cross-links |
+| **"fechar v`X.Y` de Y"** | Versão fechada + snapshot + sincroniza paper público no site |
+| **"sincroniza X"** | Edição pontual: copia + commit + push |
+| **"diff vX.Y"** | Compara estado atual com snapshot da versão `X.Y` |
+| **"rollback para vX.Y"** | Volta o paper para a versão anterior (com confirmação prévia) |
+
+---
+
+## Princípios fixos do *workflow*
+
+::: {.callout-important}
+## Regras invioláveis
+
+1. **Fonte de verdade é sempre `<projeto>/portfolio/`** — `Github_Portfolio/` é alvo de cópia, **nunca editar direto** lá.
+2. **Código-fonte do paper (`.qmd` base) nunca vai para o site** — só o **PDF da edição do leitor**.
+3. **Repos de projeto continuam privados** — público é só o site (`vitorwilher.github.io`).
+4. **Cross-links bidirecionais** — projeto e pesquisa do mesmo `<slug>` se referenciam mutuamente via callout.
+5. **Stash + rebase + pop** é o padrão de push em `Github_Portfolio` (sempre tem `cv.qmd`/`blog/` modificados localmente).
+6. **Render é responsabilidade do autor** — agente nunca renderiza PDFs em auto mode.
+:::
+
+---
+
+## Ciclo de vida típico de um projeto
+
+```{mermaid}
+flowchart TB
+  A([Ideia]) -->|"💬 'abrir projeto X'"| B[Projeto criado<br>estrutura padrão]
+  B --> C[Desenvolvimento<br>local]
+  C -->|"💬 'publica X<br>no portfólio'"| D[Card no site<br>vitorwilher.github.io/projetos/]
+  D --> E{Vira paper?}
+  E -->|não| F([Projeto<br>publicado])
+  E -->|sim| G["💬 'X vai virar paper'"]
+  G --> H[Working paper v1.0<br>vitorwilher.github.io/research/]
+  H --> I[Crítica acadêmica<br>via e-mail]
+  I --> J[Próximos Passos]
+  J -->|"💬 'fechar v1.1 de X'"| K[Nova versão<br>histórico atualizado]
+  K --> I
+
+  style A fill:#e3f2fd
+  style F fill:#d4edda
+  style H fill:#d4edda
+  style K fill:#d4edda
+```
+
+O ciclo de paper é deliberadamente cíclico: cada versão fechada gera nova janela para crítica e nova rodada de melhorias.
+
+---
+
+## Notas finais
+
+Este *workflow* foi inaugurado com o projeto [Sentimento COPOM](../research/sentimento-copom.html) em 26 de abril de 2026 e será replicado em todos os projetos novos a partir desta data. Se você é meu aluno ou colaborador e quer adaptar a estrutura ao seu próprio portfólio, sinta-se à vontade — todo o sistema é replicável e usa apenas Quarto, Git e GitHub Actions.
+
+::: {.callout-tip}
+## Material de aula
+
+Este guia também serve como material de aula para os meus cursos de **Engenharia de Dados aplicada à Economia** e **Pesquisa Reproduzível com Quarto**. Uso-o para mostrar como sustentar uma agenda de pesquisa pública e replicável **sem expor código proprietário**.
+:::
