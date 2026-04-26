@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Vitor Wilher">
+<meta name="dcterms.date" content="2026-04-26">
+<meta name="description" content="Guia prático e replicável para abrir projetos, publicar no portfólio, lançar papers acadêmicos e versionar releases — usando uma única pasta-template e um conjunto curto de frases-gatilho.">
+
+<title>Workflow de Portfólio Pessoal — Guia Operacional – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#por-que-este-guia-existe" id="toc-por-que-este-guia-existe" class="nav-link active" data-scroll-target="#por-que-este-guia-existe">Por que este guia existe</a></li>
+  <li><a href="#filosofia-em-três-princípios" id="toc-filosofia-em-três-princípios" class="nav-link" data-scroll-target="#filosofia-em-três-princípios">Filosofia em três princípios</a>
+  <ul class="collapse">
+  <li><a href="#fonte-de-verdade-única" id="toc-fonte-de-verdade-única" class="nav-link" data-scroll-target="#fonte-de-verdade-única">1. Fonte de verdade única</a></li>
+  <li><a href="#privacidade-granular" id="toc-privacidade-granular" class="nav-link" data-scroll-target="#privacidade-granular">2. Privacidade granular</a></li>
+  <li><a href="#um-conjunto-curto-de-frases-gatilho" id="toc-um-conjunto-curto-de-frases-gatilho" class="nav-link" data-scroll-target="#um-conjunto-curto-de-frases-gatilho">3. Um conjunto curto de frases-gatilho</a></li>
+  </ul></li>
+  <li><a href="#a-estrutura-padrão" id="toc-a-estrutura-padrão" class="nav-link" data-scroll-target="#a-estrutura-padrão">A estrutura padrão</a></li>
+  <li><a href="#fluxo-de-informação-três-pontas-uma-fonte" id="toc-fluxo-de-informação-três-pontas-uma-fonte" class="nav-link" data-scroll-target="#fluxo-de-informação-três-pontas-uma-fonte">Fluxo de informação: três pontas, uma fonte</a></li>
+  <li><a href="#cenário-1-abrir-projeto-novo" id="toc-cenário-1-abrir-projeto-novo" class="nav-link" data-scroll-target="#cenário-1-abrir-projeto-novo">Cenário 1 — Abrir projeto novo</a></li>
+  <li><a href="#cenário-2-publicaratualizar-projeto-no-site-sem-paper" id="toc-cenário-2-publicaratualizar-projeto-no-site-sem-paper" class="nav-link" data-scroll-target="#cenário-2-publicaratualizar-projeto-no-site-sem-paper">Cenário 2 — Publicar/atualizar projeto no site (sem paper)</a></li>
+  <li><a href="#cenário-3-projeto-virou-paper-primeira-release-pública" id="toc-cenário-3-projeto-virou-paper-primeira-release-pública" class="nav-link" data-scroll-target="#cenário-3-projeto-virou-paper-primeira-release-pública">Cenário 3 — Projeto virou paper (primeira release pública)</a></li>
+  <li><a href="#cenário-4-nova-versão-do-paper" id="toc-cenário-4-nova-versão-do-paper" class="nav-link" data-scroll-target="#cenário-4-nova-versão-do-paper">Cenário 4 — Nova versão do paper</a></li>
+  <li><a href="#cenário-5-edição-pequena-no-site" id="toc-cenário-5-edição-pequena-no-site" class="nav-link" data-scroll-target="#cenário-5-edição-pequena-no-site">Cenário 5 — Edição pequena no site</a></li>
+  <li><a href="#cheat-sheet-onde-edito-o-quê" id="toc-cheat-sheet-onde-edito-o-quê" class="nav-link" data-scroll-target="#cheat-sheet-onde-edito-o-quê">Cheat sheet — onde edito o quê</a></li>
+  <li><a href="#tabela-completa-de-frases-gatilho" id="toc-tabela-completa-de-frases-gatilho" class="nav-link" data-scroll-target="#tabela-completa-de-frases-gatilho">Tabela completa de frases-gatilho</a></li>
+  <li><a href="#princípios-fixos-do-workflow" id="toc-princípios-fixos-do-workflow" class="nav-link" data-scroll-target="#princípios-fixos-do-workflow">Princípios fixos do <em>workflow</em></a></li>
+  <li><a href="#ciclo-de-vida-típico-de-um-projeto" id="toc-ciclo-de-vida-típico-de-um-projeto" class="nav-link" data-scroll-target="#ciclo-de-vida-típico-de-um-projeto">Ciclo de vida típico de um projeto</a></li>
+  <li><a href="#notas-finais" id="toc-notas-finais" class="nav-link" data-scroll-target="#notas-finais">Notas finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Workflow de Portfólio Pessoal — Guia Operacional</h1>
+<p class="subtitle lead">Como organizar projetos e papers entre repos privados e o site público com fricção mínima</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Workflow</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Git</div>
+    <div class="quarto-category">GitHub</div>
+    <div class="quarto-category">Portfólio</div>
+    <div class="quarto-category">Produtividade</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Guia prático e replicável para abrir projetos, publicar no portfólio, lançar papers acadêmicos e versionar releases — usando uma única pasta-template e um conjunto curto de frases-gatilho.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Vitor Wilher </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="por-que-este-guia-existe" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-este-guia-existe">Por que este guia existe</h2>
+<p>Quem trabalha em vários projetos paralelos — alguns que viram papers acadêmicos, outros que viram cursos, outros que ficam apenas no portfólio — enfrenta um problema clássico de <strong>fricção operacional</strong>: cada projeto tem seu próprio repositório, seu próprio README, e ainda precisa virar uma página no site pessoal e, eventualmente, um <em>working paper</em> público. Mantida à mão, essa cadeia se desincroniza rapidamente: o README diverge da documentação do site, o PDF público fica defasado em relação à versão técnica, e cada novo projeto reinventa a roda.</p>
+<p>Este guia documenta o <strong>fluxo unificado</strong> que adoto desde o projeto Sentimento COPOM (abril/2026), construído ao redor de <strong>três decisões fundamentais</strong>:</p>
+<ol type="1">
+<li><strong>Uma pasta <code>portfolio/</code> por projeto</strong> funciona como fonte de verdade para tudo o que vai público (site, README do repo, PDF do <em>working paper</em>).</li>
+<li><strong>Metodologia CRISP-DM</strong> estrutura cada <code>.qmd</code> de divulgação em seis fases padronizadas — torna a curva de aprendizado próxima de zero quando um novo projeto é iniciado.</li>
+<li><strong>Código privado, conhecimento público</strong> — repositórios dos projetos seguem privados; o site oferece prosa, metodologia, PDF de <em>working paper</em> e CHANGELOG, mas nunca o código-fonte executável.</li>
+</ol>
+<p>O resultado é um conjunto curto de <strong>frases-gatilho</strong> que disparam <em>workflows</em> completos sem precisar lembrar de comandos, caminhos ou ordem de operações.</p>
+<hr>
+</section>
+<section id="filosofia-em-três-princípios" class="level2">
+<h2 class="anchored" data-anchor-id="filosofia-em-três-princípios">Filosofia em três princípios</h2>
+<section id="fonte-de-verdade-única" class="level3">
+<h3 class="anchored" data-anchor-id="fonte-de-verdade-única">1. Fonte de verdade única</h3>
+<p>Toda documentação pública de um projeto vive em <strong>um único arquivo <code>.qmd</code></strong> dentro de <code>&lt;projeto&gt;/portfolio/</code>. Esse arquivo é editado, e suas cópias para o site e para o README do repositório são geradas a partir dele. <strong>Editar a cópia diretamente é proibido</strong> — só editar a fonte e re-sincronizar.</p>
+</section>
+<section id="privacidade-granular" class="level3">
+<h3 class="anchored" data-anchor-id="privacidade-granular">2. Privacidade granular</h3>
+<p>Nem tudo do projeto vai público. A regra é simples:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Artefato</th>
+<th>Vai para o site?</th>
+<th>Vai para o repo público?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Código (<code>.py</code>, <code>.qmd</code> com chunks)</td>
+<td>❌ Nunca</td>
+<td>❌ Repo é privado</td>
+</tr>
+<tr class="even">
+<td><code>.qmd</code> técnico do paper (com <code>echo: true</code>)</td>
+<td>❌ Nunca</td>
+<td>❌ Repo é privado</td>
+</tr>
+<tr class="odd">
+<td>Prosa CRISP-DM do projeto</td>
+<td>✅ Sim</td>
+<td>✅ Como README</td>
+</tr>
+<tr class="even">
+<td><strong>PDF público</strong> do paper (com <code>echo: false</code>)</td>
+<td>✅ Sim</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>CHANGELOG</td>
+<td>✅ Sim (em prosa)</td>
+<td>✅ Sim (técnico)</td>
+</tr>
+<tr class="even">
+<td>Imagens e diagramas</td>
+<td>✅ Sim</td>
+<td>✅ Sim</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="um-conjunto-curto-de-frases-gatilho" class="level3">
+<h3 class="anchored" data-anchor-id="um-conjunto-curto-de-frases-gatilho">3. Um conjunto curto de frases-gatilho</h3>
+<p>Em vez de memorizar comandos <code>git</code>, caminhos de pasta e ordem de operações, basta <strong>dizer uma frase</strong> e o agente executa o <em>workflow</em> completo. As frases ficam em memória e funcionam tanto a partir do diretório do projeto quanto a partir do <code>Github_Portfolio</code>.</p>
+<hr>
+</section>
+</section>
+<section id="a-estrutura-padrão" class="level2">
+<h2 class="anchored" data-anchor-id="a-estrutura-padrão">A estrutura padrão</h2>
+<p>Todo projeto adota a mesma estrutura:</p>
+<pre><code>&lt;projeto&gt;/
+├── &lt;código do projeto&gt;             ← parte privada
+├── &lt;paper técnico&gt;.qmd             ← com chunks, privado
+│
+├── portfolio/                      ← fonte de verdade do material público
+│   ├── &lt;slug&gt;.qmd                  ← documentação CRISP-DM (vai para projetos/)
+│   ├── README.md                   ← versão enxuta (vai para README do repo)
+│   ├── _TEMPLATE.md                ← documenta a convenção
+│   ├── *.png                       ← imagens de capa
+│   └── research/                   ← OPCIONAL, quando vira paper
+│       ├── &lt;slug&gt;.qmd              ← página HTML (vai para research/)
+│       ├── &lt;slug&gt;_publico.pdf      ← PDF da edição do leitor
+│       └── &lt;slug&gt;_indice.png
+│
+├── CHANGELOG.md                    ← histórico técnico
+├── versions/vX.Y_AAAA-MM-DD/       ← snapshots por release
+└── _rollback/                      ← checkpoints ad-hoc (não vai pro repo)</code></pre>
+<p>E o destino no <code>Github_Portfolio</code>:</p>
+<pre><code>Github_Portfolio/
+├── projetos/
+│   ├── &lt;slug&gt;.qmd                  ← cópia de portfolio/&lt;slug&gt;.qmd
+│   ├── &lt;slug&gt;_*.png                ← cópias das imagens
+│   └── ...
+└── research/                       ← criada quando o projeto vira paper
+    ├── &lt;slug&gt;.qmd                  ← cópia de portfolio/research/&lt;slug&gt;.qmd
+    ├── &lt;slug&gt;_publico.pdf          ← cópia do PDF público
+    └── ...</code></pre>
+<hr>
+</section>
+<section id="fluxo-de-informação-três-pontas-uma-fonte" class="level2">
+<h2 class="anchored" data-anchor-id="fluxo-de-informação-três-pontas-uma-fonte">Fluxo de informação: três pontas, uma fonte</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  P["📁 projeto/portfolio/&lt;br&gt;&lt;b&gt;FONTE DE VERDADE&lt;/b&gt;"]
+  R[("🔒 GitHub&lt;br&gt;repo privado")]
+  S(("🌐 vitorwilher.github.io&lt;br&gt;público"))
+  P --&gt;|README.md + código| R
+  P --&gt;|.qmd + imagens| S
+  P --&gt;|PDF público + página HTML&lt;br&gt;&lt;i&gt;opcional, se virar paper&lt;/i&gt;| S
+
+  style P fill:#fff4d6,stroke:#d4a017,stroke-width:2px
+  style R fill:#fde2e2,stroke:#c0392b
+  style S fill:#d4edda,stroke:#27ae60
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>A pasta <code>portfolio/</code> no projeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.</p>
+<hr>
+</section>
+<section id="cenário-1-abrir-projeto-novo" class="level2">
+<h2 class="anchored" data-anchor-id="cenário-1-abrir-projeto-novo">Cenário 1 — Abrir projeto novo</h2>
+<p><strong>Frase-gatilho:</strong> <em>“vamos abrir o projeto <code>&lt;nome&gt;</code>”</em> (ou <em>“abrir projeto <code>&lt;slug&gt;</code>”</em>)</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  A([💬 'vamos abrir o projeto X']) --&gt; B[Cria pasta projeto/]
+  B --&gt; C[Cria portfolio/ com&lt;br&gt;slug.qmd, README.md,&lt;br&gt;_TEMPLATE.md]
+  C --&gt; D[Cria .gitignore&lt;br&gt;blindado]
+  D --&gt; E[git init -b main&lt;br&gt;+ primeiro commit]
+  E --&gt; F{Criar repo&lt;br&gt;privado&lt;br&gt;agora?}
+  F --&gt;|sim| G[gh repo create&lt;br&gt;privado + push]
+  F --&gt;|depois| H[Pronto]
+  G --&gt; H
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>O que o agente faz automaticamente:</strong></p>
+<ol type="1">
+<li>Cria pasta <code>~/Dropbox/Portfolio/&lt;nome&gt;/</code></li>
+<li>Cria <code>&lt;nome&gt;/portfolio/</code> com <code>&lt;slug&gt;.qmd</code> no template CRISP-DM (6 fases já estruturadas), <code>README.md</code> enxuto, <code>_TEMPLATE.md</code> (referência)</li>
+<li>Cria <code>.gitignore</code> blindado: <code>.env</code>, <code>.quarto/</code>, <code>_freeze/</code>, <code>__pycache__/</code>, <code>_rollback/</code>, <code>archive/</code>, <code>.venv/</code>, <code>.DS_Store</code></li>
+<li><code>git init -b main</code> + primeiro commit</li>
+<li>Pergunta se cria repo privado já agora (criar repo é ação visível, requer confirmação)</li>
+</ol>
+<p><strong>Sua responsabilidade:</strong> desenvolver o projeto. Edita o <code>.qmd</code> do <code>portfolio/</code> à medida que as fases CRISP-DM amadurecem.</p>
+<hr>
+</section>
+<section id="cenário-2-publicaratualizar-projeto-no-site-sem-paper" class="level2">
+<h2 class="anchored" data-anchor-id="cenário-2-publicaratualizar-projeto-no-site-sem-paper">Cenário 2 — Publicar/atualizar projeto no site (sem paper)</h2>
+<p><strong>Frase-gatilho:</strong> <em>“publica <code>&lt;slug&gt;</code> no portfólio”</em> ou <em>“atualiza <code>&lt;slug&gt;</code> no site”</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A([💬 'publica X&lt;br&gt;no portfólio']) --&gt; B[cp portfolio/.qmd&lt;br&gt;+ imagens →&lt;br&gt;Github_Portfolio/projetos/]
+  B --&gt; C[git stash&lt;br&gt;cv, blog, etc.]
+  C --&gt; D[git add slug&lt;br&gt;+ commit]
+  D --&gt; E[git pull --rebase&lt;br&gt;+ git push]
+  E --&gt; F[git stash pop]
+  F --&gt; G([✅ Site atualiza&lt;br&gt;via CI ~2min])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>O que o agente faz automaticamente:</strong></p>
+<ol type="1">
+<li>Copia <code>&lt;projeto&gt;/portfolio/&lt;slug&gt;.qmd</code> + imagens → <code>Github_Portfolio/projetos/&lt;slug&gt;.qmd</code></li>
+<li>Stash de mudanças não-relacionadas em <code>Github_Portfolio</code> (<code>cv.qmd</code>, <code>blog/</code>, <code>cv.pdf</code> são típicos)</li>
+<li><code>git add</code> apenas dos arquivos do <code>&lt;slug&gt;</code>, commit no estilo <em>“Projetos: …”</em></li>
+<li><code>git pull --rebase origin master</code> + <code>git push origin master</code></li>
+<li>Restaura stash com <code>git stash pop</code></li>
+<li>Confirma resultado do CI e dá URL final</li>
+</ol>
+<hr>
+</section>
+<section id="cenário-3-projeto-virou-paper-primeira-release-pública" class="level2">
+<h2 class="anchored" data-anchor-id="cenário-3-projeto-virou-paper-primeira-release-pública">Cenário 3 — Projeto virou paper (primeira release pública)</h2>
+<p><strong>Frase-gatilho:</strong> <em>“<code>&lt;slug&gt;</code> vai virar paper”</em> ou <em>“abrir paper de <code>&lt;slug&gt;</code>”</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  A([💬 'X vai virar paper']) --&gt; B[Cria portfolio/research/&lt;br&gt;com slug.qmd&lt;br&gt;baseado no template]
+  B --&gt; C[Copia PDF público&lt;br&gt;+ imagem de capa]
+  C --&gt; D[Replica em&lt;br&gt;Github_Portfolio/research/]
+  D --&gt; E[Adiciona callout cruzado&lt;br&gt;em projetos/slug.qmd]
+  E --&gt; F[Commit + push&lt;br&gt;nos dois repos]
+  F --&gt; G([✅ Paper vivo&lt;br&gt;publicado])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>O que o agente faz automaticamente:</strong></p>
+<ol type="1">
+<li>Cria <code>&lt;projeto&gt;/portfolio/research/&lt;slug&gt;.qmd</code> baseado no template do Sentimento COPOM:
+<ul>
+<li>Callout <em>“working paper · em desenvolvimento contínuo”</em></li>
+<li>Botão <strong>📄 Baixar PDF</strong></li>
+<li><strong>Abstract bilíngue</strong> PT/EN</li>
+<li><strong>Histórico de versões</strong> em prosa</li>
+<li><strong>Como citar</strong> (BibTeX)</li>
+<li><strong>Contato</strong> para diálogo acadêmico</li>
+<li><strong>Cross-link</strong> para <code>projetos/&lt;slug&gt;.html</code></li>
+<li>Nota explícita: <em>“O código-fonte é mantido privado”</em></li>
+</ul></li>
+<li>Copia <code>&lt;paper&gt;_publico.pdf</code> (edição do leitor, com <code>echo: false</code>) + imagem de capa</li>
+<li>Replica em <code>Github_Portfolio/research/</code></li>
+<li>Adiciona callout cruzado em <code>projetos/&lt;slug&gt;.qmd</code> apontando para a pesquisa</li>
+<li>Commit + push em ambos os repos</li>
+</ol>
+<p><strong>Pré-requisito:</strong> o <code>_publico.pdf</code> precisa existir. <strong>Você renderiza</strong> — auto mode não autoriza render.</p>
+<hr>
+</section>
+<section id="cenário-4-nova-versão-do-paper" class="level2">
+<h2 class="anchored" data-anchor-id="cenário-4-nova-versão-do-paper">Cenário 4 — Nova versão do paper</h2>
+<p><strong>Frase-gatilho:</strong> <em>“fechar v<code>X.Y</code> do <code>&lt;slug&gt;</code>”</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  A([💬 'fechar v1.1&lt;br&gt;de X']) --&gt; B[Atualiza titlepage&lt;br&gt;remove 'em desenvolvimento']
+  B --&gt; C[Finaliza CHANGELOG&lt;br&gt;técnico no projeto]
+  C --&gt; D[Cria snapshot&lt;br&gt;versions/v1.1_DATA/]
+  D --&gt; E[Sugere render&lt;br&gt;do PDF público]
+  E --&gt; F[Copia PDF público&lt;br&gt;atualizado para research/]
+  F --&gt; G[Atualiza histórico&lt;br&gt;de versões em prosa&lt;br&gt;no research/.qmd]
+  G --&gt; H[Atualiza BibTeX&lt;br&gt;versão e mês/ano]
+  H --&gt; I[Commit + push&lt;br&gt;nos dois repos]
+  I --&gt; J([✅ v1.1 fechada&lt;br&gt;e pública])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>O que o agente faz automaticamente:</strong></p>
+<ol type="1">
+<li>Atualiza titlepage do <code>.qmd</code> técnico (remove sufixo <em>“em desenvolvimento”</em>)</li>
+<li>Finaliza entrada da <code>vX.Y</code> no <code>CHANGELOG.md</code> técnico</li>
+<li>Cria snapshot em <code>versions/vX.Y_AAAA-MM-DD/</code></li>
+<li>Sugere que você renderize os PDFs</li>
+<li><strong>(Novo)</strong> Copia PDF público atualizado para <code>portfolio/research/</code> e <code>Github_Portfolio/research/</code></li>
+<li><strong>(Novo)</strong> Atualiza <em>“Histórico de versões”</em> do <code>&lt;slug&gt;.qmd</code> em <code>research/</code> com a entrada da nova versão (em prosa, mais legível que o CHANGELOG técnico)</li>
+<li><strong>(Novo)</strong> Atualiza o BibTeX (campo <code>note = {Working paper, versão X.Y}</code> e mês/ano)</li>
+<li>Commit + push em ambos os repos</li>
+</ol>
+<hr>
+</section>
+<section id="cenário-5-edição-pequena-no-site" class="level2">
+<h2 class="anchored" data-anchor-id="cenário-5-edição-pequena-no-site">Cenário 5 — Edição pequena no site</h2>
+<p><strong>Frase-gatilho:</strong> <em>“corrige <code>&lt;descrição&gt;</code> no site”</em> ou <em>“sincroniza <code>&lt;slug&gt;</code>”</em></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A([💬 'corrige typo&lt;br&gt;em X']) --&gt; B[Edita&lt;br&gt;portfolio/slug.qmd]
+  B --&gt; C[Sincroniza&lt;br&gt;para Github_Portfolio]
+  C --&gt; D[Commit + push]
+  D --&gt; E([✅ Site atualiza])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Para mudanças pontuais (typo, ajuste de prosa) — eu sincronizo <code>portfolio/&lt;slug&gt;.qmd</code> (e/ou <code>portfolio/research/&lt;slug&gt;.qmd</code>) para <code>Github_Portfolio/</code>, commit + push.</p>
+<hr>
+</section>
+<section id="cheat-sheet-onde-edito-o-quê" class="level2">
+<h2 class="anchored" data-anchor-id="cheat-sheet-onde-edito-o-quê">Cheat sheet — onde edito o quê</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quero editar…</th>
+<th>Edito em…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Código do <em>pipeline</em> / paper técnico (com chunks)</td>
+<td><code>&lt;projeto&gt;/&lt;paper&gt;_base.qmd</code></td>
+</tr>
+<tr class="even">
+<td>Prosa do projeto para o portfólio (CRISP-DM)</td>
+<td><code>&lt;projeto&gt;/portfolio/&lt;slug&gt;.qmd</code></td>
+</tr>
+<tr class="odd">
+<td>README do repo GitHub do projeto</td>
+<td><code>&lt;projeto&gt;/portfolio/README.md</code></td>
+</tr>
+<tr class="even">
+<td><em>Working paper</em> público (abstract, <em>changelog</em>, contato)</td>
+<td><code>&lt;projeto&gt;/portfolio/research/&lt;slug&gt;.qmd</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Nunca edito direto:</strong> <code>Github_Portfolio/...</code> (o agente sincroniza)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="tabela-completa-de-frases-gatilho" class="level2">
+<h2 class="anchored" data-anchor-id="tabela-completa-de-frases-gatilho">Tabela completa de frases-gatilho</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Você diz</th>
+<th>Eu faço</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>“vamos abrir o projeto X”</strong></td>
+<td>Cria estrutura padrão (pasta + <code>portfolio/</code> + git + opção de repo privado)</td>
+</tr>
+<tr class="even">
+<td><strong>“publica X no portfólio”</strong></td>
+<td>Sincroniza prosa do projeto → <code>Github_Portfolio/projetos/</code> + push</td>
+</tr>
+<tr class="odd">
+<td><strong>“X vai virar paper”</strong></td>
+<td>Cria <code>portfolio/research/</code> com PDF público + página HTML + cross-links</td>
+</tr>
+<tr class="even">
+<td><strong>“fechar v<code>X.Y</code> de Y”</strong></td>
+<td>Versão fechada + snapshot + sincroniza paper público no site</td>
+</tr>
+<tr class="odd">
+<td><strong>“sincroniza X”</strong></td>
+<td>Edição pontual: copia + commit + push</td>
+</tr>
+<tr class="even">
+<td><strong>“diff vX.Y”</strong></td>
+<td>Compara estado atual com snapshot da versão <code>X.Y</code></td>
+</tr>
+<tr class="odd">
+<td><strong>“rollback para vX.Y”</strong></td>
+<td>Volta o paper para a versão anterior (com confirmação prévia)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="princípios-fixos-do-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="princípios-fixos-do-workflow">Princípios fixos do <em>workflow</em></h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Regras invioláveis
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Fonte de verdade é sempre <code>&lt;projeto&gt;/portfolio/</code></strong> — <code>Github_Portfolio/</code> é alvo de cópia, <strong>nunca editar direto</strong> lá.</li>
+<li><strong>Código-fonte do paper (<code>.qmd</code> base) nunca vai para o site</strong> — só o <strong>PDF da edição do leitor</strong>.</li>
+<li><strong>Repos de projeto continuam privados</strong> — público é só o site (<code>vitorwilher.github.io</code>).</li>
+<li><strong>Cross-links bidirecionais</strong> — projeto e pesquisa do mesmo <code>&lt;slug&gt;</code> se referenciam mutuamente via callout.</li>
+<li><strong>Stash + rebase + pop</strong> é o padrão de push em <code>Github_Portfolio</code> (sempre tem <code>cv.qmd</code>/<code>blog/</code> modificados localmente).</li>
+<li><strong>Render é responsabilidade do autor</strong> — agente nunca renderiza PDFs em auto mode.</li>
+</ol>
+</div>
+</div>
+<hr>
+</section>
+<section id="ciclo-de-vida-típico-de-um-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="ciclo-de-vida-típico-de-um-projeto">Ciclo de vida típico de um projeto</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  A([Ideia]) --&gt;|"💬 'abrir projeto X'"| B[Projeto criado&lt;br&gt;estrutura padrão]
+  B --&gt; C[Desenvolvimento&lt;br&gt;local]
+  C --&gt;|"💬 'publica X&lt;br&gt;no portfólio'"| D[Card no site&lt;br&gt;vitorwilher.github.io/projetos/]
+  D --&gt; E{Vira paper?}
+  E --&gt;|não| F([Projeto&lt;br&gt;publicado])
+  E --&gt;|sim| G["💬 'X vai virar paper'"]
+  G --&gt; H[Working paper v1.0&lt;br&gt;vitorwilher.github.io/research/]
+  H --&gt; I[Crítica acadêmica&lt;br&gt;via e-mail]
+  I --&gt; J[Próximos Passos]
+  J --&gt;|"💬 'fechar v1.1 de X'"| K[Nova versão&lt;br&gt;histórico atualizado]
+  K --&gt; I
+
+  style A fill:#e3f2fd
+  style F fill:#d4edda
+  style H fill:#d4edda
+  style K fill:#d4edda
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>O ciclo de paper é deliberadamente cíclico: cada versão fechada gera nova janela para crítica e nova rodada de melhorias.</p>
+<hr>
+</section>
+<section id="notas-finais" class="level2">
+<h2 class="anchored" data-anchor-id="notas-finais">Notas finais</h2>
+<p>Este <em>workflow</em> foi inaugurado com o projeto <a href="../research/sentimento-copom.html">Sentimento COPOM</a> em 26 de abril de 2026 e será replicado em todos os projetos novos a partir desta data. Se você é meu aluno ou colaborador e quer adaptar a estrutura ao seu próprio portfólio, sinta-se à vontade — todo o sistema é replicável e usa apenas Quarto, Git e GitHub Actions.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Material de aula
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Este guia também serve como material de aula para os meus cursos de <strong>Engenharia de Dados aplicada à Economia</strong> e <strong>Pesquisa Reproduzível com Quarto</strong>. Uso-o para mostrar como sustentar uma agenda de pesquisa pública e replicável <strong>sem expor código proprietário</strong>.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

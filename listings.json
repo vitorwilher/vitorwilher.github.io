@@ -17,6 +17,7 @@
   {
     "listing": "/teaching/index.html",
     "items": [
+      "/teaching/workflow-portfolio.html",
       "/teaching/transformers-llms.html"
     ]
   }

@@ -200,7 +200,112 @@
     "href": "teaching/index.html",
     "title": "Cursos",
     "section": "",
-    "text": "Transformers & Large Language Models — MBA IA for Business 2026\n\n\n\nLLM\n\nTransformer\n\nIA Generativa\n\nEnsino\n\nMBA\n\nAttention\n\nRLHF\n\nMultimodalidade\n\n\n\nCurso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.\n\n\n\n\n\nApr 7, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Workflow de Portfólio Pessoal — Guia Operacional\n\n\nComo organizar projetos e papers entre repos privados e o site público com fricção mínima\n\n\n\nWorkflow\n\nQuarto\n\nGit\n\nGitHub\n\nPortfólio\n\nProdutividade\n\n\n\nGuia prático e replicável para abrir projetos, publicar no portfólio, lançar papers acadêmicos e versionar releases — usando uma única pasta-template e um conjunto curto de frases-gatilho.\n\n\n\n\n\nApr 26, 2026\n\n\nVitor Wilher\n\n\n\n\n\n\n\n\n\n\n\n\nTransformers & Large Language Models — MBA IA for Business 2026\n\n\n\n\n\n\nLLM\n\nTransformer\n\nIA Generativa\n\nEnsino\n\nMBA\n\nAttention\n\nRLHF\n\nMultimodalidade\n\n\n\nCurso de 4 aulas ministrado para a turma de MBA IA for Business 2026: da cronologia da IA à arquitetura Transformer, do self-attention ao RLHF, e do modelo como serviço à cadeia de valor dos LLMs.\n\n\n\n\n\nApr 7, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html",
+    "href": "teaching/workflow-portfolio.html",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "",
+    "text": "Quem trabalha em vários projetos paralelos — alguns que viram papers acadêmicos, outros que viram cursos, outros que ficam apenas no portfólio — enfrenta um problema clássico de fricção operacional: cada projeto tem seu próprio repositório, seu próprio README, e ainda precisa virar uma página no site pessoal e, eventualmente, um working paper público. Mantida à mão, essa cadeia se desincroniza rapidamente: o README diverge da documentação do site, o PDF público fica defasado em relação à versão técnica, e cada novo projeto reinventa a roda.\nEste guia documenta o fluxo unificado que adoto desde o projeto Sentimento COPOM (abril/2026), construído ao redor de três decisões fundamentais:\n\nUma pasta portfolio/ por projeto funciona como fonte de verdade para tudo o que vai público (site, README do repo, PDF do working paper).\nMetodologia CRISP-DM estrutura cada .qmd de divulgação em seis fases padronizadas — torna a curva de aprendizado próxima de zero quando um novo projeto é iniciado.\nCódigo privado, conhecimento público — repositórios dos projetos seguem privados; o site oferece prosa, metodologia, PDF de working paper e CHANGELOG, mas nunca o código-fonte executável.\n\nO resultado é um conjunto curto de frases-gatilho que disparam workflows completos sem precisar lembrar de comandos, caminhos ou ordem de operações."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#por-que-este-guia-existe",
+    "href": "teaching/workflow-portfolio.html#por-que-este-guia-existe",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "",
+    "text": "Quem trabalha em vários projetos paralelos — alguns que viram papers acadêmicos, outros que viram cursos, outros que ficam apenas no portfólio — enfrenta um problema clássico de fricção operacional: cada projeto tem seu próprio repositório, seu próprio README, e ainda precisa virar uma página no site pessoal e, eventualmente, um working paper público. Mantida à mão, essa cadeia se desincroniza rapidamente: o README diverge da documentação do site, o PDF público fica defasado em relação à versão técnica, e cada novo projeto reinventa a roda.\nEste guia documenta o fluxo unificado que adoto desde o projeto Sentimento COPOM (abril/2026), construído ao redor de três decisões fundamentais:\n\nUma pasta portfolio/ por projeto funciona como fonte de verdade para tudo o que vai público (site, README do repo, PDF do working paper).\nMetodologia CRISP-DM estrutura cada .qmd de divulgação em seis fases padronizadas — torna a curva de aprendizado próxima de zero quando um novo projeto é iniciado.\nCódigo privado, conhecimento público — repositórios dos projetos seguem privados; o site oferece prosa, metodologia, PDF de working paper e CHANGELOG, mas nunca o código-fonte executável.\n\nO resultado é um conjunto curto de frases-gatilho que disparam workflows completos sem precisar lembrar de comandos, caminhos ou ordem de operações."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#filosofia-em-três-princípios",
+    "href": "teaching/workflow-portfolio.html#filosofia-em-três-princípios",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Filosofia em três princípios",
+    "text": "Filosofia em três princípios\n\n1. Fonte de verdade única\nToda documentação pública de um projeto vive em um único arquivo .qmd dentro de &lt;projeto&gt;/portfolio/. Esse arquivo é editado, e suas cópias para o site e para o README do repositório são geradas a partir dele. Editar a cópia diretamente é proibido — só editar a fonte e re-sincronizar.\n\n\n2. Privacidade granular\nNem tudo do projeto vai público. A regra é simples:\n\n\n\n\n\n\n\n\nArtefato\nVai para o site?\nVai para o repo público?\n\n\n\n\nCódigo (.py, .qmd com chunks)\n❌ Nunca\n❌ Repo é privado\n\n\n.qmd técnico do paper (com echo: true)\n❌ Nunca\n❌ Repo é privado\n\n\nProsa CRISP-DM do projeto\n✅ Sim\n✅ Como README\n\n\nPDF público do paper (com echo: false)\n✅ Sim\n—\n\n\nCHANGELOG\n✅ Sim (em prosa)\n✅ Sim (técnico)\n\n\nImagens e diagramas\n✅ Sim\n✅ Sim\n\n\n\n\n\n3. Um conjunto curto de frases-gatilho\nEm vez de memorizar comandos git, caminhos de pasta e ordem de operações, basta dizer uma frase e o agente executa o workflow completo. As frases ficam em memória e funcionam tanto a partir do diretório do projeto quanto a partir do Github_Portfolio."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#a-estrutura-padrão",
+    "href": "teaching/workflow-portfolio.html#a-estrutura-padrão",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "A estrutura padrão",
+    "text": "A estrutura padrão\nTodo projeto adota a mesma estrutura:\n&lt;projeto&gt;/\n├── &lt;código do projeto&gt;             ← parte privada\n├── &lt;paper técnico&gt;.qmd             ← com chunks, privado\n│\n├── portfolio/                      ← fonte de verdade do material público\n│   ├── &lt;slug&gt;.qmd                  ← documentação CRISP-DM (vai para projetos/)\n│   ├── README.md                   ← versão enxuta (vai para README do repo)\n│   ├── _TEMPLATE.md                ← documenta a convenção\n│   ├── *.png                       ← imagens de capa\n│   └── research/                   ← OPCIONAL, quando vira paper\n│       ├── &lt;slug&gt;.qmd              ← página HTML (vai para research/)\n│       ├── &lt;slug&gt;_publico.pdf      ← PDF da edição do leitor\n│       └── &lt;slug&gt;_indice.png\n│\n├── CHANGELOG.md                    ← histórico técnico\n├── versions/vX.Y_AAAA-MM-DD/       ← snapshots por release\n└── _rollback/                      ← checkpoints ad-hoc (não vai pro repo)\nE o destino no Github_Portfolio:\nGithub_Portfolio/\n├── projetos/\n│   ├── &lt;slug&gt;.qmd                  ← cópia de portfolio/&lt;slug&gt;.qmd\n│   ├── &lt;slug&gt;_*.png                ← cópias das imagens\n│   └── ...\n└── research/                       ← criada quando o projeto vira paper\n    ├── &lt;slug&gt;.qmd                  ← cópia de portfolio/research/&lt;slug&gt;.qmd\n    ├── &lt;slug&gt;_publico.pdf          ← cópia do PDF público\n    └── ..."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#fluxo-de-informação-três-pontas-uma-fonte",
+    "href": "teaching/workflow-portfolio.html#fluxo-de-informação-três-pontas-uma-fonte",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Fluxo de informação: três pontas, uma fonte",
+    "text": "Fluxo de informação: três pontas, uma fonte\n\n\n\n\n\nflowchart LR\n  P[\"📁 projeto/portfolio/&lt;br&gt;&lt;b&gt;FONTE DE VERDADE&lt;/b&gt;\"]\n  R[(\"🔒 GitHub&lt;br&gt;repo privado\")]\n  S((\"🌐 vitorwilher.github.io&lt;br&gt;público\"))\n  P --&gt;|README.md + código| R\n  P --&gt;|.qmd + imagens| S\n  P --&gt;|PDF público + página HTML&lt;br&gt;&lt;i&gt;opcional, se virar paper&lt;/i&gt;| S\n\n  style P fill:#fff4d6,stroke:#d4a017,stroke-width:2px\n  style R fill:#fde2e2,stroke:#c0392b\n  style S fill:#d4edda,stroke:#27ae60\n\n\n\n\n\n\nA pasta portfolio/ no projeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cenário-1-abrir-projeto-novo",
+    "href": "teaching/workflow-portfolio.html#cenário-1-abrir-projeto-novo",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cenário 1 — Abrir projeto novo",
+    "text": "Cenário 1 — Abrir projeto novo\nFrase-gatilho: “vamos abrir o projeto &lt;nome&gt;” (ou “abrir projeto &lt;slug&gt;”)\n\n\n\n\n\nflowchart TB\n  A([💬 'vamos abrir o projeto X']) --&gt; B[Cria pasta projeto/]\n  B --&gt; C[Cria portfolio/ com&lt;br&gt;slug.qmd, README.md,&lt;br&gt;_TEMPLATE.md]\n  C --&gt; D[Cria .gitignore&lt;br&gt;blindado]\n  D --&gt; E[git init -b main&lt;br&gt;+ primeiro commit]\n  E --&gt; F{Criar repo&lt;br&gt;privado&lt;br&gt;agora?}\n  F --&gt;|sim| G[gh repo create&lt;br&gt;privado + push]\n  F --&gt;|depois| H[Pronto]\n  G --&gt; H\n\n\n\n\n\n\nO que o agente faz automaticamente:\n\nCria pasta ~/Dropbox/Portfolio/&lt;nome&gt;/\nCria &lt;nome&gt;/portfolio/ com &lt;slug&gt;.qmd no template CRISP-DM (6 fases já estruturadas), README.md enxuto, _TEMPLATE.md (referência)\nCria .gitignore blindado: .env, .quarto/, _freeze/, __pycache__/, _rollback/, archive/, .venv/, .DS_Store\ngit init -b main + primeiro commit\nPergunta se cria repo privado já agora (criar repo é ação visível, requer confirmação)\n\nSua responsabilidade: desenvolver o projeto. Edita o .qmd do portfolio/ à medida que as fases CRISP-DM amadurecem."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cenário-2-publicaratualizar-projeto-no-site-sem-paper",
+    "href": "teaching/workflow-portfolio.html#cenário-2-publicaratualizar-projeto-no-site-sem-paper",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cenário 2 — Publicar/atualizar projeto no site (sem paper)",
+    "text": "Cenário 2 — Publicar/atualizar projeto no site (sem paper)\nFrase-gatilho: “publica &lt;slug&gt; no portfólio” ou “atualiza &lt;slug&gt; no site”\n\n\n\n\n\nflowchart LR\n  A([💬 'publica X&lt;br&gt;no portfólio']) --&gt; B[cp portfolio/.qmd&lt;br&gt;+ imagens →&lt;br&gt;Github_Portfolio/projetos/]\n  B --&gt; C[git stash&lt;br&gt;cv, blog, etc.]\n  C --&gt; D[git add slug&lt;br&gt;+ commit]\n  D --&gt; E[git pull --rebase&lt;br&gt;+ git push]\n  E --&gt; F[git stash pop]\n  F --&gt; G([✅ Site atualiza&lt;br&gt;via CI ~2min])\n\n\n\n\n\n\nO que o agente faz automaticamente:\n\nCopia &lt;projeto&gt;/portfolio/&lt;slug&gt;.qmd + imagens → Github_Portfolio/projetos/&lt;slug&gt;.qmd\nStash de mudanças não-relacionadas em Github_Portfolio (cv.qmd, blog/, cv.pdf são típicos)\ngit add apenas dos arquivos do &lt;slug&gt;, commit no estilo “Projetos: …”\ngit pull --rebase origin master + git push origin master\nRestaura stash com git stash pop\nConfirma resultado do CI e dá URL final"
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cenário-3-projeto-virou-paper-primeira-release-pública",
+    "href": "teaching/workflow-portfolio.html#cenário-3-projeto-virou-paper-primeira-release-pública",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cenário 3 — Projeto virou paper (primeira release pública)",
+    "text": "Cenário 3 — Projeto virou paper (primeira release pública)\nFrase-gatilho: “&lt;slug&gt; vai virar paper” ou “abrir paper de &lt;slug&gt;”\n\n\n\n\n\nflowchart TB\n  A([💬 'X vai virar paper']) --&gt; B[Cria portfolio/research/&lt;br&gt;com slug.qmd&lt;br&gt;baseado no template]\n  B --&gt; C[Copia PDF público&lt;br&gt;+ imagem de capa]\n  C --&gt; D[Replica em&lt;br&gt;Github_Portfolio/research/]\n  D --&gt; E[Adiciona callout cruzado&lt;br&gt;em projetos/slug.qmd]\n  E --&gt; F[Commit + push&lt;br&gt;nos dois repos]\n  F --&gt; G([✅ Paper vivo&lt;br&gt;publicado])\n\n\n\n\n\n\nO que o agente faz automaticamente:\n\nCria &lt;projeto&gt;/portfolio/research/&lt;slug&gt;.qmd baseado no template do Sentimento COPOM:\n\nCallout “working paper · em desenvolvimento contínuo”\nBotão 📄 Baixar PDF\nAbstract bilíngue PT/EN\nHistórico de versões em prosa\nComo citar (BibTeX)\nContato para diálogo acadêmico\nCross-link para projetos/&lt;slug&gt;.html\nNota explícita: “O código-fonte é mantido privado”\n\nCopia &lt;paper&gt;_publico.pdf (edição do leitor, com echo: false) + imagem de capa\nReplica em Github_Portfolio/research/\nAdiciona callout cruzado em projetos/&lt;slug&gt;.qmd apontando para a pesquisa\nCommit + push em ambos os repos\n\nPré-requisito: o _publico.pdf precisa existir. Você renderiza — auto mode não autoriza render."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cenário-4-nova-versão-do-paper",
+    "href": "teaching/workflow-portfolio.html#cenário-4-nova-versão-do-paper",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cenário 4 — Nova versão do paper",
+    "text": "Cenário 4 — Nova versão do paper\nFrase-gatilho: “fechar vX.Y do &lt;slug&gt;”\n\n\n\n\n\nflowchart TB\n  A([💬 'fechar v1.1&lt;br&gt;de X']) --&gt; B[Atualiza titlepage&lt;br&gt;remove 'em desenvolvimento']\n  B --&gt; C[Finaliza CHANGELOG&lt;br&gt;técnico no projeto]\n  C --&gt; D[Cria snapshot&lt;br&gt;versions/v1.1_DATA/]\n  D --&gt; E[Sugere render&lt;br&gt;do PDF público]\n  E --&gt; F[Copia PDF público&lt;br&gt;atualizado para research/]\n  F --&gt; G[Atualiza histórico&lt;br&gt;de versões em prosa&lt;br&gt;no research/.qmd]\n  G --&gt; H[Atualiza BibTeX&lt;br&gt;versão e mês/ano]\n  H --&gt; I[Commit + push&lt;br&gt;nos dois repos]\n  I --&gt; J([✅ v1.1 fechada&lt;br&gt;e pública])\n\n\n\n\n\n\nO que o agente faz automaticamente:\n\nAtualiza titlepage do .qmd técnico (remove sufixo “em desenvolvimento”)\nFinaliza entrada da vX.Y no CHANGELOG.md técnico\nCria snapshot em versions/vX.Y_AAAA-MM-DD/\nSugere que você renderize os PDFs\n(Novo) Copia PDF público atualizado para portfolio/research/ e Github_Portfolio/research/\n(Novo) Atualiza “Histórico de versões” do &lt;slug&gt;.qmd em research/ com a entrada da nova versão (em prosa, mais legível que o CHANGELOG técnico)\n(Novo) Atualiza o BibTeX (campo note = {Working paper, versão X.Y} e mês/ano)\nCommit + push em ambos os repos"
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cenário-5-edição-pequena-no-site",
+    "href": "teaching/workflow-portfolio.html#cenário-5-edição-pequena-no-site",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cenário 5 — Edição pequena no site",
+    "text": "Cenário 5 — Edição pequena no site\nFrase-gatilho: “corrige &lt;descrição&gt; no site” ou “sincroniza &lt;slug&gt;”\n\n\n\n\n\nflowchart LR\n  A([💬 'corrige typo&lt;br&gt;em X']) --&gt; B[Edita&lt;br&gt;portfolio/slug.qmd]\n  B --&gt; C[Sincroniza&lt;br&gt;para Github_Portfolio]\n  C --&gt; D[Commit + push]\n  D --&gt; E([✅ Site atualiza])\n\n\n\n\n\n\nPara mudanças pontuais (typo, ajuste de prosa) — eu sincronizo portfolio/&lt;slug&gt;.qmd (e/ou portfolio/research/&lt;slug&gt;.qmd) para Github_Portfolio/, commit + push."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#cheat-sheet-onde-edito-o-quê",
+    "href": "teaching/workflow-portfolio.html#cheat-sheet-onde-edito-o-quê",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Cheat sheet — onde edito o quê",
+    "text": "Cheat sheet — onde edito o quê\n\n\n\n\n\n\n\nQuero editar…\nEdito em…\n\n\n\n\nCódigo do pipeline / paper técnico (com chunks)\n&lt;projeto&gt;/&lt;paper&gt;_base.qmd\n\n\nProsa do projeto para o portfólio (CRISP-DM)\n&lt;projeto&gt;/portfolio/&lt;slug&gt;.qmd\n\n\nREADME do repo GitHub do projeto\n&lt;projeto&gt;/portfolio/README.md\n\n\nWorking paper público (abstract, changelog, contato)\n&lt;projeto&gt;/portfolio/research/&lt;slug&gt;.qmd\n\n\nNunca edito direto: Github_Portfolio/... (o agente sincroniza)\n—"
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#tabela-completa-de-frases-gatilho",
+    "href": "teaching/workflow-portfolio.html#tabela-completa-de-frases-gatilho",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Tabela completa de frases-gatilho",
+    "text": "Tabela completa de frases-gatilho\n\n\n\n\n\n\n\nVocê diz\nEu faço\n\n\n\n\n“vamos abrir o projeto X”\nCria estrutura padrão (pasta + portfolio/ + git + opção de repo privado)\n\n\n“publica X no portfólio”\nSincroniza prosa do projeto → Github_Portfolio/projetos/ + push\n\n\n“X vai virar paper”\nCria portfolio/research/ com PDF público + página HTML + cross-links\n\n\n“fechar vX.Y de Y”\nVersão fechada + snapshot + sincroniza paper público no site\n\n\n“sincroniza X”\nEdição pontual: copia + commit + push\n\n\n“diff vX.Y”\nCompara estado atual com snapshot da versão X.Y\n\n\n“rollback para vX.Y”\nVolta o paper para a versão anterior (com confirmação prévia)"
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#princípios-fixos-do-workflow",
+    "href": "teaching/workflow-portfolio.html#princípios-fixos-do-workflow",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Princípios fixos do workflow",
+    "text": "Princípios fixos do workflow\n\n\n\n\n\n\nImportantRegras invioláveis\n\n\n\n\nFonte de verdade é sempre &lt;projeto&gt;/portfolio/ — Github_Portfolio/ é alvo de cópia, nunca editar direto lá.\nCódigo-fonte do paper (.qmd base) nunca vai para o site — só o PDF da edição do leitor.\nRepos de projeto continuam privados — público é só o site (vitorwilher.github.io).\nCross-links bidirecionais — projeto e pesquisa do mesmo &lt;slug&gt; se referenciam mutuamente via callout.\nStash + rebase + pop é o padrão de push em Github_Portfolio (sempre tem cv.qmd/blog/ modificados localmente).\nRender é responsabilidade do autor — agente nunca renderiza PDFs em auto mode."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#ciclo-de-vida-típico-de-um-projeto",
+    "href": "teaching/workflow-portfolio.html#ciclo-de-vida-típico-de-um-projeto",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Ciclo de vida típico de um projeto",
+    "text": "Ciclo de vida típico de um projeto\n\n\n\n\n\nflowchart TB\n  A([Ideia]) --&gt;|\"💬 'abrir projeto X'\"| B[Projeto criado&lt;br&gt;estrutura padrão]\n  B --&gt; C[Desenvolvimento&lt;br&gt;local]\n  C --&gt;|\"💬 'publica X&lt;br&gt;no portfólio'\"| D[Card no site&lt;br&gt;vitorwilher.github.io/projetos/]\n  D --&gt; E{Vira paper?}\n  E --&gt;|não| F([Projeto&lt;br&gt;publicado])\n  E --&gt;|sim| G[\"💬 'X vai virar paper'\"]\n  G --&gt; H[Working paper v1.0&lt;br&gt;vitorwilher.github.io/research/]\n  H --&gt; I[Crítica acadêmica&lt;br&gt;via e-mail]\n  I --&gt; J[Próximos Passos]\n  J --&gt;|\"💬 'fechar v1.1 de X'\"| K[Nova versão&lt;br&gt;histórico atualizado]\n  K --&gt; I\n\n  style A fill:#e3f2fd\n  style F fill:#d4edda\n  style H fill:#d4edda\n  style K fill:#d4edda\n\n\n\n\n\n\nO ciclo de paper é deliberadamente cíclico: cada versão fechada gera nova janela para crítica e nova rodada de melhorias."
+  },
+  {
+    "objectID": "teaching/workflow-portfolio.html#notas-finais",
+    "href": "teaching/workflow-portfolio.html#notas-finais",
+    "title": "Workflow de Portfólio Pessoal — Guia Operacional",
+    "section": "Notas finais",
+    "text": "Notas finais\nEste workflow foi inaugurado com o projeto Sentimento COPOM em 26 de abril de 2026 e será replicado em todos os projetos novos a partir desta data. Se você é meu aluno ou colaborador e quer adaptar a estrutura ao seu próprio portfólio, sinta-se à vontade — todo o sistema é replicável e usa apenas Quarto, Git e GitHub Actions.\n\n\n\n\n\n\nTipMaterial de aula\n\n\n\nEste guia também serve como material de aula para os meus cursos de Engenharia de Dados aplicada à Economia e Pesquisa Reproduzível com Quarto. Uso-o para mostrar como sustentar uma agenda de pesquisa pública e replicável sem expor código proprietário."
   },
   {
     "objectID": "teaching/transformers-llms.html",
