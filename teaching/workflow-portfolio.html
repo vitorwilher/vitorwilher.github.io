@@ -154,8 +154,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#privacidade-granular" id="toc-privacidade-granular" class="nav-link" data-scroll-target="#privacidade-granular">2. Privacidade granular</a></li>
   <li><a href="#um-conjunto-curto-de-frases-gatilho" id="toc-um-conjunto-curto-de-frases-gatilho" class="nav-link" data-scroll-target="#um-conjunto-curto-de-frases-gatilho">3. Um conjunto curto de frases-gatilho</a></li>
   </ul></li>
+  <li><a href="#painel-de-controle-único" id="toc-painel-de-controle-único" class="nav-link" data-scroll-target="#painel-de-controle-único">Painel de controle único</a></li>
   <li><a href="#a-estrutura-padrão" id="toc-a-estrutura-padrão" class="nav-link" data-scroll-target="#a-estrutura-padrão">A estrutura padrão</a></li>
-  <li><a href="#fluxo-de-informação-três-pontas-uma-fonte" id="toc-fluxo-de-informação-três-pontas-uma-fonte" class="nav-link" data-scroll-target="#fluxo-de-informação-três-pontas-uma-fonte">Fluxo de informação: três pontas, uma fonte</a></li>
+  <li><a href="#fluxo-de-informação-painel-fonte-de-verdade-duas-pontas" id="toc-fluxo-de-informação-painel-fonte-de-verdade-duas-pontas" class="nav-link" data-scroll-target="#fluxo-de-informação-painel-fonte-de-verdade-duas-pontas">Fluxo de informação: painel, fonte de verdade, duas pontas</a></li>
   <li><a href="#cenário-1-abrir-projeto-novo" id="toc-cenário-1-abrir-projeto-novo" class="nav-link" data-scroll-target="#cenário-1-abrir-projeto-novo">Cenário 1 — Abrir projeto novo</a></li>
   <li><a href="#cenário-2-publicaratualizar-projeto-no-site-sem-paper" id="toc-cenário-2-publicaratualizar-projeto-no-site-sem-paper" class="nav-link" data-scroll-target="#cenário-2-publicaratualizar-projeto-no-site-sem-paper">Cenário 2 — Publicar/atualizar projeto no site (sem paper)</a></li>
   <li><a href="#cenário-3-projeto-virou-paper-primeira-release-pública" id="toc-cenário-3-projeto-virou-paper-primeira-release-pública" class="nav-link" data-scroll-target="#cenário-3-projeto-virou-paper-primeira-release-pública">Cenário 3 — Projeto virou paper (primeira release pública)</a></li>
@@ -287,9 +288,83 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="um-conjunto-curto-de-frases-gatilho" class="level3">
 <h3 class="anchored" data-anchor-id="um-conjunto-curto-de-frases-gatilho">3. Um conjunto curto de frases-gatilho</h3>
-<p>Em vez de memorizar comandos <code>git</code>, caminhos de pasta e ordem de operações, basta <strong>dizer uma frase</strong> e o agente executa o <em>workflow</em> completo. As frases ficam em memória e funcionam tanto a partir do diretório do projeto quanto a partir do <code>Github_Portfolio</code>.</p>
+<p>Em vez de memorizar comandos <code>git</code>, caminhos de pasta e ordem de operações, basta <strong>dizer uma frase</strong> e o agente executa o <em>workflow</em> completo. As frases ficam em <strong>memória persistente do agente</strong>, no nível pai <code>~/Dropbox/Portfolio/</code> (ver seção <em>Painel de controle único</em> abaixo).</p>
 <hr>
 </section>
+</section>
+<section id="painel-de-controle-único" class="level2">
+<h2 class="anchored" data-anchor-id="painel-de-controle-único">Painel de controle único</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Cwd padrão de trabalho: <code>~/Dropbox/Portfolio/</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Todo o <em>workflow</em> de portfólio é operado a partir do diretório <strong>pai</strong> que contém todos os subprojetos:</p>
+<pre><code>~/Dropbox/Portfolio/        ← abrir o VS Code AQUI
+├── Sentimento_COPOM/
+├── ROI_Diagnostico/
+├── Github_Portfolio/
+├── &lt;futuros projetos&gt;/
+└── ...</code></pre>
+</div>
+</div>
+<p>A escolha é deliberada: se eu abro o VS Code dentro de um subprojeto (ex: <code>Sentimento_COPOM/</code>), o agente só enxerga as memórias específicas daquele projeto. Como as frases-gatilho são genéricas e atravessam projetos, elas vivem em uma <strong>camada acima</strong> — a memória do diretório pai <code>~/Dropbox/Portfolio/</code>.</p>
+<p>Concretamente, o agente carrega quatro memórias compartilhadas a partir desse cwd:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Memória</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>user_profile.md</code></td>
+<td>Quem é o autor, área de atuação, idioma de trabalho</td>
+</tr>
+<tr class="even">
+<td><code>portfolio_workflow.md</code></td>
+<td>Convenção da pasta <code>portfolio/</code> e da subpasta <code>research/</code></td>
+</tr>
+<tr class="odd">
+<td><code>github_portfolio_repos.md</code></td>
+<td>Caminhos locais, URLs dos remotos, <em>branch defaults</em></td>
+</tr>
+<tr class="even">
+<td><code>portfolio_frases_gatilho.md</code></td>
+<td>Lista completa das frases e o que cada uma executa</td>
+</tr>
+</tbody>
+</table>
+<p>A partir desse painel, o agente:</p>
+<ul>
+<li>Cria pastas de subprojetos novos via <em>path</em> absoluto (<code>~/Dropbox/Portfolio/&lt;NomeNovo&gt;/</code>).</li>
+<li>Sincroniza qualquer subprojeto existente com o site público em <code>Github_Portfolio/</code>.</li>
+<li>Mantém memórias específicas de subprojeto (como o sistema de <em>releases</em> do Sentimento COPOM) <strong>dentro</strong> das pastas individuais — só as memórias de <em>workflow geral</em> sobem para o nível pai.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Por que <strong>não</strong> colocar tudo em memória global do usuário?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Memórias globais (<code>~/.claude/CLAUDE.md</code>) seriam carregadas em <strong>todas</strong> as sessões, incluindo trabalhos completamente fora do portfólio. A camada <code>~/Dropbox/Portfolio/</code> é o escopo correto: acima dos subprojetos, abaixo do usuário-todo.</p>
+</div>
+</div>
+<hr>
 </section>
 <section id="a-estrutura-padrão" class="level2">
 <h2 class="anchored" data-anchor-id="a-estrutura-padrão">A estrutura padrão</h2>
@@ -323,21 +398,25 @@ ul.task-list li input[type="checkbox"] {
     └── ...</code></pre>
 <hr>
 </section>
-<section id="fluxo-de-informação-três-pontas-uma-fonte" class="level2">
-<h2 class="anchored" data-anchor-id="fluxo-de-informação-três-pontas-uma-fonte">Fluxo de informação: três pontas, uma fonte</h2>
+<section id="fluxo-de-informação-painel-fonte-de-verdade-duas-pontas" class="level2">
+<h2 class="anchored" data-anchor-id="fluxo-de-informação-painel-fonte-de-verdade-duas-pontas">Fluxo de informação: painel, fonte de verdade, duas pontas</h2>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
+  C["🎛️ ~/Dropbox/Portfolio/&lt;br&gt;&lt;b&gt;PAINEL DE CONTROLE&lt;/b&gt;&lt;br&gt;cwd do VS Code&lt;br&gt;memórias compartilhadas"]
   P["📁 projeto/portfolio/&lt;br&gt;&lt;b&gt;FONTE DE VERDADE&lt;/b&gt;"]
   R[("🔒 GitHub&lt;br&gt;repo privado")]
   S(("🌐 vitorwilher.github.io&lt;br&gt;público"))
+
+  C --&gt;|frases-gatilho| P
   P --&gt;|README.md + código| R
   P --&gt;|.qmd + imagens| S
   P --&gt;|PDF público + página HTML&lt;br&gt;&lt;i&gt;opcional, se virar paper&lt;/i&gt;| S
 
+  style C fill:#e1f0ff,stroke:#1f6feb,stroke-width:2px
   style P fill:#fff4d6,stroke:#d4a017,stroke-width:2px
   style R fill:#fde2e2,stroke:#c0392b
   style S fill:#d4edda,stroke:#27ae60
@@ -347,20 +426,21 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>A pasta <code>portfolio/</code> no projeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.</p>
+<p>O painel de controle é onde você opera (cwd <code>~/Dropbox/Portfolio/</code>). A pasta <code>portfolio/</code> de cada subprojeto é a única fonte que se edita. O agente sincroniza para as duas pontas (repo privado e site público) sob demanda.</p>
 <hr>
 </section>
 <section id="cenário-1-abrir-projeto-novo" class="level2">
 <h2 class="anchored" data-anchor-id="cenário-1-abrir-projeto-novo">Cenário 1 — Abrir projeto novo</h2>
 <p><strong>Frase-gatilho:</strong> <em>“vamos abrir o projeto <code>&lt;nome&gt;</code>”</em> (ou <em>“abrir projeto <code>&lt;slug&gt;</code>”</em>)</p>
+<p><strong>Onde você está quando diz isso:</strong> com o VS Code aberto em <code>~/Dropbox/Portfolio/</code> (o painel de controle). O agente já tem todas as memórias do <em>workflow</em> carregadas — não precisa replicar nada para a pasta nova.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart TB
-  A([💬 'vamos abrir o projeto X']) --&gt; B[Cria pasta projeto/]
-  B --&gt; C[Cria portfolio/ com&lt;br&gt;slug.qmd, README.md,&lt;br&gt;_TEMPLATE.md]
+  A([💬 'vamos abrir o projeto X']) --&gt; B[Cria pasta&lt;br&gt;~/Dropbox/Portfolio/X/]
+  B --&gt; C[Cria X/portfolio/ com&lt;br&gt;slug.qmd, README.md,&lt;br&gt;_TEMPLATE.md]
   C --&gt; D[Cria .gitignore&lt;br&gt;blindado]
   D --&gt; E[git init -b main&lt;br&gt;+ primeiro commit]
   E --&gt; F{Criar repo&lt;br&gt;privado&lt;br&gt;agora?}
@@ -375,13 +455,13 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p><strong>O que o agente faz automaticamente:</strong></p>
 <ol type="1">
-<li>Cria pasta <code>~/Dropbox/Portfolio/&lt;nome&gt;/</code></li>
+<li>Cria pasta <code>~/Dropbox/Portfolio/&lt;nome&gt;/</code> (continuando no cwd do painel)</li>
 <li>Cria <code>&lt;nome&gt;/portfolio/</code> com <code>&lt;slug&gt;.qmd</code> no template CRISP-DM (6 fases já estruturadas), <code>README.md</code> enxuto, <code>_TEMPLATE.md</code> (referência)</li>
 <li>Cria <code>.gitignore</code> blindado: <code>.env</code>, <code>.quarto/</code>, <code>_freeze/</code>, <code>__pycache__/</code>, <code>_rollback/</code>, <code>archive/</code>, <code>.venv/</code>, <code>.DS_Store</code></li>
 <li><code>git init -b main</code> + primeiro commit</li>
 <li>Pergunta se cria repo privado já agora (criar repo é ação visível, requer confirmação)</li>
 </ol>
-<p><strong>Sua responsabilidade:</strong> desenvolver o projeto. Edita o <code>.qmd</code> do <code>portfolio/</code> à medida que as fases CRISP-DM amadurecem.</p>
+<p><strong>Sua responsabilidade:</strong> desenvolver o projeto. Edita o <code>.qmd</code> do <code>portfolio/</code> à medida que as fases CRISP-DM amadurecem. Tudo continua a partir do mesmo cwd <code>~/Dropbox/Portfolio/</code> — o agente alcança qualquer subprojeto via <em>path</em> absoluto.</p>
 <hr>
 </section>
 <section id="cenário-2-publicaratualizar-projeto-no-site-sem-paper" class="level2">
