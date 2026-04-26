@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-26">
+<meta name="description" content="Pipeline reprodutível em Python que constrói um Índice de Tom hawkish/dovish das atas do Copom usando três LLMs em paralelo (Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini), calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout e walk-forward).">
+
+<title>Sentimento COPOM — Índice de Tom das Atas do Copom com Múltiplos LLMs – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
+  <li><a href="#arquitetura-do-pipeline" id="toc-arquitetura-do-pipeline" class="nav-link" data-scroll-target="#arquitetura-do-pipeline">Arquitetura do Pipeline</a></li>
+  <li><a href="#entendimento-do-negócio" id="toc-entendimento-do-negócio" class="nav-link" data-scroll-target="#entendimento-do-negócio">1. Entendimento do Negócio</a></li>
+  <li><a href="#entendimento-dos-dados" id="toc-entendimento-dos-dados" class="nav-link" data-scroll-target="#entendimento-dos-dados">2. Entendimento dos Dados</a></li>
+  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">3. Preparação dos Dados</a></li>
+  <li><a href="#modelagem" id="toc-modelagem" class="nav-link" data-scroll-target="#modelagem">4. Modelagem</a></li>
+  <li><a href="#avaliação" id="toc-avaliação" class="nav-link" data-scroll-target="#avaliação">5. Avaliação</a></li>
+  <li><a href="#surpresa-de-comunicação-z-score" id="toc-surpresa-de-comunicação-z-score" class="nav-link" data-scroll-target="#surpresa-de-comunicação-z-score">Surpresa de Comunicação (z-score)</a></li>
+  <li><a href="#sistema-de-versões" id="toc-sistema-de-versões" class="nav-link" data-scroll-target="#sistema-de-versões">Sistema de Versões</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
+  <li><a href="#próximos-passos-v2.0" id="toc-próximos-passos-v2.0" class="nav-link" data-scroll-target="#próximos-passos-v2.0">Próximos Passos (v2.0)</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sentimento COPOM — Índice de Tom das Atas do Copom com Múltiplos LLMs</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">NLP</div>
+    <div class="quarto-category">LangChain</div>
+    <div class="quarto-category">Pydantic</div>
+    <div class="quarto-category">Google Gemini</div>
+    <div class="quarto-category">Anthropic Claude</div>
+    <div class="quarto-category">OpenAI</div>
+    <div class="quarto-category">statsmodels</div>
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">Macroeconomia</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Pipeline reprodutível em Python que constrói um Índice de Tom hawkish/dovish das atas do Copom usando três LLMs em paralelo (Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini), calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout e walk-forward).
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="sentimento_copom_indice.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Índice de Tom calibrado das atas do Copom — três LLMs em paralelo</figcaption>
+</figure>
+</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto implementa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), um <em>pipeline</em> completo para construir um <strong>Índice de Tom <em>hawkish-dovish</em></strong> das atas do Comitê de Política Monetária (Copom) do Banco Central do Brasil utilizando <strong>três modelos de linguagem de grande porte (LLMs)</strong> em paralelo:</p>
+<ul>
+<li><strong>Gemini Flash Lite</strong> (Google)</li>
+<li><strong>Claude Haiku 4.5</strong> (Anthropic)</li>
+<li><strong>GPT-4.1-mini</strong> (OpenAI)</li>
+</ul>
+<p>O mesmo <em>prompt</em> é aplicado aos mesmos textos pelos três provedores via <strong>LangChain</strong>, com saída estruturada via <strong>Pydantic</strong> e cache local incremental que torna a publicação contínua do índice viável a custo marginal próximo de zero. Os <em>scores</em> brutos são calibrados em pontos percentuais equivalentes da Selic via regressão linear simples (<code>statsmodels.OLS</code>), e a robustez do exercício é testada em <strong>três camadas complementares</strong>: inferência <em>in-sample</em>, <em>holdout</em> das últimas reuniões e validação cruzada <em>walk-forward</em> sobre toda a amostra.</p>
+<p>O artefato final é um <em>paper</em> técnico em <strong>Quarto + LaTeX</strong> versionado formalmente (CHANGELOG + snapshots por release), com duas edições paralelas — base auditável (com chunks visíveis) e edição do leitor (chunks ocultos).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tese central
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os três modelos <strong>concordam sobre a direção do tom</strong> — qual ata é mais <em>hawkish</em> (sinaliza juros mais altos) ou <em>dovish</em> (sinaliza juros mais baixos) — mas <strong>divergem sobre a intensidade</strong> com que essa direção se traduz em variação da Selic. A sensibilidade calibrada <span class="math inline">\(\hat{\beta}\)</span> varia de <span class="math inline">\(+0{,}36\)</span> a <span class="math inline">\(+0{,}62\)</span> p.p. por unidade de <em>score</em>, uma diferença de mais de 70%.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<p>A comunicação dos bancos centrais é, em si, um <strong>instrumento de política monetária</strong>. As atas do Copom concentram, em escolhas sutis de linguagem, informação relevante sobre a direção futura da Selic. Quantificar esse “tom” — formalmente, mensurar o quão <em>hawkish</em> ou <em>dovish</em> uma ata é — permite:</p>
+<ol type="1">
+<li><strong>Construir séries quantitativas</strong> a partir de texto, alimentando modelos macroeconômicos (regras de Taylor, VARs, modelos de surpresa monetária);</li>
+<li><strong>Detectar viradas de ciclo monetário</strong> antes que se traduzam em decisões formais de política;</li>
+<li><strong>Comparar provedores de IA</strong> em uma tarefa econômica concreta, com critério de calibração objetivo (variação efetiva da Selic).</li>
+</ol>
+<p>O projeto responde a três perguntas práticas:</p>
+<ul>
+<li><strong>Os LLMs concordam entre si</strong> ao ler as atas do Copom?</li>
+<li>Os <em>scores</em> têm <strong>poder explicativo</strong> sobre a variação subsequente da Selic?</li>
+<li>A escolha do provedor <strong>altera materialmente</strong> o resultado quando o índice é usado como variável quantitativa?</li>
+</ul>
+<hr>
+</section>
+<section id="metodologia-crisp-dm" class="level2">
+<h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
+<p>O projeto foi estruturado seguindo o processo <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), adaptado ao contexto de <strong>NLP com IA generativa aplicada à comunicação de bancos centrais</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Aplicação no Projeto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Entendimento do Negócio</strong></td>
+<td>Mapeamento da literatura (Loughran &amp; McDonald 2011, Apel &amp; Grimaldi 2012, Hansen &amp; Kazinnik 2023), definição da escala <span class="math inline">\(-3{,}0\)</span> a <span class="math inline">\(+3{,}0\)</span> com âncoras explícitas, escolha da variável-alvo (variação efetiva da Selic)</td>
+</tr>
+<tr class="even">
+<td><strong>2. Entendimento dos Dados</strong></td>
+<td>Inspeção das atas via API pública do BCB a partir da reunião 232 (ago/2020), análise estrutural das seções (A: diagnóstico; B: cenários e riscos; C: decisão) e da série SGS 432 (meta Selic)</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Preparação dos Dados</strong></td>
+<td><em>Scraping</em> programático, limpeza de HTML, extração das seções A+B (~50% menos <em>tokens</em>), alinhamento temporal ata × decisão Selic, cache incremental local em três níveis</td>
+</tr>
+<tr class="even">
+<td><strong>4. Modelagem</strong></td>
+<td><em>Prompt</em> unificado com âncoras <em>hawkish/dovish</em>; saída estruturada via Pydantic (<code>TomAta.score: float</code>); três LLMs em paralelo via LangChain; calibração OLS por modelo</td>
+</tr>
+<tr class="odd">
+<td><strong>5. Avaliação</strong></td>
+<td><strong>Três camadas</strong>: inferência <em>in-sample</em> (β̂, SE, t, p, IC 95%, R², R²_adj), <em>holdout</em> das últimas 6 reuniões (RMSE, MAE), validação <em>walk-forward</em> com janela expansiva (n_pred = 26)</td>
+</tr>
+<tr class="even">
+<td><strong>6. Implantação</strong></td>
+<td><em>Pipeline</em> totalmente reprodutível em Quarto + Python; cache CSV por provedor permite reprocessamento incremental; sistema formal de releases (CHANGELOG + <code>versions/</code>); duas edições paralelas (base × público)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="arquitetura-do-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura-do-pipeline">Arquitetura do Pipeline</h2>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph Coleta</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    BCB[(API BCB&lt;br&gt;atas + SGS 432)]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    BCB --&gt; A[atas_cache.json]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    BCB --&gt; S[selic_cache.json]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  subgraph Preparação</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    A --&gt; P[Limpeza HTML&lt;br&gt;+ Seções A B]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  subgraph Modelagem</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    P --&gt; L1[LangChain&lt;br&gt;Gemini Flash Lite]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    P --&gt; L2[LangChain&lt;br&gt;Claude Haiku 4.5]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    P --&gt; L3[LangChain&lt;br&gt;GPT-4.1-mini]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    L1 --&gt; C1[scores_gemini_cache.csv]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    L2 --&gt; C2[scores_claude_cache.csv]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    L3 --&gt; C3[scores_openai_cache.csv]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  subgraph Calibração e Validação</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    C1 --&gt; OLS[statsmodels.OLS&lt;br&gt;ΔSelic = α + β·score + ε]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    C2 --&gt; OLS</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    C3 --&gt; OLS</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    S  --&gt; OLS</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; V1[In-sample&lt;br&gt;β̂, IC, R²]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; V2[Holdout&lt;br&gt;últimas 6 atas]</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; V3[Walk-forward&lt;br&gt;n_pred=26]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  V1 --&gt; PDF([Quarto Render PDF])</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  V2 --&gt; PDF</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  V3 --&gt; PDF</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="entendimento-do-negócio" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-do-negócio">1. Entendimento do Negócio</h2>
+<section id="problema" class="level3">
+<h3 class="anchored" data-anchor-id="problema">1.1 Problema</h3>
+<p>Bancos centrais comunicam decisões de política monetária por meio de textos cuidadosamente redigidos — atas, comunicados, relatórios de inflação. A <em>informação</em> relevante para o mercado não está apenas na decisão final (subir, manter ou cortar a Selic), mas no <strong>tom</strong> com que o cenário é descrito. Quantificar esse tom é um problema clássico de <strong>NLP aplicado</strong>, com solução tradicional via dicionários (Loughran &amp; McDonald, 2011) e, mais recentemente, via <em>embeddings</em> e LLMs (Hansen &amp; Kazinnik, 2023).</p>
+</section>
+<section id="objetivos" class="level3">
+<h3 class="anchored" data-anchor-id="objetivos">1.2 Objetivos</h3>
+<ol type="1">
+<li>Construir um <strong>Índice de Tom <em>hawkish-dovish</em></strong> das atas do Copom com escala interpretável (<span class="math inline">\(-3{,}0\)</span> a <span class="math inline">\(+3{,}0\)</span>);</li>
+<li><strong>Calibrar</strong> o índice em pontos percentuais equivalentes da Selic, tornando-o utilizável como <em>input</em> quantitativo;</li>
+<li>Comparar <strong>três provedores de LLM</strong> sob o mesmo <em>prompt</em> e validar cada calibração formalmente;</li>
+<li><strong>Versionar</strong> todo o exercício de forma reprodutível, com sistema de releases que preserva snapshots auditáveis.</li>
+</ol>
+</section>
+<section id="critérios-de-sucesso" class="level3">
+<h3 class="anchored" data-anchor-id="critérios-de-sucesso">1.3 Critérios de sucesso</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Critério</th>
+<th>Meta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Concordância direcional entre modelos</td>
+<td>Correlação <span class="math inline">\(&gt; 0{,}6\)</span> entre <em>scores</em> brutos</td>
+</tr>
+<tr class="even">
+<td>Significância estatística</td>
+<td><span class="math inline">\(\hat{\beta}\)</span> com <span class="math inline">\(p &lt; 0{,}05\)</span> no exercício <em>in-sample</em></td>
+</tr>
+<tr class="odd">
+<td>Poder preditivo <em>out-of-sample</em></td>
+<td>RMSE <em>walk-forward</em> melhor que <em>baseline</em> léxico</td>
+</tr>
+<tr class="even">
+<td>Custo operacional</td>
+<td>&lt; US$ 1 para reprocessar amostra completa</td>
+</tr>
+<tr class="odd">
+<td>Reprodutibilidade</td>
+<td><em>Pipeline</em> roda do zero apagando os caches CSV</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="entendimento-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-dos-dados">2. Entendimento dos Dados</h2>
+<section id="fontes" class="level3">
+<h3 class="anchored" data-anchor-id="fontes">2.1 Fontes</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fonte</th>
+<th>API</th>
+<th>Dados Coletados</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Banco Central do Brasil</strong></td>
+<td>API de Atas do Copom</td>
+<td>Texto integral das atas em HTML, a partir da reunião 232 (ago/2020)</td>
+</tr>
+<tr class="even">
+<td><strong>Banco Central do Brasil</strong></td>
+<td>SGS — série 432</td>
+<td>Meta Selic definida pelo Copom (data e valor por reunião)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="estrutura-das-atas" class="level3">
+<h3 class="anchored" data-anchor-id="estrutura-das-atas">2.2 Estrutura das atas</h3>
+<p>Cada ata segue um <em>template</em> canônico com três blocos:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Seção</th>
+<th>Conteúdo</th>
+<th>Uso no projeto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong></td>
+<td>Diagnóstico do cenário (atividade, inflação, externo)</td>
+<td><strong>Usada</strong></td>
+</tr>
+<tr class="even">
+<td><strong>B</strong></td>
+<td>Cenários e balanço de riscos</td>
+<td><strong>Usada</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>C+</strong></td>
+<td>Anúncio formal da decisão (juros, direção, votos)</td>
+<td><strong>Descartada</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A seção C+ é descartada porque já anuncia a decisão conhecida — usá-la contaminaria o exercício com <em>look-ahead bias</em>. As seções A+B reduzem o consumo de <em>tokens</em> em cerca de 50% sem perder a informação prospectiva de tom.</p>
+</section>
+<section id="recorte-amostral" class="level3">
+<h3 class="anchored" data-anchor-id="recorte-amostral">2.3 Recorte amostral</h3>
+<p>Início em <strong>agosto de 2020</strong> (reunião 232) — primeira ata pós-pandemia em que o Banco Central do Brasil adota o atual <em>template</em> estrutural. Recortes anteriores teriam textos de formato heterogêneo, comprometendo a comparabilidade.</p>
+<hr>
+</section>
+</section>
+<section id="preparação-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="preparação-dos-dados">3. Preparação dos Dados</h2>
+<section id="pipeline-de-coleta" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline-de-coleta">3.1 Pipeline de coleta</h3>
+<p>Implementado em chunks Python diretamente no <code>.qmd</code>, com cache local em três níveis:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Atas via API do BCB</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>atas <span class="op">=</span> baixar_atas_copom(reuniao_inicio<span class="op">=</span><span class="dv">232</span>)         <span class="co"># → atas_cache.json</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Selic via SGS 432</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>selic <span class="op">=</span> baixar_selic_sgs(serie<span class="op">=</span><span class="dv">432</span>)                  <span class="co"># → selic_cache.json</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Limpeza e extração de seções A+B</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>textos <span class="op">=</span> [extrair_secoes_AB(html) <span class="cf">for</span> html <span class="kw">in</span> atas]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O cache é <strong>incremental por reunião</strong> — só baixa do BCB o que ainda não está no JSON. Para reprocessar do zero, basta apagar o cache.</p>
+</section>
+<section id="cache-incremental-por-llm" class="level3">
+<h3 class="anchored" data-anchor-id="cache-incremental-por-llm">3.2 Cache incremental por LLM</h3>
+<p>Cada provedor mantém seu próprio CSV:</p>
+<pre><code>scores_gemini_cache.csv
+scores_claude_cache.csv
+scores_openai_cache.csv</code></pre>
+<p>Uma reunião só é re-inferida se o <em>score</em> não existir no CSV. Isso significa que rodar o <code>.qmd</code> após uma nova reunião do Copom envolve <strong>uma única chamada por provedor</strong> (custo total &lt; US$ 0,01). Reprocessar tudo é uma decisão consciente: apaga-se o CSV e o pipeline regenera.</p>
+</section>
+<section id="decisões-de-preparação" class="level3">
+<h3 class="anchored" data-anchor-id="decisões-de-preparação">3.3 Decisões de preparação</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Decisão</th>
+<th>Valor</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reunião inicial</td>
+<td>232 (ago/2020)</td>
+<td>Template estrutural estável a partir desta reunião</td>
+</tr>
+<tr class="even">
+<td>Seções utilizadas</td>
+<td>A + B</td>
+<td>Diagnóstico e riscos — descarta decisão já conhecida</td>
+</tr>
+<tr class="odd">
+<td>Variável-alvo</td>
+<td><span class="math inline">\(\Delta\)</span>Selic (p.p.)</td>
+<td>Variação na decisão da reunião subsequente</td>
+</tr>
+<tr class="even">
+<td>Cache</td>
+<td>CSV por provedor</td>
+<td>Permite reprocessamento seletivo por modelo</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="modelagem" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem">4. Modelagem</h2>
+<section id="prompt-unificado-com-âncoras-explícitas" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-unificado-com-âncoras-explícitas">4.1 Prompt unificado com âncoras explícitas</h3>
+<p>O mesmo <em>prompt</em> é enviado aos três provedores. Trecho-chave:</p>
+<blockquote class="blockquote">
+<p><em>“Classifique o tom desta ata do Copom em uma escala contínua de <span class="math inline">\(-3{,}0\)</span> (fortemente <em>dovish</em>, sinaliza corte agressivo de juros) a <span class="math inline">\(+3{,}0\)</span> (fortemente <em>hawkish</em>, sinaliza alta agressiva), com âncoras: <span class="math inline">\(-2{,}0\)</span> corte moderado; <span class="math inline">\(-1{,}0\)</span> leve viés baixista; <span class="math inline">\(0{,}0\)</span> neutro; <span class="math inline">\(+1{,}0\)</span> leve viés altista; <span class="math inline">\(+2{,}0\)</span> alta moderada. Retorne apenas o número.”</em></p>
+</blockquote>
+<p>Saída estruturada via <strong>Pydantic</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TomAta(BaseModel):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    score: <span class="bu">float</span> <span class="op">=</span> Field(ge<span class="op">=-</span><span class="fl">3.0</span>, le<span class="op">=</span><span class="fl">3.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>LangChain força o <em>output</em> a satisfazer o <em>schema</em> — qualquer texto livre ou <em>score</em> fora da faixa é rejeitado e re-pedido.</p>
+</section>
+<section id="três-llms-em-paralelo" class="level3">
+<h3 class="anchored" data-anchor-id="três-llms-em-paralelo">4.2 Três LLMs em paralelo</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Provedor</th>
+<th>Modelo</th>
+<th>Cache nativo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Google</strong></td>
+<td><code>gemini-flash-lite-latest</code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>Anthropic</strong></td>
+<td><code>claude-haiku-4-5</code></td>
+<td><code>cache_control: ephemeral</code> (prompt caching)</td>
+</tr>
+<tr class="odd">
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-4.1-mini</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>O Claude usa o <em>prompt caching</em> nativo da Anthropic (bloco de instruções marcado com <code>cache_control: ephemeral</code>), o que reduz custo e latência a partir da segunda chamada quando atende ao mínimo de <em>tokens</em>.</p>
+</section>
+<section id="calibração-ols" class="level3">
+<h3 class="anchored" data-anchor-id="calibração-ols">4.3 Calibração OLS</h3>
+<p>Para cada modelo, ajusta-se uma regressão linear simples:</p>
+<p><span class="math display">\[
+\Delta\text{Selic}_t = \alpha + \beta \cdot \text{score}_t + \varepsilon_t
+\]</span></p>
+<p>Cada modelo recebe seus próprios <span class="math inline">\(\hat{\alpha}\)</span>, <span class="math inline">\(\hat{\beta}\)</span>, <span class="math inline">\(R^2\)</span>. A calibração transforma o <em>score</em> bruto (em unidades de “tom”) em uma quantidade economicamente interpretável (pontos percentuais de variação esperada da Selic).</p>
+</section>
+<section id="baseline-metodológico-léxico-hawkishdovish-em-pt-br" class="level3">
+<h3 class="anchored" data-anchor-id="baseline-metodológico-léxico-hawkishdovish-em-pt-br">4.4 Baseline metodológico — léxico hawkish/dovish em PT-BR</h3>
+<p>Como contraponto às LLMs, implementou-se um <strong>dicionário hawkish/dovish em português</strong> adaptado ao Copom (espírito Loughran-McDonald). O <em>score</em> léxico é a frequência líquida de termos <em>hawkish</em> menos <em>dovish</em>. Serve como <em>baseline</em> não-LLM para os exercícios de validação.</p>
+<hr>
+</section>
+</section>
+<section id="avaliação" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação">5. Avaliação</h2>
+<p>A robustez do exercício é testada em <strong>três camadas complementares</strong> — uma escolha metodológica deliberada, dado o tamanho moderado da amostra (<span class="math inline">\(n = 46\)</span> atas no estado atual).</p>
+<section id="camada-1-inferência-in-sample" class="level3">
+<h3 class="anchored" data-anchor-id="camada-1-inferência-in-sample">5.1 Camada 1 — Inferência <em>in-sample</em></h3>
+<p><code>statsmodels.OLS</code> reporta, para cada um dos 4 modelos (3 LLMs + baseline léxico):</p>
+<ul>
+<li><span class="math inline">\(\hat{\beta}\)</span> e seu erro-padrão</li>
+<li>Estatística-<span class="math inline">\(t\)</span>, <span class="math inline">\(p\)</span>-valor</li>
+<li>Intervalo de confiança 95%</li>
+<li><span class="math inline">\(R^2\)</span> e <span class="math inline">\(R^2_{\text{adj}}\)</span></li>
+</ul>
+</section>
+<section id="camada-2-holdout" class="level3">
+<h3 class="anchored" data-anchor-id="camada-2-holdout">5.2 Camada 2 — Holdout</h3>
+<p>Treino nas primeiras <span class="math inline">\(n - 6\)</span> reuniões, teste nas <strong>últimas 6</strong>. Reporta RMSE e MAE <em>out-of-sample</em>.</p>
+</section>
+<section id="camada-3-walk-forward-expanding-window" class="level3">
+<h3 class="anchored" data-anchor-id="camada-3-walk-forward-expanding-window">5.3 Camada 3 — Walk-forward expanding window</h3>
+<p>Janela de treino mínima de <strong>20 atas</strong>, predição da próxima, expansão da janela em uma observação, repete até esgotar a amostra. Resulta em <span class="math inline">\(n_{\text{pred}} = 26\)</span> predições genuinamente <em>out-of-sample</em>. RMSE e MAE da walk-forward são as métricas mais conservadoras e respeitam a ordem temporal — nenhum dado futuro contamina o treino.</p>
+</section>
+<section id="achados-centrais-estado-em-abr2026" class="level3">
+<h3 class="anchored" data-anchor-id="achados-centrais-estado-em-abr2026">5.4 Achados centrais (estado em abr/2026)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th style="text-align: right;"><span class="math inline">\(R^2\)</span> in-sample</th>
+<th style="text-align: right;"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th style="text-align: right;">RMSE walk-forward</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>OpenAI GPT-4.1-mini</strong></td>
+<td style="text-align: right;"><strong>0,66</strong></td>
+<td style="text-align: right;"><span class="math inline">\(+0{,}50\)</span></td>
+<td style="text-align: right;"><strong>0,357</strong> (líder)</td>
+</tr>
+<tr class="even">
+<td><strong>Claude Haiku 4.5</strong></td>
+<td style="text-align: right;">0,43</td>
+<td style="text-align: right;"><span class="math inline">\(+0{,}62\)</span></td>
+<td style="text-align: right;">~0,67</td>
+</tr>
+<tr class="odd">
+<td><strong>Gemini Flash Lite</strong></td>
+<td style="text-align: right;">0,35</td>
+<td style="text-align: right;"><span class="math inline">\(+0{,}36\)</span></td>
+<td style="text-align: right;">~0,67</td>
+</tr>
+<tr class="even">
+<td><strong>Baseline léxico</strong></td>
+<td style="text-align: right;">(referência)</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">~0,52</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><strong>GPT-4.1-mini lidera</strong> in-sample e out-of-sample (RMSE walk-forward ~32% melhor que o baseline léxico).</li>
+<li><strong>Claude tem maior sensibilidade</strong> in-sample mas <em>overfit</em> claro — RMSE quase dobra fora da amostra.</li>
+<li><strong>Gemini é o mais conservador</strong>, comprime amplitude do <em>score</em>; empata com Claude na walk-forward.</li>
+<li><strong>Baseline léxico</strong> vence o holdout (artefato de janela calma) mas volta ao último na walk-forward, confirmando que a vantagem das LLMs é <strong>genuína sobre o ciclo completo</strong>, não um artefato.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Histórico relevante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A troca <strong><code>gpt-4o-mini</code> → <code>gpt-4.1-mini</code></strong> elevou <span class="math inline">\(R^2\)</span> de ~0,11 para ~0,66 — geração de modelo importa de forma material para esta tarefa.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="surpresa-de-comunicação-z-score" class="level2">
+<h2 class="anchored" data-anchor-id="surpresa-de-comunicação-z-score">Surpresa de Comunicação (z-score)</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="sentimento_copom_zscore.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Surpresa de Comunicação — z-score do índice calibrado</figcaption>
+</figure>
+</div>
+<p>Além do índice calibrado, o <em>paper</em> reporta a <strong>surpresa de comunicação</strong> — o <em>score</em> do modelo padronizado (z-score) usando a média e o desvio-padrão históricos. Picos relevantes de <span class="math inline">\(|z| &gt; 1{,}5\)</span> identificam atas em que o tom desvia fortemente do comportamento médio do Comitê, oferecendo uma medida natural de “evento de comunicação”.</p>
+<hr>
+</section>
+<section id="sistema-de-versões" class="level2">
+<h2 class="anchored" data-anchor-id="sistema-de-versões">Sistema de Versões</h2>
+<p>Uma escolha metodológica importante deste projeto é o <strong>sistema formal de releases</strong>, ausente em <em>papers</em> tradicionais mas natural em projetos reproduzíveis com infraestrutura de software.</p>
+<section id="estrutura-do-paper-arquivos-duplos" class="level3">
+<h3 class="anchored" data-anchor-id="estrutura-do-paper-arquivos-duplos">Estrutura do paper — arquivos duplos</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Propósito</th>
+<th>YAML</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sentimento_copom_IA_base.qmd</code></td>
+<td>Edição auditável (técnica)</td>
+<td><code>echo: true</code></td>
+</tr>
+<tr class="even">
+<td><code>sentimento_copom_IA_publico.qmd</code></td>
+<td>Edição do leitor</td>
+<td><code>echo: false</code></td>
+</tr>
+<tr class="odd">
+<td><code>referencias.bib</code></td>
+<td>Bibliografia única</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Diferem em <strong>duas linhas</strong>: <code>echo</code> no YAML e o sufixo “Edição do leitor” na <em>titlepage</em>. Mudanças de prosa, tabelas, abstract e <em>bibtex</em> atualizam <strong>ambos</strong> os arquivos; mudanças de chunks de código vão apenas no <code>base.qmd</code> e o público herda automaticamente porque os chunks ficam invisíveis lá.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Por que dois arquivos físicos em vez de profile do Quarto
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Profiles do Quarto seriam tecnicamente mais elegantes, mas dois arquivos com nomes auto-explicativos (<code>_base.qmd</code> × <code>_publico.qmd</code>) tornam o repositório mais legível para terceiros que chegam pelo GitHub.</p>
+</div>
+</div>
+</section>
+<section id="changelog-e-snapshots" class="level3">
+<h3 class="anchored" data-anchor-id="changelog-e-snapshots">CHANGELOG e snapshots</h3>
+<pre><code>sentimento_copom/
+├── CHANGELOG.md                        # formato Keep-a-Changelog
+├── versions/
+│   ├── v1.0_2026-04-26/                # snapshot da release v1.0
+│   │   ├── sentimento_copom_IA_base.qmd
+│   │   ├── sentimento_copom_IA_publico.qmd
+│   │   ├── referencias.bib
+│   │   └── CHANGELOG.md
+│   └── v2.0_YYYY-MM-DD/                # próximas releases
+└── _rollback/                          # checkpoints ad-hoc de sessão
+    └── YYYY-MM-DD_T&lt;HH&gt;_&lt;descritivo&gt;/</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><code>versions/</code></th>
+<th><code>_rollback/</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Propósito</td>
+<td>Releases formais</td>
+<td>Checkpoints ad-hoc de sessão</td>
+</tr>
+<tr class="even">
+<td>Trigger</td>
+<td>“marca como vX.Y” / fim de feature</td>
+<td>“marca esse ponto como rollback”</td>
+</tr>
+<tr class="odd">
+<td>Persistência</td>
+<td>Permanente, vai para o repositório</td>
+<td>Local, pode ser limpo</td>
+</tr>
+<tr class="even">
+<td><em>Naming</em></td>
+<td><code>vX.Y_AAAA-MM-DD/</code></td>
+<td><code>AAAA-MM-DD_TXX_descritivo/</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="convenção-de-bumps" class="level3">
+<h3 class="anchored" data-anchor-id="convenção-de-bumps">Convenção de bumps</h3>
+<ul>
+<li><strong>Major (vX.0)</strong> — nova rodada metodológica completa (probit ordenado, ensemble, modelos maiores, nova validação).</li>
+<li><strong>Minor (v1.X)</strong> — próximos passos atacados, novos achados empíricos, expansão da literatura.</li>
+<li><strong>Patch (v1.0.X)</strong> — correções de prosa, ajustes editoriais.</li>
+</ul>
+</section>
+<section id="workflow-de-release" class="level3">
+<h3 class="anchored" data-anchor-id="workflow-de-release"><em>Workflow</em> de release</h3>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  A[Edição em&lt;br&gt;base.qmd] --&gt; B{Tipo de&lt;br&gt;mudança?}</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  B --&gt;|prosa, tabelas, YAML| C[Sincroniza para&lt;br&gt;publico.qmd]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  B --&gt;|código Python| D[Apenas base.qmd&lt;br&gt;público herda]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  C --&gt; E[Commit no Git]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  D --&gt; E</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  E --&gt; F{Release?}</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  F --&gt;|sim| G[Bump titlepage&lt;br&gt;+ CHANGELOG entry&lt;br&gt;+ snapshot em versions/]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  F --&gt;|não| H[Continua&lt;br&gt;na mesma versão]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>Sentimento_COPOM/
+│
+├── sentimento_copom_IA_base.qmd       # paper técnico (echo: true)
+├── sentimento_copom_IA_publico.qmd    # edição do leitor (echo: false)
+├── referencias.bib                    # bibliografia compartilhada
+│
+├── atas_cache.json                    # cache de atas do BCB
+├── selic_cache.json                   # cache da série SGS 432
+├── scores_gemini_cache.csv            # scores Gemini Flash Lite
+├── scores_claude_cache.csv            # scores Claude Haiku 4.5
+├── scores_openai_cache.csv            # scores GPT-4.1-mini
+│
+├── sentimento_copom_indice.png        # gráfico do índice calibrado
+├── sentimento_copom_zscore.png        # gráfico do z-score
+├── AM.png                             # logotipo na titlepage
+│
+├── CHANGELOG.md                       # histórico de releases
+├── versions/                          # snapshots por release
+│   └── v1.0_2026-04-26/
+├── _rollback/                         # checkpoints de sessão
+│
+├── portfolio/                         # template de divulgação
+│   ├── sentimento-copom.qmd           # ESTE arquivo (CRISP-DM)
+│   ├── README.md                      # README do GitHub
+│   └── *.png                          # imagens de capa
+│
+└── divulgacao/                        # marketing e templates de release</code></pre>
+<hr>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Tecnologia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Renderização</strong></td>
+<td>Quarto + LaTeX (xelatex)</td>
+</tr>
+<tr class="even">
+<td><strong>Pacotes LaTeX</strong></td>
+<td><code>booktabs</code>, <code>threeparttable</code> (padrão JEL/AER)</td>
+</tr>
+<tr class="odd">
+<td><strong>Linguagem</strong></td>
+<td>Python 3.13</td>
+</tr>
+<tr class="even">
+<td><strong>Orquestração de LLMs</strong></td>
+<td>LangChain</td>
+</tr>
+<tr class="odd">
+<td><strong>Saída estruturada</strong></td>
+<td>Pydantic</td>
+</tr>
+<tr class="even">
+<td><strong>Provedores de LLM</strong></td>
+<td><code>google-genai</code>, <code>anthropic</code>, <code>openai</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Cache de prompt</strong></td>
+<td><code>cache_control: ephemeral</code> (Anthropic)</td>
+</tr>
+<tr class="even">
+<td><strong>Inferência estatística</strong></td>
+<td><code>statsmodels</code> (OLS, IC, p-valores)</td>
+</tr>
+<tr class="odd">
+<td><strong>Visualização</strong></td>
+<td><code>plotnine</code></td>
+</tr>
+<tr class="even">
+<td><strong>Coleta de dados</strong></td>
+<td><code>requests</code> (API BCB)</td>
+</tr>
+<tr class="odd">
+<td><strong>Ambiente</strong></td>
+<td><code>python-dotenv</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="como-executar-localmente" class="level2">
+<h2 class="anchored" data-anchor-id="como-executar-localmente">Como Executar Localmente</h2>
+<section id="pré-requisitos" class="level3">
+<h3 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h3>
+<ul>
+<li>Python 3.11+</li>
+<li>Quarto ≥ 1.4</li>
+<li>TeX Live (para renderização PDF)</li>
+<li>Chaves de API: Google AI Studio, Anthropic, OpenAI</li>
+</ul>
+</section>
+<section id="instalação" class="level3">
+<h3 class="anchored" data-anchor-id="instalação">Instalação</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/vitorwilher/Sentimento_COPOM.git</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Sentimento_COPOM</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># edite .env com suas chaves</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="variáveis-de-ambiente" class="level3">
+<h3 class="anchored" data-anchor-id="variáveis-de-ambiente">Variáveis de ambiente</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">GOOGLE_API_KEY</span><span class="op">=</span>...</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span>...</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="renderização" class="level3">
+<h3 class="anchored" data-anchor-id="renderização">Renderização</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Edição auditável (com chunks)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render sentimento_copom_IA_base.qmd</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Edição do leitor (sem chunks)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render sentimento_copom_IA_publico.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="reprocessamento-total" class="level3">
+<h3 class="anchored" data-anchor-id="reprocessamento-total">Reprocessamento total</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apaga caches para forçar re-inferência completa</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> scores_<span class="pp">*</span>_cache.csv</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render sentimento_copom_IA_base.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="próximos-passos-v2.0" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos-v2.0">Próximos Passos (v2.0)</h2>
+<ol type="1">
+<li><strong>Capacidade antecedente <span class="math inline">\(t \to t+1\)</span></strong> — regressão preditiva da variação subsequente da Selic;</li>
+<li><strong>Robustez a perturbações de <em>prompt</em></strong> — variar redação, ordem das âncoras, idioma; medir variância entre execuções;</li>
+<li><strong>Índice ensemble</strong> — média simples ou ponderada por <span class="math inline">\(R^2\)</span> dos três <em>scores</em> calibrados;</li>
+<li><strong>Inspeção qualitativa de divergências</strong> — atas em que os modelos discordam mais (linguisticamente ambíguas);</li>
+<li><strong>Modelos maiores</strong> — <code>gpt-4.1</code>, <code>claude-sonnet-4-5</code>, <code>gemini-2.5-pro</code>;</li>
+<li><strong>Probit ordenado</strong> — modelo de classificação de viés (alta / manutenção / corte) como alternativa ao OLS;</li>
+<li><strong>Comunicados oficiais</strong> — estender o pipeline aos comunicados (mais curtos e mais frequentes);</li>
+<li><strong>Surpresa de comunicação ortogonalizada</strong> — resíduo do tom controlando expectativas Focus.</li>
+</ol>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<ul>
+<li>Apel, M.; Grimaldi, M. (2012). <em>The Information Content of Central Bank Minutes</em>. Riksbank Working Paper.</li>
+<li>Bholat, D.; Hansen, S.; Santos, P.; Schonhardt-Bailey, C. (2015). <em>Text Mining for Central Banks</em>. Bank of England.</li>
+<li>Blinder, A. S.; Ehrmann, M.; Fratzscher, M.; De Haan, J.; Jansen, D.-J. (2008). <em>Central Bank Communication and Monetary Policy</em>. <em>Journal of Economic Literature</em>, 46(4), 910–945.</li>
+<li>Caruso, A. (2026). <em>Comunicação do Banco Central do Brasil e o Mercado Financeiro: Uma Análise Textual</em>.</li>
+<li>Hansen, S.; Kazinnik, S. (2023). <em>Can ChatGPT Decipher Fedspeak?</em>. Working Paper.</li>
+<li>Hansen, S.; McMahon, M. (2016). <em>Shocking Language: Understanding the Macroeconomic Effects of Central Bank Communication</em>. <em>Journal of International Economics</em>, 99, S114–S133.</li>
+<li>Hansen, S.; McMahon, M.; Prat, A. (2018). <em>Transparency and Deliberation Within the FOMC: A Computational Linguistics Approach</em>. <em>Quarterly Journal of Economics</em>, 133(2), 801–870.</li>
+<li>Hubert, P.; Labondance, F. (2021). <em>The Signaling Effects of Central Bank Tone</em>. <em>European Economic Review</em>, 133.</li>
+<li>Loughran, T.; McDonald, B. (2011). <em>When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks</em>. <em>Journal of Finance</em>, 66(1), 35–65.</li>
+<li>Picault, M.; Renault, T. (2017). <em>Words Are Not All Created Equal: A New Measure of ECB Communication</em>. <em>Journal of International Money and Finance</em>, 79.</li>
+<li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
+<li>Woodford, M. (2003). <em>Interest and Prices: Foundations of a Theory of Monetary Policy</em>. Princeton University Press.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

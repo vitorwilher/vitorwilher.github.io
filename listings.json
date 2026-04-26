@@ -1,7 +1,12 @@
 [
   {
-    "listing": "/research/index.html",
-    "items": []
+    "listing": "/projetos/index.html",
+    "items": [
+      "/projetos/sentimento-copom.html",
+      "/projetos/metodologia.html",
+      "/projetos/newsletter-digest-bot.html",
+      "/projetos/roi-diagnostico.html"
+    ]
   },
   {
     "listing": "/teaching/index.html",
@@ -10,11 +15,7 @@
     ]
   },
   {
-    "listing": "/projetos/index.html",
-    "items": [
-      "/projetos/metodologia.html",
-      "/projetos/newsletter-digest-bot.html",
-      "/projetos/roi-diagnostico.html"
-    ]
+    "listing": "/research/index.html",
+    "items": []
   }
 ]
