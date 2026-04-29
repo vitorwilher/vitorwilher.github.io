@@ -1,0 +1,459 @@
+---
+title: "Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic"
+date: "2026-04-29"
+categories: [Python, Shiny, skforecast, Nixtla, TimeGPT, scikit-learn, statsmodels, BCB, IBGE, Macroeconomia, Política Monetária, GitHub Actions, shinyapps.io]
+description: "Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions."
+image: "previsao-macro-capa.png"
+execute:
+  eval: false
+  echo: true
+---
+
+## Visão Geral
+
+Este projeto implementa, seguindo a metodologia **CRISP-DM** (*Cross-Industry Standard Process for Data Mining*), um *pipeline* automatizado para a geração e divulgação de **previsões macroeconômicas** para o Brasil. Quatro variáveis-chave são previstas em paralelo:
+
+- **IPCA** — Índice de Preços ao Consumidor Amplo (IBGE)
+- **Câmbio** — taxa BRL/USD (BCB/SGS)
+- **PIB** — Produto Interno Bruto (IBGE/SCN)
+- **Selic** — Taxa básica de juros (BCB/SGS)
+
+A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via **GitHub Actions**, alimentando um *dashboard* **Shiny for Python** publicado em **shinyapps.io**. A modelagem combina abordagens clássicas (regressões penalizadas, SVR, transformações de Box-Cox via `PowerTransformer`) com *foundation models* de séries temporais (**Nixtla TimeGPT**) através de uma camada de *ensemble* via `VotingRegressor`.
+
+::: {.callout-tip}
+## Tese central
+
+A automação de ponta a ponta — coleta, tratamento, modelagem, deploy — torna viável a publicação contínua de previsões macroeconômicas calibradas, com custo marginal próximo de zero por ciclo. A combinação de modelos clássicos e *foundation models* de séries temporais reduz o risco de previsões enviesadas por uma única classe de algoritmo.
+:::
+
+---
+
+## Motivação
+
+Previsões macroeconômicas são insumos críticos para política monetária, alocação de capital e planejamento corporativo. Soluções tradicionais sofrem de três limitações práticas:
+
+1. **Trabalho manual recorrente** — coleta, tratamento e re-estimação a cada ciclo consomem horas de analista qualificado;
+2. **Concentração em uma única família de modelos** — exclusivamente econométrica ou exclusivamente *machine learning*, raramente ambas;
+3. **Distribuição limitada** — relatórios em PDF estáticos, sem interatividade ou atualização contínua.
+
+O projeto responde a três perguntas práticas:
+
+- Como **automatizar** o ciclo coleta → modelagem → deploy de forma que a publicação seja *zero-touch*?
+- Que **ganho de robustez** advém de combinar modelos clássicos (skforecast/scikit-learn) com *foundation models* (Nixtla TimeGPT)?
+- Como entregar previsões em formato **interativo e auditável**, com séries históricas, intervalos de confiança e simulação de cenários?
+
+---
+
+## Metodologia — CRISP-DM
+
+O projeto foi estruturado seguindo o processo **CRISP-DM**, adaptado ao contexto de **previsão macroeconômica automatizada com publicação contínua**.
+
+| Fase | Aplicação no Projeto |
+|---|---|
+| **1. Entendimento do Negócio** | Definição das 4 variáveis-alvo (IPCA, câmbio, PIB, Selic), horizonte de previsão (12 meses), critério de sucesso (publicação quinzenal estável), público-alvo (analistas, economistas, gestores) |
+| **2. Entendimento dos Dados** | Catálogo de séries em planilha de metadados (Google Sheets), fontes BCB/SGS, BCB/ODATA, IBGE/SIDRA; estrutura de transformações log/diferença codificada como tipo numérico |
+| **3. Preparação dos Dados** | Pipeline modular em 5 scripts (`01-bibliotecas` → `05-disponibilizacao`); tratamento de séries por frequência (diária, mensal, trimestral, anual); persistência em parquet |
+| **4. Modelagem** | Quatro scripts independentes (`06-ipca`, `07-cambio`, `08-pib`, `09-selic`); ensemble de `Ridge`, `BayesianRidge`, `LinearSVR` via `VotingRegressor` + `Nixtla TimeGPT` como modelo zero-shot; transformações via `PowerTransformer` |
+| **5. Avaliação** | Métricas *out-of-sample* por modelo; intervalos de confiança quantílicos; validação visual no painel (histórico vs. previsão) |
+| **6. Implantação** | *Pipeline* totalmente automatizado em **3 GitHub Actions** (base de dados, modelos, dashboard); dashboard **Shiny for Python** publicado em **shinyapps.io**; ciclo de atualização quinzenal |
+
+---
+
+## Arquitetura do Pipeline
+
+```{mermaid}
+flowchart LR
+  subgraph Fontes
+    BCB[(BCB/SGS<br>BCB/ODATA)]
+    IBGE[(IBGE/SIDRA)]
+    META[(Google Sheets<br>metadados)]
+  end
+
+  subgraph Coleta_e_Tratamento
+    BCB --> COL[03-coleta.py]
+    IBGE --> COL
+    META --> COL
+    COL --> TRA[04-tratamento.py]
+    TRA --> DISP[05-disponibilizacao.py]
+    DISP --> P1[(dados/df_mensal.parquet)]
+    DISP --> P2[(dados/df_diaria.parquet)]
+  end
+
+  subgraph Modelagem
+    P1 --> M1[06-ipca.py]
+    P1 --> M2[07-cambio.py]
+    P1 --> M3[08-pib.py]
+    P1 --> M4[09-selic.py]
+    NIX[(Nixtla TimeGPT)] --> M1
+    NIX --> M2
+    NIX --> M3
+    NIX --> M4
+    M1 --> PR1[(previsao/ipca.parquet)]
+    M2 --> PR2[(previsao/cambio.parquet)]
+    M3 --> PR3[(previsao/pib.parquet)]
+    M4 --> PR4[(previsao/selic.parquet)]
+  end
+
+  subgraph Deploy
+    PR1 --> APP[app.py<br>Shiny for Python]
+    PR2 --> APP
+    PR3 --> APP
+    PR4 --> APP
+    APP --> SHINY([shinyapps.io])
+  end
+
+  GHA[GitHub Actions<br>cron quinzenal] -.dispara.-> COL
+  GHA -.dispara.-> M1
+  GHA -.dispara.-> APP
+```
+
+---
+
+## 1. Entendimento do Negócio
+
+### 1.1 Problema
+
+Previsões macroeconômicas servem a três usos centrais: (i) política monetária, (ii) alocação de capital, (iii) planejamento corporativo. O desafio prático é manter um sistema de previsões **continuamente atualizado**, com qualidade auditável, sem concentrar o trabalho em uma única família de modelos.
+
+### 1.2 Objetivos
+
+1. Construir *pipeline* **automatizado de ponta a ponta** — coleta, tratamento, modelagem, deploy;
+2. Cobrir as quatro variáveis macro mais demandadas no Brasil — **IPCA, câmbio, PIB, Selic**;
+3. Combinar **modelos clássicos** com **foundation models** de séries temporais para reduzir risco de viés metodológico;
+4. Distribuir resultados em **dashboard interativo** com atualização quinzenal *zero-touch*.
+
+### 1.3 Critérios de sucesso
+
+| Critério | Meta |
+|---|---|
+| Cadência de atualização | 4×/mês (dias 1, 8, 15, 22) |
+| Estabilidade do *pipeline* | < 1 falha por mês nos 3 *workflows* (coleta, modelos, deploy) |
+| Cobertura | 4 variáveis × horizonte de 12 meses |
+| Custo operacional | Próximo de zero (GitHub Actions + tier gratuito do shinyapps.io) |
+| Reprodutibilidade | *Pipeline* roda do zero apagando cache e parquets |
+
+---
+
+## 2. Entendimento dos Dados
+
+### 2.1 Fontes
+
+| Fonte | Forma de coleta | Variáveis típicas |
+|---|---|---|
+| **BCB/SGS** | API do Banco Central (Sistema Gerenciador de Séries Temporais) | Selic, câmbio, expectativas Focus |
+| **BCB/ODATA** | API ODATA do Banco Central | Câmbio diário, indicadores fiscais |
+| **IBGE/SIDRA** | API do Sistema IBGE de Recuperação Automática | IPCA, PIB, atividade |
+
+### 2.2 Catálogo via metadados
+
+A planilha de metadados (Google Sheets) é a **fonte única de verdade** sobre quais séries entram no pipeline. Cada linha define:
+
+| Campo | Conteúdo |
+|---|---|
+| `Identificador` | Nome canônico da série no projeto |
+| `Fonte` | BCB/SGS, BCB/ODATA, IBGE/SIDRA |
+| `Forma de Coleta` | API |
+| `Input de Coleta` | Código da série na fonte (ex.: `432` para Selic) |
+| `Frequência` | Diária, Mensal, Trimestral, Anual |
+| `Transformação` | Tipo numérico (1 a 6) — nível, diferença, log, log-diferença |
+
+A função `transformar(x, tipo)` no código aplica a transformação correspondente:
+
+```python
+switch = {
+    "1": lambda x: x,
+    "2": lambda x: x.diff(),
+    "3": lambda x: x.diff().diff(),
+    "4": lambda x: np.log(x),
+    "5": lambda x: np.log(x).diff(),
+    "6": lambda x: np.log(x).diff().diff(),
+}
+```
+
+### 2.3 Recorte amostral
+
+Início do treino em **janeiro de 2004**, padronizado entre as 4 variáveis. Horizonte de previsão fixo em **12 meses**.
+
+---
+
+## 3. Preparação dos Dados
+
+### 3.1 Pipeline modular em 5 scripts
+
+```
+01-bibliotecas.py        # imports e configurações globais
+02-funcoes.py            # coleta_bcb_sgs, coleta_bcb_odata, coleta_ibge_sidra
+03-coleta.py             # iteração sobre metadados; bruto por frequência
+04-tratamento.py         # alinhamento temporal, agrupamento, sanitização
+05-disponibilizacao.py   # persistência em parquet por frequência
+```
+
+### 3.2 Persistência por frequência
+
+```
+dados/
+├── df_diaria.parquet     # séries diárias (câmbio, Selic spot)
+├── df_mensal.parquet     # séries mensais (IPCA, expectativas)
+├── df_trimestral.parquet # séries trimestrais (PIB)
+└── df_anual.parquet      # séries anuais (controle)
+```
+
+### 3.3 Princípios
+
+- **Catalogação centralizada** — a planilha de metadados é editada em um lugar só; o código nunca lista séries hard-coded.
+- **Idempotência** — re-rodar o pipeline com a mesma planilha produz parquets bit-a-bit iguais.
+- **Separação clara entre coleta e tratamento** — facilita debug quando uma fonte muda formato.
+
+---
+
+## 4. Modelagem
+
+### 4.1 Quatro scripts independentes
+
+Cada variável tem seu próprio script para permitir **paralelização e debug isolado**:
+
+| Script | Variável | Frequência |
+|---|---|---|
+| `06-ipca.py` | IPCA | Mensal |
+| `07-cambio.py` | Câmbio BRL/USD | Mensal (média) |
+| `08-pib.py` | PIB | Trimestral |
+| `09-selic.py` | Selic | Mensal |
+
+### 4.2 Ensemble clássico + foundation model
+
+Cada script combina duas famílias:
+
+**Família 1 — Modelos clássicos** via `skforecast.ForecasterAutoreg`:
+
+```python
+from sklearn.linear_model import Ridge, BayesianRidge
+from sklearn.svm import LinearSVR
+from sklearn.ensemble import VotingRegressor
+from sklearn.preprocessing import PowerTransformer
+from skforecast.ForecasterAutoreg import ForecasterAutoreg
+
+estimators = [
+    ("ridge", Ridge()),
+    ("bayes", BayesianRidge()),
+    ("svr",   LinearSVR()),
+]
+voting = VotingRegressor(estimators)
+forecaster = ForecasterAutoreg(
+    regressor=voting,
+    lags=12,
+    transformer_y=PowerTransformer(),
+)
+```
+
+**Família 2 — Foundation model**: `Nixtla TimeGPT` chamado via `nixtla.NixtlaClient` com `NIXTLA_API_KEY`. Modelo *zero-shot* — não requer treino local; consome a série histórica e devolve previsão + intervalo de confiança.
+
+### 4.3 Saídas padronizadas
+
+Cada script produz um parquet em `previsao/` com colunas canônicas:
+
+```
+data | valor | tipo (histórico/previsão) | li | ls | modelo
+```
+
+```
+previsao/
+├── ipca.parquet
+├── cambio.parquet
+├── pib.parquet
+└── selic.parquet
+```
+
+### 4.4 Decisões de modelagem
+
+| Decisão | Valor | Justificativa |
+|---|---|---|
+| Horizonte | 12 meses | Janela típica para política monetária |
+| Início do treino | jan/2004 | Pós-meta de inflação consolidada |
+| Lags | 12 | Captura sazonalidade anual |
+| Transformação | `PowerTransformer` (Yeo-Johnson) | Estabiliza variância sem assumir positividade |
+| Random seed | 1984 | Reprodutibilidade exata entre execuções |
+
+---
+
+## 5. Avaliação
+
+### 5.1 Métricas por modelo
+
+A avaliação acontece dentro de cada script (`06`–`09`). Reporta-se RMSE/MAE *out-of-sample* em janela de validação fixa, com comparação contra:
+
+- *Baseline* ingênuo (último valor observado);
+- Modelo individual (Ridge, BayesianRidge, LinearSVR) sem ensemble;
+- TimeGPT zero-shot puro.
+
+### 5.2 Intervalos de confiança
+
+O ensemble `VotingRegressor` não fornece IC nativo — os intervalos exibidos no dashboard usam a parametrização quantílica do TimeGPT (`level=[80, 95]`).
+
+### 5.3 Validação visual no painel
+
+O *dashboard* sobrepõe histórico × previsão × IC de forma que o usuário detecta visualmente:
+
+- Quebras estruturais não absorvidas;
+- Compressão excessiva da amplitude de previsão;
+- Divergência entre modelos no mesmo horizonte.
+
+---
+
+## 6. Implantação
+
+### 6.1 Três workflows no GitHub Actions
+
+```
+.github/workflows/
+├── base_de_dados.yml   # cron 00:00 UTC dias 1, 8, 15, 22 → roda 03→05
+├── modelos.yml         # cron 01:00 UTC dias 1, 8, 15, 22 → roda 06→09
+└── dashboard.yml       # cron 02:00 UTC dias 1, 8, 15, 22 → deploy shinyapps
+```
+
+Os 3 *workflows* compartilham um **`concurrency group`** comum para evitar *race conditions* no `git push` final do auto-commit.
+
+### 6.2 Dashboard Shiny for Python
+
+Construído com `shiny.express`, `shinyswatch`, `plotnine`, `mizani` e `faicons`. Cada uma das 4 variáveis tem sua aba com:
+
+- KPI da última observação e da próxima previsão;
+- Gráfico histórico × previsão com IC sombreado;
+- Filtros de janela temporal e *toggle* do IC.
+
+Deploy via `rsconnect-python deploy shiny .`. URL pública: `https://vitorwilher.shinyapps.io/previsao_macro/`.
+
+### 6.3 Secrets necessários
+
+| Secret | Uso |
+|---|---|
+| `NIXTLA_API_KEY` | Chamadas ao TimeGPT |
+| `GEMINI_API_KEY` | Camada opcional de comentário automatizado |
+| `ACCOUNT`, `NAME`, `TOKEN`, `SECRET` | Credenciais shinyapps.io para `rsconnect` |
+
+---
+
+## Estrutura do Projeto
+
+```
+previsao_macro/
+│
+├── 01-bibliotecas.py           # imports e configurações globais
+├── 02-funcoes.py               # funções de coleta por fonte
+├── 03-coleta.py                # iteração sobre metadados
+├── 04-tratamento.py            # alinhamento e sanitização
+├── 05-disponibilizacao.py      # persistência em parquet
+│
+├── 06-ipca.py                  # modelo IPCA
+├── 07-cambio.py                # modelo câmbio
+├── 08-pib.py                   # modelo PIB
+├── 09-selic.py                 # modelo Selic
+│
+├── app.py                      # dashboard Shiny for Python
+│
+├── dados/                      # parquets de séries históricas
+├── previsao/                   # parquets de previsões
+├── tracking/                   # tracking.csv (ciclos de execução)
+├── rsconnect-python/           # metadata do deploy shinyapps
+│
+├── .github/workflows/          # 3 workflows (base, modelos, dashboard)
+│
+├── portfolio/                  # template de divulgação
+│   ├── previsao-macro.qmd      # ESTE arquivo (CRISP-DM)
+│   ├── README.md               # README do GitHub
+│   ├── _TEMPLATE.md            # convenção do template
+│   └── *.png                   # imagens de capa
+│
+├── poetry.lock
+└── pyproject.toml
+```
+
+---
+
+## Tecnologias
+
+| Camada | Tecnologia |
+|---|---|
+| **Linguagem** | Python 3.12 |
+| **Gerenciamento** | Poetry |
+| **Coleta** | `requests` (BCB/SGS, BCB/ODATA, IBGE/SIDRA) |
+| **Manipulação** | `pandas`, `numpy` |
+| **Modelagem clássica** | `skforecast`, `scikit-learn` (Ridge, BayesianRidge, LinearSVR, VotingRegressor) |
+| **Foundation model** | `nixtla` (TimeGPT) |
+| **Inferência estatística** | `statsmodels` |
+| **Transformações** | `sklearn.preprocessing.PowerTransformer` |
+| **Visualização** | `plotnine`, `mizani` |
+| **Dashboard** | `shiny.express`, `shinyswatch`, `faicons` |
+| **Deploy** | `rsconnect-python` → shinyapps.io |
+| **Orquestração** | GitHub Actions (cron + workflow_dispatch) |
+| **Persistência** | Apache Parquet |
+
+---
+
+## Como Executar Localmente
+
+### Pré-requisitos
+
+- Python 3.12+
+- Poetry 1.8+
+- Chaves de API: Nixtla, Gemini (opcional)
+- Conta shinyapps.io (para deploy)
+
+### Instalação
+
+```bash
+git clone https://github.com/vitorwilher/previsao_macro.git
+cd previsao_macro
+
+poetry install --no-root
+cp .env.example .env
+# edite .env com NIXTLA_API_KEY, GEMINI_API_KEY
+```
+
+### Execução manual do pipeline
+
+```bash
+# 1) Atualiza base de dados
+poetry run python -c "exec(open('01-bibliotecas.py').read()); \
+exec(open('02-funcoes.py').read()); \
+exec(open('03-coleta.py').read()); \
+exec(open('04-tratamento.py').read()); \
+exec(open('05-disponibilizacao.py').read())"
+
+# 2) Atualiza previsões
+poetry run python 06-ipca.py
+poetry run python 07-cambio.py
+poetry run python 08-pib.py
+poetry run python 09-selic.py
+
+# 3) Roda o dashboard localmente
+poetry run shiny run app.py
+```
+
+### Deploy no shinyapps.io
+
+```bash
+rsconnect add --account <conta> --name <nome> --token <token> --secret <secret>
+rsconnect deploy shiny . --title previsao_macro
+```
+
+---
+
+## Próximos Passos
+
+1. **Métricas formais de avaliação** — RMSE/MAE *walk-forward* reportados como tabela no dashboard.
+2. **Simulador de cenários** — choque exógeno em variável-X e propagação para previsões (em desenvolvimento na v2.0).
+3. **Cobertura de variáveis** — adicionar inflação por núcleo, balança comercial, conta-corrente.
+4. **Comparação contra mediana Focus** — viés sistemático do ensemble vs. expectativas de mercado.
+5. **Comentário automatizado por LLM** — leitura das previsões e geração de boletim curto via Gemini.
+6. **Cache incremental do TimeGPT** — evitar chamadas redundantes quando a série não mudou.
+
+---
+
+## Referências
+
+- Wirth, R.; Hipp, J. (2000). *CRISP-DM: Towards a Standard Process Model for Data Mining*.
+- Hyndman, R. J.; Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts.
+- Garza, A.; Mergenthaler-Canseco, M.; Olivares, K. G. *et al.* (2024). *TimeGPT-1*. Working paper, Nixtla.
+- Amat Rodrigo, J.; Escobar Ortiz, J. (2023). *skforecast: Time series forecasting with scikit-learn regressors*.
+- Banco Central do Brasil. *Sistema Gerenciador de Séries Temporais (SGS)*.
+- IBGE. *Sistema IBGE de Recuperação Automática (SIDRA)*.
