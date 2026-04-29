@@ -2,6 +2,7 @@
   {
     "listing": "/projetos/index.html",
     "items": [
+      "/projetos/previsao-macro.html",
       "/projetos/sentimento-copom.html",
       "/projetos/metodologia.html",
       "/projetos/newsletter-digest-bot.html",
@@ -9,16 +10,16 @@
     ]
   },
   {
-    "listing": "/research/index.html",
-    "items": [
-      "/research/sentimento-copom.html"
-    ]
-  },
-  {
     "listing": "/teaching/index.html",
     "items": [
       "/teaching/workflow-portfolio.html",
       "/teaching/transformers-llms.html"
+    ]
+  },
+  {
+    "listing": "/research/index.html",
+    "items": [
+      "/research/sentimento-copom.html"
     ]
   }
 ]

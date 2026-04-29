@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-29">
+<meta name="description" content="Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions.">
+
+<title>Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
+  <li><a href="#arquitetura-do-pipeline" id="toc-arquitetura-do-pipeline" class="nav-link" data-scroll-target="#arquitetura-do-pipeline">Arquitetura do Pipeline</a></li>
+  <li><a href="#entendimento-do-negócio" id="toc-entendimento-do-negócio" class="nav-link" data-scroll-target="#entendimento-do-negócio">1. Entendimento do Negócio</a></li>
+  <li><a href="#entendimento-dos-dados" id="toc-entendimento-dos-dados" class="nav-link" data-scroll-target="#entendimento-dos-dados">2. Entendimento dos Dados</a></li>
+  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">3. Preparação dos Dados</a></li>
+  <li><a href="#modelagem" id="toc-modelagem" class="nav-link" data-scroll-target="#modelagem">4. Modelagem</a></li>
+  <li><a href="#avaliação" id="toc-avaliação" class="nav-link" data-scroll-target="#avaliação">5. Avaliação</a></li>
+  <li><a href="#implantação" id="toc-implantação" class="nav-link" data-scroll-target="#implantação">6. Implantação</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos Passos</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Shiny</div>
+    <div class="quarto-category">skforecast</div>
+    <div class="quarto-category">Nixtla</div>
+    <div class="quarto-category">TimeGPT</div>
+    <div class="quarto-category">scikit-learn</div>
+    <div class="quarto-category">statsmodels</div>
+    <div class="quarto-category">BCB</div>
+    <div class="quarto-category">IBGE</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">GitHub Actions</div>
+    <div class="quarto-category">shinyapps.io</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 29, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto implementa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), um <em>pipeline</em> automatizado para a geração e divulgação de <strong>previsões macroeconômicas</strong> para o Brasil. Quatro variáveis-chave são previstas em paralelo:</p>
+<ul>
+<li><strong>IPCA</strong> — Índice de Preços ao Consumidor Amplo (IBGE)</li>
+<li><strong>Câmbio</strong> — taxa BRL/USD (BCB/SGS)</li>
+<li><strong>PIB</strong> — Produto Interno Bruto (IBGE/SCN)</li>
+<li><strong>Selic</strong> — Taxa básica de juros (BCB/SGS)</li>
+</ul>
+<p>A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via <strong>GitHub Actions</strong>, alimentando um <em>dashboard</em> <strong>Shiny for Python</strong> publicado em <strong>shinyapps.io</strong>. A modelagem combina abordagens clássicas (regressões penalizadas, SVR, transformações de Box-Cox via <code>PowerTransformer</code>) com <em>foundation models</em> de séries temporais (<strong>Nixtla TimeGPT</strong>) através de uma camada de <em>ensemble</em> via <code>VotingRegressor</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tese central
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A automação de ponta a ponta — coleta, tratamento, modelagem, deploy — torna viável a publicação contínua de previsões macroeconômicas calibradas, com custo marginal próximo de zero por ciclo. A combinação de modelos clássicos e <em>foundation models</em> de séries temporais reduz o risco de previsões enviesadas por uma única classe de algoritmo.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<p>Previsões macroeconômicas são insumos críticos para política monetária, alocação de capital e planejamento corporativo. Soluções tradicionais sofrem de três limitações práticas:</p>
+<ol type="1">
+<li><strong>Trabalho manual recorrente</strong> — coleta, tratamento e re-estimação a cada ciclo consomem horas de analista qualificado;</li>
+<li><strong>Concentração em uma única família de modelos</strong> — exclusivamente econométrica ou exclusivamente <em>machine learning</em>, raramente ambas;</li>
+<li><strong>Distribuição limitada</strong> — relatórios em PDF estáticos, sem interatividade ou atualização contínua.</li>
+</ol>
+<p>O projeto responde a três perguntas práticas:</p>
+<ul>
+<li>Como <strong>automatizar</strong> o ciclo coleta → modelagem → deploy de forma que a publicação seja <em>zero-touch</em>?</li>
+<li>Que <strong>ganho de robustez</strong> advém de combinar modelos clássicos (skforecast/scikit-learn) com <em>foundation models</em> (Nixtla TimeGPT)?</li>
+<li>Como entregar previsões em formato <strong>interativo e auditável</strong>, com séries históricas, intervalos de confiança e simulação de cenários?</li>
+</ul>
+<hr>
+</section>
+<section id="metodologia-crisp-dm" class="level2">
+<h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
+<p>O projeto foi estruturado seguindo o processo <strong>CRISP-DM</strong>, adaptado ao contexto de <strong>previsão macroeconômica automatizada com publicação contínua</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Aplicação no Projeto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Entendimento do Negócio</strong></td>
+<td>Definição das 4 variáveis-alvo (IPCA, câmbio, PIB, Selic), horizonte de previsão (12 meses), critério de sucesso (publicação quinzenal estável), público-alvo (analistas, economistas, gestores)</td>
+</tr>
+<tr class="even">
+<td><strong>2. Entendimento dos Dados</strong></td>
+<td>Catálogo de séries em planilha de metadados (Google Sheets), fontes BCB/SGS, BCB/ODATA, IBGE/SIDRA; estrutura de transformações log/diferença codificada como tipo numérico</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Preparação dos Dados</strong></td>
+<td>Pipeline modular em 5 scripts (<code>01-bibliotecas</code> → <code>05-disponibilizacao</code>); tratamento de séries por frequência (diária, mensal, trimestral, anual); persistência em parquet</td>
+</tr>
+<tr class="even">
+<td><strong>4. Modelagem</strong></td>
+<td>Quatro scripts independentes (<code>06-ipca</code>, <code>07-cambio</code>, <code>08-pib</code>, <code>09-selic</code>); ensemble de <code>Ridge</code>, <code>BayesianRidge</code>, <code>LinearSVR</code> via <code>VotingRegressor</code> + <code>Nixtla TimeGPT</code> como modelo zero-shot; transformações via <code>PowerTransformer</code></td>
+</tr>
+<tr class="odd">
+<td><strong>5. Avaliação</strong></td>
+<td>Métricas <em>out-of-sample</em> por modelo; intervalos de confiança quantílicos; validação visual no painel (histórico vs.&nbsp;previsão)</td>
+</tr>
+<tr class="even">
+<td><strong>6. Implantação</strong></td>
+<td><em>Pipeline</em> totalmente automatizado em <strong>3 GitHub Actions</strong> (base de dados, modelos, dashboard); dashboard <strong>Shiny for Python</strong> publicado em <strong>shinyapps.io</strong>; ciclo de atualização quinzenal</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="arquitetura-do-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura-do-pipeline">Arquitetura do Pipeline</h2>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph Fontes</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    BCB[(BCB/SGS&lt;br&gt;BCB/ODATA)]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    IBGE[(IBGE/SIDRA)]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    META[(Google Sheets&lt;br&gt;metadados)]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  subgraph Coleta_e_Tratamento</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    BCB --&gt; COL[03-coleta.py]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    IBGE --&gt; COL</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    META --&gt; COL</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    COL --&gt; TRA[04-tratamento.py]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    TRA --&gt; DISP[05-disponibilizacao.py]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    DISP --&gt; P1[(dados/df_mensal.parquet)]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    DISP --&gt; P2[(dados/df_diaria.parquet)]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  subgraph Modelagem</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    P1 --&gt; M1[06-ipca.py]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    P1 --&gt; M2[07-cambio.py]</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    P1 --&gt; M3[08-pib.py]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    P1 --&gt; M4[09-selic.py]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    NIX[(Nixtla TimeGPT)] --&gt; M1</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    NIX --&gt; M2</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    NIX --&gt; M3</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    NIX --&gt; M4</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    M1 --&gt; PR1[(previsao/ipca.parquet)]</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    M2 --&gt; PR2[(previsao/cambio.parquet)]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    M3 --&gt; PR3[(previsao/pib.parquet)]</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    M4 --&gt; PR4[(previsao/selic.parquet)]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  subgraph Deploy</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    PR1 --&gt; APP[app.py&lt;br&gt;Shiny for Python]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    PR2 --&gt; APP</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    PR3 --&gt; APP</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    PR4 --&gt; APP</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    APP --&gt; SHINY([shinyapps.io])</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  GHA[GitHub Actions&lt;br&gt;cron quinzenal] -.dispara.-&gt; COL</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  GHA -.dispara.-&gt; M1</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  GHA -.dispara.-&gt; APP</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="entendimento-do-negócio" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-do-negócio">1. Entendimento do Negócio</h2>
+<section id="problema" class="level3">
+<h3 class="anchored" data-anchor-id="problema">1.1 Problema</h3>
+<p>Previsões macroeconômicas servem a três usos centrais: (i) política monetária, (ii) alocação de capital, (iii) planejamento corporativo. O desafio prático é manter um sistema de previsões <strong>continuamente atualizado</strong>, com qualidade auditável, sem concentrar o trabalho em uma única família de modelos.</p>
+</section>
+<section id="objetivos" class="level3">
+<h3 class="anchored" data-anchor-id="objetivos">1.2 Objetivos</h3>
+<ol type="1">
+<li>Construir <em>pipeline</em> <strong>automatizado de ponta a ponta</strong> — coleta, tratamento, modelagem, deploy;</li>
+<li>Cobrir as quatro variáveis macro mais demandadas no Brasil — <strong>IPCA, câmbio, PIB, Selic</strong>;</li>
+<li>Combinar <strong>modelos clássicos</strong> com <strong>foundation models</strong> de séries temporais para reduzir risco de viés metodológico;</li>
+<li>Distribuir resultados em <strong>dashboard interativo</strong> com atualização quinzenal <em>zero-touch</em>.</li>
+</ol>
+</section>
+<section id="critérios-de-sucesso" class="level3">
+<h3 class="anchored" data-anchor-id="critérios-de-sucesso">1.3 Critérios de sucesso</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Critério</th>
+<th>Meta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cadência de atualização</td>
+<td>4×/mês (dias 1, 8, 15, 22)</td>
+</tr>
+<tr class="even">
+<td>Estabilidade do <em>pipeline</em></td>
+<td>&lt; 1 falha por mês nos 3 <em>workflows</em> (coleta, modelos, deploy)</td>
+</tr>
+<tr class="odd">
+<td>Cobertura</td>
+<td>4 variáveis × horizonte de 12 meses</td>
+</tr>
+<tr class="even">
+<td>Custo operacional</td>
+<td>Próximo de zero (GitHub Actions + tier gratuito do shinyapps.io)</td>
+</tr>
+<tr class="odd">
+<td>Reprodutibilidade</td>
+<td><em>Pipeline</em> roda do zero apagando cache e parquets</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="entendimento-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-dos-dados">2. Entendimento dos Dados</h2>
+<section id="fontes" class="level3">
+<h3 class="anchored" data-anchor-id="fontes">2.1 Fontes</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fonte</th>
+<th>Forma de coleta</th>
+<th>Variáveis típicas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>BCB/SGS</strong></td>
+<td>API do Banco Central (Sistema Gerenciador de Séries Temporais)</td>
+<td>Selic, câmbio, expectativas Focus</td>
+</tr>
+<tr class="even">
+<td><strong>BCB/ODATA</strong></td>
+<td>API ODATA do Banco Central</td>
+<td>Câmbio diário, indicadores fiscais</td>
+</tr>
+<tr class="odd">
+<td><strong>IBGE/SIDRA</strong></td>
+<td>API do Sistema IBGE de Recuperação Automática</td>
+<td>IPCA, PIB, atividade</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="catálogo-via-metadados" class="level3">
+<h3 class="anchored" data-anchor-id="catálogo-via-metadados">2.2 Catálogo via metadados</h3>
+<p>A planilha de metadados (Google Sheets) é a <strong>fonte única de verdade</strong> sobre quais séries entram no pipeline. Cada linha define:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Campo</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Identificador</code></td>
+<td>Nome canônico da série no projeto</td>
+</tr>
+<tr class="even">
+<td><code>Fonte</code></td>
+<td>BCB/SGS, BCB/ODATA, IBGE/SIDRA</td>
+</tr>
+<tr class="odd">
+<td><code>Forma de Coleta</code></td>
+<td>API</td>
+</tr>
+<tr class="even">
+<td><code>Input de Coleta</code></td>
+<td>Código da série na fonte (ex.: <code>432</code> para Selic)</td>
+</tr>
+<tr class="odd">
+<td><code>Frequência</code></td>
+<td>Diária, Mensal, Trimestral, Anual</td>
+</tr>
+<tr class="even">
+<td><code>Transformação</code></td>
+<td>Tipo numérico (1 a 6) — nível, diferença, log, log-diferença</td>
+</tr>
+</tbody>
+</table>
+<p>A função <code>transformar(x, tipo)</code> no código aplica a transformação correspondente:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>switch <span class="op">=</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1"</span>: <span class="kw">lambda</span> x: x,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2"</span>: <span class="kw">lambda</span> x: x.diff(),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"3"</span>: <span class="kw">lambda</span> x: x.diff().diff(),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"4"</span>: <span class="kw">lambda</span> x: np.log(x),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"5"</span>: <span class="kw">lambda</span> x: np.log(x).diff(),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"6"</span>: <span class="kw">lambda</span> x: np.log(x).diff().diff(),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="recorte-amostral" class="level3">
+<h3 class="anchored" data-anchor-id="recorte-amostral">2.3 Recorte amostral</h3>
+<p>Início do treino em <strong>janeiro de 2004</strong>, padronizado entre as 4 variáveis. Horizonte de previsão fixo em <strong>12 meses</strong>.</p>
+<hr>
+</section>
+</section>
+<section id="preparação-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="preparação-dos-dados">3. Preparação dos Dados</h2>
+<section id="pipeline-modular-em-5-scripts" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline-modular-em-5-scripts">3.1 Pipeline modular em 5 scripts</h3>
+<pre><code>01-bibliotecas.py        # imports e configurações globais
+02-funcoes.py            # coleta_bcb_sgs, coleta_bcb_odata, coleta_ibge_sidra
+03-coleta.py             # iteração sobre metadados; bruto por frequência
+04-tratamento.py         # alinhamento temporal, agrupamento, sanitização
+05-disponibilizacao.py   # persistência em parquet por frequência</code></pre>
+</section>
+<section id="persistência-por-frequência" class="level3">
+<h3 class="anchored" data-anchor-id="persistência-por-frequência">3.2 Persistência por frequência</h3>
+<pre><code>dados/
+├── df_diaria.parquet     # séries diárias (câmbio, Selic spot)
+├── df_mensal.parquet     # séries mensais (IPCA, expectativas)
+├── df_trimestral.parquet # séries trimestrais (PIB)
+└── df_anual.parquet      # séries anuais (controle)</code></pre>
+</section>
+<section id="princípios" class="level3">
+<h3 class="anchored" data-anchor-id="princípios">3.3 Princípios</h3>
+<ul>
+<li><strong>Catalogação centralizada</strong> — a planilha de metadados é editada em um lugar só; o código nunca lista séries hard-coded.</li>
+<li><strong>Idempotência</strong> — re-rodar o pipeline com a mesma planilha produz parquets bit-a-bit iguais.</li>
+<li><strong>Separação clara entre coleta e tratamento</strong> — facilita debug quando uma fonte muda formato.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="modelagem" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem">4. Modelagem</h2>
+<section id="quatro-scripts-independentes" class="level3">
+<h3 class="anchored" data-anchor-id="quatro-scripts-independentes">4.1 Quatro scripts independentes</h3>
+<p>Cada variável tem seu próprio script para permitir <strong>paralelização e debug isolado</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Script</th>
+<th>Variável</th>
+<th>Frequência</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>06-ipca.py</code></td>
+<td>IPCA</td>
+<td>Mensal</td>
+</tr>
+<tr class="even">
+<td><code>07-cambio.py</code></td>
+<td>Câmbio BRL/USD</td>
+<td>Mensal (média)</td>
+</tr>
+<tr class="odd">
+<td><code>08-pib.py</code></td>
+<td>PIB</td>
+<td>Trimestral</td>
+</tr>
+<tr class="even">
+<td><code>09-selic.py</code></td>
+<td>Selic</td>
+<td>Mensal</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ensemble-clássico-foundation-model" class="level3">
+<h3 class="anchored" data-anchor-id="ensemble-clássico-foundation-model">4.2 Ensemble clássico + foundation model</h3>
+<p>Cada script combina duas famílias:</p>
+<p><strong>Família 1 — Modelos clássicos</strong> via <code>skforecast.ForecasterAutoreg</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge, BayesianRidge</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> LinearSVR</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> VotingRegressor</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skforecast.ForecasterAutoreg <span class="im">import</span> ForecasterAutoreg</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>estimators <span class="op">=</span> [</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"ridge"</span>, Ridge()),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"bayes"</span>, BayesianRidge()),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"svr"</span>,   LinearSVR()),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>voting <span class="op">=</span> VotingRegressor(estimators)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>forecaster <span class="op">=</span> ForecasterAutoreg(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    regressor<span class="op">=</span>voting,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    lags<span class="op">=</span><span class="dv">12</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    transformer_y<span class="op">=</span>PowerTransformer(),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Família 2 — Foundation model</strong>: <code>Nixtla TimeGPT</code> chamado via <code>nixtla.NixtlaClient</code> com <code>NIXTLA_API_KEY</code>. Modelo <em>zero-shot</em> — não requer treino local; consome a série histórica e devolve previsão + intervalo de confiança.</p>
+</section>
+<section id="saídas-padronizadas" class="level3">
+<h3 class="anchored" data-anchor-id="saídas-padronizadas">4.3 Saídas padronizadas</h3>
+<p>Cada script produz um parquet em <code>previsao/</code> com colunas canônicas:</p>
+<pre><code>data | valor | tipo (histórico/previsão) | li | ls | modelo</code></pre>
+<pre><code>previsao/
+├── ipca.parquet
+├── cambio.parquet
+├── pib.parquet
+└── selic.parquet</code></pre>
+</section>
+<section id="decisões-de-modelagem" class="level3">
+<h3 class="anchored" data-anchor-id="decisões-de-modelagem">4.4 Decisões de modelagem</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Decisão</th>
+<th>Valor</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Horizonte</td>
+<td>12 meses</td>
+<td>Janela típica para política monetária</td>
+</tr>
+<tr class="even">
+<td>Início do treino</td>
+<td>jan/2004</td>
+<td>Pós-meta de inflação consolidada</td>
+</tr>
+<tr class="odd">
+<td>Lags</td>
+<td>12</td>
+<td>Captura sazonalidade anual</td>
+</tr>
+<tr class="even">
+<td>Transformação</td>
+<td><code>PowerTransformer</code> (Yeo-Johnson)</td>
+<td>Estabiliza variância sem assumir positividade</td>
+</tr>
+<tr class="odd">
+<td>Random seed</td>
+<td>1984</td>
+<td>Reprodutibilidade exata entre execuções</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="avaliação" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação">5. Avaliação</h2>
+<section id="métricas-por-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-por-modelo">5.1 Métricas por modelo</h3>
+<p>A avaliação acontece dentro de cada script (<code>06</code>–<code>09</code>). Reporta-se RMSE/MAE <em>out-of-sample</em> em janela de validação fixa, com comparação contra:</p>
+<ul>
+<li><em>Baseline</em> ingênuo (último valor observado);</li>
+<li>Modelo individual (Ridge, BayesianRidge, LinearSVR) sem ensemble;</li>
+<li>TimeGPT zero-shot puro.</li>
+</ul>
+</section>
+<section id="intervalos-de-confiança" class="level3">
+<h3 class="anchored" data-anchor-id="intervalos-de-confiança">5.2 Intervalos de confiança</h3>
+<p>O ensemble <code>VotingRegressor</code> não fornece IC nativo — os intervalos exibidos no dashboard usam a parametrização quantílica do TimeGPT (<code>level=[80, 95]</code>).</p>
+</section>
+<section id="validação-visual-no-painel" class="level3">
+<h3 class="anchored" data-anchor-id="validação-visual-no-painel">5.3 Validação visual no painel</h3>
+<p>O <em>dashboard</em> sobrepõe histórico × previsão × IC de forma que o usuário detecta visualmente:</p>
+<ul>
+<li>Quebras estruturais não absorvidas;</li>
+<li>Compressão excessiva da amplitude de previsão;</li>
+<li>Divergência entre modelos no mesmo horizonte.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="implantação" class="level2">
+<h2 class="anchored" data-anchor-id="implantação">6. Implantação</h2>
+<section id="três-workflows-no-github-actions" class="level3">
+<h3 class="anchored" data-anchor-id="três-workflows-no-github-actions">6.1 Três workflows no GitHub Actions</h3>
+<pre><code>.github/workflows/
+├── base_de_dados.yml   # cron 00:00 UTC dias 1, 8, 15, 22 → roda 03→05
+├── modelos.yml         # cron 01:00 UTC dias 1, 8, 15, 22 → roda 06→09
+└── dashboard.yml       # cron 02:00 UTC dias 1, 8, 15, 22 → deploy shinyapps</code></pre>
+<p>Os 3 <em>workflows</em> compartilham um <strong><code>concurrency group</code></strong> comum para evitar <em>race conditions</em> no <code>git push</code> final do auto-commit.</p>
+</section>
+<section id="dashboard-shiny-for-python" class="level3">
+<h3 class="anchored" data-anchor-id="dashboard-shiny-for-python">6.2 Dashboard Shiny for Python</h3>
+<p>Construído com <code>shiny.express</code>, <code>shinyswatch</code>, <code>plotnine</code>, <code>mizani</code> e <code>faicons</code>. Cada uma das 4 variáveis tem sua aba com:</p>
+<ul>
+<li>KPI da última observação e da próxima previsão;</li>
+<li>Gráfico histórico × previsão com IC sombreado;</li>
+<li>Filtros de janela temporal e <em>toggle</em> do IC.</li>
+</ul>
+<p>Deploy via <code>rsconnect-python deploy shiny .</code>. URL pública: <code>https://vitorwilher.shinyapps.io/previsao_macro/</code>.</p>
+</section>
+<section id="secrets-necessários" class="level3">
+<h3 class="anchored" data-anchor-id="secrets-necessários">6.3 Secrets necessários</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Secret</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NIXTLA_API_KEY</code></td>
+<td>Chamadas ao TimeGPT</td>
+</tr>
+<tr class="even">
+<td><code>GEMINI_API_KEY</code></td>
+<td>Camada opcional de comentário automatizado</td>
+</tr>
+<tr class="odd">
+<td><code>ACCOUNT</code>, <code>NAME</code>, <code>TOKEN</code>, <code>SECRET</code></td>
+<td>Credenciais shinyapps.io para <code>rsconnect</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>previsao_macro/
+│
+├── 01-bibliotecas.py           # imports e configurações globais
+├── 02-funcoes.py               # funções de coleta por fonte
+├── 03-coleta.py                # iteração sobre metadados
+├── 04-tratamento.py            # alinhamento e sanitização
+├── 05-disponibilizacao.py      # persistência em parquet
+│
+├── 06-ipca.py                  # modelo IPCA
+├── 07-cambio.py                # modelo câmbio
+├── 08-pib.py                   # modelo PIB
+├── 09-selic.py                 # modelo Selic
+│
+├── app.py                      # dashboard Shiny for Python
+│
+├── dados/                      # parquets de séries históricas
+├── previsao/                   # parquets de previsões
+├── tracking/                   # tracking.csv (ciclos de execução)
+├── rsconnect-python/           # metadata do deploy shinyapps
+│
+├── .github/workflows/          # 3 workflows (base, modelos, dashboard)
+│
+├── portfolio/                  # template de divulgação
+│   ├── previsao-macro.qmd      # ESTE arquivo (CRISP-DM)
+│   ├── README.md               # README do GitHub
+│   ├── _TEMPLATE.md            # convenção do template
+│   └── *.png                   # imagens de capa
+│
+├── poetry.lock
+└── pyproject.toml</code></pre>
+<hr>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Tecnologia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Linguagem</strong></td>
+<td>Python 3.12</td>
+</tr>
+<tr class="even">
+<td><strong>Gerenciamento</strong></td>
+<td>Poetry</td>
+</tr>
+<tr class="odd">
+<td><strong>Coleta</strong></td>
+<td><code>requests</code> (BCB/SGS, BCB/ODATA, IBGE/SIDRA)</td>
+</tr>
+<tr class="even">
+<td><strong>Manipulação</strong></td>
+<td><code>pandas</code>, <code>numpy</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Modelagem clássica</strong></td>
+<td><code>skforecast</code>, <code>scikit-learn</code> (Ridge, BayesianRidge, LinearSVR, VotingRegressor)</td>
+</tr>
+<tr class="even">
+<td><strong>Foundation model</strong></td>
+<td><code>nixtla</code> (TimeGPT)</td>
+</tr>
+<tr class="odd">
+<td><strong>Inferência estatística</strong></td>
+<td><code>statsmodels</code></td>
+</tr>
+<tr class="even">
+<td><strong>Transformações</strong></td>
+<td><code>sklearn.preprocessing.PowerTransformer</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Visualização</strong></td>
+<td><code>plotnine</code>, <code>mizani</code></td>
+</tr>
+<tr class="even">
+<td><strong>Dashboard</strong></td>
+<td><code>shiny.express</code>, <code>shinyswatch</code>, <code>faicons</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Deploy</strong></td>
+<td><code>rsconnect-python</code> → shinyapps.io</td>
+</tr>
+<tr class="even">
+<td><strong>Orquestração</strong></td>
+<td>GitHub Actions (cron + workflow_dispatch)</td>
+</tr>
+<tr class="odd">
+<td><strong>Persistência</strong></td>
+<td>Apache Parquet</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="como-executar-localmente" class="level2">
+<h2 class="anchored" data-anchor-id="como-executar-localmente">Como Executar Localmente</h2>
+<section id="pré-requisitos" class="level3">
+<h3 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h3>
+<ul>
+<li>Python 3.12+</li>
+<li>Poetry 1.8+</li>
+<li>Chaves de API: Nixtla, Gemini (opcional)</li>
+<li>Conta shinyapps.io (para deploy)</li>
+</ul>
+</section>
+<section id="instalação" class="level3">
+<h3 class="anchored" data-anchor-id="instalação">Instalação</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/vitorwilher/previsao_macro.git</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> previsao_macro</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> install <span class="at">--no-root</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># edite .env com NIXTLA_API_KEY, GEMINI_API_KEY</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="execução-manual-do-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="execução-manual-do-pipeline">Execução manual do pipeline</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Atualiza base de dados</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run python <span class="at">-c</span> <span class="st">"exec(open('01-bibliotecas.py').read()); </span><span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">exec(open('02-funcoes.py').read()); </span><span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">exec(open('03-coleta.py').read()); </span><span class="dt">\</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">exec(open('04-tratamento.py').read()); </span><span class="dt">\</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">exec(open('05-disponibilizacao.py').read())"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Atualiza previsões</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run python 06-ipca.py</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run python 07-cambio.py</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run python 08-pib.py</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run python 09-selic.py</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Roda o dashboard localmente</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> run shiny run app.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="deploy-no-shinyapps.io" class="level3">
+<h3 class="anchored" data-anchor-id="deploy-no-shinyapps.io">Deploy no shinyapps.io</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rsconnect</span> add <span class="at">--account</span> <span class="op">&lt;</span>conta<span class="op">&gt;</span> --name <span class="op">&lt;</span>nome<span class="op">&gt;</span> --token <span class="op">&lt;</span>token<span class="op">&gt;</span> --secret <span class="op">&lt;</span>secret<span class="op">&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rsconnect</span> deploy shiny . <span class="at">--title</span> previsao_macro</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
+<ol type="1">
+<li><strong>Métricas formais de avaliação</strong> — RMSE/MAE <em>walk-forward</em> reportados como tabela no dashboard.</li>
+<li><strong>Simulador de cenários</strong> — choque exógeno em variável-X e propagação para previsões (em desenvolvimento na v2.0).</li>
+<li><strong>Cobertura de variáveis</strong> — adicionar inflação por núcleo, balança comercial, conta-corrente.</li>
+<li><strong>Comparação contra mediana Focus</strong> — viés sistemático do ensemble vs.&nbsp;expectativas de mercado.</li>
+<li><strong>Comentário automatizado por LLM</strong> — leitura das previsões e geração de boletim curto via Gemini.</li>
+<li><strong>Cache incremental do TimeGPT</strong> — evitar chamadas redundantes quando a série não mudou.</li>
+</ol>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<ul>
+<li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
+<li>Hyndman, R. J.; Athanasopoulos, G. (2021). <em>Forecasting: Principles and Practice</em> (3rd ed.). OTexts.</li>
+<li>Garza, A.; Mergenthaler-Canseco, M.; Olivares, K. G. <em>et al.</em> (2024). <em>TimeGPT-1</em>. Working paper, Nixtla.</li>
+<li>Amat Rodrigo, J.; Escobar Ortiz, J. (2023). <em>skforecast: Time series forecasting with scikit-learn regressors</em>.</li>
+<li>Banco Central do Brasil. <em>Sistema Gerenciador de Séries Temporais (SGS)</em>.</li>
+<li>IBGE. <em>Sistema IBGE de Recuperação Automática (SIDRA)</em>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
