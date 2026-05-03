@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-04-29">
-<meta name="description" content="Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions.">
+<meta name="dcterms.date" content="2026-05-03">
+<meta name="description" content="Pipeline reprodutível em Python que coleta séries macro via APIs (BCB, IBGE, IPEADATA, FRED), gera previsões quinzenais de IPCA, câmbio, PIB e Selic com ensemble de 10 estratégias sobre 6 modelos por variável (clássicos + foundation models), valida estatisticamente contra o Boletim Focus do BCB (Diebold-Mariano + Mincer-Zarnowitz) e publica em dashboard Shiny atualizado por GitHub Actions. A manutenção é feita por agentes Claude Code via Pull Requests.">
 
-<title>Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic – Portfólio do VW</title>
+<title>Previsão Macro — Pipeline com Agentes de IA para IPCA, Câmbio, PIB e Selic – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -112,6 +112,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -204,27 +233,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic</h1>
+<h1 class="title">Previsão Macro — Pipeline com Agentes de IA para IPCA, Câmbio, PIB e Selic</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Shiny</div>
+    <div class="quarto-category">scikit-learn</div>
     <div class="quarto-category">skforecast</div>
     <div class="quarto-category">Nixtla</div>
     <div class="quarto-category">TimeGPT</div>
-    <div class="quarto-category">scikit-learn</div>
+    <div class="quarto-category">Chronos</div>
+    <div class="quarto-category">Foundation Models</div>
     <div class="quarto-category">statsmodels</div>
+    <div class="quarto-category">Walk-forward</div>
+    <div class="quarto-category">Diebold-Mariano</div>
+    <div class="quarto-category">Mincer-Zarnowitz</div>
     <div class="quarto-category">BCB</div>
     <div class="quarto-category">IBGE</div>
     <div class="quarto-category">Macroeconomia</div>
     <div class="quarto-category">Política Monetária</div>
     <div class="quarto-category">GitHub Actions</div>
     <div class="quarto-category">shinyapps.io</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Agentes de IA</div>
+    <div class="quarto-category">Claude Code</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions.
+    Pipeline reprodutível em Python que coleta séries macro via APIs (BCB, IBGE, IPEADATA, FRED), gera previsões quinzenais de IPCA, câmbio, PIB e Selic com ensemble de 10 estratégias sobre 6 modelos por variável (clássicos + foundation models), valida estatisticamente contra o Boletim Focus do BCB (Diebold-Mariano + Mincer-Zarnowitz) e publica em dashboard Shiny atualizado por GitHub Actions. A manutenção é feita por agentes Claude Code via Pull Requests.
   </div>
 </div>
 
@@ -235,7 +272,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 29, 2026</p>
+      <p class="date">May 3, 2026</p>
     </div>
   </div>
   
@@ -247,6 +284,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📄 Working paper
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Esta é a <strong>ficha técnica do projeto</strong> (metodologia CRISP-DM, arquitetura, agentes de IA na manutenção). Para o <em>working paper</em> completo com Resumo bilíngue, <em>changelog</em> público, Diebold-Mariano contra Focus e PDF para download, veja <a href="../research/previsao-macro.html"><strong>Previsão Macro — paper</strong></a>.</p>
+</div>
+</div>
 <section id="visão-geral" class="level2">
 <h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
 <p>Este projeto implementa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), um <em>pipeline</em> automatizado para a geração e divulgação de <strong>previsões macroeconômicas</strong> para o Brasil. Quatro variáveis-chave são previstas em paralelo:</p>
@@ -256,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>PIB</strong> — Produto Interno Bruto (IBGE/SCN)</li>
 <li><strong>Selic</strong> — Taxa básica de juros (BCB/SGS)</li>
 </ul>
-<p>A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via <strong>GitHub Actions</strong>, alimentando um <em>dashboard</em> <strong>Shiny for Python</strong> publicado em <strong>shinyapps.io</strong>. A modelagem combina abordagens clássicas (regressões penalizadas, SVR, transformações de Box-Cox via <code>PowerTransformer</code>) com <em>foundation models</em> de séries temporais (<strong>Nixtla TimeGPT</strong>) através de uma camada de <em>ensemble</em> via <code>VotingRegressor</code>.</p>
+<p>A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via <strong>GitHub Actions</strong>, alimentando um <em>dashboard</em> <strong>Shiny for Python</strong> publicado em <strong>shinyapps.io</strong>. A modelagem combina <strong>modelos clássicos</strong> (Ridge, Bayesian Ridge, Huber via <code>scikit-learn</code>) com <em>foundation models</em> de séries temporais (<strong>Nixtla TimeGPT</strong> e <strong>Amazon Chronos T5</strong>) e, no caso da Selic, com o modelo proprietário <strong>Tom-Copom</strong> que extrai sentimento das atas via LLM. Sobre os 6 modelos por variável, o módulo <code>ensembles.py</code> aplica <strong>10 estratégias de combinação</strong> (3 não-supervisionadas + 7 supervisionadas), avaliadas em janela <em>walk-forward</em> contra o Boletim Focus do BCB com testes formais (Diebold-Mariano com correção HAC e Mincer-Zarnowitz).</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -267,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A automação de ponta a ponta — coleta, tratamento, modelagem, deploy — torna viável a publicação contínua de previsões macroeconômicas calibradas, com custo marginal próximo de zero por ciclo. A combinação de modelos clássicos e <em>foundation models</em> de séries temporais reduz o risco de previsões enviesadas por uma única classe de algoritmo.</p>
+<p>A contribuição do projeto é <strong>tripla</strong>: (1) <strong>arquitetura reprodutível em produção</strong>, com <code>ensembles.py</code> na raiz importado por produção, paper e curso — zero duplicação de código; (2) <strong>validação estatística honesta</strong> de 10 estratégias de ensemble em janela <em>walk-forward</em> com filtros estritos anti-vazamento e benchmark formal contra o Focus do BCB; (3) <strong>operação contínua sem intervenção humana</strong> — Pull Requests são abertos por agentes <strong>Claude Code</strong>, o autor revisa e mergeia. Um quarto <em>workflow</em> (<code>paper.yml</code>) re-renderiza o paper acadêmico mensalmente. O resultado é um sistema de previsão que opera 24/7, é auditável até a última linha de código e auto-documenta-se na forma de um paper Quarto regenerado mês a mês.</p>
 </div>
 </div>
 <hr>
@@ -601,28 +651,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="ensemble-clássico-foundation-model" class="level3">
-<h3 class="anchored" data-anchor-id="ensemble-clássico-foundation-model">4.2 Ensemble clássico + foundation model</h3>
-<p>Cada script combina duas famílias:</p>
-<p><strong>Família 1 — Modelos clássicos</strong> via <code>skforecast.ForecasterAutoreg</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge, BayesianRidge</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> LinearSVR</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> VotingRegressor</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skforecast.ForecasterAutoreg <span class="im">import</span> ForecasterAutoreg</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>estimators <span class="op">=</span> [</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"ridge"</span>, Ridge()),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"bayes"</span>, BayesianRidge()),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"svr"</span>,   LinearSVR()),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>voting <span class="op">=</span> VotingRegressor(estimators)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>forecaster <span class="op">=</span> ForecasterAutoreg(</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    regressor<span class="op">=</span>voting,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    lags<span class="op">=</span><span class="dv">12</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    transformer_y<span class="op">=</span>PowerTransformer(),</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Família 2 — Foundation model</strong>: <code>Nixtla TimeGPT</code> chamado via <code>nixtla.NixtlaClient</code> com <code>NIXTLA_API_KEY</code>. Modelo <em>zero-shot</em> — não requer treino local; consome a série histórica e devolve previsão + intervalo de confiança.</p>
+<section id="modelos-individuais-por-variável" class="level3">
+<h3 class="anchored" data-anchor-id="modelos-individuais-por-variável">4.2 Modelos individuais por variável</h3>
+<p>Cada <code>06-09.py</code> mantém <strong>6 modelos por variável</strong> combinados em famílias:</p>
+<p><strong>Família 1 — Clássicos</strong> (refit por <em>vintage</em> via <code>skforecast</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge, BayesianRidge, HuberRegressor</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skforecast.ForecasterAutoreg <span class="im">import</span> ForecasterAutoreg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ridge, Bayesian Ridge e Huber treinados com as ~116 séries macro do <code>df_mensal.parquet</code> como <em>features</em> defasadas, transformação <code>PowerTransformer</code> (Yeo-Johnson) para estabilizar variância, <code>lags=12</code>.</p>
+<p><strong>Família 2 — Foundation models</strong> (zero-shot, sem treino na <em>vintage</em>):</p>
+<ul>
+<li><strong>Nixtla TimeGPT</strong> — API hospedada da Nixtla, paga por requisição; com <code>try/except</code> para tolerar falha de cota sem quebrar o pipeline.</li>
+<li><strong>Chronos T5-small e T5-base</strong> (Amazon, <em>open-source</em>) — tokenizam séries como linguagem; rodam local via <code>chronos-forecasting</code>, peso ~75 MB e ~250 MB respectivamente, cache via HuggingFace.</li>
+</ul>
+<p><strong>Família 3 — Tom-Copom</strong> (apenas Selic): score de sentimento <em>hawkish/dovish</em> das atas do COPOM, extraído via LLM (Gemini Flash Lite) e calibrado em pontos percentuais da Selic — metodologia completa em <a href="https://github.com/vitorwilher/Sentimento_COPOM">Sentimento_COPOM</a>.</p>
+</section>
+<section id="suite-de-10-estratégias-de-ensemble-ensembles.py" class="level3">
+<h3 class="anchored" data-anchor-id="suite-de-10-estratégias-de-ensemble-ensembles.py">4.3 Suite de 10 estratégias de ensemble (<code>ensembles.py</code>)</h3>
+<p>Sobre os 6 modelos por variável, o módulo <code>ensembles.py</code> na raiz do repositório aplica 10 estratégias agrupadas em 4 famílias:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Família</th>
+<th>Estratégias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Não-supervisionadas</strong></td>
+<td>Média simples, Mediana, Trimmed mean (10%)</td>
+</tr>
+<tr class="even">
+<td><strong>Ponderadas estáticas</strong></td>
+<td><span class="math inline">\(1/RMSE\)</span>, Bates-Granger (1969), Granger-Ramanathan (1984) variant C</td>
+</tr>
+<tr class="odd">
+<td><strong>Adaptativas</strong></td>
+<td>Janela rolante 12m, Forgetting factor 0,95</td>
+</tr>
+<tr class="even">
+<td><strong>Stacking</strong></td>
+<td>Pesos por horizonte, Stacking Ridge (k-fold)</td>
+</tr>
+</tbody>
+</table>
+<p><code>ensembles.py</code> é importado pelos três contextos do projeto — produção (<code>06-09.py</code>), paper (<code>paper/14-ensembles.py</code>) e curso (<code>curso/cadernos/03-ensembles.qmd</code>) — garantindo zero duplicação. Uma estratégia nova é desenvolvida uma vez e flui para todos.</p>
 </section>
 <section id="saídas-padronizadas" class="level3">
 <h3 class="anchored" data-anchor-id="saídas-padronizadas">4.3 Saídas padronizadas</h3>
@@ -682,18 +759,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="avaliação" class="level2">
 <h2 class="anchored" data-anchor-id="avaliação">5. Avaliação</h2>
-<section id="métricas-por-modelo" class="level3">
-<h3 class="anchored" data-anchor-id="métricas-por-modelo">5.1 Métricas por modelo</h3>
-<p>A avaliação acontece dentro de cada script (<code>06</code>–<code>09</code>). Reporta-se RMSE/MAE <em>out-of-sample</em> em janela de validação fixa, com comparação contra:</p>
+<p>A avaliação tem <strong>duas camadas</strong>:</p>
+<section id="métricas-walk-forward-paper13-walkforward.py" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-walk-forward-paper13-walkforward.py">5.1 Métricas walk-forward (paper/13-walkforward.py)</h3>
+<p>Para cada <em>vintage</em> <code>t</code> no <code>tracking.csv</code> (versionado <em>append-only</em> desde 2025-09-02), o pipeline calcula MAE/RMSE/Bias para cada <code>(Variável × Modelo × Horizonte)</code> usando apenas informação disponível em <code>t-1</code>. Filtros estritos anti-vazamento:</p>
 <ul>
-<li><em>Baseline</em> ingênuo (último valor observado);</li>
-<li>Modelo individual (Ridge, BayesianRidge, LinearSVR) sem ensemble;</li>
-<li>TimeGPT zero-shot puro.</li>
+<li><code>Horizonte_dias ≥ 7</code> — exclui pseudo-previsões “para o passado” quando o modelo roda tarde no mês.</li>
+<li><code>Vintage_Focus &lt; min(Data da Previsão, Data de Referência)</code> — garante que o Focus capturado nunca viu o realizado.</li>
 </ul>
+<p>Saída: <code>paper/results/wf_modelos.parquet</code> (modelos individuais) e <code>paper/results/wf_ensembles.parquet</code> (10 estratégias).</p>
 </section>
-<section id="intervalos-de-confiança" class="level3">
-<h3 class="anchored" data-anchor-id="intervalos-de-confiança">5.2 Intervalos de confiança</h3>
-<p>O ensemble <code>VotingRegressor</code> não fornece IC nativo — os intervalos exibidos no dashboard usam a parametrização quantílica do TimeGPT (<code>level=[80, 95]</code>).</p>
+<section id="testes-estatísticos-formais-paper15-avaliacao.py" class="level3">
+<h3 class="anchored" data-anchor-id="testes-estatísticos-formais-paper15-avaliacao.py">5.2 Testes estatísticos formais (paper/15-avaliacao.py)</h3>
+<p>Para cada <code>(Variável × Estratégia × Horizonte)</code> com <code>n ≥ 30</code> pares observados:</p>
+<ul>
+<li><strong>Diebold-Mariano</strong> com correção HAC (Newey-West, <code>lag = h-1</code>) — perda quadrática, <span class="math inline">\(p_{one}\)</span> unilateral <span class="math inline">\(H_1\)</span>: ensemble melhor que Focus. Implementado via <code>statsmodels.OLS</code> + <code>cov_hac</code>.</li>
+<li><strong>Mincer-Zarnowitz</strong> — OLS <code>Observado = α + β · Previsão</code>, <span class="math inline">\(F\)</span>-test conjunto <span class="math inline">\(H_0: \alpha = 0 \wedge \beta = 1\)</span>.</li>
+</ul>
+<p>Os artefatos (<code>dm_tests.csv</code>, <code>mz_regressions.csv</code>) e as figuras 300 dpi (heatmap DM, scatter MZ, séries de erro) são consumidos diretamente pelo paper Quarto e pela sub-aba “Performance Histórica” do dashboard. Resultados completos em <a href="../research/previsao-macro.html">Previsão Macro — paper</a>.</p>
 </section>
 <section id="validação-visual-no-painel" class="level3">
 <h3 class="anchored" data-anchor-id="validação-visual-no-painel">5.3 Validação visual no painel</h3>
@@ -708,13 +791,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="implantação" class="level2">
 <h2 class="anchored" data-anchor-id="implantação">6. Implantação</h2>
-<section id="três-workflows-no-github-actions" class="level3">
-<h3 class="anchored" data-anchor-id="três-workflows-no-github-actions">6.1 Três workflows no GitHub Actions</h3>
+<section id="quatro-workflows-no-github-actions" class="level3">
+<h3 class="anchored" data-anchor-id="quatro-workflows-no-github-actions">6.1 Quatro workflows no GitHub Actions</h3>
 <pre><code>.github/workflows/
 ├── base_de_dados.yml   # cron 00:00 UTC dias 1, 8, 15, 22 → roda 03→05
 ├── modelos.yml         # cron 01:00 UTC dias 1, 8, 15, 22 → roda 06→09
-└── dashboard.yml       # cron 02:00 UTC dias 1, 8, 15, 22 → deploy shinyapps</code></pre>
-<p>Os 3 <em>workflows</em> compartilham um <strong><code>concurrency group</code></strong> comum para evitar <em>race conditions</em> no <code>git push</code> final do auto-commit.</p>
+├── dashboard.yml       # push em main → deploy shinyapps via rsconnect
+└── paper.yml           # cron mensal (1º dia, 03:00 UTC) → re-render do paper</code></pre>
+<p><code>base_de_dados.yml</code> e <code>modelos.yml</code> compartilham <em>concurrency group</em> (<code>previsao-macro-pipeline-${{ github.ref }}</code>) — modelos depende de dados terem rodado. <code>dashboard.yml</code> está em grupo isolado (<code>previsao-macro-deploy-${{ github.ref }}</code>) para que o deploy rode em paralelo, lição aprendida quando os 3 compartilhavam o mesmo grupo e o deploy era cancelado a cada novo push (sequencialização indevida).</p>
 </section>
 <section id="dashboard-shiny-for-python" class="level3">
 <h3 class="anchored" data-anchor-id="dashboard-shiny-for-python">6.2 Dashboard Shiny for Python</h3>
@@ -807,7 +891,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><strong>Linguagem</strong></td>
-<td>Python 3.12</td>
+<td>Python 3.13</td>
 </tr>
 <tr class="even">
 <td><strong>Gerenciamento</strong></td>
@@ -815,23 +899,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td><strong>Coleta</strong></td>
-<td><code>requests</code> (BCB/SGS, BCB/ODATA, IBGE/SIDRA)</td>
+<td><code>requests</code> (BCB/SGS, BCB/ODATA, IBGE/SIDRA, FRED)</td>
 </tr>
 <tr class="even">
 <td><strong>Manipulação</strong></td>
-<td><code>pandas</code>, <code>numpy</code></td>
+<td><code>pandas</code>, <code>numpy</code>, <code>pyarrow</code></td>
 </tr>
 <tr class="odd">
 <td><strong>Modelagem clássica</strong></td>
-<td><code>skforecast</code>, <code>scikit-learn</code> (Ridge, BayesianRidge, LinearSVR, VotingRegressor)</td>
+<td><code>skforecast</code>, <code>scikit-learn</code> (Ridge, BayesianRidge, HuberRegressor)</td>
 </tr>
 <tr class="even">
-<td><strong>Foundation model</strong></td>
-<td><code>nixtla</code> (TimeGPT)</td>
+<td><strong>Foundation models</strong></td>
+<td><code>nixtla</code> (TimeGPT) + <code>chronos-forecasting</code> (Amazon Chronos T5)</td>
 </tr>
 <tr class="odd">
-<td><strong>Inferência estatística</strong></td>
-<td><code>statsmodels</code></td>
+<td><strong>Tom-Copom</strong></td>
+<td><code>google-genai</code> (Gemini Flash Lite) — apenas Selic</td>
+</tr>
+<tr class="even">
+<td><strong>Ensembles</strong></td>
+<td><code>ensembles.py</code> (raiz, compartilhado) — <code>numpy</code>, <code>scipy.optimize</code> (NNLS, SLSQP)</td>
+</tr>
+<tr class="odd">
+<td><strong>Avaliação estatística</strong></td>
+<td><code>statsmodels</code> (OLS + <code>cov_hac</code> Newey-West, <code>f_test</code> para Mincer-Zarnowitz)</td>
 </tr>
 <tr class="even">
 <td><strong>Transformações</strong></td>
@@ -839,23 +931,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td><strong>Visualização</strong></td>
-<td><code>plotnine</code>, <code>mizani</code></td>
+<td><code>plotnine</code>, <code>mizani</code>, <code>matplotlib</code></td>
 </tr>
 <tr class="even">
 <td><strong>Dashboard</strong></td>
 <td><code>shiny.express</code>, <code>shinyswatch</code>, <code>faicons</code></td>
 </tr>
 <tr class="odd">
+<td><strong>Paper</strong></td>
+<td>Quarto + LaTeX (xelatex)</td>
+</tr>
+<tr class="even">
 <td><strong>Deploy</strong></td>
 <td><code>rsconnect-python</code> → shinyapps.io</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>Orquestração</strong></td>
-<td>GitHub Actions (cron + workflow_dispatch)</td>
+<td>GitHub Actions (cron + workflow_dispatch + 4 <em>workflows</em>)</td>
+</tr>
+<tr class="even">
+<td><strong>Persistência</strong></td>
+<td>Apache Parquet (séries) + CSV (<em>tracking</em> append-only, testes estatísticos)</td>
 </tr>
 <tr class="odd">
-<td><strong>Persistência</strong></td>
-<td>Apache Parquet</td>
+<td><strong>Manutenção</strong></td>
+<td>Agentes <strong>Claude Code</strong> abrem PRs; humano revisa e mergeia</td>
 </tr>
 </tbody>
 </table>
@@ -909,12 +1009,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="próximos-passos" class="level2">
 <h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
 <ol type="1">
-<li><strong>Métricas formais de avaliação</strong> — RMSE/MAE <em>walk-forward</em> reportados como tabela no dashboard.</li>
-<li><strong>Simulador de cenários</strong> — choque exógeno em variável-X e propagação para previsões (em desenvolvimento na v2.0).</li>
-<li><strong>Cobertura de variáveis</strong> — adicionar inflação por núcleo, balança comercial, conta-corrente.</li>
-<li><strong>Comparação contra mediana Focus</strong> — viés sistemático do ensemble vs.&nbsp;expectativas de mercado.</li>
-<li><strong>Comentário automatizado por LLM</strong> — leitura das previsões e geração de boletim curto via Gemini.</li>
-<li><strong>Cache incremental do TimeGPT</strong> — evitar chamadas redundantes quando a série não mudou.</li>
+<li><strong>Walk-forward simulado retrospectivo</strong> — refit dos modelos clássicos (Ridge, Bayesian Ridge, Huber) com cortes históricos arbitrários (2024-01, 2024-02, …), expandindo a janela em 5–10×. Sprint própria; saída na versão <code>v2.0</code> do paper. Vai elevar <code>n</code> típico para <code>≥ 30</code> em várias combinações de IPCA e câmbio, permitindo Diebold-Mariano significativo onde hoje só temos MAE preliminar.</li>
+<li><strong>Comparação anual de Selic</strong> — comparar ensembles <strong>anuais</strong> de Selic <em>vs</em> Focus anual, removendo o viés do <em>proxy</em> mensal (Focus mensal de Selic é expansão do anual no Olinda).</li>
+<li><strong>Polish da sub-aba Tracking</strong> no dashboard — após reformulação na Sprint 3.5, ainda há ajustes visuais de eixos, <em>layout</em> e densidade dos cards.</li>
+<li><strong>Imersão self-paced</strong> — material didático em <a href="https://github.com/vitorwilher/previsao_macro/tree/main/curso"><code>curso/</code></a>: 5 cadernos Quarto + 2 <em>decks</em> reveal.js + <em>template-cliente</em> plug-and-play para implantação B2B.</li>
+<li><strong>Avaliação de não-tendenciosidade dentro de sub-amostras estáveis</strong> — Mincer-Zarnowitz hoje rejeita uniformemente em <code>h=1</code> na janela curta com choques recentes; sub-amostras pós-COVID-tardio devem permitir conclusões mais finas.</li>
+<li><strong>Cobertura de variáveis</strong> — adicionar IPCA por núcleo, balança comercial, conta-corrente.</li>
 </ol>
 <hr>
 </section>
@@ -923,9 +1023,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
 <li>Hyndman, R. J.; Athanasopoulos, G. (2021). <em>Forecasting: Principles and Practice</em> (3rd ed.). OTexts.</li>
-<li>Garza, A.; Mergenthaler-Canseco, M.; Olivares, K. G. <em>et al.</em> (2024). <em>TimeGPT-1</em>. Working paper, Nixtla.</li>
+<li>Bates, J. M.; Granger, C. W. J. (1969). <em>The Combination of Forecasts</em>. JORS 20(4).</li>
+<li>Granger, C. W. J.; Ramanathan, R. (1984). <em>Improved Methods of Combining Forecasts</em>. JoF 3(2).</li>
+<li>Stock, J. H.; Watson, M. W. (2004). <em>Combination Forecasts of Output Growth in a Seven-Country Data Set</em>. JoF 23(6).</li>
+<li>Timmermann, A. (2006). <em>Forecast Combinations</em>. Em <em>Handbook of Economic Forecasting</em>, vol.&nbsp;1.</li>
+<li>Wolpert, D. H. (1992). <em>Stacked Generalization</em>. Neural Networks 5(2).</li>
+<li>Diebold, F. X.; Mariano, R. S. (1995). <em>Comparing Predictive Accuracy</em>. JBES 13(3).</li>
+<li>Mincer, J. A.; Zarnowitz, V. (1969). <em>The Evaluation of Economic Forecasts</em>. NBER.</li>
+<li>Newey, W. K.; West, K. D. (1987). <em>A Simple, Positive Semi-Definite, HAC Covariance Matrix</em>. Econometrica 55(3).</li>
+<li>Garza, A.; Mergenthaler-Canseco, M. (2023). <em>TimeGPT-1</em>. arXiv:2310.03589.</li>
+<li>Ansari, A. F.; Stella, L.; Turkmen, C.; <em>et al.</em> (2024). <em>Chronos: Learning the Language of Time Series</em>. arXiv:2403.07815.</li>
 <li>Amat Rodrigo, J.; Escobar Ortiz, J. (2023). <em>skforecast: Time series forecasting with scikit-learn regressors</em>.</li>
-<li>Banco Central do Brasil. <em>Sistema Gerenciador de Séries Temporais (SGS)</em>.</li>
+<li>Banco Central do Brasil. <em>Sistema Gerenciador de Séries Temporais (SGS)</em> e <em>Olinda — API de Expectativas de Mercado (Focus)</em>.</li>
 <li>IBGE. <em>Sistema IBGE de Recuperação Automática (SIDRA)</em>.</li>
 </ul>
 

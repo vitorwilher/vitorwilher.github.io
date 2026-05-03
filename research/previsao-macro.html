@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Vitor Wilher">
+<meta name="dcterms.date" content="2026-05-03">
+<meta name="description" content="Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.">
+
+<title>Pipeline de Previsão Macro com Agentes de IA – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#resumo" id="toc-resumo" class="nav-link active" data-scroll-target="#resumo">Resumo</a></li>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#histórico-de-versões" id="toc-histórico-de-versões" class="nav-link" data-scroll-target="#histórico-de-versões">Histórico de versões</a></li>
+  <li><a href="#como-citar" id="toc-como-citar" class="nav-link" data-scroll-target="#como-citar">Como citar</a></li>
+  <li><a href="#comentários-críticas-e-diálogo" id="toc-comentários-críticas-e-diálogo" class="nav-link" data-scroll-target="#comentários-críticas-e-diálogo">Comentários, críticas e diálogo</a></li>
+  <li><a href="#veja-também" id="toc-veja-também" class="nav-link" data-scroll-target="#veja-também">Veja também</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pipeline de Previsão Macro com Agentes de IA</h1>
+<p class="subtitle lead">Arquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">Foundation Models</div>
+    <div class="quarto-category">TimeGPT</div>
+    <div class="quarto-category">Chronos</div>
+    <div class="quarto-category">scikit-learn</div>
+    <div class="quarto-category">statsmodels</div>
+    <div class="quarto-category">Walk-forward</div>
+    <div class="quarto-category">Diebold-Mariano</div>
+    <div class="quarto-category">Mincer-Zarnowitz</div>
+    <div class="quarto-category">BCB</div>
+    <div class="quarto-category">IBGE</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">Working Paper</div>
+    <div class="quarto-category">Agentes de IA</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Vitor Wilher <a href="mailto:vitorwilher@analisemacro.com.br" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Análise Macro
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 3, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Working paper · em desenvolvimento contínuo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Este é um <em>working paper</em> publicado em modelo de <strong>paper vivo</strong>: o documento é regenerado mensalmente pelo <em>workflow</em> <code>paper.yml</code> do projeto, com snapshots versionados (<code>v1.0</code>, <code>v1.1</code>, …) preservados internamente para garantir reprodutibilidade exata. <strong>Comentários e críticas são muito bem-vindos</strong> — se você é pesquisador(a) da área e quer dialogar sobre o exercício, escreva direto para <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a>.</p>
+</div>
+</div>
+<div style="text-align: center; margin: 2em 0;">
+<p><a href="previsao_macro_IA_publico.pdf" class="btn btn-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📄 Baixar PDF (versão atual — v1.1)</strong></a></p>
+</div>
+<hr>
+<section id="resumo" class="level2">
+<h2 class="anchored" data-anchor-id="resumo">Resumo</h2>
+<p>Este artigo documenta a arquitetura, a metodologia e a operação contínua do projeto <code>previsao_macro</code> — um <em>pipeline</em> reprodutível em Python para previsão quinzenal de <strong>IPCA</strong>, <strong>câmbio BRL/USD</strong>, <strong>PIB</strong> e <strong>Selic</strong>, mantido por <strong>agentes de IA</strong> via <em>GitHub Actions</em> e materializado em um painel público ao vivo. A contribuição é <strong>tripla</strong>:</p>
+<ol type="1">
+<li><strong>Arquitetura em quatro camadas</strong> (coleta, modelagem, <em>dashboard</em>, automação) com código compartilhado entre produção, paper e material didático, garantindo zero duplicação;</li>
+<li><strong>Validação estatística honesta</strong> de <strong>dez estratégias</strong> de combinação (<em>forecast combinations</em>) sobre <strong>seis modelos por variável</strong> — clássicos (Ridge, <em>Bayesian Ridge</em>, Huber) e <em>foundation models</em> (TimeGPT, Chronos T5) —, em janela <em>walk-forward</em> com filtros estritos anti-vazamento e <em>benchmark</em> contra a mediana do Boletim Focus do Banco Central do Brasil;</li>
+<li><strong>Operação contínua sem intervenção humana</strong> — três <em>workflows</em> GitHub Actions mantêm o pipeline rodando; um quarto re-renderiza este paper mensalmente. <em>Pull Requests</em> são abertos por agentes Claude Code e o autor revisa.</li>
+</ol>
+<p>Como evidência preliminar de que a arquitetura funciona, reportamos Diebold-Mariano (com correção HAC de Newey-West) e Mincer-Zarnowitz: três estratégias não-supervisionadas (média simples, mediana, <em>trimmed mean</em>) já vencem o Focus em <strong>Selic</strong> com <span class="math inline">\(p_{one}&lt;0{,}05\)</span> nos horizontes <span class="math inline">\(h=2\)</span> e <span class="math inline">\(h=3\)</span>, com a ressalva de que o Focus mensal de Selic é proxy do Focus anual; para IPCA, câmbio e PIB a janela atual de ~8 meses ainda é curta para significância formal, mas os MAE <em>walk-forward</em> indicam que ensembles ponderados reduzem o erro em até <strong>82%</strong> <em>vs</em> Focus em horizontes específicos do câmbio. A janela cresce mês a mês; a tese empírica deve estabilizar com mais <em>vintages</em>.</p>
+<p><strong>Palavras-chave:</strong> <em>Pipeline</em> reprodutível; Agentes de IA; <em>Forecast combination</em>; <em>Walk-forward</em>; Diebold-Mariano; Previsão Macroeconômica.</p>
+<p><strong>Códigos JEL:</strong> C53, C55, E27, E37.</p>
+<hr>
+</section>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>This paper documents the architecture, methodology and continuous operation of <code>previsao_macro</code> — a reproducible Python pipeline for fortnightly forecasting of <strong>headline inflation (IPCA)</strong>, the <strong>BRL/USD exchange rate</strong>, <strong>GDP</strong> and the <strong>Selic</strong> rate, maintained by <strong>AI agents</strong> through <em>GitHub Actions</em> and materialised in a public live dashboard. The contribution is <strong>three-fold</strong>:</p>
+<ol type="1">
+<li><strong>Four-layer architecture</strong> (data collection, modelling, dashboard, automation) with code shared between production, paper and didactic material, ensuring zero duplication;</li>
+<li><strong>Honest statistical validation</strong> of <strong>ten</strong> <em>forecast combinations</em> over <strong>six models per variable</strong> — classical (Ridge, Bayesian Ridge, Huber) and <em>foundation models</em> (TimeGPT, Chronos T5) —, in a <em>walk-forward</em> window with strict no-leakage filters and a benchmark against the median of the Brazilian Central Bank’s <em>Focus</em> Survey;</li>
+<li><strong>Continuous operation without human intervention</strong> — three GitHub Actions <em>workflows</em> keep the pipeline running; a fourth re-renders this paper monthly. <em>Pull Requests</em> are opened by Claude Code agents and the author reviews.</li>
+</ol>
+<p>As preliminary evidence that the architecture works, we report Diebold-Mariano (with Newey-West HAC correction) and Mincer-Zarnowitz tests: three unsupervised strategies (simple mean, median, <em>trimmed mean</em>) already beat the Focus for the <strong>Selic</strong> rate at <span class="math inline">\(p_{one}&lt;0.05\)</span> in horizons <span class="math inline">\(h=2\)</span> and <span class="math inline">\(h=3\)</span>, with the caveat that the monthly Selic Focus is a proxy of the annual Focus; for IPCA, the exchange rate and GDP, the current ~8-month window is still short for formal significance, but <em>walk-forward</em> MAE values indicate that weighted ensembles reduce error by up to <strong>82%</strong> <em>vs</em> Focus at specific exchange-rate horizons. The window grows month by month; the empirical thesis should stabilise with more <em>vintages</em>.</p>
+<p><strong>Keywords:</strong> Reproducible pipeline; AI agents; <em>Forecast combination</em>; <em>Walk-forward</em>; Diebold-Mariano; Macroeconomic Forecasting.</p>
+<p><strong>JEL Codes:</strong> C53, C55, E27, E37.</p>
+<hr>
+</section>
+<section id="histórico-de-versões" class="level2">
+<h2 class="anchored" data-anchor-id="histórico-de-versões">Histórico de versões</h2>
+<p>Cada <em>release</em> do <em>paper</em> é acompanhada de um sumário explícito do que mudou, do porquê e das evidências empíricas acrescentadas. <em>Snapshots</em> completos de cada versão são preservados internamente (<code>paper/versions/v&lt;N&gt;_AAAA-MM-DD/</code>) para garantir reprodutibilidade exata.</p>
+<section id="v1.1-3-de-maio-de-2026" class="level3">
+<h3 class="anchored" data-anchor-id="v1.1-3-de-maio-de-2026">[v1.1] — 3 de maio de 2026</h3>
+<p>Reposicionamento editorial: o paper passa a documentar primariamente a <strong>arquitetura + agentes de IA</strong> como contribuição do projeto. A comparação contra Focus continua como evidência, mas a contribuição central deixa de ser uma tese empírica isolada e passa a ser o <strong>método de produção</strong> (paper, painel e Imersão compartilham código, regeneram-se sob o mesmo <em>workflow</em> e auditam-se sob a mesma metodologia).</p>
+<p><strong>Principais mudanças vs v1.0:</strong></p>
+<ul>
+<li>Título, subtítulo, Resumo, Abstract, Introdução e Conclusão reescritos.</li>
+<li><strong>§3.4 Pesos <span class="math inline">\(1/RMSE\)</span></strong> (subseção nova) com referências explícitas a Bates-Granger 1969, Stock-Watson 2004, Aksu-Gunter 1992 (NRLS — <em>Normalized Reciprocal Least Squares</em>) e Timmermann 2006.</li>
+<li><strong>§10 Limitações e extensões</strong> (seção nova) documenta a janela curta (~8 meses), Mincer-Zarnowitz uniforme em <span class="math inline">\(h=1\)</span> e Selic <em>vs</em> Focus mensal. Inclui <em>roadmap</em> explícito do <strong>walk-forward simulado retrospectivo</strong> como Sprint própria, com saída na versão <code>v2.0</code>.</li>
+<li><strong>Heatmap Diebold-Mariano</strong> corrigido: antes mostrava IPCA/Câmbio/PIB como “sem dados” porque o filtro <span class="math inline">\(n \geq 30\)</span> deixava <code>p_one = NaN</code>; agora plota todas as células com cobertura &gt; 0, em cinza neutro com label <code>n=N</code> quando insuficiente.</li>
+<li><strong>Tabela de MAE walk-forward</strong> transposta — Estratégia em linhas, Variável em colunas — para caber em A4 <em>portrait</em>.</li>
+<li>Códigos JEL ajustados para C53, C55, E27, E37 (refletem o reenquadramento — mais ML/automação, menos política monetária diretamente).</li>
+</ul>
+<p>Metodologia (walk-forward, DM HAC, MZ), bibliografia e escolha das 10 estratégias <strong>inalteradas</strong>.</p>
+</section>
+<section id="v1.0-2-de-maio-de-2026" class="level3">
+<h3 class="anchored" data-anchor-id="v1.0-2-de-maio-de-2026">[v1.0] — 2 de maio de 2026</h3>
+<p>Primeira versão completa do paper, em <strong>Quarto + LaTeX</strong> com edição dual (<code>_base</code> auditável, <code>_publico</code> para leitor) e <em>titlepage</em> com autoria, abstract bilíngue PT+EN e códigos JEL — formato de periódico internacional.</p>
+<p><strong>Pipeline empírico:</strong> <em>walk-forward honesto</em> sobre <code>tracking.csv</code> (versionado desde 2025-09-02), com refit dos modelos clássicos por <em>vintage</em> + <em>foundation models</em> zero-shot (TimeGPT, Chronos T5). Para Selic, modelo proprietário <strong>Tom-Copom</strong> que extrai sentimento das atas do COPOM via LLM (Gemini Flash Lite). Filtros anti-vazamento estritos: <code>Horizonte_dias ≥ 7</code> e <code>Vintage_Focus &lt; min(Data da Previsão, Data de Referência)</code>.</p>
+<p><strong>Suite de 10 estratégias</strong> em 4 famílias (não-supervisionadas, ponderadas estáticas, adaptativas, <em>stacking</em>), implementadas em código compartilhado (<code>ensembles.py</code>) entre produção, paper e curso.</p>
+<p><strong>Validação estatística:</strong></p>
+<ol type="1">
+<li><strong>Diebold-Mariano</strong> com correção HAC (Newey-West, <em>lag</em> = <span class="math inline">\(h-1\)</span>) — perda quadrática, <span class="math inline">\(p_{one}\)</span> unilateral <span class="math inline">\(H_1\)</span>: ensemble melhor que Focus.</li>
+<li><strong>Mincer-Zarnowitz</strong> — <span class="math inline">\(F\)</span>-test conjunto <span class="math inline">\(H_0: \alpha = 0 \wedge \beta = 1\)</span> via <code>statsmodels</code>.</li>
+</ol>
+<p><strong>Achados centrais (janela inicial ~8 meses):</strong></p>
+<ul>
+<li><strong>Selic</strong>: três estratégias não-supervisionadas (média simples, mediana, <em>trimmed mean</em>) batem o Focus em DM com <span class="math inline">\(p_{one} &lt; 0{,}05\)</span> em <span class="math inline">\(h=2\)</span> e <span class="math inline">\(h=3\)</span> — confirma o <em>forecast combination puzzle</em> de Stock-Watson 2004 em janela curta. Ressalva: Focus mensal de Selic é proxy do anual.</li>
+<li><strong>Câmbio</strong>: <code>granger_ramanathan_C</code> mostra MAE 0,078 <em>vs</em> 0,445 do Focus nos mesmos pares (redução de ~82%), mas <span class="math inline">\(n = 8\)</span> — economicamente relevante, estatisticamente indeterminado.</li>
+<li><strong>IPCA, PIB</strong>: janela curta para significância formal; MAE preliminar favorece ensembles ponderados.</li>
+</ul>
+<p><strong>Bibliografia:</strong> 13 entradas cobrindo combinação clássica (Bates-Granger 1969, Granger-Ramanathan 1984, Stock-Watson 2004, Timmermann 2006, Aksu-Gunter 1992), <em>stacking</em> (Wolpert 1992), testes (Diebold-Mariano 1995, Mincer-Zarnowitz 1969, Newey-West 1987), <em>forecasting</em> (Hyndman-Athanasopoulos 2021), <em>foundation models</em> (Chronos — Ansari et al.&nbsp;2024; TimeGPT — Garza &amp; Mergenthaler-Canseco 2023) e BCB Focus.</p>
+</section>
+<section id="próximas-versões" class="level3">
+<h3 class="anchored" data-anchor-id="próximas-versões">Próximas versões</h3>
+<p>A <strong>v2.0</strong> está em planejamento e atacará prioritariamente: (i) <strong>walk-forward simulado retrospectivo</strong> dos modelos clássicos (Ridge, <em>Bayesian Ridge</em>, Huber) com cortes históricos arbitrários — refit em 2024-01, 2024-02, … — expandindo a janela em 5–10× e elevando <span class="math inline">\(n\)</span> típico para <span class="math inline">\(\geq 30\)</span> em várias combinações de IPCA e câmbio; (ii) avaliação de não-tendenciosidade dentro de sub-amostras estáveis; (iii) comparação <strong>anual</strong> de ensembles de Selic <em>vs</em> Focus anual, removendo o viés do <em>proxy</em> mensal.</p>
+<hr>
+</section>
+</section>
+<section id="como-citar" class="level2">
+<h2 class="anchored" data-anchor-id="como-citar">Como citar</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">@unpublished</span>{<span class="ot">wilher_2026_previsao_macro</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span>    = {Wilher, Vitor},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>     = {Pipeline de Previs<span class="ch">\~</span>ao Macro com Agentes de IA:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               arquitetura, valida<span class="ch">\c</span>{c}<span class="ch">\~</span>ao estat<span class="ch">\'</span>istica e</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               operacionaliza<span class="ch">\c</span>{c}<span class="ch">\~</span>ao cont<span class="ch">\'</span>inua de um sistema</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>               reprodut<span class="ch">\'</span>ivel para IPCA, C<span class="ch">\^</span>ambio, PIB e Selic},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>      = {Working paper, vers<span class="ch">\~</span>ao 1.1},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>      = {2026},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">month</span>     = {mai},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">url</span>       = {https://vitorwilher.github.io/research/previsao-macro.html}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="comentários-críticas-e-diálogo" class="level2">
+<h2 class="anchored" data-anchor-id="comentários-críticas-e-diálogo">Comentários, críticas e diálogo</h2>
+<p>Este <em>paper</em> é mantido em modelo aberto à crítica acadêmica. Se você é pesquisador(a), praticante de mercado ou estudante e quer comentar, criticar, replicar ou estender o exercício, escreva diretamente para:</p>
+<p>📧 <strong><a href="mailto:vitorwilher@analisemacro.com.br?subject=Previsao%20Macro%20—%20comentários">vitorwilher@analisemacro.com.br</a></strong></p>
+<p>Sugestões metodológicas, indicações de literatura adicional, replicações em outros bancos centrais ou períodos, e críticas aos critérios de validação empírica são particularmente bem-vindas.</p>
+<hr>
+</section>
+<section id="veja-também" class="level2">
+<h2 class="anchored" data-anchor-id="veja-também">Veja também</h2>
+<ul>
+<li>🛠️ <strong>Ficha técnica do projeto</strong> (CRISP-DM, arquitetura, agentes de IA na manutenção): <a href="../projetos/previsao-macro.html">Previsão Macro — projeto</a></li>
+<li>📊 <strong>Painel ao vivo</strong>: <a href="https://vitorwilher.shinyapps.io/previsao_macro/">vitorwilher.shinyapps.io/previsao_macro</a></li>
+<li>💻 <strong>Código-fonte</strong>: <a href="https://github.com/vitorwilher/previsao_macro">github.com/vitorwilher/previsao_macro</a> (open-source)</li>
+</ul>
+<hr>
+<div class="text-muted" style="font-size: 0.85em;">
+<p><em>O pipeline <code>previsao_macro</code> é open-source. Esta versão pública do paper esconde os chunks Python para leitura fluida; a edição auditável (com chunks visíveis) e os snapshots por release são preservados em <code>paper/versions/v&lt;N&gt;_AAAA-MM-DD/</code> no repositório.</em></p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
