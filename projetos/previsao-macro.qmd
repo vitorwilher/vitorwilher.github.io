@@ -1,13 +1,19 @@
 ---
-title: "Previsão Macro — Painel Automatizado de Previsões para IPCA, Câmbio, PIB e Selic"
-date: "2026-04-29"
-categories: [Python, Shiny, skforecast, Nixtla, TimeGPT, scikit-learn, statsmodels, BCB, IBGE, Macroeconomia, Política Monetária, GitHub Actions, shinyapps.io]
-description: "Pipeline reprodutível em Python que coleta séries macroeconômicas via APIs do Banco Central e do IBGE, gera previsões de IPCA, câmbio (BRL/USD), PIB e Selic com ensemble de modelos econométricos, machine learning e foundation models de séries temporais (Nixtla TimeGPT), e publica os resultados em um dashboard Shiny atualizado quinzenalmente via GitHub Actions."
+title: "Previsão Macro — Pipeline com Agentes de IA para IPCA, Câmbio, PIB e Selic"
+date: "2026-05-03"
+categories: [Python, Shiny, scikit-learn, skforecast, Nixtla, TimeGPT, Chronos, Foundation Models, statsmodels, Walk-forward, Diebold-Mariano, Mincer-Zarnowitz, BCB, IBGE, Macroeconomia, Política Monetária, GitHub Actions, shinyapps.io, Quarto, Agentes de IA, Claude Code]
+description: "Pipeline reprodutível em Python que coleta séries macro via APIs (BCB, IBGE, IPEADATA, FRED), gera previsões quinzenais de IPCA, câmbio, PIB e Selic com ensemble de 10 estratégias sobre 6 modelos por variável (clássicos + foundation models), valida estatisticamente contra o Boletim Focus do BCB (Diebold-Mariano + Mincer-Zarnowitz) e publica em dashboard Shiny atualizado por GitHub Actions. A manutenção é feita por agentes Claude Code via Pull Requests."
 image: "previsao-macro-capa.png"
 execute:
   eval: false
   echo: true
 ---
+
+::: {.callout-note}
+## 📄 Working paper
+
+Esta é a **ficha técnica do projeto** (metodologia CRISP-DM, arquitetura, agentes de IA na manutenção). Para o *working paper* completo com Resumo bilíngue, *changelog* público, Diebold-Mariano contra Focus e PDF para download, veja [**Previsão Macro — paper**](../research/previsao-macro.html).
+:::
 
 ## Visão Geral
 
@@ -18,12 +24,12 @@ Este projeto implementa, seguindo a metodologia **CRISP-DM** (*Cross-Industry St
 - **PIB** — Produto Interno Bruto (IBGE/SCN)
 - **Selic** — Taxa básica de juros (BCB/SGS)
 
-A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via **GitHub Actions**, alimentando um *dashboard* **Shiny for Python** publicado em **shinyapps.io**. A modelagem combina abordagens clássicas (regressões penalizadas, SVR, transformações de Box-Cox via `PowerTransformer`) com *foundation models* de séries temporais (**Nixtla TimeGPT**) através de uma camada de *ensemble* via `VotingRegressor`.
+A coleta acontece automaticamente em ciclos quinzenais (dias 1, 8, 15 e 22 de cada mês) via **GitHub Actions**, alimentando um *dashboard* **Shiny for Python** publicado em **shinyapps.io**. A modelagem combina **modelos clássicos** (Ridge, Bayesian Ridge, Huber via `scikit-learn`) com *foundation models* de séries temporais (**Nixtla TimeGPT** e **Amazon Chronos T5**) e, no caso da Selic, com o modelo proprietário **Tom-Copom** que extrai sentimento das atas via LLM. Sobre os 6 modelos por variável, o módulo `ensembles.py` aplica **10 estratégias de combinação** (3 não-supervisionadas + 7 supervisionadas), avaliadas em janela *walk-forward* contra o Boletim Focus do BCB com testes formais (Diebold-Mariano com correção HAC e Mincer-Zarnowitz).
 
 ::: {.callout-tip}
 ## Tese central
 
-A automação de ponta a ponta — coleta, tratamento, modelagem, deploy — torna viável a publicação contínua de previsões macroeconômicas calibradas, com custo marginal próximo de zero por ciclo. A combinação de modelos clássicos e *foundation models* de séries temporais reduz o risco de previsões enviesadas por uma única classe de algoritmo.
+A contribuição do projeto é **tripla**: (1) **arquitetura reprodutível em produção**, com `ensembles.py` na raiz importado por produção, paper e curso — zero duplicação de código; (2) **validação estatística honesta** de 10 estratégias de ensemble em janela *walk-forward* com filtros estritos anti-vazamento e benchmark formal contra o Focus do BCB; (3) **operação contínua sem intervenção humana** — Pull Requests são abertos por agentes **Claude Code**, o autor revisa e mergeia. Um quarto *workflow* (`paper.yml`) re-renderiza o paper acadêmico mensalmente. O resultado é um sistema de previsão que opera 24/7, é auditável até a última linha de código e auto-documenta-se na forma de um paper Quarto regenerado mês a mês.
 :::
 
 ---
@@ -219,33 +225,39 @@ Cada variável tem seu próprio script para permitir **paralelização e debug i
 | `08-pib.py` | PIB | Trimestral |
 | `09-selic.py` | Selic | Mensal |
 
-### 4.2 Ensemble clássico + foundation model
+### 4.2 Modelos individuais por variável
 
-Cada script combina duas famílias:
+Cada `06-09.py` mantém **6 modelos por variável** combinados em famílias:
 
-**Família 1 — Modelos clássicos** via `skforecast.ForecasterAutoreg`:
+**Família 1 — Clássicos** (refit por *vintage* via `skforecast`):
 
 ```python
-from sklearn.linear_model import Ridge, BayesianRidge
-from sklearn.svm import LinearSVR
-from sklearn.ensemble import VotingRegressor
+from sklearn.linear_model import Ridge, BayesianRidge, HuberRegressor
 from sklearn.preprocessing import PowerTransformer
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
-
-estimators = [
-    ("ridge", Ridge()),
-    ("bayes", BayesianRidge()),
-    ("svr",   LinearSVR()),
-]
-voting = VotingRegressor(estimators)
-forecaster = ForecasterAutoreg(
-    regressor=voting,
-    lags=12,
-    transformer_y=PowerTransformer(),
-)
 ```
 
-**Família 2 — Foundation model**: `Nixtla TimeGPT` chamado via `nixtla.NixtlaClient` com `NIXTLA_API_KEY`. Modelo *zero-shot* — não requer treino local; consome a série histórica e devolve previsão + intervalo de confiança.
+Ridge, Bayesian Ridge e Huber treinados com as ~116 séries macro do `df_mensal.parquet` como *features* defasadas, transformação `PowerTransformer` (Yeo-Johnson) para estabilizar variância, `lags=12`.
+
+**Família 2 — Foundation models** (zero-shot, sem treino na *vintage*):
+
+- **Nixtla TimeGPT** — API hospedada da Nixtla, paga por requisição; com `try/except` para tolerar falha de cota sem quebrar o pipeline.
+- **Chronos T5-small e T5-base** (Amazon, *open-source*) — tokenizam séries como linguagem; rodam local via `chronos-forecasting`, peso ~75 MB e ~250 MB respectivamente, cache via HuggingFace.
+
+**Família 3 — Tom-Copom** (apenas Selic): score de sentimento *hawkish/dovish* das atas do COPOM, extraído via LLM (Gemini Flash Lite) e calibrado em pontos percentuais da Selic — metodologia completa em [Sentimento_COPOM](https://github.com/vitorwilher/Sentimento_COPOM).
+
+### 4.3 Suite de 10 estratégias de ensemble (`ensembles.py`)
+
+Sobre os 6 modelos por variável, o módulo `ensembles.py` na raiz do repositório aplica 10 estratégias agrupadas em 4 famílias:
+
+| Família | Estratégias |
+|---|---|
+| **Não-supervisionadas** | Média simples, Mediana, Trimmed mean (10%) |
+| **Ponderadas estáticas** | $1/RMSE$, Bates-Granger (1969), Granger-Ramanathan (1984) variant C |
+| **Adaptativas** | Janela rolante 12m, Forgetting factor 0,95 |
+| **Stacking** | Pesos por horizonte, Stacking Ridge (k-fold) |
+
+`ensembles.py` é importado pelos três contextos do projeto — produção (`06-09.py`), paper (`paper/14-ensembles.py`) e curso (`curso/cadernos/03-ensembles.qmd`) — garantindo zero duplicação. Uma estratégia nova é desenvolvida uma vez e flui para todos.
 
 ### 4.3 Saídas padronizadas
 
@@ -277,17 +289,25 @@ previsao/
 
 ## 5. Avaliação
 
-### 5.1 Métricas por modelo
+A avaliação tem **duas camadas**:
 
-A avaliação acontece dentro de cada script (`06`–`09`). Reporta-se RMSE/MAE *out-of-sample* em janela de validação fixa, com comparação contra:
+### 5.1 Métricas walk-forward (paper/13-walkforward.py)
 
-- *Baseline* ingênuo (último valor observado);
-- Modelo individual (Ridge, BayesianRidge, LinearSVR) sem ensemble;
-- TimeGPT zero-shot puro.
+Para cada *vintage* `t` no `tracking.csv` (versionado *append-only* desde 2025-09-02), o pipeline calcula MAE/RMSE/Bias para cada `(Variável × Modelo × Horizonte)` usando apenas informação disponível em `t-1`. Filtros estritos anti-vazamento:
 
-### 5.2 Intervalos de confiança
+- `Horizonte_dias ≥ 7` — exclui pseudo-previsões "para o passado" quando o modelo roda tarde no mês.
+- `Vintage_Focus < min(Data da Previsão, Data de Referência)` — garante que o Focus capturado nunca viu o realizado.
 
-O ensemble `VotingRegressor` não fornece IC nativo — os intervalos exibidos no dashboard usam a parametrização quantílica do TimeGPT (`level=[80, 95]`).
+Saída: `paper/results/wf_modelos.parquet` (modelos individuais) e `paper/results/wf_ensembles.parquet` (10 estratégias).
+
+### 5.2 Testes estatísticos formais (paper/15-avaliacao.py)
+
+Para cada `(Variável × Estratégia × Horizonte)` com `n ≥ 30` pares observados:
+
+- **Diebold-Mariano** com correção HAC (Newey-West, `lag = h-1`) — perda quadrática, $p_{one}$ unilateral $H_1$: ensemble melhor que Focus. Implementado via `statsmodels.OLS` + `cov_hac`.
+- **Mincer-Zarnowitz** — OLS `Observado = α + β · Previsão`, $F$-test conjunto $H_0: \alpha = 0 \wedge \beta = 1$.
+
+Os artefatos (`dm_tests.csv`, `mz_regressions.csv`) e as figuras 300 dpi (heatmap DM, scatter MZ, séries de erro) são consumidos diretamente pelo paper Quarto e pela sub-aba "Performance Histórica" do dashboard. Resultados completos em [Previsão Macro — paper](../research/previsao-macro.html).
 
 ### 5.3 Validação visual no painel
 
@@ -301,16 +321,17 @@ O *dashboard* sobrepõe histórico × previsão × IC de forma que o usuário de
 
 ## 6. Implantação
 
-### 6.1 Três workflows no GitHub Actions
+### 6.1 Quatro workflows no GitHub Actions
 
 ```
 .github/workflows/
 ├── base_de_dados.yml   # cron 00:00 UTC dias 1, 8, 15, 22 → roda 03→05
 ├── modelos.yml         # cron 01:00 UTC dias 1, 8, 15, 22 → roda 06→09
-└── dashboard.yml       # cron 02:00 UTC dias 1, 8, 15, 22 → deploy shinyapps
+├── dashboard.yml       # push em main → deploy shinyapps via rsconnect
+└── paper.yml           # cron mensal (1º dia, 03:00 UTC) → re-render do paper
 ```
 
-Os 3 *workflows* compartilham um **`concurrency group`** comum para evitar *race conditions* no `git push` final do auto-commit.
+`base_de_dados.yml` e `modelos.yml` compartilham *concurrency group* (`previsao-macro-pipeline-${{ github.ref }}`) — modelos depende de dados terem rodado. `dashboard.yml` está em grupo isolado (`previsao-macro-deploy-${{ github.ref }}`) para que o deploy rode em paralelo, lição aprendida quando os 3 compartilhavam o mesmo grupo e o deploy era cancelado a cada novo push (sequencialização indevida).
 
 ### 6.2 Dashboard Shiny for Python
 
@@ -373,19 +394,23 @@ previsao_macro/
 
 | Camada | Tecnologia |
 |---|---|
-| **Linguagem** | Python 3.12 |
+| **Linguagem** | Python 3.13 |
 | **Gerenciamento** | Poetry |
-| **Coleta** | `requests` (BCB/SGS, BCB/ODATA, IBGE/SIDRA) |
-| **Manipulação** | `pandas`, `numpy` |
-| **Modelagem clássica** | `skforecast`, `scikit-learn` (Ridge, BayesianRidge, LinearSVR, VotingRegressor) |
-| **Foundation model** | `nixtla` (TimeGPT) |
-| **Inferência estatística** | `statsmodels` |
+| **Coleta** | `requests` (BCB/SGS, BCB/ODATA, IBGE/SIDRA, FRED) |
+| **Manipulação** | `pandas`, `numpy`, `pyarrow` |
+| **Modelagem clássica** | `skforecast`, `scikit-learn` (Ridge, BayesianRidge, HuberRegressor) |
+| **Foundation models** | `nixtla` (TimeGPT) + `chronos-forecasting` (Amazon Chronos T5) |
+| **Tom-Copom** | `google-genai` (Gemini Flash Lite) — apenas Selic |
+| **Ensembles** | `ensembles.py` (raiz, compartilhado) — `numpy`, `scipy.optimize` (NNLS, SLSQP) |
+| **Avaliação estatística** | `statsmodels` (OLS + `cov_hac` Newey-West, `f_test` para Mincer-Zarnowitz) |
 | **Transformações** | `sklearn.preprocessing.PowerTransformer` |
-| **Visualização** | `plotnine`, `mizani` |
+| **Visualização** | `plotnine`, `mizani`, `matplotlib` |
 | **Dashboard** | `shiny.express`, `shinyswatch`, `faicons` |
+| **Paper** | Quarto + LaTeX (xelatex) |
 | **Deploy** | `rsconnect-python` → shinyapps.io |
-| **Orquestração** | GitHub Actions (cron + workflow_dispatch) |
-| **Persistência** | Apache Parquet |
+| **Orquestração** | GitHub Actions (cron + workflow_dispatch + 4 *workflows*) |
+| **Persistência** | Apache Parquet (séries) + CSV (*tracking* append-only, testes estatísticos) |
+| **Manutenção** | Agentes **Claude Code** abrem PRs; humano revisa e mergeia |
 
 ---
 
@@ -440,12 +465,12 @@ rsconnect deploy shiny . --title previsao_macro
 
 ## Próximos Passos
 
-1. **Métricas formais de avaliação** — RMSE/MAE *walk-forward* reportados como tabela no dashboard.
-2. **Simulador de cenários** — choque exógeno em variável-X e propagação para previsões (em desenvolvimento na v2.0).
-3. **Cobertura de variáveis** — adicionar inflação por núcleo, balança comercial, conta-corrente.
-4. **Comparação contra mediana Focus** — viés sistemático do ensemble vs. expectativas de mercado.
-5. **Comentário automatizado por LLM** — leitura das previsões e geração de boletim curto via Gemini.
-6. **Cache incremental do TimeGPT** — evitar chamadas redundantes quando a série não mudou.
+1. **Walk-forward simulado retrospectivo** — refit dos modelos clássicos (Ridge, Bayesian Ridge, Huber) com cortes históricos arbitrários (2024-01, 2024-02, …), expandindo a janela em 5–10×. Sprint própria; saída na versão `v2.0` do paper. Vai elevar `n` típico para `≥ 30` em várias combinações de IPCA e câmbio, permitindo Diebold-Mariano significativo onde hoje só temos MAE preliminar.
+2. **Comparação anual de Selic** — comparar ensembles **anuais** de Selic *vs* Focus anual, removendo o viés do *proxy* mensal (Focus mensal de Selic é expansão do anual no Olinda).
+3. **Polish da sub-aba Tracking** no dashboard — após reformulação na Sprint 3.5, ainda há ajustes visuais de eixos, *layout* e densidade dos cards.
+4. **Imersão self-paced** — material didático em [`curso/`](https://github.com/vitorwilher/previsao_macro/tree/main/curso): 5 cadernos Quarto + 2 *decks* reveal.js + *template-cliente* plug-and-play para implantação B2B.
+5. **Avaliação de não-tendenciosidade dentro de sub-amostras estáveis** — Mincer-Zarnowitz hoje rejeita uniformemente em `h=1` na janela curta com choques recentes; sub-amostras pós-COVID-tardio devem permitir conclusões mais finas.
+6. **Cobertura de variáveis** — adicionar IPCA por núcleo, balança comercial, conta-corrente.
 
 ---
 
@@ -453,7 +478,16 @@ rsconnect deploy shiny . --title previsao_macro
 
 - Wirth, R.; Hipp, J. (2000). *CRISP-DM: Towards a Standard Process Model for Data Mining*.
 - Hyndman, R. J.; Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts.
-- Garza, A.; Mergenthaler-Canseco, M.; Olivares, K. G. *et al.* (2024). *TimeGPT-1*. Working paper, Nixtla.
+- Bates, J. M.; Granger, C. W. J. (1969). *The Combination of Forecasts*. JORS 20(4).
+- Granger, C. W. J.; Ramanathan, R. (1984). *Improved Methods of Combining Forecasts*. JoF 3(2).
+- Stock, J. H.; Watson, M. W. (2004). *Combination Forecasts of Output Growth in a Seven-Country Data Set*. JoF 23(6).
+- Timmermann, A. (2006). *Forecast Combinations*. Em *Handbook of Economic Forecasting*, vol. 1.
+- Wolpert, D. H. (1992). *Stacked Generalization*. Neural Networks 5(2).
+- Diebold, F. X.; Mariano, R. S. (1995). *Comparing Predictive Accuracy*. JBES 13(3).
+- Mincer, J. A.; Zarnowitz, V. (1969). *The Evaluation of Economic Forecasts*. NBER.
+- Newey, W. K.; West, K. D. (1987). *A Simple, Positive Semi-Definite, HAC Covariance Matrix*. Econometrica 55(3).
+- Garza, A.; Mergenthaler-Canseco, M. (2023). *TimeGPT-1*. arXiv:2310.03589.
+- Ansari, A. F.; Stella, L.; Turkmen, C.; *et al.* (2024). *Chronos: Learning the Language of Time Series*. arXiv:2403.07815.
 - Amat Rodrigo, J.; Escobar Ortiz, J. (2023). *skforecast: Time series forecasting with scikit-learn regressors*.
-- Banco Central do Brasil. *Sistema Gerenciador de Séries Temporais (SGS)*.
+- Banco Central do Brasil. *Sistema Gerenciador de Séries Temporais (SGS)* e *Olinda — API de Expectativas de Mercado (Focus)*.
 - IBGE. *Sistema IBGE de Recuperação Automática (SIDRA)*.
