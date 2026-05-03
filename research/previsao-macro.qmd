@@ -1,0 +1,142 @@
+---
+title: "Pipeline de Previsão Macro com Agentes de IA"
+subtitle: "Arquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic"
+date: "2026-05-03"
+author:
+  - name: Vitor Wilher
+    affiliation: Análise Macro
+    email: vitorwilher@analisemacro.com.br
+categories: [Python, Quarto, Foundation Models, TimeGPT, Chronos, scikit-learn, statsmodels, Walk-forward, Diebold-Mariano, Mincer-Zarnowitz, BCB, IBGE, Macroeconomia, Política Monetária, Working Paper, Agentes de IA]
+description: "Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB."
+image: "previsao_macro_heatmap.png"
+---
+
+::: {.callout-note}
+## Working paper · em desenvolvimento contínuo
+
+Este é um *working paper* publicado em modelo de **paper vivo**: o documento é regenerado mensalmente pelo *workflow* `paper.yml` do projeto, com snapshots versionados (`v1.0`, `v1.1`, …) preservados internamente para garantir reprodutibilidade exata. **Comentários e críticas são muito bem-vindos** — se você é pesquisador(a) da área e quer dialogar sobre o exercício, escreva direto para [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br).
+:::
+
+<div style="text-align: center; margin: 2em 0;">
+[**📄 Baixar PDF (versão atual — v1.1)**](previsao_macro_IA_publico.pdf){.btn .btn-primary role="button" style="font-size: 1.1em; padding: 0.8em 2em;"}
+</div>
+
+---
+
+## Resumo
+
+Este artigo documenta a arquitetura, a metodologia e a operação contínua do projeto `previsao_macro` — um *pipeline* reprodutível em Python para previsão quinzenal de **IPCA**, **câmbio BRL/USD**, **PIB** e **Selic**, mantido por **agentes de IA** via *GitHub Actions* e materializado em um painel público ao vivo. A contribuição é **tripla**:
+
+1. **Arquitetura em quatro camadas** (coleta, modelagem, *dashboard*, automação) com código compartilhado entre produção, paper e material didático, garantindo zero duplicação;
+2. **Validação estatística honesta** de **dez estratégias** de combinação (*forecast combinations*) sobre **seis modelos por variável** — clássicos (Ridge, *Bayesian Ridge*, Huber) e *foundation models* (TimeGPT, Chronos T5) ---, em janela *walk-forward* com filtros estritos anti-vazamento e *benchmark* contra a mediana do Boletim Focus do Banco Central do Brasil;
+3. **Operação contínua sem intervenção humana** — três *workflows* GitHub Actions mantêm o pipeline rodando; um quarto re-renderiza este paper mensalmente. *Pull Requests* são abertos por agentes Claude Code e o autor revisa.
+
+Como evidência preliminar de que a arquitetura funciona, reportamos Diebold-Mariano (com correção HAC de Newey-West) e Mincer-Zarnowitz: três estratégias não-supervisionadas (média simples, mediana, *trimmed mean*) já vencem o Focus em **Selic** com $p_{one}<0{,}05$ nos horizontes $h=2$ e $h=3$, com a ressalva de que o Focus mensal de Selic é proxy do Focus anual; para IPCA, câmbio e PIB a janela atual de ~8 meses ainda é curta para significância formal, mas os MAE *walk-forward* indicam que ensembles ponderados reduzem o erro em até **82%** *vs* Focus em horizontes específicos do câmbio. A janela cresce mês a mês; a tese empírica deve estabilizar com mais *vintages*.
+
+**Palavras-chave:** *Pipeline* reprodutível; Agentes de IA; *Forecast combination*; *Walk-forward*; Diebold-Mariano; Previsão Macroeconômica.
+
+**Códigos JEL:** C53, C55, E27, E37.
+
+---
+
+## Abstract
+
+This paper documents the architecture, methodology and continuous operation of `previsao_macro` — a reproducible Python pipeline for fortnightly forecasting of **headline inflation (IPCA)**, the **BRL/USD exchange rate**, **GDP** and the **Selic** rate, maintained by **AI agents** through *GitHub Actions* and materialised in a public live dashboard. The contribution is **three-fold**:
+
+1. **Four-layer architecture** (data collection, modelling, dashboard, automation) with code shared between production, paper and didactic material, ensuring zero duplication;
+2. **Honest statistical validation** of **ten** *forecast combinations* over **six models per variable** — classical (Ridge, Bayesian Ridge, Huber) and *foundation models* (TimeGPT, Chronos T5) ---, in a *walk-forward* window with strict no-leakage filters and a benchmark against the median of the Brazilian Central Bank's *Focus* Survey;
+3. **Continuous operation without human intervention** — three GitHub Actions *workflows* keep the pipeline running; a fourth re-renders this paper monthly. *Pull Requests* are opened by Claude Code agents and the author reviews.
+
+As preliminary evidence that the architecture works, we report Diebold-Mariano (with Newey-West HAC correction) and Mincer-Zarnowitz tests: three unsupervised strategies (simple mean, median, *trimmed mean*) already beat the Focus for the **Selic** rate at $p_{one}<0.05$ in horizons $h=2$ and $h=3$, with the caveat that the monthly Selic Focus is a proxy of the annual Focus; for IPCA, the exchange rate and GDP, the current ~8-month window is still short for formal significance, but *walk-forward* MAE values indicate that weighted ensembles reduce error by up to **82%** *vs* Focus at specific exchange-rate horizons. The window grows month by month; the empirical thesis should stabilise with more *vintages*.
+
+**Keywords:** Reproducible pipeline; AI agents; *Forecast combination*; *Walk-forward*; Diebold-Mariano; Macroeconomic Forecasting.
+
+**JEL Codes:** C53, C55, E27, E37.
+
+---
+
+## Histórico de versões
+
+Cada *release* do *paper* é acompanhada de um sumário explícito do que mudou, do porquê e das evidências empíricas acrescentadas. *Snapshots* completos de cada versão são preservados internamente (`paper/versions/v<N>_AAAA-MM-DD/`) para garantir reprodutibilidade exata.
+
+### [v1.1] — 3 de maio de 2026
+
+Reposicionamento editorial: o paper passa a documentar primariamente a **arquitetura + agentes de IA** como contribuição do projeto. A comparação contra Focus continua como evidência, mas a contribuição central deixa de ser uma tese empírica isolada e passa a ser o **método de produção** (paper, painel e Imersão compartilham código, regeneram-se sob o mesmo *workflow* e auditam-se sob a mesma metodologia).
+
+**Principais mudanças vs v1.0:**
+
+- Título, subtítulo, Resumo, Abstract, Introdução e Conclusão reescritos.
+- **§3.4 Pesos $1/RMSE$** (subseção nova) com referências explícitas a Bates-Granger 1969, Stock-Watson 2004, Aksu-Gunter 1992 (NRLS — *Normalized Reciprocal Least Squares*) e Timmermann 2006.
+- **§10 Limitações e extensões** (seção nova) documenta a janela curta (~8 meses), Mincer-Zarnowitz uniforme em $h=1$ e Selic *vs* Focus mensal. Inclui *roadmap* explícito do **walk-forward simulado retrospectivo** como Sprint própria, com saída na versão `v2.0`.
+- **Heatmap Diebold-Mariano** corrigido: antes mostrava IPCA/Câmbio/PIB como "sem dados" porque o filtro $n \geq 30$ deixava `p_one = NaN`; agora plota todas as células com cobertura > 0, em cinza neutro com label `n=N` quando insuficiente.
+- **Tabela de MAE walk-forward** transposta — Estratégia em linhas, Variável em colunas — para caber em A4 *portrait*.
+- Códigos JEL ajustados para C53, C55, E27, E37 (refletem o reenquadramento — mais ML/automação, menos política monetária diretamente).
+
+Metodologia (walk-forward, DM HAC, MZ), bibliografia e escolha das 10 estratégias **inalteradas**.
+
+### [v1.0] — 2 de maio de 2026
+
+Primeira versão completa do paper, em **Quarto + LaTeX** com edição dual (`_base` auditável, `_publico` para leitor) e *titlepage* com autoria, abstract bilíngue PT+EN e códigos JEL — formato de periódico internacional.
+
+**Pipeline empírico:** *walk-forward honesto* sobre `tracking.csv` (versionado desde 2025-09-02), com refit dos modelos clássicos por *vintage* + *foundation models* zero-shot (TimeGPT, Chronos T5). Para Selic, modelo proprietário **Tom-Copom** que extrai sentimento das atas do COPOM via LLM (Gemini Flash Lite). Filtros anti-vazamento estritos: `Horizonte_dias ≥ 7` e `Vintage_Focus < min(Data da Previsão, Data de Referência)`.
+
+**Suite de 10 estratégias** em 4 famílias (não-supervisionadas, ponderadas estáticas, adaptativas, *stacking*), implementadas em código compartilhado (`ensembles.py`) entre produção, paper e curso.
+
+**Validação estatística:**
+
+1. **Diebold-Mariano** com correção HAC (Newey-West, *lag* = $h-1$) — perda quadrática, $p_{one}$ unilateral $H_1$: ensemble melhor que Focus.
+2. **Mincer-Zarnowitz** — $F$-test conjunto $H_0: \alpha = 0 \wedge \beta = 1$ via `statsmodels`.
+
+**Achados centrais (janela inicial ~8 meses):**
+
+- **Selic**: três estratégias não-supervisionadas (média simples, mediana, *trimmed mean*) batem o Focus em DM com $p_{one} < 0{,}05$ em $h=2$ e $h=3$ — confirma o *forecast combination puzzle* de Stock-Watson 2004 em janela curta. Ressalva: Focus mensal de Selic é proxy do anual.
+- **Câmbio**: `granger_ramanathan_C` mostra MAE 0,078 *vs* 0,445 do Focus nos mesmos pares (redução de ~82%), mas $n = 8$ — economicamente relevante, estatisticamente indeterminado.
+- **IPCA, PIB**: janela curta para significância formal; MAE preliminar favorece ensembles ponderados.
+
+**Bibliografia:** 13 entradas cobrindo combinação clássica (Bates-Granger 1969, Granger-Ramanathan 1984, Stock-Watson 2004, Timmermann 2006, Aksu-Gunter 1992), *stacking* (Wolpert 1992), testes (Diebold-Mariano 1995, Mincer-Zarnowitz 1969, Newey-West 1987), *forecasting* (Hyndman-Athanasopoulos 2021), *foundation models* (Chronos — Ansari et al. 2024; TimeGPT — Garza & Mergenthaler-Canseco 2023) e BCB Focus.
+
+### Próximas versões
+
+A **v2.0** está em planejamento e atacará prioritariamente: (i) **walk-forward simulado retrospectivo** dos modelos clássicos (Ridge, *Bayesian Ridge*, Huber) com cortes históricos arbitrários — refit em 2024-01, 2024-02, … — expandindo a janela em 5–10× e elevando $n$ típico para $\geq 30$ em várias combinações de IPCA e câmbio; (ii) avaliação de não-tendenciosidade dentro de sub-amostras estáveis; (iii) comparação **anual** de ensembles de Selic *vs* Focus anual, removendo o viés do *proxy* mensal.
+
+---
+
+## Como citar
+
+```bibtex
+@unpublished{wilher_2026_previsao_macro,
+  author    = {Wilher, Vitor},
+  title     = {Pipeline de Previs\~ao Macro com Agentes de IA:
+               arquitetura, valida\c{c}\~ao estat\'istica e
+               operacionaliza\c{c}\~ao cont\'inua de um sistema
+               reprodut\'ivel para IPCA, C\^ambio, PIB e Selic},
+  note      = {Working paper, vers\~ao 1.1},
+  year      = {2026},
+  month     = {mai},
+  url       = {https://vitorwilher.github.io/research/previsao-macro.html}
+}
+```
+
+---
+
+## Comentários, críticas e diálogo
+
+Este *paper* é mantido em modelo aberto à crítica acadêmica. Se você é pesquisador(a), praticante de mercado ou estudante e quer comentar, criticar, replicar ou estender o exercício, escreva diretamente para:
+
+📧 **[vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br?subject=Previsao%20Macro%20—%20comentários)**
+
+Sugestões metodológicas, indicações de literatura adicional, replicações em outros bancos centrais ou períodos, e críticas aos critérios de validação empírica são particularmente bem-vindas.
+
+---
+
+## Veja também
+
+- 🛠️ **Ficha técnica do projeto** (CRISP-DM, arquitetura, agentes de IA na manutenção): [Previsão Macro — projeto](../projetos/previsao-macro.html)
+- 📊 **Painel ao vivo**: [vitorwilher.shinyapps.io/previsao_macro](https://vitorwilher.shinyapps.io/previsao_macro/)
+- 💻 **Código-fonte**: [github.com/vitorwilher/previsao_macro](https://github.com/vitorwilher/previsao_macro) (open-source)
+
+---
+
+::: {.text-muted style="font-size: 0.85em;"}
+*O pipeline `previsao_macro` é open-source. Esta versão pública do paper esconde os chunks Python para leitura fluida; a edição auditável (com chunks visíveis) e os snapshots por release são preservados em `paper/versions/v<N>_AAAA-MM-DD/` no repositório.*
+:::
