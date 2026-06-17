@@ -1,5 +1,14 @@
 [
   {
+    "listing": "/teaching/index.html",
+    "items": [
+      "/teaching/ai-applications.html",
+      "/teaching/imersao-claude-code.html",
+      "/teaching/workflow-portfolio.html",
+      "/teaching/transformers-llms.html"
+    ]
+  },
+  {
     "listing": "/projetos/index.html",
     "items": [
       "/projetos/previsao-macro.html",
@@ -7,13 +16,6 @@
       "/projetos/metodologia.html",
       "/projetos/newsletter-digest-bot.html",
       "/projetos/roi-diagnostico.html"
-    ]
-  },
-  {
-    "listing": "/teaching/index.html",
-    "items": [
-      "/teaching/workflow-portfolio.html",
-      "/teaching/transformers-llms.html"
     ]
   },
   {
