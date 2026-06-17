@@ -1,0 +1,128 @@
+---
+title: "Projeto Boletim Focus — resumo executivo escrito por um agente e enviado por e-mail"
+date: "2026-06-12"
+categories: [Python, Claude Code, Routine, Agentes de IA, BCB, Boletim Focus, Macroeconomia, GitHub Actions, Automação, E-mail, SMTP, IPCA, Selic, PIB, Câmbio]
+description: "Automação semanal que baixa o PDF do Boletim Focus do Banco Central, extrai o texto e — numa routine agendada do Claude Code — gera um resumo executivo que é enviado por e-mail. A divisão é deliberada: os scripts Python só baixam e extraem (determinístico); o agente lê o texto e escreve o resumo, nunca inventando números; GitHub Actions agendam o download e disparam o envio."
+image: focus-email-capa.jpg
+execute:
+  eval: false
+  echo: true
+---
+
+![Resumo do Focus entregue automaticamente na caixa de entrada](focus-email-capa.jpg){width=100%}
+
+## Visão Geral
+
+O **Projeto Boletim Focus** automatiza, de ponta a ponta, o acompanhamento do **Boletim Focus do Banco Central do Brasil**. Toda segunda-feira o pipeline baixa o **PDF oficial** do Focus, extrai o texto e — numa **routine agendada do Claude Code** — produz um **resumo executivo** que é **enviado por e-mail**, sem qualquer intervenção manual.
+
+::: {.callout-important}
+## A divisão de responsabilidades é o coração do projeto
+
+O sistema separa de forma estrita o que é **determinístico** do que exige **julgamento**:
+
+- **Os scripts Python só baixam e extraem.** `baixar_focus.py` busca o PDF mais recente no site do BCB e `extrair_texto.py` o converte em texto puro. Eles **não interpretam nem resumem** nada.
+- **O resumo é escrito pelo agente.** Na routine, o agente (Claude) **lê o texto extraído** e redige o resumo. **Regra de ouro: nunca inventa número** — toda mediana ou valor citado precisa estar literalmente no texto do PDF.
+- **O envio é automático.** Um GitHub Action dispara quando o resumo é publicado e manda o e-mail via SMTP do Gmail.
+:::
+
+::: {.callout-note}
+## Como se diferencia do Previsão Macro
+
+O [Previsão Macro](previsao-macro.html) **gera previsões próprias** (ensemble de modelos, dashboard Shiny, validação estatística). Este projeto **não modela nada**: ele lê o boletim oficial do BCB e produz um *digest* curado por um agente. São complementares — um prevê, o outro resume a expectativa de mercado consolidada pelo Focus.
+:::
+
+---
+
+## Arquitetura — três estágios
+
+```{mermaid}
+flowchart TB
+  subgraph S1[" 1 · GitHub Action — focus-download.yml (segunda 9h15 BRT) "]
+    direction LR
+    BCB[(bcb.gov.br<br>R&#123;AAAAMMDD&#125;.pdf)] --> BAIXAR[src/baixar_focus.py<br>baixa PDF, recua em feriado]
+    BAIXAR --> EXTRAIR[src/extrair_texto.py<br>PDF → texto]
+    EXTRAIR --> DATA[(data/focus_AAAA-MM-DD.txt<br>commitado em main)]
+  end
+
+  subgraph S2[" 2 · Routine do Claude Code (o agente) "]
+    direction LR
+    DATA --> LER[lê o .txt mais recente<br>freshness + sanity check]
+    LER --> RESUMO[escreve resumo executivo<br>+ 3 revisões · nunca inventa número]
+    RESUMO --> HTML[(output/focus/focus_AAAA-MM-DD.html<br>logo AM · commitado em main)]
+  end
+
+  subgraph S3[" 3 · GitHub Action — focus-enviar.yml "]
+    direction LR
+    HTML --> ENVIAR[src/enviar_email.py<br>SMTP Gmail · Secrets]
+    ENVIAR --> MAIL([E-mail semanal])
+  end
+
+  S1 --> S2 --> S3
+```
+
+> Repare: a pasta **`src/` nunca é executada pela routine**. Os scripts rodam nos GitHub Actions (download/extração antes, envio depois). O agente apenas **lê o `.txt`** e **escreve o `.html`** — a fronteira entre código determinístico e julgamento do agente é nítida.
+
+---
+
+## 1. Download e extração (GitHub Action)
+
+O workflow `focus-download.yml` roda toda segunda às **9h15 BRT** (cron `15 12 * * 1`, UTC) e também sob disparo manual:
+
+- **Fonte:** página oficial <https://www.bcb.gov.br/publicacoes/focus>, com PDF no padrão `https://www.bcb.gov.br/content/focus/focus/R{AAAAMMDD}.pdf`;
+- **Feriados:** quando a segunda é feriado, o BCB publica no próximo dia útil — por isso o download parte da última segunda e **recua dia a dia** até achar o PDF;
+- **Saída:** `src/baixar_focus.py` salva o PDF e `src/extrair_texto.py` gera o `.txt`; o Action **commita** `data/focus_*.{pdf,txt}` de volta em `main`.
+
+Convenção de nomes: `focus_AAAA-MM-DD` pela **data de publicação** (ex.: `focus_2026-06-12.{pdf,txt,html}`).
+
+## 2. A routine do agente
+
+Quando a routine inicia, os arquivos `data/focus_*.{pdf,txt}` já estão em `main`. A tarefa do agente:
+
+1. **Localiza o `.txt` mais recente.** Se não houver nenhum, para — o Action não rodou;
+2. **Verifica frescor:** 0–3 dias → segue; 4–7 dias → segue com `[REVISAR]` no assunto; > 7 dias → para;
+3. **Sanity check:** ao menos 2 000 caracteres e presença de `IPCA`, `Selic`, `PIB` — se falhar, o layout do PDF pode ter mudado, então para;
+4. **Lê e escreve:**
+   - **Resumo executivo** em até 200 palavras, em prosa, começando pelas medianas (IPCA do ano, Selic fim de ano, PIB, câmbio), com **citações literais entre aspas** dos números-chave;
+   - **Três principais revisões da semana** no formato `Variável (ano): anterior → atual. Hipótese: motivo.`;
+5. **Monta o HTML** em `output/focus/focus_AAAA-MM-DD.html` — logo da Análise Macro no topo, título `Focus — AAAA-MM-DD`, azul de marca `#282f6b`;
+6. **Inspeciona** (logo aparece, medianas batem com o `.txt`, há citação literal) e **commita/push** o HTML em `main`.
+
+::: {.callout-tip}
+## Nunca inventar número
+
+A regra mais importante da routine: todo valor citado **tem de existir no texto extraído**. Se não houver hipótese sólida para uma revisão, o agente escreve *"sem hipótese clara — pode ser ruído amostral"* em vez de especular. É o que torna um resumo gerado por LLM confiável o suficiente para ir direto ao e-mail.
+:::
+
+## 3. Envio por e-mail (GitHub Action)
+
+O push do `output/focus/focus_*.html` em `main` dispara o `focus-enviar.yml`, que roda `src/enviar_email.py` e envia o HTML como corpo do e-mail via **SMTP do Gmail** (apenas biblioteca padrão). As credenciais ficam nos **Secrets** do repositório, nunca no código:
+
+| Secret | Uso |
+|---|---|
+| `FOCUS_SMTP_USER` | Gmail remetente |
+| `FOCUS_SMTP_APP_PASSWORD` | senha de app de 16 dígitos |
+| `FOCUS_EMAIL_DEST` | destinatário(s) |
+| `FOCUS_EMAIL_BCC` | cópia oculta (opcional) |
+
+> Diferente de um conector que só cria *rascunho*, este módulo **dispara a mensagem de fato** — é a peça que fecha o ciclo 100% automático.
+
+---
+
+## Tecnologias
+
+| Camada | Tecnologia |
+|---|---|
+| **Linguagem** | Python 3 |
+| **Download** | `requests` (PDF do BCB, com recuo por feriado) |
+| **Extração** | extração de texto do PDF → `.txt` |
+| **Resumo** | agente **Claude** numa **routine** do Claude Code |
+| **Entregável** | HTML com identidade Análise Macro (`output/focus/`) |
+| **Envio** | `src/enviar_email.py` — SMTP do Gmail (stdlib) |
+| **Orquestração** | 2 GitHub Actions (`focus-download.yml` agendado, `focus-enviar.yml` por push) |
+| **Testes** | `pytest` (marcadores `network` / `not network`) |
+
+---
+
+## Repositório
+
+Código aberto em [github.com/vitorwilher/resumo-focus](https://github.com/vitorwilher/resumo-focus).
