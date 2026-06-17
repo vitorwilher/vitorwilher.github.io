@@ -3,7 +3,9 @@ title: "Curriculum Vitae"
 ---
 
 ## Vítor Wilher
-*Cientista de Dados Sênior e Tech Lead*
+*Especialista em Dados e IA Generativa*
+
+[⬇ Baixar CV em PDF](cv.pdf){.btn .btn-primary role="button" download="Vitor-Wilher-CV.pdf"}
 
 ---
 
@@ -18,13 +20,13 @@ title: "Curriculum Vitae"
 
 ## Resumo das Habilidades
 
-Cientista de Dados com sólida formação em Economia e Estatística e mais de 10 anos de experiência com engenharia, análise e ciência de dados. Apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.
+Especialista em Dados e IA Generativa com sólida formação em Economia e Estatística e mais de 10 anos de experiência com engenharia, análise e ciência de dados. Apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.
 
-**Hard Skills**: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs e IA Generativa.
+**Hard Skills**: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs, IA Generativa, Cloud Computing, Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora e Amazon Redshift.  
 
-**Soft Skills**: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor.
+**Soft Skills**: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor
 
-**Principal interesse atual**: uso intensivo de IA Generativa aplicada em economia e finanças. Atualmente é o *Tech Lead* da **Análise Macro**, empresa especializada em treinamento e consultoria em análise de dados.
+Principal Interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.
 
 ---
 
@@ -53,7 +55,14 @@ Cientista de Dados com sólida formação em Economia e Estatística e mais de 1
 
 ## Experiência Profissional
 
-### Cientista de Dados Sênior e Tech Lead · Análise Macro · *2015 – atual*
+### Especialista em Dados · SENAC-RJ · *2026 – atual*
+
+Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o corresponsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro.
+
+### Especialista em IA Generativa · Análise Macro · *2015 – atual*
+- Desenvolvimento de agentes inteligentes, produtos baseados em LLMs e modelos clássicos de ML;
+- Ciclo completo de produtos de IA Generativa e ML, da concepção e design de solução à entrega e sustentação em produção; 
+- Construção e implementação de pipelines de IA;
 - Construção de Agentes de IA com uso de RAG, ajuste de *prompts*, monitoramento e avaliação de performance com LangSmith e QA-Eval, orquestração com LangGraph;
 - Uso de técnicas de NLP para desenvolvimento de análise de sentimentos aplicada às atas do COPOM;
 - Construção e automatização de *pipelines* de ETL com SQL, R e Python para coleta e tratamento automatizado de dados econômicos e financeiros de fontes como B3, Banco Central e SIDRA/IBGE;
