@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-06-02">
-<meta name="description" content="Pipeline leve em Python que coleta as expectativas do Boletim Focus do Banco Central (IPCA, Câmbio, Selic e PIB) toda segunda-feira, calcula a variação semanal das medianas e gera um relatório em Markdown. Um routine agendado do Claude Code dispara o pipeline e entrega o resumo por e-mail — sem servidor, sem chaves de API.">
+<meta name="dcterms.date" content="2026-06-12">
+<meta name="description" content="Automação semanal que baixa o PDF do Boletim Focus do Banco Central, extrai o texto e — numa routine agendada do Claude Code — gera um resumo executivo que é enviado por e-mail. A divisão é deliberada: os scripts Python só baixam e extraem (determinístico); o agente lê o texto e escreve o resumo, nunca inventando números; GitHub Actions agendam o download e disparam o envio.">
 
-<title>Projeto Focus — Digest semanal do Boletim Focus por e-mail com routine do Claude Code – Portfólio do VW</title>
+<title>Projeto Boletim Focus — resumo executivo escrito por um agente e enviado por e-mail – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -112,35 +112,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -211,13 +182,12 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
-  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
-  <li><a href="#fonte-de-dados" id="toc-fonte-de-dados" class="nav-link" data-scroll-target="#fonte-de-dados">Fonte de dados</a></li>
-  <li><a href="#fluxo-do-pipeline" id="toc-fluxo-do-pipeline" class="nav-link" data-scroll-target="#fluxo-do-pipeline">Fluxo do pipeline</a></li>
-  <li><a href="#exemplo-de-saída" id="toc-exemplo-de-saída" class="nav-link" data-scroll-target="#exemplo-de-saída">Exemplo de saída</a></li>
-  <li><a href="#automação-routine-do-claude-code" id="toc-automação-routine-do-claude-code" class="nav-link" data-scroll-target="#automação-routine-do-claude-code">Automação — routine do Claude Code</a></li>
+  <li><a href="#arquitetura-três-estágios" id="toc-arquitetura-três-estágios" class="nav-link" data-scroll-target="#arquitetura-três-estágios">Arquitetura — três estágios</a></li>
+  <li><a href="#download-e-extração-github-action" id="toc-download-e-extração-github-action" class="nav-link" data-scroll-target="#download-e-extração-github-action">1. Download e extração (GitHub Action)</a></li>
+  <li><a href="#a-routine-do-agente" id="toc-a-routine-do-agente" class="nav-link" data-scroll-target="#a-routine-do-agente">2. A routine do agente</a></li>
+  <li><a href="#envio-por-e-mail-github-action" id="toc-envio-por-e-mail-github-action" class="nav-link" data-scroll-target="#envio-por-e-mail-github-action">3. Envio por e-mail (GitHub Action)</a></li>
   <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
-  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos passos</a></li>
+  <li><a href="#repositório" id="toc-repositório" class="nav-link" data-scroll-target="#repositório">Repositório</a></li>
   </ul>
 </nav>
     </div>
@@ -226,27 +196,29 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Projeto Focus — Digest semanal do Boletim Focus por e-mail com routine do Claude Code</h1>
+<h1 class="title">Projeto Boletim Focus — resumo executivo escrito por um agente e enviado por e-mail</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
+    <div class="quarto-category">Claude Code</div>
+    <div class="quarto-category">Routine</div>
+    <div class="quarto-category">Agentes de IA</div>
     <div class="quarto-category">BCB</div>
     <div class="quarto-category">Boletim Focus</div>
     <div class="quarto-category">Macroeconomia</div>
-    <div class="quarto-category">Expectativas de Mercado</div>
+    <div class="quarto-category">GitHub Actions</div>
     <div class="quarto-category">Automação</div>
-    <div class="quarto-category">Claude Code</div>
-    <div class="quarto-category">Routine</div>
     <div class="quarto-category">E-mail</div>
+    <div class="quarto-category">SMTP</div>
     <div class="quarto-category">IPCA</div>
-    <div class="quarto-category">Câmbio</div>
     <div class="quarto-category">Selic</div>
     <div class="quarto-category">PIB</div>
+    <div class="quarto-category">Câmbio</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Pipeline leve em Python que coleta as expectativas do Boletim Focus do Banco Central (IPCA, Câmbio, Selic e PIB) toda segunda-feira, calcula a variação semanal das medianas e gera um relatório em Markdown. Um routine agendado do Claude Code dispara o pipeline e entrega o resumo por e-mail — sem servidor, sem chaves de API.
+    Automação semanal que baixa o PDF do Boletim Focus do Banco Central, extrai o texto e — numa routine agendada do Claude Code — gera um resumo executivo que é enviado por e-mail. A divisão é deliberada: os scripts Python só baixam e extraem (determinístico); o agente lê o texto e escreve o resumo, nunca inventando números; GitHub Actions agendam o download e disparam o envio.
   </div>
 </div>
 
@@ -257,7 +229,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 2, 2026</p>
+      <p class="date">June 12, 2026</p>
     </div>
   </div>
   
@@ -272,13 +244,30 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="focus-email-capa.jpg" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Digest semanal do Boletim Focus entregue na caixa de entrada</figcaption>
+<figcaption>Resumo do Focus entregue automaticamente na caixa de entrada</figcaption>
 </figure>
 </div>
 <section id="visão-geral" class="level2">
 <h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
-<p>O <strong>Projeto Focus</strong> é um <em>pipeline</em> enxuto que automatiza uma tarefa simples e recorrente: acompanhar o <strong>Boletim Focus do Banco Central do Brasil</strong>. Toda segunda-feira de manhã ele coleta as expectativas de mercado para as quatro variáveis macro mais acompanhadas — <strong>IPCA, Câmbio, Selic e PIB</strong> — calcula a <strong>variação semanal</strong> das medianas e gera um relatório legível em Markdown.</p>
-<p>O diferencial está na entrega: em vez de cron/launchd na máquina local, quem dispara o ciclo é um <strong>routine agendado do Claude Code</strong> (<code>/schedule</code>) — um agente remoto que roda o pipeline e <strong>envia o resumo por e-mail</strong> automaticamente. O resultado chega na caixa de entrada sem nenhuma intervenção manual.</p>
+<p>O <strong>Projeto Boletim Focus</strong> automatiza, de ponta a ponta, o acompanhamento do <strong>Boletim Focus do Banco Central do Brasil</strong>. Toda segunda-feira o pipeline baixa o <strong>PDF oficial</strong> do Focus, extrai o texto e — numa <strong>routine agendada do Claude Code</strong> — produz um <strong>resumo executivo</strong> que é <strong>enviado por e-mail</strong>, sem qualquer intervenção manual.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>A divisão de responsabilidades é o coração do projeto
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O sistema separa de forma estrita o que é <strong>determinístico</strong> do que exige <strong>julgamento</strong>:</p>
+<ul>
+<li><strong>Os scripts Python só baixam e extraem.</strong> <code>baixar_focus.py</code> busca o PDF mais recente no site do BCB e <code>extrair_texto.py</code> o converte em texto puro. Eles <strong>não interpretam nem resumem</strong> nada.</li>
+<li><strong>O resumo é escrito pelo agente.</strong> Na routine, o agente (Claude) <strong>lê o texto extraído</strong> e redige o resumo. <strong>Regra de ouro: nunca inventa número</strong> — toda mediana ou valor citado precisa estar literalmente no texto do PDF.</li>
+<li><strong>O envio é automático.</strong> Um GitHub Action dispara quando o resumo é publicado e manda o e-mail via SMTP do Gmail.</li>
+</ul>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -289,83 +278,36 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Este <strong>não</strong> é um projeto de <em>forecasting</em>. Enquanto o <a href="previsao-macro.html">Previsão Macro</a> <strong>gera previsões próprias</strong> (ensemble de modelos clássicos + <em>foundation models</em>, dashboard Shiny, validação estatística contra o Focus), o Projeto Focus apenas <strong>lê e resume as expectativas do próprio Focus</strong>. É um <em>digest</em> informativo, leve e sem modelagem — pensado para chegar pronto no e-mail toda segunda.</p>
+<p>O <a href="previsao-macro.html">Previsão Macro</a> <strong>gera previsões próprias</strong> (ensemble de modelos, dashboard Shiny, validação estatística). Este projeto <strong>não modela nada</strong>: ele lê o boletim oficial do BCB e produz um <em>digest</em> curado por um agente. São complementares — um prevê, o outro resume a expectativa de mercado consolidada pelo Focus.</p>
 </div>
 </div>
 <hr>
 </section>
-<section id="motivação" class="level2">
-<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
-<p>O Boletim Focus é divulgado pelo BCB às segundas-feiras de manhã, consolidando as expectativas coletadas até a sexta anterior. Abrir o site, baixar os dados e comparar com a semana passada é um ritual manual que se repete toda semana. O projeto elimina esse atrito com três escolhas deliberadas:</p>
-<ol type="1">
-<li><strong>Sem chaves nem segredos</strong> — a <a href="https://dadosabertos.bcb.gov.br/dataset/expectativas-mercado">API de Expectativas de Mercado do BCB</a> é pública e não exige autenticação;</li>
-<li><strong>Saída em Markdown</strong> — versionável, legível e fácil de embutir no corpo de um e-mail;</li>
-<li><strong>Entrega <em>zero-touch</em></strong> — o routine do Claude Code roda o pipeline e despacha o resumo sozinho.</li>
-</ol>
-<hr>
-</section>
-<section id="fonte-de-dados" class="level2">
-<h2 class="anchored" data-anchor-id="fonte-de-dados">Fonte de dados</h2>
-<p><strong>API de Expectativas de Mercado do BCB</strong> (Olinda / OData, pública e sem autenticação).</p>
-<ul>
-<li>Base: <code>https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata</code></li>
-<li>Endpoint: <code>ExpectativasMercadoAnuais</code> — expectativas por ano-referência</li>
-<li>Filtro padrão: <code>baseCalculo eq 0</code> (amostra completa de respondentes)</li>
-<li>Campos: <code>Indicador, Data, DataReferencia, Media, Mediana, DesvioPadrao, Minimo, Maximo, numeroRespondentes</code></li>
-</ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>ID</th>
-<th>Indicador (API)</th>
-<th>Descrição</th>
-<th>Unidade</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>ipca</code></td>
-<td><code>IPCA</code></td>
-<td>Inflação (IPCA) esperada</td>
-<td>% a.a.</td>
-</tr>
-<tr class="even">
-<td><code>cambio</code></td>
-<td><code>Câmbio</code></td>
-<td>Taxa de câmbio R<span class="math inline">\(/US\)</span></td>
-<td>R<span class="math inline">\(/US\)</span></td>
-</tr>
-<tr class="odd">
-<td><code>selic</code></td>
-<td><code>Selic</code></td>
-<td>Taxa básica de juros (meta)</td>
-<td>% a.a.</td>
-</tr>
-<tr class="even">
-<td><code>pib</code></td>
-<td><code>PIB Total</code></td>
-<td>Crescimento do PIB</td>
-<td>% a.a.</td>
-</tr>
-</tbody>
-</table>
-<blockquote class="blockquote">
-<p>Os nomes em “Indicador (API)” precisam bater <strong>exatamente</strong> com os valores retornados pela API (atenção à acentuação, ex.: <code>Câmbio</code>).</p>
-</blockquote>
-<hr>
-</section>
-<section id="fluxo-do-pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="fluxo-do-pipeline">Fluxo do pipeline</h2>
+<section id="arquitetura-três-estágios" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura-três-estágios">Arquitetura — três estágios</h2>
 <div class="cell" data-layout-align="default">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  BCB[(API Expectativas&lt;br&gt;BCB / Olinda)] --&gt; COL[collector.py&lt;br&gt;coleta + retry/backoff]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  COL --&gt; RAW[(data/raw/&lt;br&gt;CSV por indicador)]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  RAW --&gt; TRA[transform.py&lt;br&gt;foto recente + variação semanal]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  TRA --&gt; PROC[(data/processed/&lt;br&gt;CSV consolidado)]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  PROC --&gt; REP[report.py&lt;br&gt;relatório Markdown]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  REP --&gt; OUT[(reports/latest.md&lt;br&gt;+ focus_AAAA-MM-DD.md)]</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ROUT[Routine Claude Code&lt;br&gt;agendado] -.dispara.-&gt; COL</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  OUT -.resumo.-&gt; MAIL([E-mail semanal])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart TB</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph S1[" 1 · GitHub Action — focus-download.yml (segunda 9h15 BRT) "]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    direction LR</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    BCB[(bcb.gov.br&lt;br&gt;R&amp;#123;AAAAMMDD&amp;#125;.pdf)] --&gt; BAIXAR[src/baixar_focus.py&lt;br&gt;baixa PDF, recua em feriado]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    BAIXAR --&gt; EXTRAIR[src/extrair_texto.py&lt;br&gt;PDF → texto]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    EXTRAIR --&gt; DATA[(data/focus_AAAA-MM-DD.txt&lt;br&gt;commitado em main)]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  subgraph S2[" 2 · Routine do Claude Code (o agente) "]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    direction LR</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    DATA --&gt; LER[lê o .txt mais recente&lt;br&gt;freshness + sanity check]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    LER --&gt; RESUMO[escreve resumo executivo&lt;br&gt;+ 3 revisões · nunca inventa número]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    RESUMO --&gt; HTML[(output/focus/focus_AAAA-MM-DD.html&lt;br&gt;logo AM · commitado em main)]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  subgraph S3[" 3 · GitHub Action — focus-enviar.yml "]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    direction LR</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    HTML --&gt; ENVIAR[src/enviar_email.py&lt;br&gt;SMTP Gmail · Secrets]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    ENVIAR --&gt; MAIL([E-mail semanal])</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  S1 --&gt; S2 --&gt; S3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
@@ -376,74 +318,82 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<ol type="1">
-<li><strong>Coleta</strong> (<code>collector.coletar_todos</code>) — consulta a API para cada indicador numa janela de 30 dias (traz divulgações suficientes para a variação), com <em>retry/backoff</em> porque a API do BCB ocasionalmente oscila;</li>
-<li><strong>Persistência bruta</strong> — CSV por indicador em <code>data/raw/</code>;</li>
-<li><strong>Transformação</strong> (<code>transform.consolidar</code>) — extrai a foto mais recente por ano-referência e calcula a variação frente à divulgação anterior;</li>
-<li><strong>Persistência consolidada</strong> — CSV achatado em <code>data/processed/</code>;</li>
-<li><strong>Relatório</strong> (<code>report.gerar_markdown</code>) — gera <code>reports/focus_&lt;data&gt;.md</code> e atualiza <code>reports/latest.md</code>.</li>
-</ol>
+<blockquote class="blockquote">
+<p>Repare: a pasta <strong><code>src/</code> nunca é executada pela routine</strong>. Os scripts rodam nos GitHub Actions (download/extração antes, envio depois). O agente apenas <strong>lê o <code>.txt</code></strong> e <strong>escreve o <code>.html</code></strong> — a fronteira entre código determinístico e julgamento do agente é nítida.</p>
+</blockquote>
 <hr>
 </section>
-<section id="exemplo-de-saída" class="level2">
-<h2 class="anchored" data-anchor-id="exemplo-de-saída">Exemplo de saída</h2>
-<p>Trecho do relatório gerado (divulgação de 29/05/2026):</p>
+<section id="download-e-extração-github-action" class="level2">
+<h2 class="anchored" data-anchor-id="download-e-extração-github-action">1. Download e extração (GitHub Action)</h2>
+<p>O workflow <code>focus-download.yml</code> roda toda segunda às <strong>9h15 BRT</strong> (cron <code>15 12 * * 1</code>, UTC) e também sob disparo manual:</p>
+<ul>
+<li><strong>Fonte:</strong> página oficial <a href="https://www.bcb.gov.br/publicacoes/focus" class="uri">https://www.bcb.gov.br/publicacoes/focus</a>, com PDF no padrão <code>https://www.bcb.gov.br/content/focus/focus/R{AAAAMMDD}.pdf</code>;</li>
+<li><strong>Feriados:</strong> quando a segunda é feriado, o BCB publica no próximo dia útil — por isso o download parte da última segunda e <strong>recua dia a dia</strong> até achar o PDF;</li>
+<li><strong>Saída:</strong> <code>src/baixar_focus.py</code> salva o PDF e <code>src/extrair_texto.py</code> gera o <code>.txt</code>; o Action <strong>commita</strong> <code>data/focus_*.{pdf,txt}</code> de volta em <code>main</code>.</li>
+</ul>
+<p>Convenção de nomes: <code>focus_AAAA-MM-DD</code> pela <strong>data de publicação</strong> (ex.: <code>focus_2026-06-12.{pdf,txt,html}</code>).</p>
+</section>
+<section id="a-routine-do-agente" class="level2">
+<h2 class="anchored" data-anchor-id="a-routine-do-agente">2. A routine do agente</h2>
+<p>Quando a routine inicia, os arquivos <code>data/focus_*.{pdf,txt}</code> já estão em <code>main</code>. A tarefa do agente:</p>
+<ol type="1">
+<li><strong>Localiza o <code>.txt</code> mais recente.</strong> Se não houver nenhum, para — o Action não rodou;</li>
+<li><strong>Verifica frescor:</strong> 0–3 dias → segue; 4–7 dias → segue com <code>[REVISAR]</code> no assunto; &gt; 7 dias → para;</li>
+<li><strong>Sanity check:</strong> ao menos 2 000 caracteres e presença de <code>IPCA</code>, <code>Selic</code>, <code>PIB</code> — se falhar, o layout do PDF pode ter mudado, então para;</li>
+<li><strong>Lê e escreve:</strong>
+<ul>
+<li><strong>Resumo executivo</strong> em até 200 palavras, em prosa, começando pelas medianas (IPCA do ano, Selic fim de ano, PIB, câmbio), com <strong>citações literais entre aspas</strong> dos números-chave;</li>
+<li><strong>Três principais revisões da semana</strong> no formato <code>Variável (ano): anterior → atual. Hipótese: motivo.</code>;</li>
+</ul></li>
+<li><strong>Monta o HTML</strong> em <code>output/focus/focus_AAAA-MM-DD.html</code> — logo da Análise Macro no topo, título <code>Focus — AAAA-MM-DD</code>, azul de marca <code>#282f6b</code>;</li>
+<li><strong>Inspeciona</strong> (logo aparece, medianas batem com o <code>.txt</code>, há citação literal) e <strong>commita/push</strong> o HTML em <code>main</code>.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Nunca inventar número
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A regra mais importante da routine: todo valor citado <strong>tem de existir no texto extraído</strong>. Se não houver hipótese sólida para uma revisão, o agente escreve <em>“sem hipótese clara — pode ser ruído amostral”</em> em vez de especular. É o que torna um resumo gerado por LLM confiável o suficiente para ir direto ao e-mail.</p>
+</div>
+</div>
+</section>
+<section id="envio-por-e-mail-github-action" class="level2">
+<h2 class="anchored" data-anchor-id="envio-por-e-mail-github-action">3. Envio por e-mail (GitHub Action)</h2>
+<p>O push do <code>output/focus/focus_*.html</code> em <code>main</code> dispara o <code>focus-enviar.yml</code>, que roda <code>src/enviar_email.py</code> e envia o HTML como corpo do e-mail via <strong>SMTP do Gmail</strong> (apenas biblioteca padrão). As credenciais ficam nos <strong>Secrets</strong> do repositório, nunca no código:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Variável</th>
-<th style="text-align: center;">Ano-ref.</th>
-<th style="text-align: center;">Mediana</th>
-<th style="text-align: center;">Var. semanal</th>
-<th style="text-align: center;">Respondentes</th>
+<th>Secret</th>
+<th>Uso</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>IPCA (% a.a.)</td>
-<td style="text-align: center;">2026</td>
-<td style="text-align: center;">5,09%</td>
-<td style="text-align: center;">▪️ 0,00</td>
-<td style="text-align: center;">154</td>
+<td><code>FOCUS_SMTP_USER</code></td>
+<td>Gmail remetente</td>
 </tr>
 <tr class="even">
-<td>Câmbio (R<span class="math inline">\(/US\)</span>)</td>
-<td style="text-align: center;">2026</td>
-<td style="text-align: center;">R$ 5,16</td>
-<td style="text-align: center;">▪️ 0,00</td>
-<td style="text-align: center;">122</td>
+<td><code>FOCUS_SMTP_APP_PASSWORD</code></td>
+<td>senha de app de 16 dígitos</td>
 </tr>
 <tr class="odd">
-<td>Selic (% a.a.)</td>
-<td style="text-align: center;">2026</td>
-<td style="text-align: center;">13,25%</td>
-<td style="text-align: center;">▪️ 0,00</td>
-<td style="text-align: center;">157</td>
+<td><code>FOCUS_EMAIL_DEST</code></td>
+<td>destinatário(s)</td>
 </tr>
 <tr class="even">
-<td>PIB Total (% a.a.)</td>
-<td style="text-align: center;">2026</td>
-<td style="text-align: center;">1,90%</td>
-<td style="text-align: center;">🔺 +0,01</td>
-<td style="text-align: center;">116</td>
+<td><code>FOCUS_EMAIL_BCC</code></td>
+<td>cópia oculta (opcional)</td>
 </tr>
 </tbody>
 </table>
 <blockquote class="blockquote">
-<p>A variação semanal compara a mediana da divulgação mais recente com a imediatamente anterior. 🔺 = revisada para cima, 🔻 = para baixo, ▪️ = estável. O relatório completo cobre os anos-referência 2026 a 2029 para cada variável.</p>
+<p>Diferente de um conector que só cria <em>rascunho</em>, este módulo <strong>dispara a mensagem de fato</strong> — é a peça que fecha o ciclo 100% automático.</p>
 </blockquote>
-<hr>
-</section>
-<section id="automação-routine-do-claude-code" class="level2">
-<h2 class="anchored" data-anchor-id="automação-routine-do-claude-code">Automação — routine do Claude Code</h2>
-<p>O repositório inclui <code>scripts/run_weekly.sh</code> (ativa o <code>.venv</code>, roda o pipeline e registra log datado), compatível com <strong>cron</strong> ou <strong>launchd</strong>. Mas a forma adotada é o <strong>routine do Claude Code</strong>:</p>
-<ul>
-<li>um agente agendado via <code>/schedule</code> roda toda segunda de manhã;</li>
-<li>executa o pipeline, lê o <code>reports/latest.md</code> gerado;</li>
-<li><strong>envia o resumo por e-mail</strong> — fechando o ciclo coleta → relatório → entrega sem máquina ligada nem servidor próprio.</li>
-</ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agendamento clássico equivalente (cron, toda segunda às 09:00)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 9 <span class="pp">*</span> <span class="pp">*</span> 1 /caminho/Projeto_Focus/scripts/run_weekly.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 <section id="tecnologias" class="level2">
@@ -462,41 +412,43 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td><strong>Linguagem</strong></td>
-<td>Python 3.13</td>
+<td>Python 3</td>
 </tr>
 <tr class="even">
-<td><strong>Coleta</strong></td>
-<td><code>requests</code> (API Olinda do BCB) com <em>retry/backoff</em></td>
+<td><strong>Download</strong></td>
+<td><code>requests</code> (PDF do BCB, com recuo por feriado)</td>
 </tr>
 <tr class="odd">
-<td><strong>Manipulação</strong></td>
-<td><code>pandas</code></td>
+<td><strong>Extração</strong></td>
+<td>extração de texto do PDF → <code>.txt</code></td>
 </tr>
 <tr class="even">
-<td><strong>Relatório</strong></td>
-<td>Markdown (<code>reports/latest.md</code> + cópia datada)</td>
+<td><strong>Resumo</strong></td>
+<td>agente <strong>Claude</strong> numa <strong>routine</strong> do Claude Code</td>
 </tr>
 <tr class="odd">
-<td><strong>Agendamento</strong></td>
-<td><code>run_weekly.sh</code> (cron/launchd) ou <strong>routine do Claude Code</strong> (<code>/schedule</code>)</td>
+<td><strong>Entregável</strong></td>
+<td>HTML com identidade Análise Macro (<code>output/focus/</code>)</td>
 </tr>
 <tr class="even">
-<td><strong>Entrega</strong></td>
-<td>E-mail automático disparado pelo routine</td>
+<td><strong>Envio</strong></td>
+<td><code>src/enviar_email.py</code> — SMTP do Gmail (stdlib)</td>
+</tr>
+<tr class="odd">
+<td><strong>Orquestração</strong></td>
+<td>2 GitHub Actions (<code>focus-download.yml</code> agendado, <code>focus-enviar.yml</code> por push)</td>
+</tr>
+<tr class="even">
+<td><strong>Testes</strong></td>
+<td><code>pytest</code> (marcadores <code>network</code> / <code>not network</code>)</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="próximos-passos" class="level2">
-<h2 class="anchored" data-anchor-id="próximos-passos">Próximos passos</h2>
-<ul>
-<li>Adicionar mais variáveis (IGP-M, IPCA mensal, Conta Corrente, Dívida/PIB);</li>
-<li>Gráficos de evolução das expectativas embutidos no relatório;</li>
-<li>Exportação do relatório em PDF/HTML;</li>
-<li>Série histórica acumulada (SQLite) em vez de só CSVs por data;</li>
-<li>Testes automatizados (<code>pytest</code>) para <code>transform</code> e <code>report</code>.</li>
-</ul>
+<section id="repositório" class="level2">
+<h2 class="anchored" data-anchor-id="repositório">Repositório</h2>
+<p>Código aberto em <a href="https://github.com/vitorwilher/resumo-focus">github.com/vitorwilher/resumo-focus</a>.</p>
 
 
 </section>
