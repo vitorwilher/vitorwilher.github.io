@@ -5,7 +5,7 @@ title: "Curriculum Vitae"
 ## Vítor Wilher
 *Especialista em Dados e IA Generativa*
 
-[⬇ Baixar CV em PDF](cv.pdf){.btn .btn-primary role="button" download="Vitor-Wilher-CV.pdf"}
+[⬇ Baixar CV em PDF](CV-Completo.pdf){.btn .btn-primary role="button" download="Vitor-Wilher-CV.pdf"}
 
 ---
 
