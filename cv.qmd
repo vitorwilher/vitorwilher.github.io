@@ -20,13 +20,13 @@ title: "Curriculum Vitae"
 
 ## Resumo das Habilidades
 
-Especialista em Dados e IA Generativa com sólida formação em Economia e Estatística e mais de 10 anos de experiência com engenharia, análise e ciência de dados. Apaixonado por extrair valor dos dados e construir soluções inteligentes e escaláveis que impulsionam a tomada de decisão.
+Especialista em Dados e IA Generativa com sólida formação em Economia e Estatística. É Bacharel e Mestre em Economia pela Universidade Federal Fluminense, Especialista em Análise de Dados e Inteligência Artificial e Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Dados do SENAC Rio.
 
-**Hard Skills**: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs, IA Generativa, Cloud Computing, Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora e Amazon Redshift.  
+**Hard Skills**: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs, IA Generativa, Cloud Computing, Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora e Amazon Redshift.
 
 **Soft Skills**: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor
 
-Principal Interesse atual: uso intensivo de IA Generativa aplicada em economia e finanças.
+**Principal Interesse atual**: uso intensivo de IA Generativa aplicada na resolução de problemas em economia, finanças, marketing, vendas, dentre outros.
 
 ---
 
@@ -55,14 +55,11 @@ Principal Interesse atual: uso intensivo de IA Generativa aplicada em economia e
 
 ## Experiência Profissional
 
-### Especialista em Dados · SENAC-RJ · *2026 – atual*
+### Especialista em Tecnologia e Dados · SENAC-RJ · *2026 – atual*
 
-Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o corresponsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro.
+Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o responsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro.
 
 ### Especialista em IA Generativa · Análise Macro · *2015 – atual*
-- Desenvolvimento de agentes inteligentes, produtos baseados em LLMs e modelos clássicos de ML;
-- Ciclo completo de produtos de IA Generativa e ML, da concepção e design de solução à entrega e sustentação em produção; 
-- Construção e implementação de pipelines de IA;
 - Construção de Agentes de IA com uso de RAG, ajuste de *prompts*, monitoramento e avaliação de performance com LangSmith e QA-Eval, orquestração com LangGraph;
 - Uso de técnicas de NLP para desenvolvimento de análise de sentimentos aplicada às atas do COPOM;
 - Construção e automatização de *pipelines* de ETL com SQL, R e Python para coleta e tratamento automatizado de dados econômicos e financeiros de fontes como B3, Banco Central e SIDRA/IBGE;
@@ -78,7 +75,7 @@ Especialista em Dados e IA Generativa com atuação na Célula de Inovação do 
 - Ministrou palestras em todo o Brasil sobre perspectivas econômicas e análise de dados.
 
 ### Professor · Universidade Veiga de Almeida · *2015*
-- *[a preencher — bullets do PDF estão duplicados da seção Instituto Millenium]*
+- Professor de Matemática e Estatística nos cursos de MBA da instituição.
 
 ### Coordenador · GECE/UFF · *2013 – 2014*
 - Coordenei alunos de graduação no desenvolvimento de análises de perspectivas econômicas;
@@ -91,7 +88,7 @@ Atuação no *middle office* da área comercial da Endesa Geração de Energia. 
 Atuação como Estagiário de Economia na assessoria econômico-financeira às empresas incubadas e na implementação e gerenciamento do *Desafio Universitário Empreendedor Sebrae*.
 
 ### Estagiário · RC Consultores · *2008*
-- *[a preencher — descrição do PDF está duplicada da seção COPPE/UFRJ]*
+Atuação como Estagiário de Economia, auxiliando na coleta e tratamento de dados macroeconômicos.
 
 ### Estagiário · Brechbuhler Consultoria · *2008*
 Atuação como Estagiário de Economia na elaboração de rotinas de administração financeira de uma empresa (fluxo de caixa, DRE, balanço patrimonial etc.); elaboração de *business plan*; estruturação e obtenção de financiamento de longo prazo junto ao BNDES; estudos de viabilidade econômica; concepção e estruturação de *project finance*; entre outras atividades correlacionadas.
