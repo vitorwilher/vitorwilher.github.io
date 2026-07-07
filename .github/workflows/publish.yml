@@ -30,6 +30,8 @@ jobs:
             any::knitr
             any::tidyverse
             any::ggplot2
+            any::jsonlite
+            any::htmltools
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2

@@ -1,0 +1,72 @@
+---
+title: ""
+page-layout: full
+anchor-sections: false
+---
+
+::: {.hero}
+<p class="eyebrow">Análise Macro · toda semana</p>
+<h1>Boletim AM</h1>
+<p class="sub">A newsletter semanal da <strong>Análise Macro</strong> — economia, dados e <strong>IA generativa</strong>, publicada todo domingo</p>
+<p class="lead">Cada edição destrincha um problema real com código, séries temporais e modelos de linguagem. Abaixo, as edições mais recentes — clique para ler a versão completa.</p>
+<div class="cta">
+  <a class="btn primary" href="https://analisemacro.kit.com/profile" target="_blank">Assinar o boletim</a>
+  <a class="btn" href="https://analisemacro.kit.com/profile/posts" target="_blank">Ver todas as edições</a>
+</div>
+:::
+
+```{r}
+#| echo: false
+#| results: asis
+library(jsonlite)
+library(htmltools)
+
+posts <- fromJSON("boletins.json", simplifyDataFrame = FALSE)
+
+# Limpa o excerpt: remove o cabeçalho repetido "Edição #NNN | Newsletter ... Macro"
+# e extrai o número da edição, quando presente.
+meses <- c("jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez")
+fmt_data <- function(iso) {
+  d <- as.Date(substr(iso, 1, 10))
+  paste0(format(d, "%d"), " ", meses[as.integer(format(d, "%m"))], " ", format(d, "%Y"))
+}
+edicao_num <- function(txt) {
+  m <- regmatches(txt, regexpr("(?i)edi[cç][aã]o\\s*#\\s*([0-9]+)", txt, perl = TRUE))
+  if (length(m) == 0) return(NA_character_)
+  sub("(?i).*?#\\s*", "#", m, perl = TRUE)
+}
+limpa_excerpt <- function(txt) {
+  # tira o prefixo "Edição #NNN | Newsletter Semanal da Análise Macro"
+  txt <- sub("(?i)^\\s*edi[cç][aã]o\\s*#\\s*[0-9]+\\s*\\|?\\s*", "", txt, perl = TRUE)
+  txt <- sub("(?i)^\\s*newsletter semanal da an[aá]lise macro\\s*", "", txt, perl = TRUE)
+  trimws(txt)
+}
+
+cards <- lapply(posts, function(p) {
+  num <- edicao_num(p$excerpt)
+  tags$a(
+    class = "boletim-card", href = p$url, target = "_blank",
+    tags$div(
+      class = "boletim-meta",
+      if (!is.na(num)) tags$span(class = "n", num),
+      tags$span(class = "data", fmt_data(p$published_at)),
+      if (!is.null(p$reading_time)) tags$span(class = "leitura", paste0(p$reading_time, " min"))
+    ),
+    tags$h3(p$title),
+    tags$p(class = "excerpt", limpa_excerpt(p$excerpt)),
+    tags$span(class = "go", "Ler edição →")
+  )
+})
+
+grid_html <- as.character(tags$div(class = "boletim-grid", cards))
+# Envolve numa fence raw {=html} para o Pandoc NÃO reinterpretar as <div>.
+cat("```{=html}\n", grid_html, "\n```\n", sep = "")
+```
+
+::: {.newsletter-signup}
+<h2>Receba toda semana</h2>
+<p class="muted">O formulário de cadastro será integrado aqui em breve. Por enquanto, você pode assinar direto na página do boletim.</p>
+<div class="cta">
+  <a class="btn primary" href="https://analisemacro.kit.com/profile" target="_blank">Assinar o Boletim AM</a>
+</div>
+:::

@@ -22,6 +22,8 @@ website:
       - href: https://vitorwilher.github.io/doutorado-epge/
         text: Doutorado
         target: _blank
+      - href: newsletter/index.qmd
+        text: Newsletter
     right:
       - icon: github
         href: https://github.com/vitorwilher
