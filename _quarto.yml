@@ -19,6 +19,9 @@ website:
         text: Cursos
       - href: research/index.qmd
         text: Pesquisas
+      - href: https://vitorwilher.github.io/doutorado-epge/
+        text: Doutorado
+        target: _blank
     right:
       - icon: github
         href: https://github.com/vitorwilher
