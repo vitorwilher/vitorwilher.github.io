@@ -13,14 +13,15 @@ about:
       href: https://linkedin.com/in/vitorwilher
 ---
 
-**Vítor Wilher** é Especialista em Dados e IA Generativa com sólida formação em Economia e Estatística. É Bacharel e Mestre em Economia pela Universidade Federal Fluminense, Especialista em Análise de Dados e Inteligência Artificial e Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Dados do SENAC Rio.
-
-**Hard Skills**: Python, R, SQL, Estatística, Econometria, Macroeconomia, Machine Learning, NLP, Deep Learning, Prompt Engineering, LLMs, IA Generativa, Cloud Computing, Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora e Amazon Redshift.
-
-**Soft Skills**: liderança técnica de projetos, criatividade, trabalho em equipe, bom humor
-
-**Principal interesse atual**: uso intensivo de IA Generativa aplicada na resolução de problemas em economia, finanças, marketing, vendas, dentre outros.
-
----
+::: {.hero}
+<h1>Vítor Wilher</h1>
+<p class="sub">Especialista em Dados e <strong>IA Generativa</strong> · Candidato ao PhD em Economia pela <strong>EPGE/FGV</strong></p>
+<p class="lead">Uso intensivo de IA Generativa aplicada à resolução de problemas em economia, finanças, marketing e vendas — de séries temporais e econometria a LLMs e cloud computing.</p>
+<div class="cta">
+  <a class="btn primary" href="projetos/index.html">Ver projetos</a>
+  <a class="btn" href="cv.html">Currículo</a>
+  <a class="btn" href="research/index.html">Pesquisas</a>
+</div>
+:::
 
 Caso eu possa lhe ajudar em algum projeto de análise de dados, me contacte pelo e-mail [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br).
