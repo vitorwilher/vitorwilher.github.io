@@ -1,27 +1,107 @@
-/* Navbar */
-.navbar {
-  font-weight: 500;
+/* ==========================================================================
+   Portfólio — Vítor Wilher
+   Linguagem visual herdada das Notas do Doutorado (EPGE/FGV):
+   paleta "papel", títulos em serif, acento azul EPGE, cards com border-top.
+   Re-skin sobre Quarto + tema cosmo (Bootstrap). Dark mode via .quarto-dark.
+   ========================================================================== */
+
+:root {
+  --bg:#f7f6f3; --panel:#ffffff; --ink:#1c1b19; --muted:#5f5b54;
+  --line:#e4e0d8; --accent:#1f4e79; --accent-2:#2e7d32;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.06);
+  --radius:12px;
 }
 
-/* Home - about template */
+body.quarto-dark {
+  --bg:#14140f; --panel:#1d1d18; --ink:#ece9e2; --muted:#a49f95;
+  --line:#302f28; --accent:#7cb0e0; --accent-2:#7ac47f;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 30px rgba(0,0,0,.5);
+}
+
+/* ---------- Base ---------- */
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: var(--accent); }
+
+/* Títulos em serif — o "ar acadêmico" das notas do doutorado */
+h1, h2, h3, .quarto-title h1.title {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -.01em;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  font-weight: 500;
+  background: var(--panel) !important;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Hero da Home ---------- */
+.hero {
+  text-align: center;
+  padding: 40px 0 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+.hero .eyebrow {
+  font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin-bottom: 6px;
+}
+.hero h1 {
+  font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+  font-size: 2.15rem; line-height: 1.18; margin: .1em 0 .15em;
+}
+.hero .sub { color: var(--muted); font-size: 1.05rem; margin: .25em 0; }
+.hero .sub strong { color: var(--ink); font-weight: 600; }
+.hero .lead { max-width: 720px; margin: 18px auto 0; color: var(--muted); }
+.hero .cta {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin: 26px 0 8px;
+}
+.hero .btn {
+  display: inline-block; padding: 11px 22px; border-radius: 10px;
+  font-weight: 600; font-size: 1rem; border: 1px solid var(--line);
+  background: var(--panel); color: var(--ink); box-shadow: var(--shadow);
+  transition: filter .15s, transform .15s;
+}
+.hero .btn:hover { text-decoration: none; transform: translateY(-1px); }
+.hero .btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+.hero .btn.primary:hover { filter: brightness(1.06); }
+
+/* ---------- Home - about template (trestles) ---------- */
 #quarto-content .about-entity .about-image {
   border-radius: 50%;
   max-width: 200px;
 }
 
-/* Cards de projetos */
+/* ---------- Cards de listagem (Projetos / Cursos / Pesquisas) ---------- */
 .quarto-grid-item {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  transition: box-shadow 0.2s;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform .15s, box-shadow .15s;
 }
-
 .quarto-grid-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(0,0,0,.06), 0 14px 34px rgba(0,0,0,.12);
 }
+.quarto-grid-item .card-title { font-family: Georgia, serif; }
 
-/* Footer */
+/* ---------- Footer ---------- */
 .nav-footer {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 560px) {
+  .hero { padding: 28px 0 4px; }
+  .hero h1 { font-size: 1.72rem; }
 }
