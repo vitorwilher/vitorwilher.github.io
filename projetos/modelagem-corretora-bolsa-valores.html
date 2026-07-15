@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-28">
+<meta name="description" content="Modelagem de dados fim a fim (conceitual → lógico → físico) de um sistema de negociação em bolsa para uma corretora, materializada em PostgreSQL 13+ com trigger de manutenção automática de saldo e uma bateria de consultas que validam cada decisão de projeto.">
+
+<title>Modelagem de Corretora de Bolsa de Valores – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-aea57144232a0656f242208b1b530a6e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/doutorado-epge/" target="_blank"> 
+<span class="menu-text">Doutorado</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../newsletter/index.html"> 
+<span class="menu-text">Newsletter</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
+  <li><a href="#arquitetura-do-pipeline" id="toc-arquitetura-do-pipeline" class="nav-link" data-scroll-target="#arquitetura-do-pipeline">Arquitetura do Pipeline</a></li>
+  <li><a href="#entendimento-do-negócio" id="toc-entendimento-do-negócio" class="nav-link" data-scroll-target="#entendimento-do-negócio">1. Entendimento do Negócio</a></li>
+  <li><a href="#entendimento-dos-dados" id="toc-entendimento-dos-dados" class="nav-link" data-scroll-target="#entendimento-dos-dados">2. Entendimento dos Dados</a></li>
+  <li><a href="#preparação-dos-dados-modelo-conceitual-er" id="toc-preparação-dos-dados-modelo-conceitual-er" class="nav-link" data-scroll-target="#preparação-dos-dados-modelo-conceitual-er">3. Preparação dos Dados — Modelo Conceitual (ER)</a></li>
+  <li><a href="#modelagem-modelo-lógico-relacional" id="toc-modelagem-modelo-lógico-relacional" class="nav-link" data-scroll-target="#modelagem-modelo-lógico-relacional">4. Modelagem — Modelo Lógico (Relacional)</a></li>
+  <li><a href="#avaliação-modelo-físico-e-validação" id="toc-avaliação-modelo-físico-e-validação" class="nav-link" data-scroll-target="#avaliação-modelo-físico-e-validação">5. Avaliação — Modelo Físico e Validação</a></li>
+  <li><a href="#implantação" id="toc-implantação" class="nav-link" data-scroll-target="#implantação">6. Implantação</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos Passos</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Modelagem de Corretora de Bolsa de Valores</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">SQL</div>
+    <div class="quarto-category">PostgreSQL</div>
+    <div class="quarto-category">Modelagem ER</div>
+    <div class="quarto-category">Modelagem de Dados</div>
+    <div class="quarto-category">Banco de Dados</div>
+    <div class="quarto-category">Bolsa de Valores</div>
+    <div class="quarto-category">DDL</div>
+    <div class="quarto-category">Trigger</div>
+    <div class="quarto-category">PL/pgSQL</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Modelagem de dados fim a fim (conceitual → lógico → físico) de um sistema de negociação em bolsa para uma corretora, materializada em PostgreSQL 13+ com trigger de manutenção automática de saldo e uma bateria de consultas que validam cada decisão de projeto.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 28, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modelagem-corretora-bolsa-valores_capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Diagrama entidade-relacionamento do modelo conceitual — seis entidades da corretora e suas cardinalidades</figcaption>
+</figure>
+</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto percorre as três camadas clássicas da <strong>modelagem de dados</strong> — conceitual, lógico e físico — para um sistema de <strong>negociação em bolsa de valores</strong> operado por uma corretora. Partindo de um enunciado em linguagem natural, o trabalho formaliza o domínio em um <strong>modelo entidade-relacionamento (ER)</strong>, traduz esse ER para um <strong>esquema relacional</strong> normalizado e o implementa como um <strong>schema PostgreSQL</strong> completo, com DDL, massa de teste (DML) e uma bateria de consultas de validação (DQL).</p>
+<p>Cada fase é organizada segundo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), aqui adaptada de um contexto de <em>data mining</em> para um de <strong>engenharia de dados / modelagem de banco de dados</strong>: o “entendimento do negócio” vira o levantamento de requisitos, a “modelagem” vira o desenho conceitual e lógico, e a “implantação” vira o <code>CREATE TABLE</code> no SGBD-alvo. O artefato final é um conjunto de scripts SQL idempotentes e reprodutíveis, mais a documentação textual que os sustenta.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tese central
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Um enunciado ambíguo só vira um banco confiável quando cada decisão de modelagem é <strong>explicitada e justificada</strong>: separar Empresa de Ação (para acomodar PETR3/PETR4), usar PK <em>surrogate</em> onde a chave natural é instável (CPF vs.&nbsp;CNPJ), e materializar o <strong>Saldo de Carteira</strong> por <em>trigger</em> em vez de recalculá-lo na aplicação são escolhas que transformam requisitos vagos em integridade garantida pelo próprio SGBD.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<p>Este projeto nasce como atividade avaliativa da disciplina <strong>Transformando Dados em Percepção (TDP)</strong> (Prof.&nbsp;Anderson Nascimento), promovida a projeto de portfólio próprio. A proposta é demonstrar, de ponta a ponta, o ofício de modelar dados: sair de um texto de requisitos e chegar a um banco que <strong>não permite</strong> estados inconsistentes.</p>
+<p>O domínio escolhido — uma corretora que gerencia investidores, ações e negociações — é rico o suficiente para exercitar todos os construtos centrais da modelagem relacional: entidades fortes, entidade associativa (N:M com atributos), entidade fraca (PK composta), chaves naturais vs.&nbsp;<em>surrogate</em>, e regras de negócio que só se resolvem com <em>trigger</em>.</p>
+<p>O projeto responde a perguntas como:</p>
+<ul>
+<li>Como estruturar o relacionamento <strong>N:M</strong> entre investidores e ações, dado que um investidor negocia várias ações e uma ação é negociada por vários investidores?</li>
+<li>Empresa e Ação são o mesmo conceito ou entidades distintas? (Uma mesma empresa emite PETR3 ON e PETR4 PN.)</li>
+<li>Como manter o <strong>Saldo de Carteira</strong> sempre coerente com as negociações realizadas, sem depender da aplicação cliente?</li>
+<li>Como um histórico de cotações modelado como <strong>série temporal</strong> habilita análises retrospectivas de patrimônio?</li>
+</ul>
+<hr>
+</section>
+<section id="metodologia-crisp-dm" class="level2">
+<h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
+<p>O projeto foi estruturado seguindo o processo <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), aqui adaptado ao contexto de <strong>modelagem de dados relacional</strong>: as fases mapeiam levantamento de requisitos → modelo conceitual → modelo lógico → modelo físico → validação por consultas → implantação do schema.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Aplicação no Projeto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Entendimento do Negócio</strong></td>
+<td>Leitura do enunciado da corretora; identificação de investidores, ações, negociações, cotações e saldo de carteira; definição do critério de sucesso: um schema que sustenta as consultas de negócio e barra estados inválidos por construção.</td>
+</tr>
+<tr class="even">
+<td><strong>2. Entendimento dos Dados</strong></td>
+<td>Levantamento dos atributos e domínios de cada entidade (CPF/CNPJ, ticker, enums de tipo e operação); análise das cardinalidades e das ambiguidades do enunciado (Empresa × Ação, natureza do saldo).</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Preparação dos Dados</strong></td>
+<td>Modelo <strong>conceitual (ER)</strong>: seis entidades, seis relacionamentos, sete decisões de modelagem documentadas (D1–D7) e restrições de integridade a levar ao físico. Diagrama em Mermaid <code>erDiagram</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>4. Modelagem</strong></td>
+<td>Modelo <strong>lógico (relacional)</strong>: tradução ER → tabelas, com PKs <em>surrogate</em>/naturais, FKs, PKs compostas para entidade fraca e N:M, <code>CHECK</code> de domínio e índices propostos para otimização.</td>
+</tr>
+<tr class="odd">
+<td><strong>5. Avaliação</strong></td>
+<td>Modelo <strong>físico + validação</strong>: <code>ddl.sql</code> (DDL + <em>trigger</em> PL/pgSQL), <code>dml.sql</code> (massa de teste cobrindo todos os casos) e <code>dql.sql</code> (8 consultas que validam trigger, cardinalidades e decisões). Sintaxe validada com <code>pglast</code>, o parser oficial do Postgres (52 statements OK).</td>
+</tr>
+<tr class="even">
+<td><strong>6. Implantação</strong></td>
+<td>Scripts SQL <strong>idempotentes</strong> (<code>DROP ... IF EXISTS</code> em ordem inversa de dependência) prontos para rodar em qualquer instância PostgreSQL 13+ via <code>psql -f</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="arquitetura-do-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura-do-pipeline">Arquitetura do Pipeline</h2>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  A[Enunciado&lt;br&gt;requisitos em&lt;br&gt;linguagem natural] --&gt; B[Modelo Conceitual&lt;br&gt;ER · 6 entidades&lt;br&gt;6 relacionamentos]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  B --&gt; C[Modelo Lógico&lt;br&gt;esquema relacional&lt;br&gt;PK/FK · CHECK · índices]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  C --&gt; D[Modelo Físico&lt;br&gt;DDL PostgreSQL&lt;br&gt;+ trigger PL/pgSQL]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  D --&gt; E[Validação&lt;br&gt;DML massa de teste&lt;br&gt;+ 8 consultas DQL]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  E --&gt; F[Schema implantado&lt;br&gt;psql -f · idempotente]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="entendimento-do-negócio" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-do-negócio">1. Entendimento do Negócio</h2>
+<p>Uma corretora quer um sistema para gerenciar <strong>Investidores</strong>, <strong>Ações</strong> e suas <strong>Negociações</strong> na bolsa. Os requisitos explícitos do enunciado:</p>
+<ul>
+<li><strong>Investidor</strong> identificado por CPF <em>ou</em> CNPJ, com nome, tipo (pessoa física ou jurídica), e-mail e telefone.</li>
+<li><strong>Ação</strong> pertencente a uma <strong>Empresa</strong> listada, identificada por seu <em>ticker</em>, com nome da empresa, setor e valor de mercado.</li>
+<li><strong>Negociações</strong> (compra ou venda) registrando data/hora, tipo de operação, quantidade e valor unitário no momento da transação.</li>
+<li><strong>Histórico de Cotações</strong> das ações — data, hora e valor — para permitir análise de séries temporais.</li>
+<li><strong>Saldo de Carteira</strong> de cada investidor (posição atual), atualizado a partir das negociações, com suporte a análises retrospectivas via histórico de cotações.</li>
+</ul>
+<p><strong>Critério de sucesso:</strong> um schema que (i) sustenta todas as consultas de negócio (posição da carteira, patrimônio, extrato, volume, séries de cotação) e (ii) impede estados inconsistentes por construção — venda sem saldo, quantidade negativa, documento com tamanho incompatível com o tipo, ticker órfão de empresa.</p>
+<hr>
+</section>
+<section id="entendimento-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-dos-dados">2. Entendimento dos Dados</h2>
+<p>O domínio se decompõe em <strong>seis entidades</strong>, cujos atributos e domínios foram levantados a partir do enunciado:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entidade</th>
+<th>Papel</th>
+<th>Chave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Investidor</strong></td>
+<td>PF ou PJ que negocia ações</td>
+<td><code>id_investidor</code> (surrogate) + <code>documento</code> único</td>
+</tr>
+<tr class="even">
+<td><strong>Empresa</strong></td>
+<td>Empresa listada que emite ações</td>
+<td><code>id_empresa</code> (surrogate)</td>
+</tr>
+<tr class="odd">
+<td><strong>Ação</strong></td>
+<td>Papel emitido, identificado pelo <em>ticker</em></td>
+<td><code>ticker</code> (natural)</td>
+</tr>
+<tr class="even">
+<td><strong>Negociação</strong></td>
+<td>Compra/venda de uma ação por um investidor</td>
+<td><code>id_negociacao</code> (surrogate) — entidade associativa</td>
+</tr>
+<tr class="odd">
+<td><strong>Histórico de Cotação</strong></td>
+<td>Snapshots de preço ao longo do tempo</td>
+<td><code>(ticker, data_hora)</code> — PK composta, entidade fraca</td>
+</tr>
+<tr class="even">
+<td><strong>Saldo de Carteira</strong></td>
+<td>Posição atual por investidor × ação</td>
+<td><code>(id_investidor, ticker)</code> — PK composta</td>
+</tr>
+</tbody>
+</table>
+<p>Os domínios fechados foram identificados desde a análise: <code>Investidor.tipo ∈ {PF, PJ}</code> e <code>Negociacao.tipo_operacao ∈ {COMPRA, VENDA}</code>, ambos destinados a virar <code>CHECK IN (...)</code> no físico. Duas <strong>ambiguidades</strong> do enunciado exigiram decisão explícita: se Empresa e Ação são um único conceito (não são — ver D2) e se o Saldo de Carteira é uma <em>view</em> derivada ou uma tabela observável (é tabela materializada — ver D4).</p>
+<hr>
+</section>
+<section id="preparação-dos-dados-modelo-conceitual-er" class="level2">
+<h2 class="anchored" data-anchor-id="preparação-dos-dados-modelo-conceitual-er">3. Preparação dos Dados — Modelo Conceitual (ER)</h2>
+<p>O modelo conceitual formaliza as seis entidades e <strong>seis relacionamentos</strong>, todos <code>1:N</code> na notação <em>crow’s foot</em>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Entidade A</th>
+<th>Verbo</th>
+<th>Entidade B</th>
+<th>Cardinalidade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R1</td>
+<td>Empresa</td>
+<td><strong>emite</strong></td>
+<td>Ação</td>
+<td>(1,1) — (1,N)</td>
+</tr>
+<tr class="even">
+<td>R2</td>
+<td>Investidor</td>
+<td><strong>realiza</strong></td>
+<td>Negociação</td>
+<td>(1,N) — (1,1)</td>
+</tr>
+<tr class="odd">
+<td>R3</td>
+<td>Ação</td>
+<td><strong>é objeto de</strong></td>
+<td>Negociação</td>
+<td>(1,N) — (1,1)</td>
+</tr>
+<tr class="even">
+<td>R4</td>
+<td>Ação</td>
+<td><strong>tem</strong></td>
+<td>Histórico de Cotação</td>
+<td>(1,1) — (0,N)</td>
+</tr>
+<tr class="odd">
+<td>R5</td>
+<td>Investidor</td>
+<td><strong>possui</strong></td>
+<td>Saldo de Carteira</td>
+<td>(1,1) — (0,N)</td>
+</tr>
+<tr class="even">
+<td>R6</td>
+<td>Ação</td>
+<td><strong>compõe</strong></td>
+<td>Saldo de Carteira</td>
+<td>(1,1) — (0,N)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Negociação</strong> materializa o relacionamento N:M entre Investidor e Ação como <strong>entidade associativa</strong> com atributos próprios (data/hora, tipo, quantidade, valor). <strong>Histórico de Cotação</strong> é <strong>entidade fraca</strong> com PK composta <code>(ticker, data_hora)</code>: no máximo uma cotação por ação por instante.</p>
+<p>As sete <strong>decisões de modelagem</strong> documentadas no conceitual:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>D1</strong></td>
+<td>Investidor com PK <em>surrogate</em> + <code>documento</code> único</td>
+<td>Evita PK de tamanho variável (CPF 11 dígitos vs.&nbsp;CNPJ 14) e simplifica FKs.</td>
+</tr>
+<tr class="even">
+<td><strong>D2</strong></td>
+<td>Empresa e Ação como entidades distintas (1:N)</td>
+<td>Uma empresa emite várias classes de ação (PETR3 ON, PETR4 PN).</td>
+</tr>
+<tr class="odd">
+<td><strong>D3</strong></td>
+<td><code>valor_mercado</code> como atributo simples (não histórico)</td>
+<td>Enunciado pede snapshot; histórico de preço fica na Cotação.</td>
+</tr>
+<tr class="even">
+<td><strong>D4</strong></td>
+<td>Saldo de Carteira como <strong>tabela materializada</strong> via <em>trigger</em></td>
+<td>Enunciado quer saldo “atualizado a partir das negociações” — trigger garante consistência sem responsabilizar a aplicação.</td>
+</tr>
+<tr class="odd">
+<td><strong>D5</strong></td>
+<td><code>ticker</code> como PK natural da Ação</td>
+<td>Curto, único, imutável — evita <em>join</em> extra em Negociação e Cotação.</td>
+</tr>
+<tr class="even">
+<td><strong>D6</strong></td>
+<td><code>tipo</code> e <code>tipo_operacao</code> como enums via <code>CHECK</code></td>
+<td>Domínios fechados evitam inconsistência por digitação livre.</td>
+</tr>
+<tr class="odd">
+<td><strong>D7</strong></td>
+<td><code>quantidade</code> como inteiro</td>
+<td>Ações brasileiras são negociadas em unidades inteiras.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="modelagem-modelo-lógico-relacional" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem-modelo-lógico-relacional">4. Modelagem — Modelo Lógico (Relacional)</h2>
+<p>A tradução ER → relacional produz seis tabelas. Cada relacionamento 1:N vira uma FK no lado N; as PKs compostas materializam a entidade fraca e a associação:</p>
+<pre><code>Investidor (id_investidor PK, documento UNIQUE, tipo CHECK IN (PF,PJ),
+            nome, email, telefone)
+
+Empresa    (id_empresa PK, nome_empresa, setor, valor_mercado CHECK &gt;= 0)
+
+Acao       (ticker PK, id_empresa FK → Empresa)
+
+Negociacao (id_negociacao PK,
+            id_investidor FK → Investidor, ticker FK → Acao,
+            data_hora, tipo_operacao CHECK IN (COMPRA,VENDA),
+            quantidade CHECK &gt; 0, valor_unitario CHECK &gt; 0)
+
+HistoricoCotacao (ticker PK/FK → Acao, data_hora PK, valor CHECK &gt; 0)
+
+SaldoCarteira    (id_investidor PK/FK → Investidor, ticker PK/FK → Acao,
+                  quantidade CHECK &gt;= 0)</code></pre>
+<p>Além dos índices implícitos das PKs e da <code>UNIQUE</code> de <code>documento</code>, o lógico propõe índices de otimização para os padrões de acesso previstos: <code>idx_negociacao_investidor</code> (extrato/posição), <code>idx_negociacao_ticker_data</code> (histórico por ação), <code>idx_cotacao_data</code> (última cotação até X) e <code>idx_acao_empresa</code> (join Empresa × Ação). Os domínios fechados ficam como <code>CHECK IN (...)</code> em vez de <code>ENUM</code> nativo, por portabilidade.</p>
+<hr>
+</section>
+<section id="avaliação-modelo-físico-e-validação" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação-modelo-físico-e-validação">5. Avaliação — Modelo Físico e Validação</h2>
+<p>O físico implementa o esquema em <strong>PostgreSQL 13+</strong> com três scripts.</p>
+<section id="ddl-schema-trigger" class="level3">
+<h3 class="anchored" data-anchor-id="ddl-schema-trigger">5.1 DDL — schema + trigger</h3>
+<p><code>ddl.sql</code> cria as seis tabelas com todas as constraints (PK, FK, <code>UNIQUE</code>, <code>CHECK</code>), incluindo a validação cruzada de que o <code>documento</code> tem 11 dígitos quando <code>tipo = 'PF'</code> e 14 quando <code>'PJ'</code>. As PKs <em>surrogate</em> usam <code>BIGINT GENERATED ALWAYS AS IDENTITY</code>. O coração do físico é a <strong>materialização do Saldo de Carteira</strong> (decisão D4) via <em>trigger</em> <code>AFTER INSERT</code> em <code>Negociacao</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">FUNCTION</span> fn_atualiza_saldo_carteira()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>RETURNS <span class="kw">TRIGGER</span> <span class="kw">AS</span> $$</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">IF</span> <span class="kw">NEW</span>.tipo_operacao <span class="op">=</span> <span class="st">'COMPRA'</span> <span class="cf">THEN</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">INSERT</span> <span class="kw">INTO</span> SaldoCarteira (id_investidor, ticker, quantidade)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">VALUES</span> (<span class="kw">NEW</span>.id_investidor, <span class="kw">NEW</span>.ticker, <span class="kw">NEW</span>.quantidade)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">ON</span> CONFLICT (id_investidor, ticker)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        DO <span class="kw">UPDATE</span> <span class="kw">SET</span> quantidade <span class="op">=</span> SaldoCarteira.quantidade <span class="op">+</span> EXCLUDED.quantidade;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSIF</span> <span class="kw">NEW</span>.tipo_operacao <span class="op">=</span> <span class="st">'VENDA'</span> <span class="cf">THEN</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- valida saldo suficiente; RAISE EXCEPTION se venda a descoberto</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">..</span>.</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">IF</span>;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURN</span> <span class="kw">NEW</span>;</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Uma <strong>COMPRA</strong> soma ao saldo (via <code>UPSERT</code>); uma <strong>VENDA</strong> subtrai, mas levanta <code>RAISE EXCEPTION</code> se o investidor não tiver ações suficientes — o banco <strong>recusa</strong> a venda a descoberto por construção.</p>
+</section>
+<section id="dml-massa-de-teste" class="level3">
+<h3 class="anchored" data-anchor-id="dml-massa-de-teste">5.2 DML — massa de teste</h3>
+<p><code>dml.sql</code> popula o banco cobrindo todos os casos: <strong>4 investidores</strong> (2 PF por CPF, 2 PJ por CNPJ), <strong>3 empresas / 5 ações</strong> (Petrobras com PETR3 e PETR4, Vale com VALE3, Itaú com ITUB3 e ITUB4), <strong>12 negociações</strong> (compras e vendas, datadas 20–24/abr/2026) e <strong>16 pontos de cotação</strong> para gerar séries temporais. O <code>SaldoCarteira</code> <strong>não</strong> recebe <code>INSERT</code> manual — é o <em>trigger</em> que o popula.</p>
+</section>
+<section id="dql-8-consultas-de-validação" class="level3">
+<h3 class="anchored" data-anchor-id="dql-8-consultas-de-validação">5.3 DQL — 8 consultas de validação</h3>
+<p><code>dql.sql</code> exercita e valida o modelo:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Consulta</th>
+<th>O que valida</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q1</td>
+<td>Posição atual da carteira por investidor</td>
+<td>O <em>trigger</em> (saldo = compras − vendas).</td>
+</tr>
+<tr class="even">
+<td>Q2</td>
+<td>Patrimônio atual (carteira × última cotação, <code>DISTINCT ON</code>)</td>
+<td>Join carteira × série de cotação.</td>
+</tr>
+<tr class="odd">
+<td>Q3</td>
+<td>Extrato de negociações de PETR4 por data</td>
+<td>Índice <code>ticker, data_hora</code>.</td>
+</tr>
+<tr class="even">
+<td>Q4</td>
+<td>Top investidores por volume financeiro</td>
+<td>Agregação sobre Negociação.</td>
+</tr>
+<tr class="odd">
+<td>Q5</td>
+<td>Série temporal de cotação com variação abs./% (<code>LAG</code>)</td>
+<td>Modelagem de cotação como série temporal.</td>
+</tr>
+<tr class="even">
+<td>Q6</td>
+<td>Volume diário negociado por ação</td>
+<td>Agregação por dia e ticker.</td>
+</tr>
+<tr class="odd">
+<td>Q7</td>
+<td>Empresas com mais de uma ação listada</td>
+<td>A decisão <strong>D2</strong> (Empresa 1:N Ação).</td>
+</tr>
+<tr class="even">
+<td>Q8</td>
+<td>Patrimônio retrospectivo em data D (carteira × cotação histórica)</td>
+<td>Análise retrospectiva pedida no enunciado.</td>
+</tr>
+</tbody>
+</table>
+<p>A sintaxe de todos os scripts foi validada com <strong><code>pglast</code></strong> (parser oficial do PostgreSQL): 52 statements sem erro.</p>
+<hr>
+</section>
+</section>
+<section id="implantação" class="level2">
+<h2 class="anchored" data-anchor-id="implantação">6. Implantação</h2>
+<p>Os scripts são <strong>idempotentes</strong>: <code>ddl.sql</code> começa com <code>DROP ... IF EXISTS</code> em ordem inversa de dependência (trigger → função → tabelas), então pode ser reexecutado sem erro. A implantação em qualquer instância PostgreSQL 13+ é direta:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> minha_base <span class="at">-f</span> fisico/ddl.sql   <span class="co"># schema + trigger</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> minha_base <span class="at">-f</span> fisico/dml.sql   <span class="co"># massa de teste (trigger popula o saldo)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> minha_base <span class="at">-f</span> fisico/dql.sql   <span class="co"># 8 consultas de validação</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>Modelagem_Corretora_Bolsa_Valores/
+├── enunciado.md                  # transcrição do enunciado (Google Doc)
+├── README.md                     # visão geral e roadmap
+│
+├── conceitual/
+│   ├── modelo.md                 # especificação textual do modelo conceitual
+│   ├── diagrama_er.mmd           # diagrama ER (Mermaid erDiagram, editável)
+│   └── diagrama_er.png           # render do diagrama ER
+│
+├── logico/
+│   └── modelo.md                 # esquema relacional textual (ER → tabelas)
+│
+├── fisico/
+│   ├── ddl.sql                   # CREATE TABLE, constraints, trigger PL/pgSQL
+│   ├── dml.sql                   # INSERTs cobrindo todas as entidades
+│   └── dql.sql                   # 8 consultas que validam o modelo
+│
+└── portfolio/                    # divulgação CRISP-DM
+    ├── modelagem-corretora-bolsa-valores.qmd   # ESTE arquivo
+    ├── modelagem-corretora-bolsa-valores_capa.png
+    └── _TEMPLATE.md</code></pre>
+<hr>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Stack</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SGBD-alvo</strong></td>
+<td>PostgreSQL 13+</td>
+</tr>
+<tr class="even">
+<td><strong>DDL / DML / DQL</strong></td>
+<td>SQL padrão + extensões PostgreSQL</td>
+</tr>
+<tr class="odd">
+<td><strong>Lógica de negócio</strong></td>
+<td>PL/pgSQL (<em>trigger</em> <code>AFTER INSERT</code>)</td>
+</tr>
+<tr class="even">
+<td><strong>Recursos SQL</strong></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code>, <code>ON CONFLICT</code> (UPSERT), CTE, <code>DISTINCT ON</code>, <em>window functions</em> (<code>LAG</code>), <code>STRING_AGG</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Modelagem conceitual</strong></td>
+<td>Mermaid <code>erDiagram</code> (+ especificação para BrModelo)</td>
+</tr>
+<tr class="even">
+<td><strong>Validação de sintaxe</strong></td>
+<td><code>pglast</code> (parser oficial do Postgres)</td>
+</tr>
+<tr class="odd">
+<td><strong>Documentação</strong></td>
+<td>Markdown + Quarto</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="como-executar-localmente" class="level2">
+<h2 class="anchored" data-anchor-id="como-executar-localmente">Como Executar Localmente</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>url-do-repo<span class="op">&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Modelagem_Corretora_Bolsa_Valores</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Em uma instância PostgreSQL 13+ com uma base recém-criada:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">createdb</span> corretora</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> corretora <span class="at">-f</span> fisico/ddl.sql   <span class="co"># schema + trigger</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> corretora <span class="at">-f</span> fisico/dml.sql   <span class="co"># massa de teste</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> corretora <span class="at">-f</span> fisico/dql.sql   <span class="co"># consultas de validação</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O <code>ddl.sql</code> é idempotente — pode ser reexecutado para recriar o schema do zero.</p>
+<p>Para regenerar o diagrama ER a partir da fonte Mermaid:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npx</span> <span class="at">-p</span> @mermaid-js/mermaid-cli@latest mmdc <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-i</span> conceitual/diagrama_er.mmd <span class="at">-o</span> conceitual/diagrama_er.png <span class="at">-b</span> white <span class="at">-w</span> 1600</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
+<ul>
+<li>Construir o modelo conceitual e o lógico no <strong>BrModelo</strong> (<code>.brM3</code> + <code>.png</code>), conforme pede a entrega acadêmica.</li>
+<li>Executar um <em>smoke test</em> dos scripts <code>.sql</code> em uma instância PostgreSQL real (hoje só validados por parser).</li>
+<li>Consolidar conceitual + lógico em um documento Word para submissão via Classroom.</li>
+<li>Estender o modelo: proventos (dividendos/JCP), custódia por conta, taxas de corretagem e um livro de ofertas (<em>order book</em>).</li>
+</ul>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<ul>
+<li>ELMASRI, Ramez; NAVATHE, Shamkant. <em>Sistemas de Banco de Dados</em>. 7ª ed.&nbsp;São Paulo: Pearson, 2018.</li>
+<li>DAMAS, Luís. <em>SQL — Structured Query Language</em>. 6ª ed.&nbsp;Rio de Janeiro: LTC, 2007.</li>
+<li>The PostgreSQL Global Development Group. <em>PostgreSQL 13 Documentation</em> — <em>Triggers</em>, <em>CREATE TABLE</em>, <em>INSERT … ON CONFLICT</em>, <em>Window Functions</em>.</li>
+<li>Ferramenta de modelagem <strong>BrModelo</strong> — http://www.sis4.com/brModelo/</li>
+<li><code>pglast</code> — <em>PostgreSQL Languages AST and statements prettifier</em> — https://github.com/lelit/pglast</li>
+<li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -11,8 +11,10 @@
   {
     "listing": "/projetos/index.html",
     "items": [
+      "/projetos/taylor-sentimento.html",
       "/projetos/projeto-boletim-focus.html",
       "/projetos/previsao-macro.html",
+      "/projetos/modelagem-corretora-bolsa-valores.html",
       "/projetos/sentimento-copom.html",
       "/projetos/metodologia.html",
       "/projetos/newsletter-digest-bot.html",
