@@ -10,7 +10,7 @@ anchor-sections: false
 <p class="sub">A newsletter semanal da <strong>Análise Macro</strong> — economia, dados e <strong>IA generativa</strong>, publicada todo domingo</p>
 <p class="lead">Cada edição destrincha um problema real com código, séries temporais e modelos de linguagem. Abaixo, as edições mais recentes — clique para ler a versão completa.</p>
 <div class="cta">
-  <a class="btn primary" href="https://www.analisemacro.com/boletim-am" target="_blank">Assinar o boletim</a>
+  <a class="btn primary" href="https://analisemacro.com.br/boletim-am" target="_blank">Assinar o boletim</a>
   <a class="btn" href="https://analisemacro.kit.com/profile/posts" target="_blank">Ver todas as edições</a>
 </div>
 :::
@@ -67,6 +67,6 @@ cat("```{=html}\n", grid_html, "\n```\n", sep = "")
 <h2>Receba toda semana</h2>
 <p class="muted">O formulário de cadastro será integrado aqui em breve. Por enquanto, você pode assinar direto na página do boletim.</p>
 <div class="cta">
-  <a class="btn primary" href="https://www.analisemacro.com/boletim-am" target="_blank">Assinar o Boletim AM</a>
+  <a class="btn primary" href="https://analisemacro.com.br/boletim-am" target="_blank">Assinar o Boletim AM</a>
 </div>
 :::
