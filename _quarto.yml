@@ -20,7 +20,7 @@ website:
       - href: research/index.qmd
         text: Pesquisas
       - href: https://vitorwilher.github.io/pos-puc-rio-ia/
-        text: Pós em IA
+        text: Pós em Dados e IA
         target: _blank
       - href: https://vitorwilher.github.io/doutorado-epge/
         text: Doutorado
