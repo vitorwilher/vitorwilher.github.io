@@ -22,6 +22,9 @@ website:
       - href: https://vitorwilher.github.io/pos-puc-rio-ia/
         text: Pós em Dados e IA
         target: _blank
+      - href: https://vitorwilher.github.io/anthropic-academy-cursos/
+        text: Anthropic
+        target: _blank
       - href: https://vitorwilher.github.io/doutorado-epge/
         text: Doutorado
         target: _blank
