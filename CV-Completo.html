@@ -335,6 +335,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#resumo-das-habilidades" id="toc-resumo-das-habilidades" class="nav-link" data-scroll-target="#resumo-das-habilidades"><strong>Resumo das Habilidades</strong></a></li>
   <li><a href="#formação-educacional" id="toc-formação-educacional" class="nav-link" data-scroll-target="#formação-educacional"><strong>Formação Educacional</strong></a></li>
   <li><a href="#experiência-profissional" id="toc-experiência-profissional" class="nav-link" data-scroll-target="#experiência-profissional"><strong>Experiência Profissional</strong></a></li>
+  <li><a href="#projetos-selecionados" id="toc-projetos-selecionados" class="nav-link" data-scroll-target="#projetos-selecionados"><strong>Projetos Selecionados</strong></a></li>
   <li><a href="#idiomas" id="toc-idiomas" class="nav-link" data-scroll-target="#idiomas"><strong>Idiomas</strong></a></li>
   <li><a href="#habilidades-principais" id="toc-habilidades-principais" class="nav-link" data-scroll-target="#habilidades-principais"><strong>Habilidades Principais</strong></a></li>
   </ul>
@@ -368,8 +369,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="resumo-das-habilidades" class="level1">
 <h1><strong>Resumo das Habilidades</strong></h1>
 <hr>
-<p>Engenheiro de IA e Cientista de Dados com sólida formação em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — da concepção e design de solução à operação em produção. Combina LLMs (Anthropic, OpenAI), agentes com RAG, ML clássico e validação estatística para resolver problemas de negócio, traduzindo necessidades de áreas não-técnicas em soluções de ponta a ponta. É Bacharel e Mestre em Economia pela Universidade Federal Fluminense, Especialista em Análise de Dados e Inteligência Artificial e Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Dados do SENAC Rio.</p>
-<p><strong>Hard Skills</strong>: Python (principal), R, SQL, FastAPI, Docker, Git, CI/CD (GitHub Actions), LLMs e API programática (Anthropic, OpenAI, Amazon Bedrock), Agentes e orquestração (LangGraph, LangChain), RAG e Vector Databases (ChromaDB, pgvector/BM25), Prompt Engineering, Avaliação de modelos (LLM-as-judge, LangSmith, QA-Eval, evals e testes de regressão), NLP, Machine Learning (Scikit-learn, Pandas, NumPy), Deep Learning, Econometria e Inferência Estatística, Cloud Computing (Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora, Amazon Redshift), PostgreSQL.</p>
+<p>Engenheiro de IA e Cientista de Dados com sólida formação em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — da concepção e design de solução à operação em produção. Combina LLMs (Anthropic, OpenAI), agentes com RAG, servidores <strong>MCP (Model Context Protocol)</strong>, ML clássico e validação estatística para resolver problemas de negócio, traduzindo necessidades de áreas não-técnicas em soluções de ponta a ponta. É Bacharel e Mestre em Economia pela Universidade Federal Fluminense, Especialista em Análise de Dados e Inteligência Artificial e Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Dados do SENAC Rio.</p>
+<p><strong>Hard Skills</strong>: Python (principal), R, SQL, TypeScript, FastAPI, Docker, Git, CI/CD (GitHub Actions), LLMs e API programática (Anthropic, OpenAI, Amazon Bedrock), <strong>MCP (Model Context Protocol)</strong> — construção e publicação de servidores, Agentes e orquestração (LangGraph, LangChain), RAG e Vector Databases (ChromaDB, pgvector/BM25), Prompt Engineering, Avaliação de modelos (LLM-as-judge, <em>self-consistency</em>, LangSmith, QA-Eval, evals e testes de regressão), NLP, Machine Learning (Scikit-learn, Pandas, NumPy), Deep Learning, Econometria e Inferência Estatística (OLS/HAC, GMM, VAR/VECM, filtro de Kalman, bootstrap), Desenvolvimento de pacotes R, Cloud Computing (Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora, Amazon Redshift, Cloudflare Workers), PostgreSQL.</p>
 <p><strong>Soft Skills:</strong> liderança técnica de projetos, comunicação com públicos técnicos e não-técnicos, mentoria de desenvolvedores, criatividade, trabalho em equipe, bom humor.</p>
 <p><strong>Principal Interesse atual:</strong> engenharia de IA Generativa aplicada à eficiência operacional e à resolução de problemas em economia, finanças e mercado financeiro.</p>
 </section>
@@ -418,9 +419,13 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Liderança técnica no ciclo completo de produtos de IA Generativa e ML — da concepção e design de solução à entrega e sustentação em produção —, atuando como interlocutor entre necessidades de negócio e implementação técnica;<br>
 </li>
-<li>Desenvolvimento de agentes de IA com RAG (recuperação híbrida densa + esparsa/BM25 sobre <em>vector database</em>), orquestração com LangGraph e engenharia de prompts, servidos como API em <strong>FastAPI</strong> e empacotados em <strong>Docker</strong> (ex.: serviço de consulta às atas do COPOM);<br>
+<li>Desenvolvimento de agentes de IA com <strong>RAG</strong> (recuperação híbrida BM25 + densa, fusão RRF e reranking), orquestração com LangGraph e engenharia de prompts, servidos como API em <strong>FastAPI</strong> e empacotados em <strong>Docker</strong> — como o serviço de consulta às atas do COPOM, com <em>eval harness</em> (<em>golden set</em> + LLM-as-judge) e <strong>gate de qualidade que reprova regressões</strong>;<br>
 </li>
-<li>Construção de sistemas <strong>multi-LLM / multi-agente</strong> para análise de sentimento das atas do COPOM — três LLMs em paralelo — com técnicas de NLP;<br>
+<li>Concepção e publicação do <strong>primeiro servidor MCP (Model Context Protocol) da empresa</strong>, em <strong>TypeScript sobre Cloudflare Workers</strong>: expõe as séries analíticas do IPCA como ferramentas que assistentes de IA (Claude, Cursor, Codex) consomem ao vivo, com atualização mensal automática e sem autenticação para o usuário final;<br>
+</li>
+<li>Construção de sistemas <strong>multi-LLM / multi-agente</strong> para análise de sentimento das atas do COPOM — três LLMs em paralelo (Anthropic, Google e OpenAI), com validação cega por agentes independentes e agregação por <em>self-consistency</em>;<br>
+</li>
+<li>Autoria do pacote R <strong><code>nucleos</code></strong> (código aberto), que reproduz as séries analíticas do IPCA publicadas pelo Banco Central (Nota Técnica 57) com <strong>conformidade verificada em testes automatizados contra a série oficial do SGS</strong>;<br>
 </li>
 <li>Avaliação e observabilidade de modelos e pipelines de IA: <em>LLM-as-judge</em>, LangSmith e QA-Eval para <em>evals</em> e testes de regressão; validação estatística de previsões (Diebold-Mariano, Mincer-Zarnowitz) contra o Boletim Focus do Banco Central;<br>
 </li>
@@ -459,6 +464,14 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Técnico de Gerência de Redes Sr</strong> <span class="meta"><strong>Oi/Telemar</strong> · 2000-2007</span></p>
 <p>Trabalhou na Gerência de Redes Nacional da operadora, como especialista na programação de centrais telefônicas de grande porte EWSD/Siemens. As atividades principais envolviam a configuração das centrais EWSD/Siemens da planta e resolução de falhas da rede doméstica (voz e sinalização) envolvendo principalmente protocolos TUP, ISUP e MFC-R2. Também era responsável pelo suporte e treinamento a outros membros da equipe. As habilidades necessárias eram saber programar em CHILL, conhecer redes/protocolos de telecomunicações e hardware da central EWSD/Siemens.</p>
 </section>
+<section id="projetos-selecionados" class="level1">
+<h1><strong>Projetos Selecionados</strong></h1>
+<hr>
+<p><strong>MCP Análise Macro</strong> — servidor <strong>MCP</strong> público que leva as séries analíticas do IPCA (Nota Técnica 57 do BCB) para dentro do Claude, Cursor e Codex. TypeScript sobre Cloudflare Workers, sem autenticação, com atualização mensal automática. Primeiro MCP da empresa. <a href="https://nucleos-mcp.analisemacro.workers.dev/mcp"><code>nucleos-mcp.analisemacro.workers.dev</code></a></p>
+<p><strong><code>nucleos</code></strong> — pacote R de código aberto que reproduz as 22 séries analíticas do IPCA do Banco Central, com conformidade verificada em testes automatizados contra a série oficial do SGS. <a href="https://github.com/vitorwilher/nucleos"><code>github.com/vitorwilher/nucleos</code></a></p>
+<p><strong>COPOM RAG Service</strong> — RAG sobre as atas do Copom e o Focus servido como API (FastAPI + Docker), com <em>eval harness</em> — <em>golden set</em>, LLM-as-judge com <em>self-consistency</em> e gate que reprova regressões — e observabilidade de custo, latência e tokens por request. <a href="https://github.com/vitorwilher/copom-rag-service"><code>github.com/vitorwilher/copom-rag-service</code></a></p>
+<p><strong>Sentimento COPOM &amp; Regra de Taylor</strong> — índice de tom <em>hawkish-dovish</em> das atas construído com três LLMs em paralelo e validação cega por agentes independentes, usado como regressor em uma Regra de Taylor aumentada (OLS/HAC, GMM, VAR/VECM, filtro de Kalman). <a href="https://vitorwilher.github.io/projetos/"><code>vitorwilher.github.io</code></a></p>
+</section>
 <section id="idiomas" class="level1">
 <h1><strong>Idiomas</strong></h1>
 <hr>
@@ -477,13 +490,17 @@ ul.task-list li input[type="checkbox"] {
 </li>
 <li>R<br>
 </li>
+<li>Desenvolvimento de pacotes R<br>
+</li>
 <li>SQL / PostgreSQL<br>
 </li>
 <li>FastAPI e Docker<br>
 </li>
 <li>LLMs e Agentes de IA (LangGraph)<br>
 </li>
-<li>RAG e Vector Databases<br>
+<li>MCP (Model Context Protocol)<br>
+</li>
+<li>RAG (híbrido BM25 + denso, RRF)<br>
 </li>
 <li>Avaliação de Modelos (evals / LLM-as-judge)<br>
 </li>
