@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-07-24">
+<meta name="description" content="O primeiro MCP da Análise Macro: um servidor remoto e sem autenticação que coloca as 23 séries analíticas do IPCA — os 9 núcleos de inflação da Nota Técnica 57 do BCB, difusão e agregações por segmento — dentro do Claude, Cursor e Codex. A camada de cálculo é o pacote R nucleos, que reproduz o SGS até a 2ª casa decimal; o servidor é fino, roda em Cloudflare Workers e se atualiza sozinho todo mês, sem re-deploy.">
+
+<title>MCP Análise Macro — os núcleos de inflação do IPCA dentro do Claude – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-eeac7883647bf95d5990a01bcd45fe2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/pos-puc-rio-ia/" target="_blank"> 
+<span class="menu-text">Pós em Dados e IA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/anthropic-academy-cursos/" target="_blank"> 
+<span class="menu-text">Anthropic</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/doutorado-epge/" target="_blank"> 
+<span class="menu-text">Doutorado</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../newsletter/index.html"> 
+<span class="menu-text">Newsletter</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#por-que-um-mcp" id="toc-por-que-um-mcp" class="nav-link" data-scroll-target="#por-que-um-mcp">Por que um MCP</a></li>
+  <li><a href="#arquitetura" id="toc-arquitetura" class="nav-link" data-scroll-target="#arquitetura">Arquitetura</a></li>
+  <li><a href="#as-ferramentas" id="toc-as-ferramentas" class="nav-link" data-scroll-target="#as-ferramentas">As ferramentas</a></li>
+  <li><a href="#a-camada-de-cálculo-o-pacote-nucleos" id="toc-a-camada-de-cálculo-o-pacote-nucleos" class="nav-link" data-scroll-target="#a-camada-de-cálculo-o-pacote-nucleos">A camada de cálculo: o pacote <code>nucleos</code></a></li>
+  <li><a href="#como-conectar" id="toc-como-conectar" class="nav-link" data-scroll-target="#como-conectar">Como conectar</a></li>
+  <li><a href="#instalar-o-pacote-r" id="toc-instalar-o-pacote-r" class="nav-link" data-scroll-target="#instalar-o-pacote-r">Instalar o pacote R</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos Passos</a></li>
+  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MCP Análise Macro — os núcleos de inflação do IPCA dentro do Claude</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">MCP</div>
+    <div class="quarto-category">Model Context Protocol</div>
+    <div class="quarto-category">TypeScript</div>
+    <div class="quarto-category">Cloudflare Workers</div>
+    <div class="quarto-category">Agentes de IA</div>
+    <div class="quarto-category">Pacote R</div>
+    <div class="quarto-category">IPCA</div>
+    <div class="quarto-category">Núcleos de Inflação</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">SIDRA</div>
+    <div class="quarto-category">SGS</div>
+    <div class="quarto-category">Reprodutibilidade</div>
+    <div class="quarto-category">GitHub Actions</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    O primeiro MCP da Análise Macro: um servidor remoto e sem autenticação que coloca as 23 séries analíticas do IPCA — os 9 núcleos de inflação da Nota Técnica 57 do BCB, difusão e agregações por segmento — dentro do Claude, Cursor e Codex. A camada de cálculo é o pacote R <code>nucleos</code>, que reproduz o SGS até a 2ª casa decimal; o servidor é fino, roda em Cloudflare Workers e se atualiza sozinho todo mês, sem re-deploy.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 24, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="nucleos-mcp-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Os 9 núcleos de inflação da NT 57, calculados pelo pacote <code>nucleos</code> e servidos ao vivo pelo MCP</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experimente agora
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O servidor está no ar, é <strong>público e gratuito</strong>. Cole esta URL como conector personalizado no Claude (Configurações → Connectors) e pergunte <em>“os núcleos do IPCA estão desacelerando?”</em>:</p>
+<pre><code>https://nucleos-mcp.analisemacro.workers.dev/mcp</code></pre>
+<p>Guia passo a passo, escrito para quem não é desenvolvedor: <a href="https://vitorwilher.github.io/nucleos/articles/conectar-ia.html"><strong>Conectar com IA</strong></a>.</p>
+</div>
+</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto tem duas camadas que resolvem problemas diferentes:</p>
+<ol type="1">
+<li><p><strong><code>nucleos</code></strong> — um pacote R que calcula, de forma reprodutível, as <strong>22 séries analíticas derivadas do IPCA</strong> publicadas pelo Banco Central, seguindo a metodologia consolidada da <a href="https://www.bcb.gov.br/publicacoes/notastecnicas/NT_57_202512"><strong>Nota Técnica 57</strong></a> (dez/2025). Cada série é verificada, em teste automatizado, contra a série oficial do SGS.</p></li>
+<li><p><strong>MCP Análise Macro</strong> — o <strong>primeiro servidor MCP da casa</strong>, que expõe essas séries como ferramentas que um assistente de IA chama sozinho. É o foco desta ficha.</p></li>
+</ol>
+<p>A ordem importa: o MCP só é possível — e só é <em>confiável</em> — porque a camada de cálculo já existia e era auditada. Um servidor que entrega número errado com fluência é pior que servidor nenhum.</p>
+<hr>
+</section>
+<section id="por-que-um-mcp" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-um-mcp">Por que um MCP</h2>
+<p>O <strong>Model Context Protocol</strong> é o padrão aberto que permite a um assistente de IA chamar ferramentas externas. Na prática, resolve um problema concreto de quem trabalha com dados macroeconômicos: <strong>o modelo não sabe o IPCA de junho de 2026</strong> — e, pior, se você perguntar, ele pode inventar um número plausível.</p>
+<p>Com o conector instalado, a pergunta <em>“a difusão está subindo?”</em> deixa de ser um exercício de memória do modelo e vira uma <strong>consulta ao dado calculado</strong>, com fonte e data de referência anexadas na resposta.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>O nicho
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Levantamento de julho de 2026 sobre MCPs de dados financeiros: os que existem são todos de <strong>mercado global/EUA</strong> — ações, fundamentos, <em>filings</em> (Financial Datasets, Alpha Vantage, Polygon, Finnhub, FMP, EODHD). <strong>Nenhum faz macroeconomia brasileira</strong>, e muito menos núcleos de inflação pela metodologia do BCB.</p>
+<p>Daí a estratégia de marca: o nome do produto é <strong>MCP Análise Macro</strong> (guarda-chuva), não “MCP Núcleos”. <strong>Nome amplo, entrega estreita</strong> — a v1 traz só os núcleos do IPCA, que é o carro-chefe e tem os dados prontos; a expansão para Selic/Copom, câmbio, atividade, fiscal e Focus nasce em infraestrutura própria, módulo a módulo.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="arquitetura" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura">Arquitetura</h2>
+<p>A decisão de projeto mais importante: <strong>o servidor não roda R e não coleta o SIDRA</strong>. Ele lê um artefato pré-calculado.</p>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  subgraph Calculo["Camada de cálculo — pacote R nucleos"]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    SIDRA[(SIDRA/IBGE&lt;br&gt;5 estruturas do IPCA)] --&gt; PKG["get_ipca() · agregar()&lt;br&gt;core_ma/ms/dp/p55() · difusao()"]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    PKG --&gt; TEST{{"testthat&lt;br&gt;conformidade vs. SGS"}}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  subgraph CI["GitHub Actions — mensal"]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    TEST --&gt; GERA["dashboard/gerar_dados.R"]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    GERA --&gt; REL[("release dashboard-dados&lt;br&gt;series_nucleos.json")]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  subgraph Worker["MCP — Cloudflare Workers (TypeScript)"]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    REL --&gt;|"fetch + cache 6h"| MCP["nucleos-mcp&lt;br&gt;Streamable HTTP · authless"]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    FB[(src/data.json&lt;br&gt;fallback embutido)] -.-&gt;|"se o fetch falhar"| MCP</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    MCP --&gt; TOOLS["nucleos_listar · nucleos_metadata&lt;br&gt;nucleos_ultimas · nucleos_serie&lt;br&gt;nucleos_comparar"]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  TOOLS --&gt; CLIENTES(["Claude · Claude Code&lt;br&gt;Cursor · Codex"])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Isso mantém o servidor <strong>fino</strong>: sem runtime R, sem chamada ao SIDRA no caminho crítico (que é lento e paginado), sem estado para administrar. O custo ocioso no Cloudflare fica perto de zero — apropriado para um dado que muda <strong>uma vez por mês</strong>.</p>
+<section id="auto-atualização-sem-re-deploy" class="level3">
+<h3 class="anchored" data-anchor-id="auto-atualização-sem-re-deploy">Auto-atualização sem re-deploy</h3>
+<p>O Worker busca <code>series_nucleos.json</code> no <em>release</em> <code>dashboard-dados</code> em tempo de execução, com cache de 6h por <em>isolate</em>. O workflow mensal regenera esse artefato após a divulgação do IPCA — então <strong>o MCP se atualiza sozinho</strong>. O <code>src/data.json</code> embutido no bundle existe apenas como <em>fallback</em>: se o GitHub estiver fora do ar, o servidor responde com o snapshot antigo em vez de quebrar.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode ts code-with-copy"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">loadData</span>()<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Snapshot<span class="op">&gt;</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> now <span class="op">=</span> <span class="bu">Date</span><span class="op">.</span><span class="fu">now</span>()<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (cache <span class="op">&amp;&amp;</span> now <span class="op">-</span> cache<span class="op">.</span><span class="at">at</span> <span class="op">&lt;</span> TTL_MS) <span class="cf">return</span> cache<span class="op">.</span><span class="at">data</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> res <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(DATA_URL<span class="op">,</span> { cf<span class="op">:</span> { cacheTtl<span class="op">:</span> <span class="dv">3600</span><span class="op">,</span> cacheEverything<span class="op">:</span> <span class="kw">true</span> } })<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (res<span class="op">.</span><span class="at">ok</span>) {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> data <span class="op">=</span> (<span class="cf">await</span> res<span class="op">.</span><span class="fu">json</span>()) <span class="im">as</span> Snapshot<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (data<span class="op">?.</span><span class="at">series</span> <span class="op">&amp;&amp;</span> data<span class="op">?.</span><span class="at">metadata</span>) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        cache <span class="op">=</span> { at<span class="op">:</span> now<span class="op">,</span> data }<span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// GitHub/rede indisponível — cai no fallback abaixo.</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Preserva o último bom; se nunca houve, usa o snapshot embutido no bundle.</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>cache) cache <span class="op">=</span> { at<span class="op">:</span> now<span class="op">,</span> data<span class="op">:</span> fallback <span class="im">as</span> Snapshot }<span class="op">;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> cache<span class="op">.</span><span class="at">data</span><span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="sem-autenticação-por-escolha" class="level3">
+<h3 class="anchored" data-anchor-id="sem-autenticação-por-escolha">Sem autenticação, por escolha</h3>
+<p>O servidor é <strong><em>authless</em></strong> e fala <strong>Streamable HTTP</strong> — o transporte que Claude, Cursor e Codex suportam nativamente por URL. Ninguém precisa instalar ponte (<code>mcp-remote</code>), colar chave nem fazer login: cola-se a URL e as ferramentas aparecem. Como o servidor <strong>só devolve dado público e não acessa arquivo nenhum do usuário</strong>, a superfície de risco de dispensar autenticação é mínima — e a fricção de adoção cai a zero, que é o que importa num produto que se quer distribuído para uma rede de alunos e clientes.</p>
+<hr>
+</section>
+</section>
+<section id="as-ferramentas" class="level2">
+<h2 class="anchored" data-anchor-id="as-ferramentas">As ferramentas</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nucleos_listar</code></td>
+<td>Lista as 23 séries disponíveis (núcleos, agregações, difusão, IPCA cheio)</td>
+</tr>
+<tr class="even">
+<td><code>nucleos_metadata</code></td>
+<td>Proveniência: última referência, data de atualização, fonte, metodologia</td>
+</tr>
+<tr class="odd">
+<td><code>nucleos_ultimas</code></td>
+<td>Panorama do mês: variação, aceleração (p.p.) e acumulados 3m/12m</td>
+</tr>
+<tr class="even">
+<td><code>nucleos_serie</code></td>
+<td>Série temporal de uma série, por período ou últimos <span class="math inline">\(N\)</span> meses</td>
+</tr>
+<tr class="odd">
+<td><code>nucleos_comparar</code></td>
+<td>Confronta várias séries lado a lado</td>
+</tr>
+</tbody>
+</table>
+<p>O snapshot atual cobre <strong>23 séries mensais de 2000-01 a 2026-06</strong>: os <strong>9 núcleos</strong> (EX0, EX1, EX2, EX3, EX-FE, MA, MS, DP, P55) e mais 14 séries — difusão, IPCA cheio, EX3 Serviços/Industriais e as agregações por segmento (administrados, livres, serviços, bens industriais, comercializáveis, duráveis/semiduráveis/não duráveis, alimentação no domicílio).</p>
+<section id="o-design-que-separa-um-mcp-bom-de-um-mcp-ingênuo" class="level3">
+<h3 class="anchored" data-anchor-id="o-design-que-separa-um-mcp-bom-de-um-mcp-ingênuo">O design que separa um MCP bom de um MCP ingênuo</h3>
+<p>Expor dado cru é a parte fácil. O que dá trabalho é <strong>impedir que o modelo use o dado errado</strong> — e isso se faz no texto que acompanha as ferramentas.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Três armadilhas endereçadas no protocolo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>1. A difusão não é uma variação de preço.</strong> É a proporção (%) de itens do IPCA com variação positiva no mês — um <strong>nível</strong>. Acumulá-la como se fosse inflação produz absurdo: três meses a ~60% “acumulariam” ~300%. O servidor detecta a série de nível e reporta a <strong>média</strong> do período, com nota explícita na resposta:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode ts code-with-copy"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ehNivel <span class="op">=</span> (nome<span class="op">:</span> <span class="dt">string</span>) <span class="kw">=&gt;</span> <span class="fu">norm</span>(nome) <span class="op">===</span> <span class="st">"difusao"</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Agrega os últimos n meses conforme a natureza da série.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> agregado <span class="op">=</span> (nome<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> v<span class="op">:</span> <span class="dt">number</span>[]<span class="op">,</span> n<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ehNivel</span>(nome) <span class="op">?</span> <span class="fu">media</span>(v<span class="op">,</span> n) <span class="op">:</span> <span class="fu">acumulado</span>(v<span class="op">,</span> n)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2. O snapshot pode estar velho.</strong> O IPCA é mensal; se o artefato tem mais de 45 dias, provavelmente houve divulgação do IBGE ainda não refletida. O <code>nucleos_metadata</code> calcula a idade <strong>em tempo de execução</strong> e emite alerta — em vez de deixar o modelo apresentar dado defasado como se fosse o mais recente.</p>
+<p><strong>3. O modelo precisa saber o que ele não sabe.</strong> O campo <code>instructions</code>, enviado no <em>handshake</em>, avisa que os dados são um snapshot pré-calculado (não consulta ao vivo), explica a unidade da difusão e indica por qual ferramenta começar.</p>
+</div>
+</div>
+<p>Há ainda uma camada de tolerância na entrada: <code>resolveSerie()</code> normaliza acento e caixa e aceita abreviação, então <code>"ms"</code>, <code>"MS"</code> e <code>"Núcleo MS"</code> chegam todos à mesma série — o modelo não precisa acertar o rótulo canônico de primeira.</p>
+<hr>
+</section>
+</section>
+<section id="a-camada-de-cálculo-o-pacote-nucleos" class="level2">
+<h2 class="anchored" data-anchor-id="a-camada-de-cálculo-o-pacote-nucleos">A camada de cálculo: o pacote <code>nucleos</code></h2>
+<p>O MCP é fino porque o trabalho pesado está no pacote R — e é lá que mora o diferencial técnico.</p>
+<section id="as-cinco-estruturas-do-ipca" class="level3">
+<h3 class="anchored" data-anchor-id="as-cinco-estruturas-do-ipca">As cinco estruturas do IPCA</h3>
+<p>O IPCA teve <strong>5 estruturas (POF) desde 1991</strong>, cada uma numa tabela diferente do SIDRA (58/61, 655/656, 2938, 1419, 7060). <code>get_ipca()</code> costura as cinco e devolve o <strong>código estrutural</strong> do IPCA, não o id interno do SIDRA.</p>
+<p>Isso cria uma sutileza que o código precisa respeitar: um mesmo código (ex.: <code>8101.Cursos</code>) <strong>muda de significado entre estruturas</strong>. Por isso MS e DP usam <em>proxies</em> de transição e são calculados <strong>estrutura a estrutura</strong> — montar uma história única por código contaminaria o cálculo.</p>
+</section>
+<section id="conformidade-contra-o-sgs" class="level3">
+<h3 class="anchored" data-anchor-id="conformidade-contra-o-sgs">Conformidade contra o SGS</h3>
+<p>A validação não é “parece certo”: há uma suíte de testes que compara <strong>cada série</strong> com a oficial do Banco Central. As 22 séries reproduzem o SGS <strong>até a segunda casa decimal de 1999 em diante</strong> (o MS é exato desde 1991).</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limitação conhecida, documentada
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No período de alta inflação e transição de planos monetários (<strong>1991–1995</strong>), a API pública do SIDRA não reproduz exatamente as variações usadas pelo BCB, que foram construídas a partir de microdados do IBGE.</p>
+<p>A divergência é de <strong>fonte de dados, não de método</strong> — a evidência é que até agregações simples divergem no período, enquanto o MS, que suaviza itens administrados, permanece exato. Está registrado em <code>?get_ipca</code> em vez de escondido.</p>
+</div>
+</div>
+</section>
+<section id="detalhes-de-metodologia-que-a-nt-57-mudou" class="level3">
+<h3 class="anchored" data-anchor-id="detalhes-de-metodologia-que-a-nt-57-mudou">Detalhes de metodologia que a NT 57 mudou</h3>
+<ul>
+<li><code>core_ma()</code> apara as duas caudas <strong>simetricamente</strong>: os itens que atravessam os percentis 20 e 80 entram com peso parcial (etapa iv da Subseção 2.3). A versão anterior descartava por inteiro o item do percentil 80.</li>
+<li>No DP, a janela de volatilidade cobre os <strong>48 meses anteriores</strong> ao mês de referência, <strong>sem incluí-lo</strong>: a variação corrente entra no núcleo, mas quem estima a volatilidade são os 48 meses prévios.</li>
+<li>Agosto e setembro de 1991 não foram divulgados isoladamente pelo IBGE e recebem tratamento específico (Subseção 2.7).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="como-conectar" class="level2">
+<h2 class="anchored" data-anchor-id="como-conectar">Como conectar</h2>
+<p>O endereço é o mesmo nos três clientes, sempre terminado em <code>/mcp</code>.</p>
+<section id="claude-site-e-aplicativo" class="level3">
+<h3 class="anchored" data-anchor-id="claude-site-e-aplicativo">Claude (site e aplicativo)</h3>
+<p><strong>Configurações → Connectors → Adicionar conector personalizado</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nome</td>
+<td><code>MCP Análise Macro — Núcleos de Inflação Brasil</code></td>
+</tr>
+<tr class="even">
+<td>URL do servidor MCP remoto</td>
+<td><code>https://nucleos-mcp.analisemacro.workers.dev/mcp</code></td>
+</tr>
+<tr class="odd">
+<td>ID do Cliente OAuth</td>
+<td><em>(vazio)</em></td>
+</tr>
+<tr class="even">
+<td>Client Secret OAuth</td>
+<td><em>(vazio)</em></td>
+</tr>
+</tbody>
+</table>
+<p>Os campos de OAuth ficam vazios — o servidor é <em>authless</em>. Funciona em <strong>todos os planos</strong>, inclusive o gratuito (que permite 1 conector personalizado).</p>
+</section>
+<section id="claude-code" class="level3">
+<h3 class="anchored" data-anchor-id="claude-code">Claude Code</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> mcp add <span class="at">--scope</span> user <span class="at">--transport</span> http <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  nucleos-ipca https://nucleos-mcp.analisemacro.workers.dev/mcp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Com <code>--scope project</code>, grava um <code>.mcp.json</code> na raiz do repositório — versionado no git, então quem clonar herda o conector (útil para turma ou equipe).</p>
+</section>
+<section id="cursor" class="level3">
+<h3 class="anchored" data-anchor-id="cursor">Cursor</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"mcpServers"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"nucleos-ipca"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"url"</span><span class="fu">:</span> <span class="st">"https://nucleos-mcp.analisemacro.workers.dev/mcp"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="codex-cli" class="level3">
+<h3 class="anchored" data-anchor-id="codex-cli">Codex CLI</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[mcp_servers.nucleos_ipca]</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">url</span> <span class="op">=</span> <span class="st">"https://nucleos-mcp.analisemacro.workers.dev/mcp"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><code>/mcp</code> não abre no navegador — e isso está correto
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Acessando a URL direto no navegador, você recebe <code>406 Not Acceptable: Client must accept text/event-stream</code>. É o servidor dizendo que o navegador não fala o protocolo: ele não envia o header <code>Accept: text/event-stream</code> que o Streamable HTTP exige. Quem envia é o cliente MCP — e para esses a mesma URL responde 200.</p>
+<p>Para conferir que o servidor está vivo, use a <strong>raiz</strong>, que devolve um <em>health-check</em> em texto puro com o último mês disponível.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="instalar-o-pacote-r" class="level2">
+<h2 class="anchored" data-anchor-id="instalar-o-pacote-r">Instalar o pacote R</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"remotes"</span>)) <span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"vitorwilher/nucleos"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nucleos)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Coleta o IPCA do SIDRA/IBGE (costura as cinco estruturas desde 1991)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ipca <span class="ot">&lt;-</span> <span class="fu">get_ipca</span>(<span class="at">inicio =</span> <span class="st">"2015-01"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># As 17 agregações simples (EX0-EX3, EX-FE, segmentos) de uma vez</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="fu">agregar</span>(ipca)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Os núcleos de cálculo direto</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>ma  <span class="ot">&lt;-</span> <span class="fu">core_ma</span>(ipca)    <span class="co"># médias aparadas sem suavização</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>ms  <span class="ot">&lt;-</span> <span class="fu">core_ms</span>(ipca)    <span class="co"># médias aparadas com suavização</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>dp  <span class="ot">&lt;-</span> <span class="fu">core_dp</span>(ipca)    <span class="co"># dupla ponderação</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>p55 <span class="ot">&lt;-</span> <span class="fu">core_p55</span>(ipca)   <span class="co"># percentil 55</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>dif <span class="ot">&lt;-</span> <span class="fu">difusao</span>(ipca)    <span class="co"># índice de difusão</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Conferência contra a série oficial do Banco Central</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>oficial <span class="ot">&lt;-</span> <span class="fu">get_sgs</span>(<span class="dv">11426</span>, <span class="at">inicio =</span> <span class="st">"2015-01"</span>)   <span class="co"># núcleo MA oficial</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O pacote inclui <code>ipca_exemplo</code>, um recorte de 2015–2026 para experimentar sem depender da rede.</p>
+<hr>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>nucleos/
+│
+├── R/                            # get_ipca, get_sgs, agregar,
+│                                 # core_ma/ms/dp/p55, difusao, proxies
+├── data/                         # ipca_vetores, ipca_estruturas,
+│                                 # ipca_ms_itens, ipca_proxies, series_sgs
+├── data-raw/                     # scripts que geram os datasets (NT 57)
+├── tests/testthat/               # conformidade contra o SGS
+├── vignettes/
+│   ├── nucleos.Rmd               # tutorial com gráficos
+│   └── conectar-ia.Rmd           # guia do MCP p/ público não-técnico
+│
+├── mcp/                          # ← o servidor MCP
+│   ├── src/index.ts              # 5 tools, Streamable HTTP, authless
+│   ├── src/data.json             # snapshot de fallback (23 séries)
+│   ├── wrangler.jsonc            # Cloudflare Workers + Durable Object
+│   └── gerar_snapshot.R          # regenera o fallback
+│
+├── dashboard/gerar_dados.R       # publica o artefato do release
+├── paper/                        # relatório técnico (Quarto → PDF)
+└── .github/workflows/            # R-CMD-check · pkgdown · dados-dashboard</code></pre>
+<hr>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Tecnologia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Cálculo</strong></td>
+<td>R ≥ 4.1 (pipe nativo), <code>dplyr</code>, <code>tidyr</code>, <code>tibble</code>, <code>httr</code>, <code>jsonlite</code>, <code>curl</code></td>
+</tr>
+<tr class="even">
+<td><strong>Testes</strong></td>
+<td><code>testthat</code> (3ª edição), conformidade contra o SGS</td>
+</tr>
+<tr class="odd">
+<td><strong>Documentação</strong></td>
+<td><code>roxygen2</code>, <code>pkgdown</code>, vignettes em <code>knitr</code>/<code>rmarkdown</code></td>
+</tr>
+<tr class="even">
+<td><strong>Servidor MCP</strong></td>
+<td>TypeScript, <code>@modelcontextprotocol/sdk</code>, <code>agents</code>, <code>zod</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Runtime</strong></td>
+<td>Cloudflare Workers (Durable Objects, Streamable HTTP)</td>
+</tr>
+<tr class="even">
+<td><strong>Deploy</strong></td>
+<td><code>wrangler</code></td>
+</tr>
+<tr class="odd">
+<td><strong>CI/CD</strong></td>
+<td>GitHub Actions — <code>R-CMD-check</code>, <code>pkgdown</code>, atualização mensal dos dados</td>
+</tr>
+<tr class="even">
+<td><strong>Reprodutibilidade</strong></td>
+<td><code>renv</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
+<ol type="1">
+<li><strong>Dashboard Shiny</strong> — monitor dos núcleos lendo o mesmo artefato do <em>release</em>: tela-resumo, leque de núcleos, núcleo médio, difusão, tabela com <em>download</em> e o selo “reproduz o SGS”.</li>
+<li><strong>Workflow <code>panorama_inflacao()</code></strong> — uma ferramenta que não devolve dado cru, e sim a <strong>leitura de conjuntura</strong> (o que acelerou, o que desacelerou, como está a difusão). O padrão que os melhores MCPs de dados adotam: entregar <em>workflow</em>, não só linha de tabela.</li>
+<li><strong>Expansão do MCP Análise Macro</strong> — Selic/Copom, câmbio, atividade, fiscal e expectativas do Focus, em infraestrutura própria, virando “a inteligência macro do Brasil dentro do Claude”.</li>
+<li><strong>Camada autenticada para clientes</strong> — mantendo o <em>tier</em> público como porta de entrada.</li>
+<li><strong>CRAN</strong> — submissão do pacote após estabilizar a API.</li>
+</ol>
+<hr>
+</section>
+<section id="links" class="level2">
+<h2 class="anchored" data-anchor-id="links">Links</h2>
+<ul>
+<li><strong>Repositório:</strong> <a href="https://github.com/vitorwilher/nucleos">github.com/vitorwilher/nucleos</a></li>
+<li><strong>Documentação do pacote:</strong> <a href="https://vitorwilher.github.io/nucleos/">vitorwilher.github.io/nucleos</a></li>
+<li><strong>Guia “Conectar com IA”:</strong> <a href="https://vitorwilher.github.io/nucleos/articles/conectar-ia.html">articles/conectar-ia.html</a></li>
+<li><strong>Servidor MCP:</strong> <code>https://nucleos-mcp.analisemacro.workers.dev/mcp</code></li>
+<li><strong>Nota Técnica 57 (BCB):</strong> <a href="https://www.bcb.gov.br/publicacoes/notastecnicas/NT_57_202512">bcb.gov.br</a></li>
+</ul>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<ul>
+<li>Banco Central do Brasil (2025). <em>Nota Técnica 57 — Núcleos de inflação e demais séries analíticas derivadas do IPCA</em>. Brasília: BCB.</li>
+<li>IBGE. <em>Sistema IBGE de Recuperação Automática (SIDRA)</em> — tabelas 58/61, 655/656, 2938, 1419 e 7060.</li>
+<li>Banco Central do Brasil. <em>Sistema Gerenciador de Séries Temporais (SGS)</em>.</li>
+<li>Anthropic (2024). <em>Model Context Protocol</em> — <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
