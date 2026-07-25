@@ -1,8 +1,8 @@
 ---
-title: "Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic?"
-date: "2026-07-05"
-categories: [Python, Quarto, LLM, statsmodels, OLS, Regra de Taylor, Política Monetária, Banco Central, Macroeconomia, Séries Temporais, python-bcb]
-description: "Extensão do Sentimento COPOM: o índice de tom hawkish-dovish das atas (3 LLMs) entra como regressor numa Regra de Taylor para a Selic, ao lado do hiato do produto e do desvio de inflação. Base montada na frequência de reunião — 48 reuniões (232–279, ago/2020–jun/2026), correlação sentimento × ΔSelic de 0,70 contemporânea e 0,63 antecedente."
+title: "Regra de Taylor com Sentimento do Copom — o balanço de riscos antecipa a Selic ou apenas reflete expectativas?"
+date: "2026-07-23"
+categories: [Python, Quarto, LLM, statsmodels, OLS, GMM, VAR, Filtro de Kalman, Regra de Taylor, Política Monetária, Banco Central, Macroeconomia, Séries Temporais, python-bcb]
+description: "A comunicação do Copom decomposta por três LLMs em diagnóstico retrospectivo, orientação prospectiva e balanço de riscos, com validação cega por agentes independentes. O balanço de riscos antecipa a ΔSelic da reunião seguinte (+0,146 p.p. por desvio-padrão), mas o efeito é integralmente absorvido pela expectativa do Questionário Pré-Copom (+13,3 pb), sem prever a surpresa monetária. Linguagem como sinalização compartilhada, não choque autônomo."
 image: "taylor-sentimento-capa.png"
 execute:
   eval: false
@@ -14,55 +14,76 @@ execute:
 ::: {.callout-note}
 ## 🔗 Projeto-mãe: Sentimento COPOM
 
-Este trabalho é uma **extensão direta** do [**Sentimento COPOM**](sentimento-copom.html). Lá, construímos um Índice de Tom *hawkish-dovish* das atas do Copom com **três LLMs em paralelo** (Gemini Flash Lite, Claude Haiku 4.5, GPT-4.1-mini), calibrado em pontos percentuais da Selic. **Aqui**, esse índice deixa de ser o objeto final e vira um **regressor**: entra numa **Regra de Taylor** para testar se o tom da comunicação adiciona poder explicativo sobre a taxa de juros *além* dos fundamentos macroeconômicos tradicionais. Os *scores* dos três modelos são insumos **congelados** desta versão — não se reprocessam atas aqui; a escoragem incremental pertence ao projeto irmão.
+Este trabalho é uma **extensão direta** do [**Sentimento COPOM**](sentimento-copom.html). Lá, construímos um Índice de Tom *hawkish-dovish* das atas do Copom com **três LLMs em paralelo** (Gemini Flash Lite, Claude Haiku 4.5, GPT-4.1-mini). **Aqui**, esse índice deixa de ser o objeto final e vira um **regressor** numa **Regra de Taylor** — e, na rodada atual, é *reconstruído*: o corpus A+B das atas passa a ser lido integralmente e o tom é decomposto em dimensões econômicas distintas.
+
+Uma correção importante em relação à versão anterior desta ficha: as regressões usam os ***scores* brutos em $[-3, +3]$** (padronizados por z-score), **não** a série calibrada em pontos percentuais da Selic disponível no projeto de origem. Não há, portanto, vazamento mecânico da calibração OLS do projeto-mãe para a Regra de Taylor estimada aqui.
 :::
 
 ## Visão Geral
 
-Este projeto testa, seguindo a metodologia **CRISP-DM** (*Cross-Industry Standard Process for Data Mining*), uma pergunta de economia monetária aplicada: **o sentimento da comunicação do Copom, medido por LLMs, tem informação sobre a Selic que os fundamentos macro não capturam?**
+Este projeto testa, seguindo a metodologia **CRISP-DM**, uma pergunta de economia monetária aplicada: **o sentimento da comunicação do Copom, medido por LLMs, tem informação sobre a Selic que os fundamentos macro não capturam?**
 
-Para isso, montamos uma base na **frequência de reunião do Copom** (a unidade de observação é a *reunião*, não o mês) reunindo quatro blocos, cada um coletado de fonte pública com *cache* local incremental:
+A resposta encontrada é mais interessante — e mais restritiva — do que a hipótese inicial sugeria. O tom **explica** a Selic contemporânea com folga e o **balanço de riscos de inflação antecipa** a decisão da reunião seguinte. Mas quando se confronta esse conteúdo antecedente com a expectativa do mercado medida **antes** da reunião, o efeito se revela **integralmente absorvido pela expectativa**: a linguagem desloca o consenso, não a surpresa.
 
-- **Decisão da Selic** — meta pós-reunião, variação (ΔSelic) e defasagem (SGS 432);
-- **Sentimento** — índice de tom *hawkish-dovish* por LLM e *ensemble* (média simples dos três), herdado do Sentimento COPOM;
-- **Desvio da inflação esperada** — expectativa Focus (IPCA 12 meses suavizada, mediana na véspera da reunião) menos a meta interpolada para o mesmo horizonte;
-- **Hiato do produto** — ciclo do filtro Hodrick-Prescott ($\lambda = 14400$) sobre o log do IBC-Br dessazonalizado (SGS 24364), com defasagem de publicação de 2 meses.
+::: {.callout-important}
+## Tese central (revisada)
 
-O artefato final é um *paper* técnico reprodutível em **Quarto + LaTeX**, versionado formalmente (CHANGELOG + *snapshots* por *release*), no mesmo padrão editorial do projeto-mãe.
-
-::: {.callout-tip}
-## Tese central
-
-A **Regra de Taylor** — que explica a taxa de juros por hiato do produto e desvio da inflação em relação à meta — é o cavalo de batalha da política monetária empírica. A hipótese aqui é que o **tom da comunicação** carrega sinal *incremental*: dois cenários com hiato e desvio de inflação parecidos podem justificar respostas diferentes da Selic, e a diferença aparece na *linguagem* da ata. Na base montada, o *ensemble* de sentimento tem **correlação de 0,70 com a ΔSelic contemporânea e de 0,63 com a ΔSelic da reunião seguinte** — evidência preliminar de que o tom não só acompanha, mas *antecede* a decisão.
+A hipótese original era que o tom carrega sinal *incremental* sobre a decisão. Os resultados obrigam a **reposicionar a pergunta**: o balanço de riscos antecipa a ΔSelic da reunião seguinte em **+0,146 p.p. por desvio-padrão** ($p = 0{,}001$), mas desloca a **expectativa média do Questionário Pré-Copom em +13,3 pontos-base** — praticamente toda a decisão realizada (+12,9 pb). A **surpresa** residual é de **−0,4 pb**, estatisticamente indistinguível de zero. A comunicação do Copom opera como **mecanismo de sinalização compartilhado com o mercado**, não como choque monetário autônomo.
 :::
 
 ---
 
 ## Motivação
 
-A Regra de Taylor [@taylor1993] postula que o banco central ajusta a taxa de juros de referência em resposta a dois desvios: a inflação em relação à meta e o produto em relação ao potencial. É uma das relações mais estimadas em macroeconomia — mas trata a comunicação do banco central como ruído. Ao mesmo tempo, uma literatura crescente mostra que a *comunicação* é, em si, um instrumento de política monetária [@blinder2008; @hansen2018]: o *tom* com que o cenário é descrito antecipa a direção dos juros.
+A Regra de Taylor [@taylor1993] postula que o banco central ajusta a taxa de juros em resposta a dois desvios: a inflação em relação à meta e o produto em relação ao potencial. É uma das relações mais estimadas em macroeconomia — mas trata a comunicação do banco central como ruído. Ao mesmo tempo, uma literatura crescente mostra que a *comunicação* é, em si, um instrumento de política monetária [@blinder2008; @hansen2018].
 
-O projeto-mãe transformou esse tom em uma série quantitativa. Este projeto fecha o elo, colocando as duas peças na mesma regressão. As perguntas de pesquisa:
+O projeto-mãe transformou esse tom em série quantitativa. Este projeto fecha o elo, colocando as duas peças na mesma regressão — e depois submete o resultado a um teste que boa parte da literatura de *central bank communication* não faz: **descontar o que o mercado já esperava**.
 
-1. **O sentimento sobrevive aos controles?** Com hiato do produto e desvio de inflação na regressão, o coeficiente do sentimento ($\hat{\delta}$) permanece positivo e estatisticamente significante?
-2. **O tom antecede a decisão?** O sentimento da ata da reunião $t$ (ou defasado, $t-1$) prevê a ΔSelic da reunião seguinte? A correlação antecedente de **0,63** é apenas contemporaneidade disfarçada ou há *timing*?
-3. **A escolha do LLM muda a conclusão econômica?** Como os três modelos divergem na *intensidade* do *score* (a tese do projeto-mãe), o coeficiente $\hat{\delta}$ e o ganho de $R^2$ são robustos ao provedor de IA usado como fonte do regressor?
-4. **A especificação importa?** Regra contemporânea vs. *forward-looking* com suavização; hiato via HP vs. fonte alternativa (IFI) — o sinal do sentimento é robusto?
+### Perguntas de pesquisa
+
+1. **O sentimento sobrevive aos controles?** Com hiato do produto e desvio de inflação na regressão, $\hat{\delta}$ permanece positivo e significante?
+2. **O tom antecede a decisão?** O sentimento da ata $t$ prevê a ΔSelic da reunião $t+1$ — ou isso é contemporaneidade disfarçada?
+3. **Qual dimensão da linguagem carrega o sinal?** Diagnóstico retrospectivo, orientação prospectiva e balanço de riscos são objetos econômicos distintos; agregá-los num único índice pode estar misturando informação com ruído.
+4. **O sinal é antecipação ou surpresa?** Se o mercado já precifica o conteúdo da ata, o efeito sobre a decisão não é informação nova.
+5. **A conclusão depende do LLM?** Sinal e significância são estáveis entre Claude, Gemini e OpenAI?
+
+---
+
+## A auditoria que reorientou o projeto
+
+A versão inicial deste trabalho estimava a Regra de Taylor com o índice agregado herdado. Uma auditoria do corpus revelou duas coisas — uma tranquilizadora e uma que exigiu refazer a escoragem:
+
+::: {.callout-warning}
+## O que a auditoria encontrou
+
+**Sem vazamento (verificado).** A extração já excluía corretamente a **seção C** das atas, que contém discussão, decisão e votação. E os *scores* usados são as saídas brutas dos modelos em $[-3, +3]$ — a calibração em p.p. da Selic nunca entrou nesta base.
+
+**Truncagem material (corrigida).** A extração legada limitava as seções A+B a **4.500 caracteres**. O corte atingiu **35 das 48 atas**. Entre as atas truncadas, a extração integral recuperou **mediana de 6.042 caracteres** (máximo de 10.061) — cobertura temporal desigual, com risco de eliminar justamente o conteúdo prospectivo das atas mais longas.
+:::
+
+A resposta foi reconstruir o corpus (`data/raw/atas_full_cache.json`, seções A+B integrais, seção C excluída) e **reescorar as 48 atas** em dimensões separadas, com cada justificativa vinculada a um identificador de parágrafo (`P01`, `P02`, …) para auditabilidade.
+
+### O índice prospectivo em quatro dimensões
+
+| Dimensão | O que mede |
+|---|---|
+| `tom_retrospectivo` | Leitura dos dados e condições **já observadas** |
+| `orientacao_prospectiva` | Indicação explícita sobre a **postura monetária futura** |
+| `balanco_riscos_inflacao` | **Assimetria dos riscos** para a inflação |
+| `confianca` | Grau de clareza da classificação (diagnóstico de validade) |
 
 ---
 
 ## Metodologia — CRISP-DM
 
-O projeto segue o processo **CRISP-DM**, aqui aplicado a um problema de **econometria de séries temporais aumentada por um regressor gerado por IA**.
-
 | Fase | Aplicação no Projeto |
 |---|---|
-| **1. Entendimento do Negócio** | Formalização da Regra de Taylor *forward-looking* com suavização (@taylor1993; @clarida2000); escolha da variável-alvo (meta Selic / ΔSelic por reunião); hipótese testável: o sentimento das atas adiciona poder explicativo além de hiato e desvio de inflação |
-| **2. Entendimento dos Dados** | Mapeamento de 4 blocos (Selic SGS 432; sentimento herdado dos 3 LLMs; Focus IPCA 12m suavizada; hiato via IBC-Br). A unidade é a **reunião do Copom** (232–279), não o mês — todos os regressores são alinhados à data da reunião |
-| **3. Preparação dos Dados** | `scripts/01_build_base.py` monta `data/base_taylor.csv` (uma linha por reunião). Decisões documentadas: `selic_pos` = 1º valor após a reunião; Focus = última mediana **anterior** à reunião (informação disponível ao comitê); meta interpolada por média ponderada; hiato defasado em $m-2$. *Cache* local incremental por fonte |
-| **4. Modelagem** | Regra de Taylor aumentada estimada por **OLS com erros HAC (Newey-West)**: $i_t = \rho\, i_{t-1} + (1-\rho)[\alpha + \beta(\pi^e_t - \pi^*_t) + \gamma\, \text{hiato}_t] + \delta\, S_t + \varepsilon_t$. Comparação com/sem o termo de sentimento e por fonte de LLM. *(Em estruturação — v0.1: base pronta; estimação é o próximo bloco)* |
-| **5. Avaliação** | Teste de significância de $\hat{\delta}$ (o sentimento sobrevive aos controles?); ganho de $R^2$/$\bar{R}^2$ ao adicionar $S_t$; especificação antecedente ($t \to t+1$); robustez ao provedor de LLM e à fonte do hiato. Evidência preliminar já na base: correlação $S \times \Delta$Selic de **0,70** (contemporânea) e **0,63** (antecedente) |
-| **6. Implantação** | *Paper* reprodutível em Quarto + LaTeX; base regenerável apagando o *cache*; sistema formal de *releases* (CHANGELOG + `versions/`); edições base (auditável) e público (do leitor), como no projeto-mãe |
+| **1. Entendimento do Negócio** | Regra de Taylor *forward-looking* com suavização (@taylor1993; @clarida2000). Hipótese testável: o tom adiciona poder explicativo além de hiato e desvio de inflação — e, na rodada revisada, se esse conteúdo é **antecipação** ou **surpresa** |
+| **2. Entendimento dos Dados** | Cinco blocos: Selic (SGS 432); corpus integral das atas; Focus IPCA 12m suavizada; hiato (IBC-Br, SGS 24364); **Questionário Pré-Copom** (42 edições quantitativas, reuniões 238+). A unidade é a **reunião do Copom** (232–279), não o mês |
+| **3. Preparação dos Dados** | `01_build_base.py` monta `base_taylor.csv` (48 reuniões). `09_prepare_forward_texts.py` reconstrói o corpus A+B sem truncagem. `14/15_*` coletam o QPC e constroem a surpresa da decisão. *Cache* incremental por fonte |
+| **4. Modelagem** | OLS com erros **HAC (Newey-West, 2 defasagens)** como referência; **TSLS e GMM em dois passos** para endogeneidade; **filtro de Kalman** como hiato alternativo; **VAR** e **VECM** como exploratórios; **regressões móveis** para estabilidade; **bootstrap (5.000 réplicas)** e ***leave-one-out*** na especificação de surpresa |
+| **5. Avaliação** | Significância de $\hat{\delta}$; ganho de $\bar{R}^2$; decomposição por dimensão textual; **identidade decisão = expectativa + surpresa**; robustez ao provedor de LLM e à fonte do hiato; **validação cega por dois agentes independentes** |
+| **6. Implantação** | *Paper* reprodutível em Quarto + LaTeX; base regenerável apagando o *cache*; CHANGELOG + `versions/` |
 
 ---
 
@@ -70,204 +91,183 @@ O projeto segue o processo **CRISP-DM**, aqui aplicado a um problema de **econom
 
 ```{mermaid}
 flowchart LR
-  subgraph Herdado["Sentimento COPOM (congelado)"]
-    SC[(scores 3 LLMs<br>Claude · Gemini · OpenAI)]
-    AT[(atas_cache.json<br>datas das reuniões)]
+  subgraph Corpus["Corpus reconstruído"]
+    ATAS[(atas_full_cache.json<br>seções A+B integrais<br>seção C excluída)]
   end
 
-  subgraph Coleta["Coleta via API BCB (python-bcb)"]
+  subgraph Coleta["Coleta via API BCB"]
     SGS432[(SGS 432<br>meta Selic)]
-    FOCUS[(Focus IPCA 12m<br>suavizada)]
+    FOCUS[(Focus IPCA 12m)]
     META[(SGS 13521<br>meta de inflação)]
     IBC[(SGS 24364<br>IBC-Br dessaz.)]
+    QPC[(Questionário Pré-Copom<br>42 edições)]
   end
 
-  SC --> BUILD
-  AT --> BUILD
+  ATAS --> SCORE[["Escoragem 3 LLMs<br>4 dimensões · evidência por parágrafo"]]
+  SCORE --> VALID{{"Validação cega<br>2 agentes independentes"}}
+  VALID --> BUILD
   SGS432 --> BUILD
   FOCUS --> BUILD
   META --> BUILD
   IBC --> BUILD
 
-  BUILD[["scripts/01_build_base.py<br>frequência de reunião"]] --> CSV[(data/base_taylor.csv<br>48 reuniões × 14 colunas)]
+  BUILD[["base_taylor.csv<br>48 reuniões"]] --> EST
 
-  subgraph Modelagem["Regra de Taylor aumentada"]
-    CSV --> OLS[statsmodels OLS<br>HAC / Newey-West]
-    OLS --> M0["Baseline<br>hiato + desvio π"]
-    OLS --> M1["+ sentimento S_t<br>δ̂, ΔR²"]
-    OLS --> M2["antecedente<br>t → t+1"]
+  subgraph EST["Estimação"]
+    M01["M0 / M1<br>contemporânea"]
+    M2["M2 antecedente<br>por dimensão"]
+    IV["TSLS / GMM"]
+    KAL["hiato Kalman"]
+    DIN["VAR · VECM · rolling"]
   end
 
-  M0 --> PDF([Quarto Render PDF])
-  M1 --> PDF
-  M2 --> PDF
+  QPC --> SURP[["Surpresa monetária<br>decisão − expectativa QPC"]]
+  M2 --> SURP
+  SURP --> DEC["Identidade:<br>decisão = expectativa + surpresa"]
+
+  EST --> PDF([Quarto Render PDF])
+  DEC --> PDF
 ```
 
 ---
 
-## 1. Entendimento do Negócio
+## 1. Especificações
 
-### 1.1 A Regra de Taylor como cavalo de batalha
-
-A Regra de Taylor descreve a política monetária como uma resposta sistemática da taxa de juros a dois desvios fundamentais:
+### 1.1 Regra de Taylor contemporânea
 
 $$
-i_t = \alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t + \varepsilon_t
+i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S^z_t + \varepsilon_t
 $$
 
-Empiricamente, estima-se uma versão **suavizada e *forward-looking*** [@clarida2000], em que o BC ajusta a taxa gradualmente (termo de suavização $\rho$) e reage a expectativas, não a valores realizados:
+### 1.2 Especificação antecedente dinâmica
 
 $$
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \varepsilon_t
+\Delta i_{t+1} = c + \phi\,\Delta i_t + \beta\,\text{desvio}_t + \gamma\,\text{hiato}_t + \delta\, S^z_t + \varepsilon_{t+1}
 $$
 
-### 1.2 O aumento por sentimento
+O controle por $\Delta i_t$ é o teste decisivo: sem ele, a ata *parece* prever a próxima reunião apenas porque acompanha a decisão corrente.
 
-A contribuição do projeto é acrescentar o índice de tom $S_t$ como regressor:
+### 1.3 Decomposição da surpresa
+
+Com a expectativa do QPC coletada **antes** da reunião, vale a identidade contábil:
 
 $$
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S_t + \varepsilon_t
+\underbrace{\Delta i_{t+1}}_{\text{decisão realizada}} = \underbrace{E^{QPC}_t[\Delta i_{t+1}]}_{\text{expectativa}} + \underbrace{u_{t+1}}_{\text{surpresa}}
 $$
 
-O coeficiente de interesse é $\hat{\delta}$. Sob a hipótese nula ($\delta = 0$), o tom da ata é redundante dado hiato e desvio de inflação. Rejeitá-la significa que a *linguagem* do Copom carrega informação sobre a Selic que os fundamentos observáveis não capturam.
-
-### 1.3 Critérios de sucesso
-
-| Critério | Meta |
-|---|---|
-| Significância do sentimento | $\hat{\delta}$ com $p < 0{,}05$ mantidos os controles |
-| Ganho explicativo | $\Delta\bar{R}^2 > 0$ ao adicionar $S_t$ ao *baseline* |
-| Antecedência | Correlação $S_t \times \Delta$Selic$_{t+1}$ economicamente relevante (base: **0,63**) |
-| Robustez ao LLM | Sinal e significância de $\hat{\delta}$ estáveis entre Claude, Gemini e OpenAI |
-| Reprodutibilidade | Base regenerada do zero apagando os *caches* de `data/raw/` |
+Estimar a mesma regressão sobre cada componente separa **sinalização** (o índice move a expectativa) de **choque** (o índice move a surpresa).
 
 ---
 
-## 2. Entendimento dos Dados
+## 2. Resultados
 
-### 2.1 Fontes
+### 2.1 A Regra de Taylor contemporânea
 
-| Bloco | Fonte | Série / origem |
-|---|---|---|
-| Reuniões e datas | API BCB (atas), *cache* herdado | `atas_cache.json` — data da reunião, nº 232–279 |
-| Meta Selic | SGS 432 (diária) | Meta definida pelo Copom |
-| Sentimento | Sentimento COPOM (congelado) | `scores_{claude,gemini,openai}_cache.csv` |
-| Inflação esperada | Focus/BCB | IPCA 12m **suavizada**, mediana, `baseCalculo=0` |
-| Meta de inflação | SGS 13521 (anual) | Interpolada para o horizonte de 12m |
-| Hiato do produto | SGS 24364 (IBC-Br dessaz.) | Filtro HP ($\lambda = 14400$) sobre o log |
+O sentimento sobrevive aos controles com folga. Comparação M0 (*baseline*) → M1 (aumentada), $n = 47$, erros HAC:
 
-### 2.2 A unidade de observação é a reunião
+| Modelo | $\hat{\delta}$ (sentimento) | $p$-valor | $\bar{R}^2$ |
+|---|---|---|---|
+| **M0 — Baseline** | — | — | 0,9932 |
+| **M1 — Aumentada** | **+0,283** | $< 0{,}001$ | **0,9960** |
 
-Diferentemente de estimações macro em frequência mensal ou trimestral, aqui **cada linha é uma reunião do Copom**. Isso alinha a decisão de juros à ata que a acompanha e ao estado da economia *como observado pelo comitê naquele momento* — daí a exigência de usar sempre a última divulgação **anterior** à reunião para o Focus, evitando *look-ahead bias*.
-
-### 2.3 Recorte amostral
-
-A amostra vai da **reunião 232 (ago/2020)** — herdando o início do projeto-mãe, que corresponde ao *template* estrutural estável das atas pós-pandemia — à **reunião 279 (jun/2026)**, totalizando **48 reuniões**. As reuniões 278 e 279 foram adicionadas em 2026-07-05, escoradas no projeto irmão com o mesmo *prompt* e modelos da v1.0.
-
----
-
-## 3. Preparação dos Dados
-
-Toda a montagem vive em `scripts/01_build_base.py`, que produz `data/base_taylor.csv` (uma linha por reunião) e cria *cache* local por fonte. Decisões de coleta documentadas:
-
-### 3.1 Selic e variação
-
-```python
-# A nova meta vigora a partir do dia útil seguinte à reunião:
-df["selic_pre"] = [selic.asof(d) for d in df["data"]]              # valor na data
-df["selic_pos"] = [selic[selic.index > d].iloc[0] for d in df["data"]]  # 1º após
-df["d_selic"]   = df["selic_pos"] - df["selic_pre"]                # ΔSelic decidida
-df["selic_lag"] = df["selic_pos"].shift(1)                         # i_{t-1}
-```
-
-### 3.2 Sentimento herdado (ensemble)
-
-```python
-for modelo in ["claude", "gemini", "openai"]:
-    s = pd.read_csv(RAW / f"scores_{modelo}_cache.csv")
-    df = df.merge(s, on="reuniao", how="left")
-df["score_ensemble"] = df[["score_claude", "score_gemini", "score_openai"]].mean(axis=1)
-```
-
-### 3.3 Desvio da inflação esperada
-
-O Focus entra pela **última mediana divulgada antes da reunião** (informação disponível ao comitê). A meta de 12 meses é a média ponderada das metas anuais do ano corrente e seguinte pelos meses cobertos — com a meta contínua de 3% a partir de 2025, a ponderação torna-se inócua e o desvio fica dominado pela expectativa.
-
-```python
-df["ipca_e12m"]       = [f.asof(d - pd.Timedelta(days=1)) for d in df["data"]]
-df["desvio_inflacao"] = df["ipca_e12m"] - df["meta_12m"]
-```
-
-### 3.4 Hiato do produto
-
-```python
-ciclo, _ = sm.tsa.filters.hpfilter(np.log(ibc), lamb=14400)  # ciclo HP
-hiato = (ciclo * 100).rename("hiato")                        # % do potencial
-# cada reunião usa o valor de m-2 (defasagem de publicação do IBC-Br)
-```
+O coeficiente do sentimento padronizado é **+0,283 p.p. por desvio-padrão** (EP HAC 0,056; IC 95% [0,169; 0,396]). O desvio da inflação cai de $\hat\beta = 0{,}669$ para $0{,}415$ quando o tom entra — parte do que se atribuía aos fundamentos observáveis estava, na verdade, na linguagem.
 
 ::: {.callout-note}
-## Duas decisões de coleta que exigiram checagem empírica
+## Estabilidade temporal
 
-**SGS 24364 vs. 24363** — verificamos que a **24364** é a série *com* ajuste sazonal (amplitude sazonal do crescimento m/m de 0,8%, contra 11,4% da 24363). **Viés de ponta do HP** — o filtro Hodrick-Prescott sofre de *end-point bias*, que afeta justamente as observações recentes; fica registrado como limitação, e a robustez com o hiato da IFI é passo futuro.
+Regressões móveis com janela de 24 reuniões: o coeficiente do sentimento é **positivo em 100% das janelas** e significante a 5% em **95,8%** delas (23 de 24). Com janelas de 28 e 32 reuniões, a proporção significativa vai a **100%**. Não é artefato de subperíodo.
 :::
 
----
+### 2.2 Antecedência: o controle que desfaz o resultado bruto
 
-## 4. Modelagem
+Sem controlar a decisão corrente, o sentimento parece prever a próxima reunião ($\hat\delta = +0{,}509$, $p < 0{,}001$). **Com** o controle, o efeito evapora:
 
-### 4.1 Especificação de referência
+| Especificação M2 | $\hat{\delta}$ | $p$-valor | $\bar{R}^2$ |
+|---|---|---|---|
+| **M2a** — sem controlar $\Delta i_t$ | +0,509 | $< 0{,}001$ | 0,440 |
+| **M2b** — dinâmica, com $\Delta i_t$ | **+0,045** | 0,407 | 0,837 |
 
-A Regra de Taylor aumentada, estimada por **OLS** com erros-padrão **HAC (Newey-West)** para lidar com a autocorrelação natural de séries de política monetária:
+A "antecedência" do índice **agregado** era contemporaneidade disfarçada. TSLS e GMM em dois passos (instrumentando os quatro regressores com defasagens 1 e 2) confirmam: $\hat\delta = -0{,}066$ ($p = 0{,}64$) e $-0{,}104$ ($p = 0{,}47$), com o teste J de Hansen não rejeitando as sobreidentificações ($p = 0{,}49$).
 
-$$
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S_t + \varepsilon_t
-$$
+### 2.3 A decomposição resolve o enigma
 
-O desenho experimental compara três especificações aninhadas:
+O índice agregado falha porque **mistura objetos econômicos distintos**. Separando as dimensões na especificação dinâmica (dependente: ΔSelic em $t+1$; controles: $\Delta i_t$, desvio de inflação, hiato Kalman):
 
-| Modelo | Regressores | Pergunta |
+| Dimensão textual | $\hat{\delta}$ | EP HAC | $p$-valor |
+|---|---|---|---|
+| Sentimento legado (agregado) | +0,045 | 0,053 | 0,407 |
+| Tom retrospectivo | +0,102 | 0,065 | 0,127 |
+| Orientação prospectiva | −0,022 | 0,046 | 0,642 |
+| **Balanço de riscos de inflação** | **+0,146** | 0,042 | **0,001** |
+
+O conteúdo antecedente está **concentrado no balanço de riscos** — não na orientação prospectiva explícita, que seria o candidato intuitivo. Na especificação decomposta (as três dimensões juntas), o balanço de riscos mantém **+0,129** ($p = 0{,}006$) e a orientação prospectiva vira **negativa e significante** (−0,101, $p = 0{,}006$), sugerindo que as duas dimensões capturam informações parcialmente opostas.
+
+**Robustez ao provedor:** o sinal é positivo nos três LLMs, com significância individual para Claude (+0,132, $p = 0{,}002$) e Gemini (+0,124, $p < 0{,}001$); OpenAI mantém o sinal (+0,076) mas não a significância ($p = 0{,}148$).
+
+### 2.4 Validação cega por agentes independentes
+
+Antes de levar o índice a sério, dois agentes classificaram independentemente 12 atas do piloto, **sem acesso aos scores dos provedores**:
+
+| Comparação (balanço de riscos) | Spearman | Concordância de sinal |
 |---|---|---|
-| **M0 — Baseline** | $i_{t-1}$, desvio π, hiato | Regra de Taylor clássica |
-| **M1 — Aumentada** | M0 $+\ S_t$ | $\hat{\delta}$ significante? $\Delta\bar{R}^2 > 0$? |
-| **M2 — Antecedente** | ΔSelic$_{t+1} \sim S_t$ + controles | O tom antecede a decisão? |
+| Agente A × Agente B | **0,954** | **100%** |
+| Consenso dos agentes × *ensemble* dos LLMs | **0,777** | 75% |
 
-::: {.callout-note}
-## Estado atual — v0.1
+Entre os três LLMs no corpus completo (48 atas), o balanço de riscos tem concordância de sinal entre **91,7% e 97,9%** — a dimensão mais estável das quatro.
 
-A **base de dados está pronta e auditada** (documento `01_base_dados.qmd` → PDF, com fontes, checagens de consistência, descritivas e correlações). A **estimação da Regra de Taylor é o próximo bloco do paper** — por isso, os números reportados abaixo são as **correlações da base**, não coeficientes estruturais estimados. Nenhum número aqui é digitado à mão: todos saem de *chunks* executáveis, seguindo a regra de ouro da skill `paper-analise-macro`.
+### 2.5 O teste decisivo: sinalização ou surpresa?
+
+Usando as 42 edições quantitativas do QPC, a decomposição da identidade contábil (coeficientes em pontos-base por desvio-padrão do balanço de riscos, controles macro parcimoniosos, erros HAC):
+
+| Componente | Coeficiente (pb) | $p$-valor | $\bar{R}^2$ |
+|---|---|---|---|
+| **Decisão realizada** | **+12,9** | $< 0{,}01$ | 0,885 |
+| **Expectativa média do QPC** | **+13,3** | $< 0{,}01$ | 0,919 |
+| **Surpresa** (resíduo) | **−0,4** | 0,872 | −0,042 |
+
+$$
+\underbrace{12{,}916}_{\text{decisão realizada}} = \underbrace{13{,}333}_{\text{expectativa QPC}} + \underbrace{(-0{,}417)}_{\text{surpresa}}
+$$
+
+::: {.callout-important}
+## O resultado central
+
+**O efeito é integralmente absorvido pela expectativa.** O bootstrap com 5.000 réplicas coloca o efeito sobre a expectativa entre **+5,7 e +20,9 pb** (probabilidade de ser positivo: 99,9%), e todas as estimativas *leave-one-out* permanecem positivas. Já a surpresa tem IC bootstrap de **[−5,9; +4,5] pb** — indistinguível de zero.
+
+O índice também **não reduz o desacordo** do mercado: não há efeito significativo sobre a dispersão nem sobre a entropia das respostas do QPC. A comunicação sinaliza a *direção* da política sem estreitar o consenso — e sem gerar choque monetário autônomo.
 :::
 
-### 4.2 Evidência preliminar da base
+### 2.6 Dinâmica multivariada (exploratória)
 
-Antes de qualquer estimação estrutural, a base já revela o padrão que motiva o projeto:
-
-- **Correlação sentimento (*ensemble*) × ΔSelic contemporânea:** **0,70**
-- **Correlação sentimento (*ensemble*) × ΔSelic da reunião seguinte ($t \to t+1$):** **0,63**
-
-A queda modesta da correlação ao defasar (0,70 → 0,63) é o **sinal de antecedência**: o tom da ata carrega informação sobre a decisão que ainda virá. As duas observações mais recentes (reuniões 278 e 279) são cortes de 0,25 p.p. acompanhados de tom *hawkish* no *ensemble* (+1,7) — uma tensão que a especificação aumentada deve ajudar a interpretar.
+VAR na frequência das reuniões (ordenação recursiva com sentimento por último, 1 defasagem por AIC/BIC/HQIC/FPE, sistema estável, teste de *whiteness* $p = 0{,}74$) e VECM em níveis com posto 1 produzem respostas positivas ao choque de sentimento, mas com **intervalos que atravessam zero**. Consistente com a leitura principal: sem evidência de choque autônomo.
 
 ---
 
-## 5. Avaliação
+## 3. Discussão
 
-O plano de avaliação segue quatro eixos, aninhados na comparação M0 → M1 → M2:
+Os resultados formam um padrão coerente:
 
-### 5.1 O sentimento sobrevive aos controles?
+1. **Associação contemporânea forte e estável** — sob hiato HP e Kalman, e em praticamente todas as janelas móveis.
+2. **Antecedência bruta é ilusória** — desaparece ao controlar a decisão corrente.
+3. **A dimensão importa** — o conteúdo antecedente está no *balanço de riscos*, não na orientação prospectiva.
+4. **A expectativa absorve o efeito** — +13,3 pb sobre o consenso do QPC.
+5. **Não há previsão da surpresa** — o resíduo é pequeno e impreciso.
+6. **Robustez à endogeneidade** — TSLS e GMM não recuperam coeficiente diferente de zero.
+7. **Dinâmica multivariada imprecisa** — VAR e VECM com IC atravessando zero.
 
-Teste-$t$ de $\hat{\delta}$ na M1 sob erros HAC. A pergunta empírica: mantidos hiato e desvio de inflação, o coeficiente do tom permanece positivo e significante ($p < 0{,}05$)?
+A leitura econômica: a linguagem do Copom **descreve bem a postura contemporânea** e a assimetria de riscos **carrega sinal sobre a próxima decisão** — mas esse sinal **já está incorporado às expectativas do mercado** antes de a decisão acontecer. É sinalização compartilhada, não informação privada revelada.
 
-### 5.2 Quanto o sentimento adiciona?
+---
 
-Comparação de $\bar{R}^2$ entre M0 e M1. Um $\Delta\bar{R}^2 > 0$ material significa que a *linguagem* das atas explica variação da Selic não capturada pelos fundamentos observáveis.
+## Limitações
 
-### 5.3 O tom antecede a decisão?
-
-A especificação antecedente (M2) testa se $S_t$ prevê ΔSelic$_{t+1}$. A correlação de **0,63** já observada é o ponto de partida — a regressão controla por hiato e desvio de inflação para isolar o componente genuinamente prospectivo do tom.
-
-### 5.4 A conclusão econômica depende do LLM?
-
-Como os três modelos divergem na *intensidade* do *score* (a tese do projeto-mãe: $\hat{\beta}$ de calibração varia de +0,36 a +0,62 p.p. por unidade de *score*), reestima-se a M1 usando cada LLM como fonte de $S_t$. Se $\hat{\delta}$ mantém sinal e significância entre Claude, Gemini e OpenAI, a conclusão econômica é **robusta ao provedor de IA** — um requisito para levar o índice a sério como *input* macro.
+- O *score* contemporâneo vem de ata publicada **depois** da decisão — associação explicativa, não causalidade.
+- A amostra tem **48 reuniões** e atravessa regimes de política monetária muito distintos.
+- Hiato e sentimento parecem estacionários; os testes para desvio da inflação e ΔSelic são inconclusivos.
+- O **VECM** mistura variáveis com ordens de integração possivelmente diferentes e tem posto de cointegração instável — por isso é apresentado como exploratório.
+- Janelas móveis sobrepostas geram coeficientes serialmente dependentes.
+- O filtro HP sofre **viés de ponta** (*end-point bias*); daí o hiato alternativo por Kalman.
+- A validação usa **dois agentes independentes**, não avaliadores humanos especialistas — replicação externa permanece desejável.
 
 ---
 
@@ -276,33 +276,32 @@ Como os três modelos divergem na *intensidade* do *score* (a tese do projeto-m�
 ```
 Taylor_Sentimento/
 │
-├── taylor_sentimento_IA_base.qmd    # paper técnico reprodutível (echo: true)
-├── 01_base_dados.qmd                # documento de inspeção da base → PDF
-├── referencias.bib                  # bibliografia BibTeX
-├── AM.png                           # logotipo na titlepage
+├── taylor_sentimento_IA_base.qmd    # paper técnico reprodutível
+├── NOVA_ABORDAGEM.md                # desenho do índice prospectivo
+├── referencias.bib · AM.png
 │
 ├── scripts/
-│   └── 01_build_base.py             # montagem da base na frequência de reunião
+│   ├── 01_build_base.py             # base na frequência de reunião
+│   ├── 02_estima_referencia.py      # M0 / M1, OLS + HAC, parâmetros estruturais
+│   ├── 03_estima_m2.py              # antecedente (referência e dinâmica)
+│   ├── 04_robustez_iv_gmm_m2.py     # TSLS e GMM em dois passos
+│   ├── 05_reestima_hiato_kalman.py  # hiato por modelo estrutural
+│   ├── 06_var_irf_sentimento.py     # VAR + IRFs
+│   ├── 07_vecm_irf_sentimento.py    # VECM exploratório
+│   ├── 08_rolling_sentimento.py     # regressões móveis
+│   ├── 09_prepare_forward_texts.py  # corpus A+B integral (sem LLM)
+│   ├── 10–13_*.py                   # escoragem prospectiva, reestimação, validação
+│   └── 14–17_*.py                   # QPC: coleta, surpresa, estimação
 │
 ├── data/
-│   ├── base_taylor.csv              # 48 reuniões × 14 colunas (saída)
-│   └── raw/                         # insumos + caches de API
-│       ├── scores_claude_cache.csv  # sentimento herdado (congelado)
-│       ├── scores_gemini_cache.csv
-│       ├── scores_openai_cache.csv
-│       ├── atas_cache.json          # datas das reuniões
-│       ├── selic_cache.json         # SGS 432
-│       ├── focus_ipca12m_cache.csv  # Focus IPCA 12m suavizada
-│       ├── meta_inflacao_cache.csv  # SGS 13521
-│       └── ibcbr_cache.csv          # SGS 24364
+│   ├── base_taylor.csv              # 48 reuniões
+│   ├── raw/                         # caches de API + corpus + QPC (42 edições)
+│   ├── pilot/                       # piloto, schema e dupla codificação
+│   └── results/                     # CSVs de coeficientes e diagnósticos
 │
-├── CHANGELOG.md                     # histórico de releases (Keep a Changelog)
-├── versions/                        # snapshots por release
-├── _rollback/                       # checkpoints de sessão
-│
-└── portfolio/
-    ├── taylor-sentimento.qmd        # ESTE arquivo (ficha CRISP-DM)
-    └── taylor-sentimento-capa.png   # imagem de capa
+├── figures/                         # IRFs e rolling
+├── CHANGELOG.md · versions/
+└── portfolio/                       # ESTA ficha + capa
 ```
 
 ---
@@ -314,12 +313,12 @@ Taylor_Sentimento/
 | **Renderização** | Quarto + LaTeX (xelatex) |
 | **Pacotes LaTeX** | `booktabs`, `threeparttable` (padrão JEL/AER) |
 | **Linguagem** | Python 3.11+ |
-| **Inferência estatística** | `statsmodels` (OLS, HAC/Newey-West, filtro HP) |
+| **Inferência estatística** | `statsmodels` (OLS, HAC/Newey-West, HP, Kalman/`UnobservedComponents`, VAR, VECM, GMM) |
 | **Manipulação de dados** | `pandas`, `numpy` |
-| **Coleta de dados** | `python-bcb` (SGS, Expectativas/Focus), `requests` |
+| **Coleta de dados** | `python-bcb` (SGS, Focus), `requests`, `openpyxl` (QPC) |
+| **Escoragem por LLM** | LangChain + Pydantic (Claude, Gemini, OpenAI) sob *schema* estruturado |
 | **Visualização** | `plotnine` |
-| **Ambiente** | `python-dotenv` |
-| **Índice de sentimento** | Herdado do [Sentimento COPOM](sentimento-copom.html) (LangChain + Pydantic, 3 LLMs) |
+| **Índice de sentimento** | Reconstruído a partir do corpus integral; base legada herdada do [Sentimento COPOM](sentimento-copom.html) |
 
 ---
 
@@ -327,11 +326,8 @@ Taylor_Sentimento/
 
 ### Pré-requisitos
 
-- Python 3.11+
-- Quarto ≥ 1.4
-- TinyTeX / TeX Live (para renderização PDF via xelatex)
-
-Chaves de API de LLM **não são necessárias** no fluxo padrão — os *scores* de sentimento são insumos congelados herdados do projeto irmão. Só há re-escoragem de atas no Sentimento COPOM.
+- Python 3.11+ · Quarto ≥ 1.4 · TinyTeX / TeX Live (xelatex)
+- Chaves de API (Anthropic, Google, OpenAI) **apenas** para reescorar as atas; o fluxo de estimação usa os *scores* já persistidos.
 
 ### Instalação
 
@@ -341,39 +337,46 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Montar a base e renderizar
+### Pipeline
 
 ```bash
-# 1) Monta data/base_taylor.csv (coleta com cache local em data/raw/)
+# 1) Base na frequência de reunião
 python scripts/01_build_base.py
 
-# 2) Documento de inspeção da base → PDF
-quarto render 01_base_dados.qmd --to pdf
+# 2) Estimações de referência e robustez
+python scripts/02_estima_referencia.py
+python scripts/03_estima_m2.py
+python scripts/04_robustez_iv_gmm_m2.py
+python scripts/05_reestima_hiato_kalman.py
 
-# 3) Paper técnico (Regra de Taylor aumentada)
+# 3) Dinâmica e estabilidade
+python scripts/06_var_irf_sentimento.py
+python scripts/07_vecm_irf_sentimento.py
+python scripts/08_rolling_sentimento.py
+
+# 4) Índice prospectivo (corpus integral)
+python scripts/09_prepare_forward_texts.py
+python scripts/12_reestimate_forward_index.py
+
+# 5) Surpresa monetária via QPC
+python scripts/15_build_qpc_surprise.py
+python scripts/16_estimate_qpc_surprise.py
+python scripts/17_estimate_qpc_expectation.py
+
+# 6) Paper
 quarto render taylor_sentimento_IA_base.qmd --to pdf
-```
-
-### Reprocessamento
-
-```bash
-# Apaga os caches de coleta para forçar novo download do BCB
-# (os scores de sentimento em raw/ permanecem — são congelados)
-rm data/raw/focus_ipca12m_cache.csv data/raw/meta_inflacao_cache.csv data/raw/ibcbr_cache.csv
-python scripts/01_build_base.py
 ```
 
 ---
 
 ## Próximos Passos
 
-1. **Estimar a Regra de Taylor aumentada** (M0 → M1 → M2) por OLS com erros HAC, exportando as tabelas de regressão em `booktabs`/`threeparttable`;
-2. **Robustez ao provedor de LLM** — reestimar a M1 usando Claude, Gemini e OpenAI isoladamente como fonte de $S_t$;
-3. **Robustez do hiato** — comparar o hiato via HP (com viés de ponta) contra o hiato oficial da IFI (trimestral interpolado);
-4. **Especificação preditiva** — formalizar a regressão antecedente $t \to t+1$ e testar defasagens do sentimento;
-5. **Endogeneidade** — avaliar GMM caso a simultaneidade tom × decisão se mostre relevante;
-6. **Sentimento ortogonalizado** — usar o resíduo do tom (controlando expectativas Focus) como regressor, isolando a surpresa de comunicação;
-7. **Edição do leitor** — criar `taylor_sentimento_IA_publico.qmd` (`echo: false`) quando o paper amadurecer.
+1. **Preços intradiários de DI** — separar a surpresa da *decisão* da surpresa de *comunicação* em janelas estreitas ao redor da publicação da ata. É a extensão prioritária: sem ela, o teste de surpresa depende do QPC, que é pré-reunião mas não intradiário.
+2. **Projeção local** — estimar a resposta dinâmica por *local projections*, mais parcimoniosas que VAR/VECM com $n = 48$.
+3. **Validação com especialistas humanos** — replicar a dupla codificação cega com avaliadores externos.
+4. **Sentimento ortogonalizado** — usar o resíduo do tom (controlando expectativas Focus) para isolar a surpresa de comunicação.
+5. **Hiato oficial da IFI** — robustez adicional contra HP e Kalman.
+6. **Edição do leitor** — `taylor_sentimento_IA_publico.qmd` (`echo: false`).
 
 ---
 
@@ -383,6 +386,9 @@ python scripts/01_build_base.py
 - Blinder, A. S.; Ehrmann, M.; Fratzscher, M.; De Haan, J.; Jansen, D.-J. (2008). *Central Bank Communication and Monetary Policy*. *Journal of Economic Literature*, 46(4), 910–945.
 - Hansen, S.; McMahon, M.; Prat, A. (2018). *Transparency and Deliberation Within the FOMC: A Computational Linguistics Approach*. *Quarterly Journal of Economics*, 133(2), 801–870.
 - Hodrick, R. J.; Prescott, E. C. (1997). *Postwar U.S. Business Cycles: An Empirical Investigation*. *Journal of Money, Credit and Banking*, 29(1), 1–16.
+- Johansen, S. (1991). *Estimation and Hypothesis Testing of Cointegration Vectors in Gaussian Vector Autoregressive Models*. *Econometrica*, 59(6), 1551–1580.
+- Newey, W. K.; West, K. D. (1987). *A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix*. *Econometrica*, 55(3), 703–708.
+- Sims, C. A. (1980). *Macroeconomics and Reality*. *Econometrica*, 48(1), 1–48.
 - Taylor, J. B. (1993). *Discretion versus Policy Rules in Practice*. *Carnegie-Rochester Conference Series on Public Policy*, 39, 195–214.
 - Woodford, M. (2003). *Interest and Prices: Foundations of a Theory of Monetary Policy*. Princeton University Press.
 - Wirth, R.; Hipp, J. (2000). *CRISP-DM: Towards a Standard Process Model for Data Mining*.
