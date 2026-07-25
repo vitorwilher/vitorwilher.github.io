@@ -9,7 +9,7 @@ execute:
   echo: true
 ---
 
-![COPOM RAG Service — RAG servido como API, com eval harness e observability](copom-rag-service-capa.png){width=100%}
+![Arquitetura em quatro faixas: ingestão e indexação (batch) → retrieval híbrido com rerank (por request) → geração com contrato de saída → eval harness, o código-âncora](copom-rag-service-capa.png){width=100%}
 
 ::: {.callout-important}
 ## Estado atual — motor implementado, gate no melhor ponto
