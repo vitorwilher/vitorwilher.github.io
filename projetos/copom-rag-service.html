@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-07-22">
+<meta name="description" content="Serviço de RAG sobre 48 atas do Copom e o Focus (862 chunks), exposto como API (FastAPI + Docker), com eval harness — golden set + LLM-as-judge com self-consistency + gate que falha se a qualidade regride — e observability de custo, latência e tokens por request. Motor implementado: gate em 1,000 com zero alucinações, 31 testes verdes.">
+
+<title>COPOM RAG Service — RAG sobre Atas do Copom + Focus, Servido como API com Eval Harness e Observability – Portfólio do VW</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/profile.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-eeac7883647bf95d5990a01bcd45fe2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Portfólio do VW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projetos/index.html"> 
+<span class="menu-text">Projetos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching/index.html"> 
+<span class="menu-text">Cursos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../research/index.html"> 
+<span class="menu-text">Pesquisas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/pos-puc-rio-ia/" target="_blank"> 
+<span class="menu-text">Pós em Dados e IA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/anthropic-academy-cursos/" target="_blank"> 
+<span class="menu-text">Anthropic</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://vitorwilher.github.io/doutorado-epge/" target="_blank"> 
+<span class="menu-text">Doutorado</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../newsletter/index.html"> 
+<span class="menu-text">Newsletter</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/vitorwilher"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/vitorwilher"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
+  <li><a href="#arquitetura" id="toc-arquitetura" class="nav-link" data-scroll-target="#arquitetura">Arquitetura</a></li>
+  <li><a href="#entendimento-do-negócio" id="toc-entendimento-do-negócio" class="nav-link" data-scroll-target="#entendimento-do-negócio">1. Entendimento do Negócio</a></li>
+  <li><a href="#entendimento-dos-dados" id="toc-entendimento-dos-dados" class="nav-link" data-scroll-target="#entendimento-dos-dados">2. Entendimento dos Dados</a></li>
+  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">3. Preparação dos Dados</a></li>
+  <li><a href="#modelagem" id="toc-modelagem" class="nav-link" data-scroll-target="#modelagem">4. Modelagem</a></li>
+  <li><a href="#avaliação-o-código-âncora" id="toc-avaliação-o-código-âncora" class="nav-link" data-scroll-target="#avaliação-o-código-âncora">5. Avaliação — o Código-Âncora</a></li>
+  <li><a href="#implantação" id="toc-implantação" class="nav-link" data-scroll-target="#implantação">6. Implantação</a></li>
+  <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+  <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
+  <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos Passos</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">COPOM RAG Service — RAG sobre Atas do Copom + Focus, Servido como API com Eval Harness e Observability</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">FastAPI</div>
+    <div class="quarto-category">Docker</div>
+    <div class="quarto-category">RAG</div>
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">Anthropic Claude</div>
+    <div class="quarto-category">BM25</div>
+    <div class="quarto-category">RRF</div>
+    <div class="quarto-category">Reranking</div>
+    <div class="quarto-category">LLM-as-judge</div>
+    <div class="quarto-category">Self-consistency</div>
+    <div class="quarto-category">CI</div>
+    <div class="quarto-category">Observability</div>
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">Macroeconomia</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Serviço de RAG sobre 48 atas do Copom e o Focus (862 chunks), exposto como API (FastAPI + Docker), com eval harness — golden set + LLM-as-judge com self-consistency + gate que falha se a qualidade regride — e observability de custo, latência e tokens por request. Motor implementado: gate em 1,000 com zero alucinações, 31 testes verdes.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="copom-rag-service-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>COPOM RAG Service — RAG servido como API, com eval harness e observability</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Estado atual — motor implementado, gate no melhor ponto
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O <strong>motor está completo e roda de ponta a ponta</strong>: retrieval híbrido real (BM25 + denso + RRF + rerank) sobre <strong>862 chunks</strong> — 814 de <strong>48 atas completas</strong> (reuniões 232–279) e 48 do <strong>Focus</strong> —, geração via Claude e juiz LLM com <em>self-consistency</em>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Verificação</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Eval harness (<code>--samples 3</code>, API real)</td>
+<td><strong>8/8 casos com nota 1,000</strong></td>
+</tr>
+<tr class="even">
+<td>Alucinações</td>
+<td><strong>0</strong></td>
+</tr>
+<tr class="odd">
+<td><em>Gate</em> (threshold <span class="math inline">\(0{,}70\)</span>)</td>
+<td><strong>PASSOU</strong></td>
+</tr>
+<tr class="even">
+<td>Suíte de testes</td>
+<td><strong>31 testes verdes</strong></td>
+</tr>
+</tbody>
+</table>
+<p>O eval também roda <strong>offline e sem custo</strong>: sem <code>ANTHROPIC_API_KEY</code>, geração e juiz degradam para modos determinísticos (extrativo / heurístico), e a degradação é <strong>registrada no trace</strong> (<code>degraded: true</code>) em vez de silenciada.</p>
+<p><strong>O que ainda falta:</strong> plugar o gate como <em>GitHub Action</em> a cada PR (hoje ele roda por linha de comando), atas anteriores à reunião 232, exportador OpenTelemetry/Prometheus de fato (hoje o sink é JSONL, que é o formato que eles consomem) e embeddings via <em>provider</em> (hoje há <em>fallback</em> local).</p>
+</div>
+</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
+<p>Este projeto implementa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), um <strong>serviço de RAG</strong> (<em>Retrieval-Augmented Generation</em>) sobre as <strong>atas do Comitê de Política Monetária (Copom)</strong> e o <strong>boletim Focus</strong> do Banco Central do Brasil, exposto como <strong>API</strong> (FastAPI + Docker).</p>
+<p>A pergunta do usuário — em linguagem natural, sobre política monetária brasileira — é respondida com fundamentação recuperada das atas e do Focus, e a resposta <strong>cita as fontes</strong> usadas. Em um domínio onde um número errado (Selic, meta de inflação, projeção) é uma falha grave, auditabilidade e ausência de alucinação são requisitos, não enfeites.</p>
+<p>O contexto de uso imaginado é o de um <strong>departamento de pesquisa macroeconômica de banco</strong>: o objetivo é <strong>comprimir o tempo entre a fonte primária (a ata que acabou de sair) e uma leitura defensável e rastreável</strong> que a <strong>mesa de operação</strong> possa usar para posicionar em juros. Não se trata de “prever a Selic” — a convicção direcional continua sendo do economista —, mas de dar ao <em>research</em> e à mesa um copiloto de leitura testado e auditável. A seção de <a href="#motivação">Motivação</a> detalha os públicos-alvo e a tese de negócio.</p>
+<p>O diferencial do projeto, contudo, <strong>não é o RAG em si</strong> — montar um RAG é tarefa de uma tarde. É a <strong>engenharia de qualidade ao redor dele</strong>:</p>
+<ul>
+<li>um <strong>eval harness</strong> com <em>golden set</em>, <strong>LLM-as-judge</strong> com <em>self-consistency</em> e um <strong>gate</strong> que <strong>falha (exit 1)</strong> se a qualidade média regride;</li>
+<li><strong>observability</strong> de custo, latência, <em>tokens</em> e <strong>degradação</strong> por <em>request</em>;</li>
+<li>empacotamento como <strong>API + Docker</strong>, pronto para subir com um comando.</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Repositório:</strong> <a href="https://github.com/vitorwilher/copom-rag-service">github.com/vitorwilher/copom-rag-service</a> · <strong>Site do projeto:</strong> <a href="https://vitorwilher.github.io/copom-rag-service/">vitorwilher.github.io/copom-rag-service</a></p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tese central
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Um RAG de política monetária não se prova por uma <em>demo</em> bonita — prova-se por <strong>não regredir</strong>. A postura de engenharia deste projeto é tratar qualidade de resposta como um <strong>contrato verificável em CI</strong>: o <em>golden set</em> + LLM-as-judge produzem um score agregado, e nenhuma mudança entra sem que a média se mantenha acima do <em>threshold</em>. O <strong>código-âncora</strong> do card é, portanto, o <code>run_eval.py</code> — o <em>gate</em> que transforma “parece bom” em “passou ou falhou”.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<section id="o-problema-de-negócio-da-fonte-primária-à-leitura-defensável" class="level3">
+<h3 class="anchored" data-anchor-id="o-problema-de-negócio-da-fonte-primária-à-leitura-defensável">O problema de negócio: da fonte primária à leitura defensável</h3>
+<p>Imagine este projeto dentro do <strong>departamento de pesquisa macroeconômica de um grande banco brasileiro</strong> — um Itaú, Bradesco, Santander, Banco do Brasil ou Nubank. Um time de macro produz, essencialmente, três coisas: <strong>cenário</strong> (para onde vão Selic, câmbio, inflação e atividade), <strong>calls</strong> (recomendações táticas para as mesas) e <strong>atendimento</strong> a clientes internos e externos. O gargalo crônico não é <em>ter</em> a opinião — é a <strong>velocidade e a rastreabilidade</strong> entre “o Banco Central falou” e “a mesa agiu com base numa leitura defensável”.</p>
+<p>O cliente interno mais crítico é a <strong>mesa de operação</strong> (juros / <em>rates</em>). Assim que uma ata do Copom sai, ela precisa responder, em minutos, três perguntas cujo resultado move preço:</p>
+<ol type="1">
+<li><strong>O que mudou</strong> no comunicado/ata em relação ao anterior — <em>forward guidance</em>, balanço de riscos, assimetria do cenário;</li>
+<li><strong>Isso confirma ou contradiz o que o mercado já espera</strong> — o <em>gap</em> entre a comunicação do Copom e a mediana do <strong>Focus</strong> é, literalmente, fonte de alfa para uma posição em DI/pré;</li>
+<li><strong>Qual a base textual</strong> dessa leitura — para tomar risco, a mesa precisa poder clicar na frase da ata que sustenta a interpretação.</li>
+</ol>
+<p>Este serviço <strong>não substitui</strong> o economista sênior que forma o cenário; a convicção direcional (o <em>call</em> de “corta 50 vs.&nbsp;25”) continua sendo humana. O que ele faz é <strong>industrializar a camada de leitura de fontes primárias</strong> (atas + Focus) que hoje é feita no braço, sob pressão de tempo, e cujo raciocínio raramente fica documentado. É um <strong>copiloto de leitura</strong>, não o piloto do cenário — e a diferença para um <em>chatbot</em> genérico é que aqui as fontes são o Copom e o Focus, <strong>versionados</strong>, e a resposta é <strong>auditável e testada</strong>.</p>
+</section>
+<section id="por-que-o-eval-harness-é-o-que-dá-licença-de-operar-num-banco" class="level3">
+<h3 class="anchored" data-anchor-id="por-que-o-eval-harness-é-o-que-dá-licença-de-operar-num-banco">Por que o eval harness é o que dá “licença de operar” num banco</h3>
+<p>Numa instituição regulada, uma ferramenta que gera leitura de política monetária para embasar posição de risco tem um problema óbvio: <strong>e se ela alucinar?</strong> Um economista que inventa uma frase que o Copom não disse — e a mesa monta centenas de milhões em DI em cima disso — é um <strong>incidente</strong>. O <em>golden set</em> + LLM-as-judge + gate de CI que <strong>reprova se a qualidade regride</strong> é a resposta institucional para “como você garante que essa coisa não me faz tomar decisão sobre fato inventado?”. Neste projeto, a engenharia de avaliação não é só boa prática de <em>software</em>: é <strong>governança de modelo e gestão de risco disfarçadas de código</strong> — a diferença entre um brinquedo e algo que passa no <strong>comitê de modelos</strong>.</p>
+</section>
+<section id="as-perguntas-de-engenharia-por-trás-disso" class="level3">
+<h3 class="anchored" data-anchor-id="as-perguntas-de-engenharia-por-trás-disso">As perguntas de engenharia por trás disso</h3>
+<p>Tecnicamente, sistemas de RAG são fáceis de montar e difíceis de manter honestos. Uma troca de modelo, um ajuste de <em>prompt</em>, uma mudança no <em>chunking</em> ou no <em>reranker</em> podem melhorar três respostas e piorar outras dez — sem que ninguém perceba até um usuário reclamar. O projeto responde, então, a três perguntas práticas de engenharia de LLM que espelham as três dores de negócio acima:</p>
+<ol type="1">
+<li><strong>Como impedir regressão de qualidade</strong> em um serviço de RAG a cada mudança?</li>
+<li><strong>Quanto custa, quão rápido e quantos <em>tokens</em> consome</strong> cada resposta — métrica de produto num <em>research</em> que vive de orçamento e de SLA?</li>
+<li><strong>Como garantir auditabilidade</strong> — que cada resposta seja rastreável às atas ou ao Focus que a fundamentam?</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="metodologia-crisp-dm" class="level2">
+<h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
+<p>O projeto foi estruturado seguindo o processo <strong>CRISP-DM</strong>, adaptado ao contexto de <strong>engenharia de LLM / RAG aplicado à comunicação de bancos centrais</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Aplicação no Projeto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Entendimento do Negócio</strong></td>
+<td>Responder perguntas sobre política monetária com fundamentação auditável (fontes citadas) e sem alucinação numérica; definir qualidade como contrato verificável em CI</td>
+</tr>
+<tr class="even">
+<td><strong>2. Entendimento dos Dados</strong></td>
+<td>48 atas completas (232–279) + Focus ancorado à véspera de cada reunião; jargão de política monetária e números sensíveis (Selic, projeções)</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Preparação dos Dados</strong></td>
+<td><em>Chunking</em> em 862 unidades com proveniência; indexação <strong>esparsa</strong> (BM25) e <strong>densa</strong> (embeddings + cosseno), ambas enriquecidas com ata/reunião/data</td>
+</tr>
+<tr class="even">
+<td><strong>4. Modelagem</strong></td>
+<td><strong>Retrieval híbrido</strong> BM25 + denso → <strong>RRF</strong> → <strong>reranker</strong> → <em>prompt</em> → geração via Claude, com saída estruturada (resposta + fontes) via Pydantic</td>
+</tr>
+<tr class="odd">
+<td><strong>5. Avaliação</strong></td>
+<td><strong>Eval harness</strong>: <em>golden set</em> de fatos ancorados e abstenções + <strong>LLM-as-judge</strong> com <em>self-consistency</em> + <strong>gate</strong> que falha em regressão</td>
+</tr>
+<tr class="even">
+<td><strong>6. Implantação</strong></td>
+<td><strong>API FastAPI + Docker/compose</strong>; <strong>observability</strong> de custo/latência/<em>tokens</em> por <em>request</em></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="arquitetura" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura">Arquitetura</h2>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph Ingestao["Ingestão — API do BCB"]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    ATAS[(48 atas completas&lt;br&gt;reuniões 232–279)] --&gt; ING["ingest.py"]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    FOCUS[(Focus na véspera&lt;br&gt;de cada reunião)] --&gt; ING</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ING --&gt; CORP[("corpus.jsonl&lt;br&gt;862 chunks&lt;br&gt;814 atas + 48 Focus")]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  Q[POST /ask&lt;br&gt;pergunta] --&gt; API[FastAPI]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  API --&gt; PIPE[RAGPipeline]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  subgraph Retrieval["Retrieval híbrido"]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    CORP --&gt; IDX["indexing_text()&lt;br&gt;+ ata · reunião · data"]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    IDX --&gt; BM25["BM25&lt;br&gt;esparso"]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    IDX --&gt; DENSE["Denso&lt;br&gt;embeddings + cosseno"]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    PIPE --&gt; BM25</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    PIPE --&gt; DENSE</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    BM25 --&gt; FUSE["Fusão RRF"]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    DENSE --&gt; FUSE</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    FUSE --&gt; RR["Reranker&lt;br&gt;boost de decisão condicional"]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  RR --&gt; GEN["Claude Haiku 4.5&lt;br&gt;resposta + fontes"]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  GEN --&gt;|"sem chave"| EXT["fallback extrativo&lt;br&gt;degraded: true"]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  GEN --&gt; API</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  API --&gt; R[resposta + fontes]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  subgraph Qualidade["Eval harness — o código-âncora"]</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    GS[("golden_set.jsonl&lt;br&gt;5 fatos + 3 abstenções")] --&gt; RUN["run_eval.py"]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    RUN --&gt; PIPE2[RAGPipeline]</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    PIPE2 --&gt; JUDGE["Claude Sonnet 5&lt;br&gt;self-consistency (N=3)&lt;br&gt;mediana + voto maioria"]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    JUDGE --&gt; GATE{"média ≥ threshold?"}</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    GATE --&gt;|não| FAIL["exit 1 — reprova"]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    GATE --&gt;|sim| PASS["exit 0 — passa"]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  API -. custo · latência · tokens · degraded .-&gt; OBS["obs/tracing&lt;br&gt;sink JSONL"]</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  JUDGE -. .-&gt; OBS</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="entendimento-do-negócio" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-do-negócio">1. Entendimento do Negócio</h2>
+<section id="problema" class="level3">
+<h3 class="anchored" data-anchor-id="problema">1.1 Problema</h3>
+<p>Servir um assistente de RAG sobre política monetária é, antes de tudo, um problema de <strong>confiabilidade</strong>. A comunicação do Copom concentra, em escolhas sutis de linguagem e em números precisos, informação relevante sobre a direção da Selic — e política monetária no Brasil é, cada vez mais, um exercício de <strong>interpretar comunicação</strong> (o Copom fala para ancorar expectativas). Uma ferramenta que leia essa comunicação de forma sistemática, testada e citável é exatamente o tipo de <strong>vantagem marginal</strong> que um <em>research</em> de banco persegue.</p>
+<p>Do ponto de vista da <strong>mesa de operação</strong>, o problema é de <strong>tempo e de defesa da tese</strong>: a leitura da ata precisa sair em minutos, tornar explícito o <em>gap</em> entre o Copom e o Focus, e vir com a <strong>frase-fonte</strong> que a sustenta — porque é com base nela que a mesa monta a posição. Um serviço que responda a esse material precisa, então, ser <strong>fundamentado</strong> (cada resposta apoiada em trechos reais), <strong>auditável</strong> (fontes citadas) e <strong>estável</strong> (qualidade que não regride a cada mudança de <em>prompt</em>, modelo ou <em>retriever</em>).</p>
+</section>
+<section id="objetivos" class="level3">
+<h3 class="anchored" data-anchor-id="objetivos">1.2 Objetivos</h3>
+<ol type="1">
+<li>Expor um endpoint <code>POST /ask</code> que responde a perguntas sobre as atas do Copom e o Focus <strong>com fontes citadas</strong>;</li>
+<li>Construir um <strong>eval harness</strong> que meça a qualidade das respostas de forma objetiva e a <strong>transforme em gate de CI</strong>;</li>
+<li>Instrumentar <strong>custo, latência e tokens</strong> por <em>request</em>;</li>
+<li>Empacotar tudo como <strong>API + Docker</strong> reprodutível.</li>
+</ol>
+</section>
+<section id="públicos-alvo-clientes-internos" class="level3">
+<h3 class="anchored" data-anchor-id="públicos-alvo-clientes-internos">1.3 Públicos-alvo (clientes internos)</h3>
+<p>O serviço é desenhado como <strong>produto de dados para clientes internos</strong> do banco. Cada público extrai um valor distinto do mesmo endpoint:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Público-alvo</th>
+<th>O que ganha</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mesa de <em>rates</em> / juros</strong></td>
+<td>Leitura da ata em minutos, com o <em>gap</em> Copom × Focus explícito e fonte clicável para tomar risco</td>
+</tr>
+<tr class="even">
+<td><strong>Economista-chefe / cenário</strong></td>
+<td>Livra o time do garimpo braçal de fontes e o libera para o que é insubstituível — formar a convicção</td>
+</tr>
+<tr class="odd">
+<td><strong><em>Sales</em> / clientes externos</strong></td>
+<td>Munição para o <em>flash</em> pós-Copom que sai antes do concorrente, com consistência de narrativa</td>
+</tr>
+<tr class="even">
+<td><strong>Risco / <em>compliance</em> / comitê de modelos</strong></td>
+<td>Uma IA que <strong>não é aprovada sem passar num gate de qualidade</strong> — governança embutida, não <em>post facto</em></td>
+</tr>
+<tr class="odd">
+<td><strong>Tesouraria / ALM</strong></td>
+<td>Sinal antecipado de trajetória de Selic para decisões de <em>funding</em> e <em>hedge</em></td>
+</tr>
+</tbody>
+</table>
+<p>O denominador comum: uma <strong>única fonte de verdade, testada e rastreável</strong>, sobre o que o Banco Central efetivamente disse — em vez de N leituras informais e não documentadas espalhadas pelo <em>chat</em> do time.</p>
+</section>
+<section id="critérios-de-sucesso" class="level3">
+<h3 class="anchored" data-anchor-id="critérios-de-sucesso">1.4 Critérios de sucesso</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Critério</th>
+<th>Meta</th>
+<th>Situação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fundamentação</td>
+<td>Toda resposta cita ao menos uma fonte (ata/Focus)</td>
+<td>✅ atendido</td>
+</tr>
+<tr class="even">
+<td>Qualidade agregada</td>
+<td>Média do LLM-as-judge <span class="math inline">\(\geq\)</span> <em>threshold</em> (<span class="math inline">\(0{,}70\)</span>)</td>
+<td>✅ <strong>1,000</strong></td>
+</tr>
+<tr class="odd">
+<td>Ausência de alucinação</td>
+<td>Zero números inventados no <em>golden set</em></td>
+<td>✅ <strong>0</strong></td>
+</tr>
+<tr class="even">
+<td>Abstenção</td>
+<td>Sem informação no contexto, declarar “não sei”</td>
+<td>✅ 3 casos testados</td>
+</tr>
+<tr class="odd">
+<td>Gate de regressão</td>
+<td>Exit 1 quando a média cai abaixo do <em>threshold</em></td>
+<td>✅ implementado · ⏳ falta plugar no CI</td>
+</tr>
+<tr class="even">
+<td>Observabilidade</td>
+<td>Custo, latência e <em>tokens</em> por <em>request</em></td>
+<td>✅ + sink JSONL e flag <code>degraded</code></td>
+</tr>
+<tr class="odd">
+<td>Reprodutibilidade</td>
+<td><code>docker compose up</code> sobe a API; um comando roda o gate</td>
+<td>✅ + 31 testes verdes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="entendimento-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="entendimento-dos-dados">2. Entendimento dos Dados</h2>
+<section id="fontes" class="level3">
+<h3 class="anchored" data-anchor-id="fontes">2.1 Fontes</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fonte</th>
+<th>Origem</th>
+<th>Dados</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Atas do Copom</strong></td>
+<td>API pública do BCB</td>
+<td>Texto integral das atas (diagnóstico, cenários, riscos, decisão)</td>
+</tr>
+<tr class="even">
+<td><strong>Boletim Focus</strong></td>
+<td>API pública do BCB</td>
+<td>Expectativas de mercado (IPCA, Selic, PIB, câmbio)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="natureza-do-corpus" class="level3">
+<h3 class="anchored" data-anchor-id="natureza-do-corpus">2.2 Natureza do corpus</h3>
+<p>O material combina <strong>jargão técnico de política monetária</strong> — meta para a inflação, hiato do produto, ancoragem de expectativas, cenários de referência — com <strong>números sensíveis</strong> (meta Selic, projeções de inflação, intervalos de tolerância). Essa mistura tem duas implicações diretas para o <em>retrieval</em>:</p>
+<ul>
+<li>a <strong>correspondência léxica exata</strong> importa (termos técnicos, nomes de reuniões), o que motiva o componente <strong>BM25</strong>;</li>
+<li>a <strong>similaridade semântica</strong> também importa (paráfrases, sinônimos, perguntas em linguagem coloquial), o que motiva o componente <strong>denso</strong>.</li>
+</ul>
+<p>Daí a opção por <strong>retrieval híbrido</strong>.</p>
+<hr>
+</section>
+</section>
+<section id="preparação-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="preparação-dos-dados">3. Preparação dos Dados</h2>
+<section id="ingestão-e-chunking" class="level3">
+<h3 class="anchored" data-anchor-id="ingestão-e-chunking">3.1 Ingestão e <em>chunking</em></h3>
+<p>As atas e o Focus são coletados via API do BCB, limpos e segmentados em <em>chunks</em> com metadados de proveniência (identificador da fonte, número da reunião, data). O identificador de fonte (ex.: <code>ata_232</code>, <code>focus_2020-08-05</code>) é o que permite a <strong>citação rastreável</strong> na resposta final.</p>
+<p>O corpus versionado tem <strong>862 chunks</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Origem</th>
+<th style="text-align: right;">Chunks</th>
+<th>Detalhe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Atas do Copom</strong></td>
+<td style="text-align: right;">814</td>
+<td>48 atas <strong>completas</strong> (seções A+B+C), reuniões 232–279</td>
+</tr>
+<tr class="even">
+<td><strong>Boletim Focus</strong></td>
+<td style="text-align: right;">48</td>
+<td>1 chunk por reunião — mediana de Selic, IPCA, PIB e câmbio <strong>vigente na véspera</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A ancoragem do Focus <strong>na véspera de cada reunião</strong> é deliberada: é a expectativa que o comitê tinha diante de si ao decidir, e é ela que permite responder à pergunta que a mesa realmente faz — <em>qual era o gap entre o que o mercado esperava e o que o Copom fez?</em></p>
+</section>
+<section id="indexação-em-dois-níveis" class="level3">
+<h3 class="anchored" data-anchor-id="indexação-em-dois-níveis">3.2 Indexação em dois níveis</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Índice</th>
+<th>Implementação</th>
+<th>Sinal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Esparso</strong></td>
+<td>BM25 próprio, com tokenização e <em>stopwords</em> pt-BR</td>
+<td>Correspondência léxica de termos técnicos</td>
+</tr>
+<tr class="even">
+<td><strong>Denso</strong></td>
+<td>Embeddings + similaridade de cosseno, em memória</td>
+<td>Similaridade semântica (paráfrases)</td>
+</tr>
+</tbody>
+</table>
+<p>O componente denso usa <strong>degradação graciosa</strong> em três níveis: OpenAI (<code>text-embedding-3-small</code>) se houver <code>OPENAI_API_KEY</code>, Google (<code>text-embedding-004</code>) se houver <code>GOOGLE_API_KEY</code>, e por fim um <strong>embedding local determinístico</strong> por <em>hashing trick</em> + TF, sem dependência externa nem download de modelo.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Por que não há <em>vector store</em> nesta versão
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Com <strong>862 chunks</strong>, um índice em memória resolve — a busca é instantânea e o corpus inteiro cabe folgado. Introduzir ChromaDB ou pgvector aqui adicionaria uma dependência de infraestrutura, um serviço para operar e um estado para sincronizar, <strong>sem ganho mensurável de qualidade ou latência</strong>.</p>
+<p>A troca vale a pena quando o corpus crescer uma ou duas ordens de grandeza (atas desde a reunião 21, relatórios trimestrais, comunicados). A interface do <code>DenseRetriever</code> isola essa decisão: trocar o backend não toca no pipeline.</p>
+</div>
+</div>
+</section>
+<section id="decisões-de-preparação" class="level3">
+<h3 class="anchored" data-anchor-id="decisões-de-preparação">3.3 Decisões de preparação</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Decisão</th>
+<th>Valor</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Índice denso</td>
+<td>Em memória</td>
+<td>862 chunks não justificam operar um <em>vector store</em></td>
+</tr>
+<tr class="even">
+<td>Metadado de fonte</td>
+<td>Obrigatório por <em>chunk</em></td>
+<td>Sem ele não há citação auditável</td>
+</tr>
+<tr class="odd">
+<td>Proveniência na indexação</td>
+<td>Prefixo com ata + data (ISO e por extenso)</td>
+<td>Faz “ata 279” e “junho de 2026” casarem com o chunk certo</td>
+</tr>
+<tr class="even">
+<td>Fusão de candidatos</td>
+<td>Reciprocal Rank Fusion</td>
+<td>Combina BM25 + denso sem calibrar escalas de score</td>
+</tr>
+<tr class="odd">
+<td>Atas</td>
+<td>Seções <strong>A+B+C</strong> completas</td>
+<td>O eval pergunta pela decisão, que está na seção C</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="modelagem" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem">4. Modelagem</h2>
+<section id="retrieval-híbrido-com-reranking" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-híbrido-com-reranking">4.1 Retrieval híbrido com reranking</h3>
+<p>O <code>HybridRetriever</code> (<code>src/rag/retriever.py</code>) orquestra três componentes:</p>
+<ol type="1">
+<li><strong><code>BM25Retriever</code></strong> — top-k por score BM25 (esparso);</li>
+<li><strong><code>DenseRetriever</code></strong> — top-k por similaridade de cosseno sobre embeddings;</li>
+<li><strong><code>Reranker</code></strong> — reordena o conjunto fundido (RRF) pelos <code>top_n</code> mais relevantes à pergunta (cross-encoder ou reranking via LLM).</li>
+</ol>
+</section>
+<section id="pipeline-de-geração" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline-de-geração">4.2 Pipeline de geração</h3>
+<p>O <code>RAGPipeline</code> (<code>src/rag/pipeline.py</code>) executa o fluxo <strong>retrieve → montar prompt → gerar</strong>, com <em>system prompt</em> que exige fundamentação e proíbe invenção de números:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RAGAnswer(BaseModel):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    answer: <span class="bu">str</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    sources: <span class="bu">list</span>[<span class="bu">str</span>]           <span class="co"># fontes citadas — auditabilidade</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    model: <span class="bu">str</span> <span class="op">=</span> <span class="st">"claude-haiku-4-5"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A saída estruturada via <strong>Pydantic</strong> garante que a API sempre devolva um objeto com <code>answer</code> <strong>e</strong> <code>sources</code>.</p>
+<p>Sem <code>ANTHROPIC_API_KEY</code>, o pipeline <strong>degrada para um modo extrativo determinístico</strong> em vez de falhar: devolve os trechos recuperados, marca <code>mode="extractive_fallback"</code> e <code>degraded=True</code> no <em>trace</em>. Isso é o que permite rodar a suíte inteira e o eval em CI <strong>sem custo e sem segredo configurado</strong> — com a degradação visível, não disfarçada de resposta normal.</p>
+</section>
+<section id="api" class="level3">
+<h3 class="anchored" data-anchor-id="api">4.3 API</h3>
+<p>O endpoint <code>POST /ask</code> (<code>src/app/main.py</code>) recebe <code>{"question": "..."}</code> e devolve <code>{"answer": ..., "sources": [...], "model": ...}</code>. Cada chamada é envolvida em um <em>span</em> de <em>tracing</em> (custo/latência/tokens).</p>
+<hr>
+</section>
+</section>
+<section id="avaliação-o-código-âncora" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação-o-código-âncora">5. Avaliação — o Código-Âncora</h2>
+<p>Esta é a fase que define o card. A qualidade das respostas é tratada como um <strong>contrato verificável em CI</strong>, não como impressão subjetiva.</p>
+<section id="golden-set" class="level3">
+<h3 class="anchored" data-anchor-id="golden-set">5.1 Golden set</h3>
+<p><code>src/eval/golden_set.jsonl</code> reúne <strong>8 perguntas com gabarito e <em>tags</em></strong>. A escolha do que perguntar é uma decisão de projeto, não um detalhe:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>O eval mede fidelidade à ata, não conhecimento de macroeconomia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Um <em>golden set</em> conceitual (“o que é um tom <em>hawkish</em>?”) mediria a competência do <strong>modelo de base</strong> — e um LLM moderno acerta isso sem ler ata nenhuma. Não é o que interessa aqui. O usuário deste serviço <strong>já domina os conceitos</strong>; o que ele quer saber é <strong>o que a ata específica disse</strong>.</p>
+<p>Por isso o conjunto tem <strong>5 fatos ancorados em atas nomeadas</strong> — decisão de juros da ata 279 (junho/2026), da 277 (março/2026), a alta da 268 (janeiro/2025), o balanço de riscos e a caracterização do hiato do produto — e <strong>3 casos de abstenção</strong>: uma projeção que não está nas atas, uma pergunta fora de escopo e um teste explícito de comportamento (“o que fazer quando a resposta não estiver nas atas recuperadas”).</p>
+<p>As abstenções valem tanto quanto os acertos: num domínio onde um número inventado vira posição de centenas de milhões em DI, <strong>recusar é a resposta certa</strong> — e precisa ser testado como tal.</p>
+</div>
+</div>
+</section>
+<section id="llm-as-judge" class="level3">
+<h3 class="anchored" data-anchor-id="llm-as-judge">5.2 LLM-as-judge</h3>
+<p><code>src/eval/judge.py</code> implementa um <strong>juiz LLM</strong> que, dado o trio <code>(pergunta, resposta_gerada, resposta_esperada)</code>, emite um <strong>score contínuo em <span class="math inline">\([0, 1]\)</span></strong> e uma <strong>justificativa</strong>, com saída estruturada via Pydantic:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> JudgeVerdict(BaseModel):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    score: <span class="bu">float</span> <span class="op">=</span> Field(ge<span class="op">=</span><span class="fl">0.0</span>, le<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    rationale: <span class="bu">str</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    hallucination: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O juiz penaliza fortemente <strong>números incorretos</strong> — coerente com a natureza do domínio.</p>
+</section>
+<section id="runner-e-gate-de-ci" class="level3">
+<h3 class="anchored" data-anchor-id="runner-e-gate-de-ci">5.3 Runner e gate de CI</h3>
+<p><code>src/eval/run_eval.py</code> é o <strong>coração</strong> do projeto. Ele:</p>
+<ol type="1">
+<li>lê o <em>golden set</em>;</li>
+<li>roda <strong>cada pergunta pelo pipeline</strong> (<code>RAGPipeline.run</code>);</li>
+<li><strong>avalia cada resposta com o juiz</strong> (<code>Judge.score</code>);</li>
+<li><strong>agrega</strong> os scores (média, mínimo, contagem de alucinações);</li>
+<li>imprime um <strong>relatório</strong>;</li>
+<li><strong>sai com exit code 1</strong> se a média ficar abaixo do <em>threshold</em>.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> eval.run_eval                    <span class="co"># threshold padrão (0.70)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> eval.run_eval <span class="at">--threshold</span> 0.75   <span class="co"># gate customizado</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> eval.run_eval <span class="at">--samples</span> 3        <span class="co"># self-consistency do juiz</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O exit code é o que torna isso um <em>gate</em> e não um relatório: plugado numa <em>GitHub Action</em> a cada PR, ele <strong>bloqueia o merge</strong> quando a qualidade regride. Essa amarração ao CI é o passo que falta — hoje o gate roda por linha de comando, com o mesmo contrato, mas a decisão de barrar o merge ainda é manual.</p>
+<p>O gate saiu de <strong>0,76 para 1,000</strong> ao longo do desenvolvimento. Vale registrar o que produziu esse ganho, porque nenhuma das três decisões é sobre “melhorar o prompt” — todas são de <strong>engenharia de recuperação e de medição</strong>.</p>
+</section>
+<section id="retrieval-ancorado-na-proveniência" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-ancorado-na-proveniência">Retrieval ancorado na proveniência</h3>
+<p>Perguntas do tipo <em>“a decisão da ata 279”</em> ou <em>“a reunião de junho de 2026”</em> traziam o chunk errado: o retriever via só o texto, e o número da ata não está escrito no corpo dela. A correção foi indexar cada chunk <strong>com sua proveniência</strong> — identificador, número da reunião e data em ISO <strong>e por extenso</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> indexing_text(chunk: RetrievedChunk) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    meta <span class="op">=</span> chunk.metadata <span class="kw">or</span> {}</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    reuniao <span class="op">=</span> meta.get(<span class="st">"meeting"</span>, <span class="st">""</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> meta.get(<span class="st">"data"</span>, <span class="st">""</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    extenso <span class="op">=</span> _data_por_extenso(data)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>chunk<span class="sc">.</span>source<span class="sc">}</span><span class="ss"> reunião </span><span class="sc">{</span>reuniao<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>data<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>extenso<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>chunk<span class="sc">.</span>text<span class="sc">}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O <code>.text</code> retornado permanece <strong>limpo</strong>, sem o prefixo — a proveniência serve para <em>encontrar</em> o chunk, não para poluir a citação exibida.</p>
+</section>
+<section id="juiz-estabilizado-por-self-consistency" class="level3">
+<h3 class="anchored" data-anchor-id="juiz-estabilizado-por-self-consistency">Juiz estabilizado por <em>self-consistency</em></h3>
+<p>Um juiz LLM chamado uma vez por caso tem variância suficiente para fazer o gate oscilar entre execuções sem que nada no código tenha mudado — o pior tipo de teste, o que falha por acaso. <code>Judge(samples=N)</code> avalia cada caso <strong>N vezes</strong> (default 3) e agrega por <strong>mediana da nota</strong> (robusta a um <em>outlier</em>) e <strong>voto de maioria</strong> na flag de alucinação. A justificativa reporta a dispersão, então um caso instável fica visível em vez de escondido atrás da média.</p>
+</section>
+<section id="o-boost-de-decisão-que-sequestrava-o-focus" class="level3">
+<h3 class="anchored" data-anchor-id="o-boost-de-decisão-que-sequestrava-o-focus">O boost de decisão que sequestrava o Focus</h3>
+<p>O reranker dá bônus a <em>chunks</em> que contêm o dado da decisão — o que ajuda em perguntas sobre juros e <strong>atrapalha</strong> em perguntas de mercado: <em>“o que o Focus esperava?”</em> trazia a ata em vez do chunk do Focus. A solução foi um conjunto de termos (<code>_MARKET_QUERY_TERMS</code>) que <strong>desliga</strong> o boost, deixando o chunk <code>focus_*</code> competir em pé de igualdade.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Uma nota de honestidade sobre o 1,000
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nota máxima em <strong>8 casos</strong> é evidência de que o motor está afinado para o <em>golden set</em> atual — não de que o sistema é infalível. O conjunto é pequeno por ser feito à mão com gabarito verificado; expandi-lo para 30–50 casos, com adversariais, é o próximo passo natural, e a expectativa correta é que a média <strong>caia</strong> quando isso acontecer. Um gate que nunca reprova não está medindo nada.</p>
+</div>
+</div>
+</section>
+<section id="observability" class="level3">
+<h3 class="anchored" data-anchor-id="observability">5.4 Observability</h3>
+<p><code>src/obs/tracing.py</code> oferece um <em>context manager</em> <code>trace(...)</code> que mede <strong>latência</strong>, agrega <strong>tokens</strong> (entrada + saída) e estima <strong>custo</strong> em US$ a partir da tabela de preços do modelo, por <em>request</em>.</p>
+<p>Com <code>COPOM_TRACE_FILE</code>, cada <em>span</em> é gravado em <strong>JSONL</strong>, e <code>python -m obs.tracing &lt;arquivo&gt;</code> agrega a sessão por modelo e por <em>span</em>:</p>
+<pre><code>[trace] generate   model=claude-haiku-4-5  lat=2.564s  tok_in=2343  tok_out=165  cost=US$0.003168
+[trace] judge      model=claude-sonnet-5   lat=2.811s  tok_in=4055  tok_out=129  cost=US$0.014100</code></pre>
+<p>O campo que mais importa não é o custo: é o <strong><code>degraded</code></strong>. Quando o pipeline cai para o modo extrativo por falta de chave ou falha de API, isso fica <strong>marcado no trace</strong> em vez de silenciado — uma resposta pior produzida por degradação não pode passar por resposta normal. <code>summarize_traces</code> conta quantos <em>spans</em> degradaram na sessão.</p>
+<hr>
+</section>
+</section>
+<section id="implantação" class="level2">
+<h2 class="anchored" data-anchor-id="implantação">6. Implantação</h2>
+<p>O serviço é empacotado como <strong>API FastAPI + Docker</strong>:</p>
+<ul>
+<li><code>Dockerfile</code> — imagem <code>python:3.11-slim</code> com <em>healthcheck</em> no <code>/health</code>;</li>
+<li><code>docker-compose.yml</code> — sobe a API; o corpus é versionado no repositório, então não há serviço de banco a orquestrar nesta versão;</li>
+<li><code>uvicorn app.main:app</code> como <em>entrypoint</em>.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">--build</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="estrutura-do-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
+<pre><code>COPOM_RAG_Service/
+│
+├── src/                            # 1.675 linhas
+│   ├── app/main.py                 # FastAPI, endpoint POST /ask
+│   ├── rag/
+│   │   ├── retriever.py            # BM25 + denso + RRF + rerank (433 linhas)
+│   │   ├── embeddings.py           # denso: provider (.env) ou fallback local
+│   │   ├── corpus.py               # corpus.jsonl → RetrievedChunk
+│   │   └── pipeline.py             # retrieve → prompt → gerar (Claude + fallback)
+│   ├── eval/
+│   │   ├── golden_set.jsonl        # 5 fatos ancorados + 3 abstenções
+│   │   ├── judge.py                # LLM-as-judge + self-consistency
+│   │   └── run_eval.py             # CORAÇÃO: golden set → agrega → gate exit 1
+│   └── obs/tracing.py              # trace() + sink JSONL + summarize_traces
+│
+├── scripts/
+│   ├── download_atas.py            # API do BCB → atas completas (desde a 232)
+│   ├── download_focus.py           # API Expectativas → Focus por reunião
+│   └── ingest.py                   # → data/corpus.jsonl
+│
+├── data/corpus.jsonl               # 862 chunks (814 atas + 48 Focus), versionado
+├── tests/                          # 31 testes: retriever, pipeline, judge,
+│                                   # gate, tracing, ingestão do Focus
+│
+├── Dockerfile · docker-compose.yml · requirements.txt · .env.example
+│
+└── portfolio/
+    └── copom-rag-service.qmd       # ESTA ficha</code></pre>
+<hr>
+</section>
+<section id="tecnologias" class="level2">
+<h2 class="anchored" data-anchor-id="tecnologias">Tecnologias</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Tecnologia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>API</strong></td>
+<td>FastAPI + uvicorn</td>
+</tr>
+<tr class="even">
+<td><strong>Contratos / saída estruturada</strong></td>
+<td>Pydantic v2</td>
+</tr>
+<tr class="odd">
+<td><strong>Retrieval esparso</strong></td>
+<td>BM25 próprio, tokenização e <em>stopwords</em> pt-BR</td>
+</tr>
+<tr class="even">
+<td><strong>Retrieval denso</strong></td>
+<td>Embeddings (OpenAI / Google / <em>hashing</em> local) + cosseno em memória</td>
+</tr>
+<tr class="odd">
+<td><strong>Fusão e reordenação</strong></td>
+<td>Reciprocal Rank Fusion + reranker com <em>boost</em> condicional</td>
+</tr>
+<tr class="even">
+<td><strong>Geração</strong></td>
+<td>Claude Haiku 4.5 (com <em>fallback</em> extrativo determinístico)</td>
+</tr>
+<tr class="odd">
+<td><strong>LLM-as-judge</strong></td>
+<td>Claude Sonnet 5, <em>self-consistency</em> por mediana (com <em>fallback</em> heurístico)</td>
+</tr>
+<tr class="even">
+<td><strong>Observability</strong></td>
+<td><code>trace()</code> próprio + sink JSONL + <code>summarize_traces</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Testes</strong></td>
+<td>pytest (31 testes)</td>
+</tr>
+<tr class="even">
+<td><strong>Empacotamento</strong></td>
+<td>Docker + docker-compose</td>
+</tr>
+<tr class="odd">
+<td><strong>Ambiente</strong></td>
+<td><code>python-dotenv</code></td>
+</tr>
+</tbody>
+</table>
+<p>A separação de modelos é deliberada: <strong>Haiku gera</strong> (barato, rápido, é o que roda a cada request) e <strong>Sonnet julga</strong> (mais criterioso, roda só no eval). Nos traces da última execução, a geração custou ~US$ 0,003 por resposta contra ~US$ 0,014 por avaliação do juiz — a assimetria é o ponto.</p>
+<hr>
+</section>
+<section id="como-executar-localmente" class="level2">
+<h2 class="anchored" data-anchor-id="como-executar-localmente">Como Executar Localmente</h2>
+<section id="pré-requisitos" class="level3">
+<h3 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h3>
+<ul>
+<li>Python 3.11+</li>
+<li>Chave de API da Anthropic — <strong>opcional</strong>: sem ela, geração e juiz degradam para modos determinísticos e o eval roda offline, sem custo</li>
+<li>Docker (opcional)</li>
+</ul>
+</section>
+<section id="instalação" class="level3">
+<h3 class="anchored" data-anchor-id="instalação">Instalação</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/vitorwilher/copom-rag-service.git</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> copom-rag-service</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env   <span class="co"># opcional: ANTHROPIC_API_KEY</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="ingestão-o-corpus-já-vem-versionado" class="level3">
+<h3 class="anchored" data-anchor-id="ingestão-o-corpus-já-vem-versionado">Ingestão (o corpus já vem versionado)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/download_atas.py    <span class="co"># API do BCB → atas completas</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/download_focus.py   <span class="co"># API Expectativas → Focus por reunião</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/ingest.py           <span class="co"># → data/corpus.jsonl</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="subir-a-api" class="level3">
+<h3 class="anchored" data-anchor-id="subir-a-api">Subir a API</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> app.main:app <span class="at">--reload</span> <span class="at">--port</span> 8000   <span class="co"># POST /ask</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="rodar-o-eval-harness-o-gate" class="level3">
+<h3 class="anchored" data-anchor-id="rodar-o-eval-harness-o-gate">Rodar o eval harness (o gate)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">PYTHONPATH</span><span class="op">=</span>src <span class="ex">python</span> <span class="at">-m</span> eval.run_eval <span class="at">--samples</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="testes-e-observabilidade" class="level3">
+<h3 class="anchored" data-anchor-id="testes-e-observabilidade">Testes e observabilidade</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">PYTHONPATH</span><span class="op">=</span>src <span class="ex">python</span> <span class="at">-m</span> pytest <span class="at">-q</span>            <span class="co"># 31 testes</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Grava cada span em JSONL e agrega custo/latência/tokens</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="va">COPOM_TRACE_FILE</span><span class="op">=</span>traces.jsonl <span class="va">PYTHONPATH</span><span class="op">=</span>src <span class="ex">python</span> <span class="at">-m</span> eval.run_eval</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="va">PYTHONPATH</span><span class="op">=</span>src <span class="ex">python</span> <span class="at">-m</span> obs.tracing traces.jsonl</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
+<ol type="1">
+<li><strong>Gate no CI</strong> — <em>GitHub Action</em> rodando <code>run_eval</code> a cada PR e bloqueando o merge em regressão. É a peça que falta para o contrato deixar de depender de disciplina manual; tudo o que ela precisa (exit code, threshold, modo offline sem custo) já está pronto.</li>
+<li><strong>Golden set maior</strong> — expandir para 30–50 perguntas, com casos adversariais e mais abstenções. Com 8 casos, o 1,000 diz menos do que parece.</li>
+<li><strong>Avaliação de <em>retrieval</em></strong> — medir recall@k e MRR, separando “não achou o trecho” de “achou e respondeu mal”. Hoje o juiz mede só a resposta final, e as duas falhas se confundem.</li>
+<li><strong>Atas anteriores à 232</strong> — a API do BCB lista desde a reunião 21; ampliar a janela histórica.</li>
+<li><strong>Exportador OpenTelemetry / Prometheus</strong> — hoje o sink é JSONL, que é o formato que esses <em>backends</em> consomem, mas falta o exportador de fato.</li>
+<li><strong>Embeddings via <em>provider</em></strong> — hoje o denso usa <em>fallback</em> local.</li>
+<li><strong>Gap Copom × Focus como ferramenta de primeira classe</strong> — a pergunta que a mesa mais faz merece um endpoint próprio, não uma pergunta em texto livre.</li>
+</ol>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<ul>
+<li>Lewis, P. et al.&nbsp;(2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>. NeurIPS.</li>
+<li>Robertson, S.; Zaragoza, H. (2009). <em>The Probabilistic Relevance Framework: BM25 and Beyond</em>. Foundations and Trends in Information Retrieval.</li>
+<li>Cormack, G. V.; Clarke, C. L. A.; Büttcher, S. (2009). <em>Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods</em>. SIGIR.</li>
+<li>Zheng, L. et al.&nbsp;(2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</em>. NeurIPS.</li>
+<li>Es, S. et al.&nbsp;(2024). <em>RAGAS: Automated Evaluation of Retrieval Augmented Generation</em>. EACL.</li>
+<li>Blinder, A. S.; Ehrmann, M.; Fratzscher, M.; De Haan, J.; Jansen, D.-J. (2008). <em>Central Bank Communication and Monetary Policy</em>. Journal of Economic Literature, 46(4), 910–945.</li>
+<li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/vitorwilher\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Vítor Wilher · <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

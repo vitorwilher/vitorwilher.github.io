@@ -1,11 +1,17 @@
 [
   {
-    "listing": "/teaching/index.html",
+    "listing": "/projetos/index.html",
     "items": [
-      "/teaching/ai-applications.html",
-      "/teaching/imersao-claude-code.html",
-      "/teaching/workflow-portfolio.html",
-      "/teaching/transformers-llms.html"
+      "/projetos/nucleos-mcp.html",
+      "/projetos/taylor-sentimento.html",
+      "/projetos/copom-rag-service.html",
+      "/projetos/projeto-boletim-focus.html",
+      "/projetos/previsao-macro.html",
+      "/projetos/modelagem-corretora-bolsa-valores.html",
+      "/projetos/sentimento-copom.html",
+      "/projetos/metodologia.html",
+      "/projetos/newsletter-digest-bot.html",
+      "/projetos/roi-diagnostico.html"
     ]
   },
   {
@@ -16,17 +22,12 @@
     ]
   },
   {
-    "listing": "/projetos/index.html",
+    "listing": "/teaching/index.html",
     "items": [
-      "/projetos/nucleos-mcp.html",
-      "/projetos/taylor-sentimento.html",
-      "/projetos/projeto-boletim-focus.html",
-      "/projetos/previsao-macro.html",
-      "/projetos/modelagem-corretora-bolsa-valores.html",
-      "/projetos/sentimento-copom.html",
-      "/projetos/metodologia.html",
-      "/projetos/newsletter-digest-bot.html",
-      "/projetos/roi-diagnostico.html"
+      "/teaching/ai-applications.html",
+      "/teaching/imersao-claude-code.html",
+      "/teaching/workflow-portfolio.html",
+      "/teaching/transformers-llms.html"
     ]
   }
 ]
