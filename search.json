@@ -1292,7 +1292,7 @@
     "href": "projetos/copom-rag-service.html",
     "title": "COPOM RAG Service — RAG sobre Atas do Copom + Focus, Servido como API com Eval Harness e Observability",
     "section": "",
-    "text": "COPOM RAG Service — RAG servido como API, com eval harness e observability"
+    "text": "Arquitetura em quatro faixas: ingestão e indexação (batch) → retrieval híbrido com rerank (por request) → geração com contrato de saída → eval harness, o código-âncora"
   },
   {
     "objectID": "projetos/copom-rag-service.html#visão-geral",
