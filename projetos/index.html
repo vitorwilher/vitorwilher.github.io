@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -42,14 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f33da510f0608c2f77f1ef468bf336ec.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-eeac7883647bf95d5990a01bcd45fe2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +111,7 @@ ul.task-list li input[type="checkbox"] {
   </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -381,7 +384,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(8)</span></div><div class="category" data-category="QWdlbnRl">Agente <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QW50aHJvcGljJTIwQ2xhdWRl">Anthropic Claude <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QXV0b21hJUMzJUE3JUMzJUEzbw==">Automação <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QmFuY28lMjBkZSUyMERhZG9z">Banco de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Qm9sZXRpbSUyMEZvY3Vz">Boletim Focus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sc2ElMjBkZSUyMFZhbG9yZXM=">Bolsa de Valores <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QyVDMyVBMm1iaW8=">Câmbio <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb21h">Chroma <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQVBJ">Claude API <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQ29kZQ==">Claude Code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q1JN">CRM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RERM">DDL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RHVja0RC">DuckDB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RS1tYWls">E-mail <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5nZW5oYXJpYSUyMGRlJTIwRGFkb3M=">Engenharia de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0NT">GCS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2l0SHViJTIwQWN0aW9ucw==">GitHub Actions <span class="quarto-category-count">(4)</span></div><div class="category" data-category="R29vZ2xlJTIwR2VtaW5p">Google Gemini <span class="quarto-category-count">(2)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SU1BUA==">IMAP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SVBDQQ==">IPCA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TGFuZ0NoYWlu">LangChain <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TGFuZ0dyYXBo">LangGraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TWFya2V0aW5n">Marketing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWV0YSUyMEdyYXBoJTIwQVBJ">Meta Graph API <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwZGUlMjBEYWRvcw==">Modelagem de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwRVI=">Modelagem ER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tml4dGxh">Nixtla <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T0xT">OLS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbkFJ">OpenAI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UElC">PIB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UEwlMkZwZ1NRTA==">PL/pgSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UG9zdGdyZVNRTA==">PostgreSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHlkYW50aWM=">Pydantic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(7)</span></div><div class="category" data-category="cHl0aG9uLWJjYg==">python-bcb <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(4)</span></div><div class="category" data-category="UkFH">RAG <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVncmElMjBkZSUyMFRheWxvcg==">Regra de Taylor <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Um91dGluZQ==">Routine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2ElQzMlQkFkZQ==">Saúde <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsaWM=">Selic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UyVDMyVBOXJpZXMlMjBUZW1wb3JhaXM=">Séries Temporais <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2hpbnlhcHBzLmlv">shinyapps.io <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2tmb3JlY2FzdA==">skforecast <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U01UUA==">SMTP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1FM">SQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(3)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJpZ2dlcg==">Trigger <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2hhdHNBcHA=">WhatsApp <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(8)</span></div><div class="category" data-category="QWdlbnRl">Agente <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QW50aHJvcGljJTIwQ2xhdWRl">Anthropic Claude <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QXV0b21hJUMzJUE3JUMzJUEzbw==">Automação <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QmFuY28lMjBkZSUyMERhZG9z">Banco de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Qm9sZXRpbSUyMEZvY3Vz">Boletim Focus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sc2ElMjBkZSUyMFZhbG9yZXM=">Bolsa de Valores <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QyVDMyVBMm1iaW8=">Câmbio <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb21h">Chroma <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQVBJ">Claude API <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQ29kZQ==">Claude Code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q1JN">CRM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RERM">DDL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RHVja0RC">DuckDB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RS1tYWls">E-mail <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5nZW5oYXJpYSUyMGRlJTIwRGFkb3M=">Engenharia de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmlsdHJvJTIwZGUlMjBLYWxtYW4=">Filtro de Kalman <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0NT">GCS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2l0SHViJTIwQWN0aW9ucw==">GitHub Actions <span class="quarto-category-count">(4)</span></div><div class="category" data-category="R01N">GMM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R29vZ2xlJTIwR2VtaW5p">Google Gemini <span class="quarto-category-count">(2)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SU1BUA==">IMAP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SVBDQQ==">IPCA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TGFuZ0NoYWlu">LangChain <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TGFuZ0dyYXBo">LangGraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TWFya2V0aW5n">Marketing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWV0YSUyMEdyYXBoJTIwQVBJ">Meta Graph API <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwZGUlMjBEYWRvcw==">Modelagem de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwRVI=">Modelagem ER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tml4dGxh">Nixtla <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T0xT">OLS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbkFJ">OpenAI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UElC">PIB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UEwlMkZwZ1NRTA==">PL/pgSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UG9zdGdyZVNRTA==">PostgreSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHlkYW50aWM=">Pydantic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(7)</span></div><div class="category" data-category="cHl0aG9uLWJjYg==">python-bcb <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(4)</span></div><div class="category" data-category="UkFH">RAG <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVncmElMjBkZSUyMFRheWxvcg==">Regra de Taylor <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Um91dGluZQ==">Routine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2ElQzMlQkFkZQ==">Saúde <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsaWM=">Selic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UyVDMyVBOXJpZXMlMjBUZW1wb3JhaXM=">Séries Temporais <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2hpbnlhcHBzLmlv">shinyapps.io <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2tmb3JlY2FzdA==">skforecast <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U01UUA==">SMTP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1FM">SQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(3)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJpZ2dlcg==">Trigger <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VkFS">VAR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2hhdHNBcHA=">WhatsApp <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content column-page-left" id="quarto-document-content">
 
@@ -436,7 +439,7 @@ window.Quarto = {
     </div>
 </div>
 <div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDc3RhdHNtb2RlbHMlMkNPTFMlMkNSZWdyYSUyMGRlJTIwVGF5bG9yJTJDUG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTWFjcm9lY29ub21pYSUyQ1MlQzMlQTlyaWVzJTIwVGVtcG9yYWlzJTJDcHl0aG9uLWJjYg==" data-listing-date-sort="1783209600000" data-listing-file-modified-sort="1784814633409" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3222">
+<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDc3RhdHNtb2RlbHMlMkNPTFMlMkNHTU0lMkNWQVIlMkNGaWx0cm8lMjBkZSUyMEthbG1hbiUyQ1JlZ3JhJTIwZGUlMjBUYXlsb3IlMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNCYW5jbyUyMENlbnRyYWwlMkNNYWNyb2Vjb25vbWlhJTJDUyVDMyVBOXJpZXMlMjBUZW1wb3JhaXMlMkNweXRob24tYmNi" data-listing-date-sort="1784764800000" data-listing-file-modified-sort="1784980015537" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3175">
 <a href="../projetos/taylor-sentimento.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -444,7 +447,7 @@ window.Quarto = {
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic?
+Regra de Taylor com Sentimento do Copom — o balanço de riscos antecipa a Selic ou apenas reflete expectativas?
 </h5>
 <div class="listing-categories">
 
@@ -457,6 +460,12 @@ Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic?
 <div class="listing-category" onclick="window.quartoListingCategory('c3RhdHNtb2RlbHM='); return false;">statsmodels</div>
 
 <div class="listing-category" onclick="window.quartoListingCategory('T0xT'); return false;">OLS</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('R01N'); return false;">GMM</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('RmlsdHJvJTIwZGUlMjBLYWxtYW4='); return false;">Filtro de Kalman</div>
 
 <div class="listing-category" onclick="window.quartoListingCategory('UmVncmElMjBkZSUyMFRheWxvcg=='); return false;">Regra de Taylor</div>
 
@@ -472,20 +481,20 @@ Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic?
 
 </div>
 <div class="card-text listing-description delink">
-<p>Extensão do Sentimento COPOM: o índice de tom hawkish-dovish das atas (3 LLMs) entra como regressor numa Regra de Taylor para a Selic, ao lado do hiato do produto e do…</p>
+<p>A comunicação do Copom decomposta por três LLMs em diagnóstico retrospectivo, orientação prospectiva e balanço de riscos, com validação cega por agentes independentes. O…</p>
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
 
 </div>
 <div class="listing-date">
-Jul 5, 2026
+Jul 23, 2026
 </div>
 </div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQ29kZSUyQ1JvdXRpbmUlMkNBZ2VudGVzJTIwZGUlMjBJQSUyQ0JDQiUyQ0JvbGV0aW0lMjBGb2N1cyUyQ01hY3JvZWNvbm9taWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDQXV0b21hJUMzJUE3JUMzJUEzbyUyQ0UtbWFpbCUyQ1NNVFAlMkNJUENBJTJDU2VsaWMlMkNQSUIlMkNDJUMzJUEybWJpbw==" data-listing-date-sort="1781222400000" data-listing-file-modified-sort="1784814633406" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="910">
+<div class="g-col-1" data-index="1" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQ29kZSUyQ1JvdXRpbmUlMkNBZ2VudGVzJTIwZGUlMjBJQSUyQ0JDQiUyQ0JvbGV0aW0lMjBGb2N1cyUyQ01hY3JvZWNvbm9taWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDQXV0b21hJUMzJUE3JUMzJUEzbyUyQ0UtbWFpbCUyQ1NNVFAlMkNJUENBJTJDU2VsaWMlMkNQSUIlMkNDJUMzJUEybWJpbw==" data-listing-date-sort="1781222400000" data-listing-file-modified-sort="1784980015534" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="910">
 <a href="../projetos/projeto-boletim-focus.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -542,7 +551,7 @@ Jun 12, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="UHl0aG9uJTJDU2hpbnklMkNzY2lraXQtbGVhcm4lMkNza2ZvcmVjYXN0JTJDTml4dGxhJTJDVGltZUdQVCUyQ0Nocm9ub3MlMkNGb3VuZGF0aW9uJTIwTW9kZWxzJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDc2hpbnlhcHBzLmlvJTJDUXVhcnRvJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNDbGF1ZGUlMjBDb2Rl" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1784814633406" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3172">
+<div class="g-col-1" data-index="2" data-categories="UHl0aG9uJTJDU2hpbnklMkNzY2lraXQtbGVhcm4lMkNza2ZvcmVjYXN0JTJDTml4dGxhJTJDVGltZUdQVCUyQ0Nocm9ub3MlMkNGb3VuZGF0aW9uJTIwTW9kZWxzJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDc2hpbnlhcHBzLmlvJTJDUXVhcnRvJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNDbGF1ZGUlMjBDb2Rl" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1784980015534" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3172">
 <a href="../projetos/previsao-macro.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -611,7 +620,7 @@ May 3, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="U1FMJTJDUG9zdGdyZVNRTCUyQ01vZGVsYWdlbSUyMEVSJTJDTW9kZWxhZ2VtJTIwZGUlMjBEYWRvcyUyQ0JhbmNvJTIwZGUlMjBEYWRvcyUyQ0JvbHNhJTIwZGUlMjBWYWxvcmVzJTJDRERMJTJDVHJpZ2dlciUyQ1BMJTJGcGdTUUw=" data-listing-date-sort="1777334400000" data-listing-file-modified-sort="1784814633404" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2709">
+<div class="g-col-1" data-index="3" data-categories="U1FMJTJDUG9zdGdyZVNRTCUyQ01vZGVsYWdlbSUyMEVSJTJDTW9kZWxhZ2VtJTIwZGUlMjBEYWRvcyUyQ0JhbmNvJTIwZGUlMjBEYWRvcyUyQ0JvbHNhJTIwZGUlMjBWYWxvcmVzJTJDRERMJTJDVHJpZ2dlciUyQ1BMJTJGcGdTUUw=" data-listing-date-sort="1777334400000" data-listing-file-modified-sort="1784980015533" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2709">
 <a href="../projetos/modelagem-corretora-bolsa-valores.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -656,7 +665,7 @@ Apr 28, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDTkxQJTJDTGFuZ0NoYWluJTJDUHlkYW50aWMlMkNHb29nbGUlMjBHZW1pbmklMkNBbnRocm9waWMlMjBDbGF1ZGUlMkNPcGVuQUklMkNzdGF0c21vZGVscyUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ01hY3JvZWNvbm9taWE=" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1784814633406" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3359">
+<div class="g-col-1" data-index="4" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDTkxQJTJDTGFuZ0NoYWluJTJDUHlkYW50aWMlMkNHb29nbGUlMjBHZW1pbmklMkNBbnRocm9waWMlMjBDbGF1ZGUlMkNPcGVuQUklMkNzdGF0c21vZGVscyUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ01hY3JvZWNvbm9taWE=" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1784980015535" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3359">
 <a href="../projetos/sentimento-copom.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -709,7 +718,7 @@ Apr 26, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="UHl0aG9uJTJDR29vZ2xlJTIwR2VtaW5pJTJDTExNJTJDUkFHJTJDTGFuZ0dyYXBoJTJDTGFuZ0NoYWluJTJDQ2hyb21hJTJDU2hpbnklMkNzaGlueWFwcHMuaW8lMkNBZ2VudGUlMkNTYSVDMyVCQWRl" data-listing-date-sort="1776988800000" data-listing-file-modified-sort="1784814633402" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1318">
+<div class="g-col-1" data-index="5" data-categories="UHl0aG9uJTJDR29vZ2xlJTIwR2VtaW5pJTJDTExNJTJDUkFHJTJDTGFuZ0dyYXBoJTJDTGFuZ0NoYWluJTJDQ2hyb21hJTJDU2hpbnklMkNzaGlueWFwcHMuaW8lMkNBZ2VudGUlMkNTYSVDMyVCQWRl" data-listing-date-sort="1776988800000" data-listing-file-modified-sort="1784980015531" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1318">
 <a href="../projetos/metodologia.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -758,7 +767,7 @@ Apr 24, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="6" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQVBJJTJDTExNJTJDUXVhcnRvJTJDR2l0SHViJTIwQWN0aW9ucyUyQ01ldGElMjBHcmFwaCUyMEFQSSUyQ1doYXRzQXBwJTJDSU1BUCUyQ0F1dG9tYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1776902400000" data-listing-file-modified-sort="1784814633404" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2950">
+<div class="g-col-1" data-index="6" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQVBJJTJDTExNJTJDUXVhcnRvJTJDR2l0SHViJTIwQWN0aW9ucyUyQ01ldGElMjBHcmFwaCUyMEFQSSUyQ1doYXRzQXBwJTJDSU1BUCUyQ0F1dG9tYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1776902400000" data-listing-file-modified-sort="1784980015533" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2950">
 <a href="../projetos/newsletter-digest-bot.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -803,7 +812,7 @@ Apr 23, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="UHl0aG9uJTJDU2hpbnklMkNFbmdlbmhhcmlhJTIwZGUlMjBEYWRvcyUyQ0R1Y2tEQiUyQ0dDUyUyQ0dpdEh1YiUyMEFjdGlvbnMlMkNNYXJrZXRpbmclMkNDUk0=" data-listing-date-sort="1776816000000" data-listing-file-modified-sort="1784814633406" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2931">
+<div class="g-col-1" data-index="7" data-categories="UHl0aG9uJTJDU2hpbnklMkNFbmdlbmhhcmlhJTIwZGUlMjBEYWRvcyUyQ0R1Y2tEQiUyQ0dDUyUyQ0dpdEh1YiUyMEFjdGlvbnMlMkNNYXJrZXRpbmclMkNDUk0=" data-listing-date-sort="1776816000000" data-listing-file-modified-sort="1784980015535" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2931">
 <a href="../projetos/roi-diagnostico.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">

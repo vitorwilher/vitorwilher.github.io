@@ -2,22 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-07-05">
-<meta name="description" content="Extensão do Sentimento COPOM: o índice de tom hawkish-dovish das atas (3 LLMs) entra como regressor numa Regra de Taylor para a Selic, ao lado do hiato do produto e do desvio de inflação. Base montada na frequência de reunião — 48 reuniões (232–279, ago/2020–jun/2026), correlação sentimento × ΔSelic de 0,70 contemporânea e 0,63 antecedente.">
+<meta name="dcterms.date" content="2026-07-23">
+<meta name="description" content="A comunicação do Copom decomposta por três LLMs em diagnóstico retrospectivo, orientação prospectiva e balanço de riscos, com validação cega por agentes independentes. O balanço de riscos antecipa a ΔSelic da reunião seguinte (+0,146 p.p. por desvio-padrão), mas o efeito é integralmente absorvido pela expectativa do Questionário Pré-Copom (+13,3 pb), sem prever a surpresa monetária. Linguagem como sinalização compartilhada, não choque autônomo.">
 
-<title>Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic? – Portfólio do VW</title>
+<title>Regra de Taylor com Sentimento do Copom — o balanço de riscos antecipa a Selic ou apenas reflete expectativas? – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -77,14 +80,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f33da510f0608c2f77f1ef468bf336ec.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-eeac7883647bf95d5990a01bcd45fe2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6ac2aec46ad7f46b16024ee4409aa65c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -117,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -395,13 +398,13 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão Geral</a></li>
   <li><a href="#motivação" id="toc-motivação" class="nav-link" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#a-auditoria-que-reorientou-o-projeto" id="toc-a-auditoria-que-reorientou-o-projeto" class="nav-link" data-scroll-target="#a-auditoria-que-reorientou-o-projeto">A auditoria que reorientou o projeto</a></li>
   <li><a href="#metodologia-crisp-dm" id="toc-metodologia-crisp-dm" class="nav-link" data-scroll-target="#metodologia-crisp-dm">Metodologia — CRISP-DM</a></li>
   <li><a href="#arquitetura" id="toc-arquitetura" class="nav-link" data-scroll-target="#arquitetura">Arquitetura</a></li>
-  <li><a href="#entendimento-do-negócio" id="toc-entendimento-do-negócio" class="nav-link" data-scroll-target="#entendimento-do-negócio">1. Entendimento do Negócio</a></li>
-  <li><a href="#entendimento-dos-dados" id="toc-entendimento-dos-dados" class="nav-link" data-scroll-target="#entendimento-dos-dados">2. Entendimento dos Dados</a></li>
-  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">3. Preparação dos Dados</a></li>
-  <li><a href="#modelagem" id="toc-modelagem" class="nav-link" data-scroll-target="#modelagem">4. Modelagem</a></li>
-  <li><a href="#avaliação" id="toc-avaliação" class="nav-link" data-scroll-target="#avaliação">5. Avaliação</a></li>
+  <li><a href="#especificações" id="toc-especificações" class="nav-link" data-scroll-target="#especificações">1. Especificações</a></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados">2. Resultados</a></li>
+  <li><a href="#discussão" id="toc-discussão" class="nav-link" data-scroll-target="#discussão">3. Discussão</a></li>
+  <li><a href="#limitações" id="toc-limitações" class="nav-link" data-scroll-target="#limitações">Limitações</a></li>
   <li><a href="#estrutura-do-projeto" id="toc-estrutura-do-projeto" class="nav-link" data-scroll-target="#estrutura-do-projeto">Estrutura do Projeto</a></li>
   <li><a href="#tecnologias" id="toc-tecnologias" class="nav-link" data-scroll-target="#tecnologias">Tecnologias</a></li>
   <li><a href="#como-executar-localmente" id="toc-como-executar-localmente" class="nav-link" data-scroll-target="#como-executar-localmente">Como Executar Localmente</a></li>
@@ -416,13 +419,16 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Regra de Taylor com Sentimento do Copom — o tom das atas explica a Selic?</h1>
+<h1 class="title">Regra de Taylor com Sentimento do Copom — o balanço de riscos antecipa a Selic ou apenas reflete expectativas?</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Quarto</div>
     <div class="quarto-category">LLM</div>
     <div class="quarto-category">statsmodels</div>
     <div class="quarto-category">OLS</div>
+    <div class="quarto-category">GMM</div>
+    <div class="quarto-category">VAR</div>
+    <div class="quarto-category">Filtro de Kalman</div>
     <div class="quarto-category">Regra de Taylor</div>
     <div class="quarto-category">Política Monetária</div>
     <div class="quarto-category">Banco Central</div>
@@ -434,7 +440,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Extensão do Sentimento COPOM: o índice de tom hawkish-dovish das atas (3 LLMs) entra como regressor numa Regra de Taylor para a Selic, ao lado do hiato do produto e do desvio de inflação. Base montada na frequência de reunião — 48 reuniões (232–279, ago/2020–jun/2026), correlação sentimento × ΔSelic de 0,70 contemporânea e 0,63 antecedente.
+    A comunicação do Copom decomposta por três LLMs em diagnóstico retrospectivo, orientação prospectiva e balanço de riscos, com validação cega por agentes independentes. O balanço de riscos antecipa a ΔSelic da reunião seguinte (+0,146 p.p. por desvio-padrão), mas o efeito é integralmente absorvido pela expectativa do Questionário Pré-Copom (+13,3 pb), sem prever a surpresa monetária. Linguagem como sinalização compartilhada, não choque autônomo.
   </div>
 </div>
 
@@ -445,7 +451,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 5, 2026</p>
+      <p class="date">July 23, 2026</p>
     </div>
   </div>
   
@@ -473,50 +479,100 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Este trabalho é uma <strong>extensão direta</strong> do <a href="sentimento-copom.html"><strong>Sentimento COPOM</strong></a>. Lá, construímos um Índice de Tom <em>hawkish-dovish</em> das atas do Copom com <strong>três LLMs em paralelo</strong> (Gemini Flash Lite, Claude Haiku 4.5, GPT-4.1-mini), calibrado em pontos percentuais da Selic. <strong>Aqui</strong>, esse índice deixa de ser o objeto final e vira um <strong>regressor</strong>: entra numa <strong>Regra de Taylor</strong> para testar se o tom da comunicação adiciona poder explicativo sobre a taxa de juros <em>além</em> dos fundamentos macroeconômicos tradicionais. Os <em>scores</em> dos três modelos são insumos <strong>congelados</strong> desta versão — não se reprocessam atas aqui; a escoragem incremental pertence ao projeto irmão.</p>
+<p>Este trabalho é uma <strong>extensão direta</strong> do <a href="sentimento-copom.html"><strong>Sentimento COPOM</strong></a>. Lá, construímos um Índice de Tom <em>hawkish-dovish</em> das atas do Copom com <strong>três LLMs em paralelo</strong> (Gemini Flash Lite, Claude Haiku 4.5, GPT-4.1-mini). <strong>Aqui</strong>, esse índice deixa de ser o objeto final e vira um <strong>regressor</strong> numa <strong>Regra de Taylor</strong> — e, na rodada atual, é <em>reconstruído</em>: o corpus A+B das atas passa a ser lido integralmente e o tom é decomposto em dimensões econômicas distintas.</p>
+<p>Uma correção importante em relação à versão anterior desta ficha: as regressões usam os <strong><em>scores</em> brutos em <span class="math inline">\([-3, +3]\)</span></strong> (padronizados por z-score), <strong>não</strong> a série calibrada em pontos percentuais da Selic disponível no projeto de origem. Não há, portanto, vazamento mecânico da calibração OLS do projeto-mãe para a Regra de Taylor estimada aqui.</p>
 </div>
 </div>
 <section id="visão-geral" class="level2">
 <h2 class="anchored" data-anchor-id="visão-geral">Visão Geral</h2>
-<p>Este projeto testa, seguindo a metodologia <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>), uma pergunta de economia monetária aplicada: <strong>o sentimento da comunicação do Copom, medido por LLMs, tem informação sobre a Selic que os fundamentos macro não capturam?</strong></p>
-<p>Para isso, montamos uma base na <strong>frequência de reunião do Copom</strong> (a unidade de observação é a <em>reunião</em>, não o mês) reunindo quatro blocos, cada um coletado de fonte pública com <em>cache</em> local incremental:</p>
-<ul>
-<li><strong>Decisão da Selic</strong> — meta pós-reunião, variação (ΔSelic) e defasagem (SGS 432);</li>
-<li><strong>Sentimento</strong> — índice de tom <em>hawkish-dovish</em> por LLM e <em>ensemble</em> (média simples dos três), herdado do Sentimento COPOM;</li>
-<li><strong>Desvio da inflação esperada</strong> — expectativa Focus (IPCA 12 meses suavizada, mediana na véspera da reunião) menos a meta interpolada para o mesmo horizonte;</li>
-<li><strong>Hiato do produto</strong> — ciclo do filtro Hodrick-Prescott (<span class="math inline">\(\lambda = 14400\)</span>) sobre o log do IBC-Br dessazonalizado (SGS 24364), com defasagem de publicação de 2 meses.</li>
-</ul>
-<p>O artefato final é um <em>paper</em> técnico reprodutível em <strong>Quarto + LaTeX</strong>, versionado formalmente (CHANGELOG + <em>snapshots</em> por <em>release</em>), no mesmo padrão editorial do projeto-mãe.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>Este projeto testa, seguindo a metodologia <strong>CRISP-DM</strong>, uma pergunta de economia monetária aplicada: <strong>o sentimento da comunicação do Copom, medido por LLMs, tem informação sobre a Selic que os fundamentos macro não capturam?</strong></p>
+<p>A resposta encontrada é mais interessante — e mais restritiva — do que a hipótese inicial sugeria. O tom <strong>explica</strong> a Selic contemporânea com folga e o <strong>balanço de riscos de inflação antecipa</strong> a decisão da reunião seguinte. Mas quando se confronta esse conteúdo antecedente com a expectativa do mercado medida <strong>antes</strong> da reunião, o efeito se revela <strong>integralmente absorvido pela expectativa</strong>: a linguagem desloca o consenso, não a surpresa.</p>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Tese central
+<span class="screen-reader-only">Important</span>Tese central (revisada)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A <strong>Regra de Taylor</strong> — que explica a taxa de juros por hiato do produto e desvio da inflação em relação à meta — é o cavalo de batalha da política monetária empírica. A hipótese aqui é que o <strong>tom da comunicação</strong> carrega sinal <em>incremental</em>: dois cenários com hiato e desvio de inflação parecidos podem justificar respostas diferentes da Selic, e a diferença aparece na <em>linguagem</em> da ata. Na base montada, o <em>ensemble</em> de sentimento tem <strong>correlação de 0,70 com a ΔSelic contemporânea e de 0,63 com a ΔSelic da reunião seguinte</strong> — evidência preliminar de que o tom não só acompanha, mas <em>antecede</em> a decisão.</p>
+<p>A hipótese original era que o tom carrega sinal <em>incremental</em> sobre a decisão. Os resultados obrigam a <strong>reposicionar a pergunta</strong>: o balanço de riscos antecipa a ΔSelic da reunião seguinte em <strong>+0,146 p.p. por desvio-padrão</strong> (<span class="math inline">\(p = 0{,}001\)</span>), mas desloca a <strong>expectativa média do Questionário Pré-Copom em +13,3 pontos-base</strong> — praticamente toda a decisão realizada (+12,9 pb). A <strong>surpresa</strong> residual é de <strong>−0,4 pb</strong>, estatisticamente indistinguível de zero. A comunicação do Copom opera como <strong>mecanismo de sinalização compartilhado com o mercado</strong>, não como choque monetário autônomo.</p>
 </div>
 </div>
 <hr>
 </section>
 <section id="motivação" class="level2">
 <h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
-<p>A Regra de Taylor <span class="citation" data-cites="taylor1993">[@taylor1993]</span> postula que o banco central ajusta a taxa de juros de referência em resposta a dois desvios: a inflação em relação à meta e o produto em relação ao potencial. É uma das relações mais estimadas em macroeconomia — mas trata a comunicação do banco central como ruído. Ao mesmo tempo, uma literatura crescente mostra que a <em>comunicação</em> é, em si, um instrumento de política monetária <span class="citation" data-cites="blinder2008 hansen2018">[@blinder2008; @hansen2018]</span>: o <em>tom</em> com que o cenário é descrito antecipa a direção dos juros.</p>
-<p>O projeto-mãe transformou esse tom em uma série quantitativa. Este projeto fecha o elo, colocando as duas peças na mesma regressão. As perguntas de pesquisa:</p>
+<p>A Regra de Taylor <span class="citation" data-cites="taylor1993">[@taylor1993]</span> postula que o banco central ajusta a taxa de juros em resposta a dois desvios: a inflação em relação à meta e o produto em relação ao potencial. É uma das relações mais estimadas em macroeconomia — mas trata a comunicação do banco central como ruído. Ao mesmo tempo, uma literatura crescente mostra que a <em>comunicação</em> é, em si, um instrumento de política monetária <span class="citation" data-cites="blinder2008 hansen2018">[@blinder2008; @hansen2018]</span>.</p>
+<p>O projeto-mãe transformou esse tom em série quantitativa. Este projeto fecha o elo, colocando as duas peças na mesma regressão — e depois submete o resultado a um teste que boa parte da literatura de <em>central bank communication</em> não faz: <strong>descontar o que o mercado já esperava</strong>.</p>
+<section id="perguntas-de-pesquisa" class="level3">
+<h3 class="anchored" data-anchor-id="perguntas-de-pesquisa">Perguntas de pesquisa</h3>
 <ol type="1">
-<li><strong>O sentimento sobrevive aos controles?</strong> Com hiato do produto e desvio de inflação na regressão, o coeficiente do sentimento (<span class="math inline">\(\hat{\delta}\)</span>) permanece positivo e estatisticamente significante?</li>
-<li><strong>O tom antecede a decisão?</strong> O sentimento da ata da reunião <span class="math inline">\(t\)</span> (ou defasado, <span class="math inline">\(t-1\)</span>) prevê a ΔSelic da reunião seguinte? A correlação antecedente de <strong>0,63</strong> é apenas contemporaneidade disfarçada ou há <em>timing</em>?</li>
-<li><strong>A escolha do LLM muda a conclusão econômica?</strong> Como os três modelos divergem na <em>intensidade</em> do <em>score</em> (a tese do projeto-mãe), o coeficiente <span class="math inline">\(\hat{\delta}\)</span> e o ganho de <span class="math inline">\(R^2\)</span> são robustos ao provedor de IA usado como fonte do regressor?</li>
-<li><strong>A especificação importa?</strong> Regra contemporânea vs.&nbsp;<em>forward-looking</em> com suavização; hiato via HP vs.&nbsp;fonte alternativa (IFI) — o sinal do sentimento é robusto?</li>
+<li><strong>O sentimento sobrevive aos controles?</strong> Com hiato do produto e desvio de inflação na regressão, <span class="math inline">\(\hat{\delta}\)</span> permanece positivo e significante?</li>
+<li><strong>O tom antecede a decisão?</strong> O sentimento da ata <span class="math inline">\(t\)</span> prevê a ΔSelic da reunião <span class="math inline">\(t+1\)</span> — ou isso é contemporaneidade disfarçada?</li>
+<li><strong>Qual dimensão da linguagem carrega o sinal?</strong> Diagnóstico retrospectivo, orientação prospectiva e balanço de riscos são objetos econômicos distintos; agregá-los num único índice pode estar misturando informação com ruído.</li>
+<li><strong>O sinal é antecipação ou surpresa?</strong> Se o mercado já precifica o conteúdo da ata, o efeito sobre a decisão não é informação nova.</li>
+<li><strong>A conclusão depende do LLM?</strong> Sinal e significância são estáveis entre Claude, Gemini e OpenAI?</li>
 </ol>
 <hr>
 </section>
+</section>
+<section id="a-auditoria-que-reorientou-o-projeto" class="level2">
+<h2 class="anchored" data-anchor-id="a-auditoria-que-reorientou-o-projeto">A auditoria que reorientou o projeto</h2>
+<p>A versão inicial deste trabalho estimava a Regra de Taylor com o índice agregado herdado. Uma auditoria do corpus revelou duas coisas — uma tranquilizadora e uma que exigiu refazer a escoragem:</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>O que a auditoria encontrou
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Sem vazamento (verificado).</strong> A extração já excluía corretamente a <strong>seção C</strong> das atas, que contém discussão, decisão e votação. E os <em>scores</em> usados são as saídas brutas dos modelos em <span class="math inline">\([-3, +3]\)</span> — a calibração em p.p. da Selic nunca entrou nesta base.</p>
+<p><strong>Truncagem material (corrigida).</strong> A extração legada limitava as seções A+B a <strong>4.500 caracteres</strong>. O corte atingiu <strong>35 das 48 atas</strong>. Entre as atas truncadas, a extração integral recuperou <strong>mediana de 6.042 caracteres</strong> (máximo de 10.061) — cobertura temporal desigual, com risco de eliminar justamente o conteúdo prospectivo das atas mais longas.</p>
+</div>
+</div>
+<p>A resposta foi reconstruir o corpus (<code>data/raw/atas_full_cache.json</code>, seções A+B integrais, seção C excluída) e <strong>reescorar as 48 atas</strong> em dimensões separadas, com cada justificativa vinculada a um identificador de parágrafo (<code>P01</code>, <code>P02</code>, …) para auditabilidade.</p>
+<section id="o-índice-prospectivo-em-quatro-dimensões" class="level3">
+<h3 class="anchored" data-anchor-id="o-índice-prospectivo-em-quatro-dimensões">O índice prospectivo em quatro dimensões</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimensão</th>
+<th>O que mede</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tom_retrospectivo</code></td>
+<td>Leitura dos dados e condições <strong>já observadas</strong></td>
+</tr>
+<tr class="even">
+<td><code>orientacao_prospectiva</code></td>
+<td>Indicação explícita sobre a <strong>postura monetária futura</strong></td>
+</tr>
+<tr class="odd">
+<td><code>balanco_riscos_inflacao</code></td>
+<td><strong>Assimetria dos riscos</strong> para a inflação</td>
+</tr>
+<tr class="even">
+<td><code>confianca</code></td>
+<td>Grau de clareza da classificação (diagnóstico de validade)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
 <section id="metodologia-crisp-dm" class="level2">
 <h2 class="anchored" data-anchor-id="metodologia-crisp-dm">Metodologia — CRISP-DM</h2>
-<p>O projeto segue o processo <strong>CRISP-DM</strong>, aqui aplicado a um problema de <strong>econometria de séries temporais aumentada por um regressor gerado por IA</strong>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -531,27 +587,27 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td><strong>1. Entendimento do Negócio</strong></td>
-<td>Formalização da Regra de Taylor <em>forward-looking</em> com suavização (<span class="citation" data-cites="taylor1993">@taylor1993</span>; <span class="citation" data-cites="clarida2000">@clarida2000</span>); escolha da variável-alvo (meta Selic / ΔSelic por reunião); hipótese testável: o sentimento das atas adiciona poder explicativo além de hiato e desvio de inflação</td>
+<td>Regra de Taylor <em>forward-looking</em> com suavização (<span class="citation" data-cites="taylor1993">@taylor1993</span>; <span class="citation" data-cites="clarida2000">@clarida2000</span>). Hipótese testável: o tom adiciona poder explicativo além de hiato e desvio de inflação — e, na rodada revisada, se esse conteúdo é <strong>antecipação</strong> ou <strong>surpresa</strong></td>
 </tr>
 <tr class="even">
 <td><strong>2. Entendimento dos Dados</strong></td>
-<td>Mapeamento de 4 blocos (Selic SGS 432; sentimento herdado dos 3 LLMs; Focus IPCA 12m suavizada; hiato via IBC-Br). A unidade é a <strong>reunião do Copom</strong> (232–279), não o mês — todos os regressores são alinhados à data da reunião</td>
+<td>Cinco blocos: Selic (SGS 432); corpus integral das atas; Focus IPCA 12m suavizada; hiato (IBC-Br, SGS 24364); <strong>Questionário Pré-Copom</strong> (42 edições quantitativas, reuniões 238+). A unidade é a <strong>reunião do Copom</strong> (232–279), não o mês</td>
 </tr>
 <tr class="odd">
 <td><strong>3. Preparação dos Dados</strong></td>
-<td><code>scripts/01_build_base.py</code> monta <code>data/base_taylor.csv</code> (uma linha por reunião). Decisões documentadas: <code>selic_pos</code> = 1º valor após a reunião; Focus = última mediana <strong>anterior</strong> à reunião (informação disponível ao comitê); meta interpolada por média ponderada; hiato defasado em <span class="math inline">\(m-2\)</span>. <em>Cache</em> local incremental por fonte</td>
+<td><code>01_build_base.py</code> monta <code>base_taylor.csv</code> (48 reuniões). <code>09_prepare_forward_texts.py</code> reconstrói o corpus A+B sem truncagem. <code>14/15_*</code> coletam o QPC e constroem a surpresa da decisão. <em>Cache</em> incremental por fonte</td>
 </tr>
 <tr class="even">
 <td><strong>4. Modelagem</strong></td>
-<td>Regra de Taylor aumentada estimada por <strong>OLS com erros HAC (Newey-West)</strong>: <span class="math inline">\(i_t = \rho\, i_{t-1} + (1-\rho)[\alpha + \beta(\pi^e_t - \pi^*_t) + \gamma\, \text{hiato}_t] + \delta\, S_t + \varepsilon_t\)</span>. Comparação com/sem o termo de sentimento e por fonte de LLM. <em>(Em estruturação — v0.1: base pronta; estimação é o próximo bloco)</em></td>
+<td>OLS com erros <strong>HAC (Newey-West, 2 defasagens)</strong> como referência; <strong>TSLS e GMM em dois passos</strong> para endogeneidade; <strong>filtro de Kalman</strong> como hiato alternativo; <strong>VAR</strong> e <strong>VECM</strong> como exploratórios; <strong>regressões móveis</strong> para estabilidade; <strong>bootstrap (5.000 réplicas)</strong> e <strong><em>leave-one-out</em></strong> na especificação de surpresa</td>
 </tr>
 <tr class="odd">
 <td><strong>5. Avaliação</strong></td>
-<td>Teste de significância de <span class="math inline">\(\hat{\delta}\)</span> (o sentimento sobrevive aos controles?); ganho de <span class="math inline">\(R^2\)</span>/<span class="math inline">\(\bar{R}^2\)</span> ao adicionar <span class="math inline">\(S_t\)</span>; especificação antecedente (<span class="math inline">\(t \to t+1\)</span>); robustez ao provedor de LLM e à fonte do hiato. Evidência preliminar já na base: correlação <span class="math inline">\(S \times \Delta\)</span>Selic de <strong>0,70</strong> (contemporânea) e <strong>0,63</strong> (antecedente)</td>
+<td>Significância de <span class="math inline">\(\hat{\delta}\)</span>; ganho de <span class="math inline">\(\bar{R}^2\)</span>; decomposição por dimensão textual; <strong>identidade decisão = expectativa + surpresa</strong>; robustez ao provedor de LLM e à fonte do hiato; <strong>validação cega por dois agentes independentes</strong></td>
 </tr>
 <tr class="even">
 <td><strong>6. Implantação</strong></td>
-<td><em>Paper</em> reprodutível em Quarto + LaTeX; base regenerável apagando o <em>cache</em>; sistema formal de <em>releases</em> (CHANGELOG + <code>versions/</code>); edições base (auditável) e público (do leitor), como no projeto-mãe</td>
+<td><em>Paper</em> reprodutível em Quarto + LaTeX; base regenerável apagando o <em>cache</em>; CHANGELOG + <code>versions/</code></td>
 </tr>
 </tbody>
 </table>
@@ -561,37 +617,42 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="arquitetura">Arquitetura</h2>
 <div class="cell" data-layout-align="default">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph Herdado["Sentimento COPOM (congelado)"]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    SC[(scores 3 LLMs&lt;br&gt;Claude · Gemini · OpenAI)]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    AT[(atas_cache.json&lt;br&gt;datas das reuniões)]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  end</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  subgraph Coleta["Coleta via API BCB (python-bcb)"]</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    SGS432[(SGS 432&lt;br&gt;meta Selic)]</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    FOCUS[(Focus IPCA 12m&lt;br&gt;suavizada)]</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    META[(SGS 13521&lt;br&gt;meta de inflação)]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    IBC[(SGS 24364&lt;br&gt;IBC-Br dessaz.)]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  subgraph Corpus["Corpus reconstruído"]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    ATAS[(atas_full_cache.json&lt;br&gt;seções A+B integrais&lt;br&gt;seção C excluída)]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  subgraph Coleta["Coleta via API BCB"]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    SGS432[(SGS 432&lt;br&gt;meta Selic)]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    FOCUS[(Focus IPCA 12m)]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    META[(SGS 13521&lt;br&gt;meta de inflação)]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    IBC[(SGS 24364&lt;br&gt;IBC-Br dessaz.)]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    QPC[(Questionário Pré-Copom&lt;br&gt;42 edições)]</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  end</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  SC --&gt; BUILD</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  AT --&gt; BUILD</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  SGS432 --&gt; BUILD</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  FOCUS --&gt; BUILD</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  META --&gt; BUILD</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  IBC --&gt; BUILD</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  BUILD[["scripts/01_build_base.py&lt;br&gt;frequência de reunião"]] --&gt; CSV[(data/base_taylor.csv&lt;br&gt;48 reuniões × 14 colunas)]</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  subgraph Modelagem["Regra de Taylor aumentada"]</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    CSV --&gt; OLS[statsmodels OLS&lt;br&gt;HAC / Newey-West]</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; M0["Baseline&lt;br&gt;hiato + desvio π"]</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; M1["+ sentimento S_t&lt;br&gt;δ̂, ΔR²"]</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    OLS --&gt; M2["antecedente&lt;br&gt;t → t+1"]</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  end</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  M0 --&gt; PDF([Quarto Render PDF])</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  M1 --&gt; PDF</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  M2 --&gt; PDF</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  ATAS --&gt; SCORE[["Escoragem 3 LLMs&lt;br&gt;4 dimensões · evidência por parágrafo"]]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  SCORE --&gt; VALID{{"Validação cega&lt;br&gt;2 agentes independentes"}}</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  VALID --&gt; BUILD</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  SGS432 --&gt; BUILD</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  FOCUS --&gt; BUILD</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  META --&gt; BUILD</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  IBC --&gt; BUILD</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  BUILD[["base_taylor.csv&lt;br&gt;48 reuniões"]] --&gt; EST</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  subgraph EST["Estimação"]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    M01["M0 / M1&lt;br&gt;contemporânea"]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    M2["M2 antecedente&lt;br&gt;por dimensão"]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    IV["TSLS / GMM"]</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    KAL["hiato Kalman"]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    DIN["VAR · VECM · rolling"]</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  end</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  QPC --&gt; SURP[["Surpresa monetária&lt;br&gt;decisão − expectativa QPC"]]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  M2 --&gt; SURP</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  SURP --&gt; DEC["Identidade:&lt;br&gt;decisão = expectativa + surpresa"]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  EST --&gt; PDF([Quarto Render PDF])</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  DEC --&gt; PDF</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
@@ -604,289 +665,287 @@ window.Quarto = {
 </div>
 <hr>
 </section>
-<section id="entendimento-do-negócio" class="level2">
-<h2 class="anchored" data-anchor-id="entendimento-do-negócio">1. Entendimento do Negócio</h2>
-<section id="a-regra-de-taylor-como-cavalo-de-batalha" class="level3">
-<h3 class="anchored" data-anchor-id="a-regra-de-taylor-como-cavalo-de-batalha">1.1 A Regra de Taylor como cavalo de batalha</h3>
-<p>A Regra de Taylor descreve a política monetária como uma resposta sistemática da taxa de juros a dois desvios fundamentais:</p>
+<section id="especificações" class="level2">
+<h2 class="anchored" data-anchor-id="especificações">1. Especificações</h2>
+<section id="regra-de-taylor-contemporânea" class="level3">
+<h3 class="anchored" data-anchor-id="regra-de-taylor-contemporânea">1.1 Regra de Taylor contemporânea</h3>
 <p><span class="math display">\[
-i_t = \alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t + \varepsilon_t
-\]</span></p>
-<p>Empiricamente, estima-se uma versão <strong>suavizada e <em>forward-looking</em></strong> <span class="citation" data-cites="clarida2000">[@clarida2000]</span>, em que o BC ajusta a taxa gradualmente (termo de suavização <span class="math inline">\(\rho\)</span>) e reage a expectativas, não a valores realizados:</p>
-<p><span class="math display">\[
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \varepsilon_t
+i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S^z_t + \varepsilon_t
 \]</span></p>
 </section>
-<section id="o-aumento-por-sentimento" class="level3">
-<h3 class="anchored" data-anchor-id="o-aumento-por-sentimento">1.2 O aumento por sentimento</h3>
-<p>A contribuição do projeto é acrescentar o índice de tom <span class="math inline">\(S_t\)</span> como regressor:</p>
+<section id="especificação-antecedente-dinâmica" class="level3">
+<h3 class="anchored" data-anchor-id="especificação-antecedente-dinâmica">1.2 Especificação antecedente dinâmica</h3>
 <p><span class="math display">\[
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S_t + \varepsilon_t
+\Delta i_{t+1} = c + \phi\,\Delta i_t + \beta\,\text{desvio}_t + \gamma\,\text{hiato}_t + \delta\, S^z_t + \varepsilon_{t+1}
 \]</span></p>
-<p>O coeficiente de interesse é <span class="math inline">\(\hat{\delta}\)</span>. Sob a hipótese nula (<span class="math inline">\(\delta = 0\)</span>), o tom da ata é redundante dado hiato e desvio de inflação. Rejeitá-la significa que a <em>linguagem</em> do Copom carrega informação sobre a Selic que os fundamentos observáveis não capturam.</p>
+<p>O controle por <span class="math inline">\(\Delta i_t\)</span> é o teste decisivo: sem ele, a ata <em>parece</em> prever a próxima reunião apenas porque acompanha a decisão corrente.</p>
 </section>
-<section id="critérios-de-sucesso" class="level3">
-<h3 class="anchored" data-anchor-id="critérios-de-sucesso">1.3 Critérios de sucesso</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Critério</th>
-<th>Meta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Significância do sentimento</td>
-<td><span class="math inline">\(\hat{\delta}\)</span> com <span class="math inline">\(p &lt; 0{,}05\)</span> mantidos os controles</td>
-</tr>
-<tr class="even">
-<td>Ganho explicativo</td>
-<td><span class="math inline">\(\Delta\bar{R}^2 &gt; 0\)</span> ao adicionar <span class="math inline">\(S_t\)</span> ao <em>baseline</em></td>
-</tr>
-<tr class="odd">
-<td>Antecedência</td>
-<td>Correlação <span class="math inline">\(S_t \times \Delta\)</span>Selic<span class="math inline">\(_{t+1}\)</span> economicamente relevante (base: <strong>0,63</strong>)</td>
-</tr>
-<tr class="even">
-<td>Robustez ao LLM</td>
-<td>Sinal e significância de <span class="math inline">\(\hat{\delta}\)</span> estáveis entre Claude, Gemini e OpenAI</td>
-</tr>
-<tr class="odd">
-<td>Reprodutibilidade</td>
-<td>Base regenerada do zero apagando os <em>caches</em> de <code>data/raw/</code></td>
-</tr>
-</tbody>
-</table>
+<section id="decomposição-da-surpresa" class="level3">
+<h3 class="anchored" data-anchor-id="decomposição-da-surpresa">1.3 Decomposição da surpresa</h3>
+<p>Com a expectativa do QPC coletada <strong>antes</strong> da reunião, vale a identidade contábil:</p>
+<p><span class="math display">\[
+\underbrace{\Delta i_{t+1}}_{\text{decisão realizada}} = \underbrace{E^{QPC}_t[\Delta i_{t+1}]}_{\text{expectativa}} + \underbrace{u_{t+1}}_{\text{surpresa}}
+\]</span></p>
+<p>Estimar a mesma regressão sobre cada componente separa <strong>sinalização</strong> (o índice move a expectativa) de <strong>choque</strong> (o índice move a surpresa).</p>
 <hr>
 </section>
 </section>
-<section id="entendimento-dos-dados" class="level2">
-<h2 class="anchored" data-anchor-id="entendimento-dos-dados">2. Entendimento dos Dados</h2>
-<section id="fontes" class="level3">
-<h3 class="anchored" data-anchor-id="fontes">2.1 Fontes</h3>
+<section id="resultados" class="level2">
+<h2 class="anchored" data-anchor-id="resultados">2. Resultados</h2>
+<section id="a-regra-de-taylor-contemporânea" class="level3">
+<h3 class="anchored" data-anchor-id="a-regra-de-taylor-contemporânea">2.1 A Regra de Taylor contemporânea</h3>
+<p>O sentimento sobrevive aos controles com folga. Comparação M0 (<em>baseline</em>) → M1 (aumentada), <span class="math inline">\(n = 47\)</span>, erros HAC:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Bloco</th>
-<th>Fonte</th>
-<th>Série / origem</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Reuniões e datas</td>
-<td>API BCB (atas), <em>cache</em> herdado</td>
-<td><code>atas_cache.json</code> — data da reunião, nº 232–279</td>
-</tr>
-<tr class="even">
-<td>Meta Selic</td>
-<td>SGS 432 (diária)</td>
-<td>Meta definida pelo Copom</td>
-</tr>
-<tr class="odd">
-<td>Sentimento</td>
-<td>Sentimento COPOM (congelado)</td>
-<td><code>scores_{claude,gemini,openai}_cache.csv</code></td>
-</tr>
-<tr class="even">
-<td>Inflação esperada</td>
-<td>Focus/BCB</td>
-<td>IPCA 12m <strong>suavizada</strong>, mediana, <code>baseCalculo=0</code></td>
-</tr>
-<tr class="odd">
-<td>Meta de inflação</td>
-<td>SGS 13521 (anual)</td>
-<td>Interpolada para o horizonte de 12m</td>
-</tr>
-<tr class="even">
-<td>Hiato do produto</td>
-<td>SGS 24364 (IBC-Br dessaz.)</td>
-<td>Filtro HP (<span class="math inline">\(\lambda = 14400\)</span>) sobre o log</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="a-unidade-de-observação-é-a-reunião" class="level3">
-<h3 class="anchored" data-anchor-id="a-unidade-de-observação-é-a-reunião">2.2 A unidade de observação é a reunião</h3>
-<p>Diferentemente de estimações macro em frequência mensal ou trimestral, aqui <strong>cada linha é uma reunião do Copom</strong>. Isso alinha a decisão de juros à ata que a acompanha e ao estado da economia <em>como observado pelo comitê naquele momento</em> — daí a exigência de usar sempre a última divulgação <strong>anterior</strong> à reunião para o Focus, evitando <em>look-ahead bias</em>.</p>
-</section>
-<section id="recorte-amostral" class="level3">
-<h3 class="anchored" data-anchor-id="recorte-amostral">2.3 Recorte amostral</h3>
-<p>A amostra vai da <strong>reunião 232 (ago/2020)</strong> — herdando o início do projeto-mãe, que corresponde ao <em>template</em> estrutural estável das atas pós-pandemia — à <strong>reunião 279 (jun/2026)</strong>, totalizando <strong>48 reuniões</strong>. As reuniões 278 e 279 foram adicionadas em 2026-07-05, escoradas no projeto irmão com o mesmo <em>prompt</em> e modelos da v1.0.</p>
-<hr>
-</section>
-</section>
-<section id="preparação-dos-dados" class="level2">
-<h2 class="anchored" data-anchor-id="preparação-dos-dados">3. Preparação dos Dados</h2>
-<p>Toda a montagem vive em <code>scripts/01_build_base.py</code>, que produz <code>data/base_taylor.csv</code> (uma linha por reunião) e cria <em>cache</em> local por fonte. Decisões de coleta documentadas:</p>
-<section id="selic-e-variação" class="level3">
-<h3 class="anchored" data-anchor-id="selic-e-variação">3.1 Selic e variação</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A nova meta vigora a partir do dia útil seguinte à reunião:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"selic_pre"</span>] <span class="op">=</span> [selic.asof(d) <span class="cf">for</span> d <span class="kw">in</span> df[<span class="st">"data"</span>]]              <span class="co"># valor na data</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"selic_pos"</span>] <span class="op">=</span> [selic[selic.index <span class="op">&gt;</span> d].iloc[<span class="dv">0</span>] <span class="cf">for</span> d <span class="kw">in</span> df[<span class="st">"data"</span>]]  <span class="co"># 1º após</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"d_selic"</span>]   <span class="op">=</span> df[<span class="st">"selic_pos"</span>] <span class="op">-</span> df[<span class="st">"selic_pre"</span>]                <span class="co"># ΔSelic decidida</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"selic_lag"</span>] <span class="op">=</span> df[<span class="st">"selic_pos"</span>].shift(<span class="dv">1</span>)                         <span class="co"># i_{t-1}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="sentimento-herdado-ensemble" class="level3">
-<h3 class="anchored" data-anchor-id="sentimento-herdado-ensemble">3.2 Sentimento herdado (ensemble)</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> modelo <span class="kw">in</span> [<span class="st">"claude"</span>, <span class="st">"gemini"</span>, <span class="st">"openai"</span>]:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> pd.read_csv(RAW <span class="op">/</span> <span class="ss">f"scores_</span><span class="sc">{</span>modelo<span class="sc">}</span><span class="ss">_cache.csv"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.merge(s, on<span class="op">=</span><span class="st">"reuniao"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"score_ensemble"</span>] <span class="op">=</span> df[[<span class="st">"score_claude"</span>, <span class="st">"score_gemini"</span>, <span class="st">"score_openai"</span>]].mean(axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="desvio-da-inflação-esperada" class="level3">
-<h3 class="anchored" data-anchor-id="desvio-da-inflação-esperada">3.3 Desvio da inflação esperada</h3>
-<p>O Focus entra pela <strong>última mediana divulgada antes da reunião</strong> (informação disponível ao comitê). A meta de 12 meses é a média ponderada das metas anuais do ano corrente e seguinte pelos meses cobertos — com a meta contínua de 3% a partir de 2025, a ponderação torna-se inócua e o desvio fica dominado pela expectativa.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"ipca_e12m"</span>]       <span class="op">=</span> [f.asof(d <span class="op">-</span> pd.Timedelta(days<span class="op">=</span><span class="dv">1</span>)) <span class="cf">for</span> d <span class="kw">in</span> df[<span class="st">"data"</span>]]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"desvio_inflacao"</span>] <span class="op">=</span> df[<span class="st">"ipca_e12m"</span>] <span class="op">-</span> df[<span class="st">"meta_12m"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="hiato-do-produto" class="level3">
-<h3 class="anchored" data-anchor-id="hiato-do-produto">3.4 Hiato do produto</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ciclo, _ <span class="op">=</span> sm.tsa.filters.hpfilter(np.log(ibc), lamb<span class="op">=</span><span class="dv">14400</span>)  <span class="co"># ciclo HP</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hiato <span class="op">=</span> (ciclo <span class="op">*</span> <span class="dv">100</span>).rename(<span class="st">"hiato"</span>)                        <span class="co"># % do potencial</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cada reunião usa o valor de m-2 (defasagem de publicação do IBC-Br)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Duas decisões de coleta que exigiram checagem empírica
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>SGS 24364 vs.&nbsp;24363</strong> — verificamos que a <strong>24364</strong> é a série <em>com</em> ajuste sazonal (amplitude sazonal do crescimento m/m de 0,8%, contra 11,4% da 24363). <strong>Viés de ponta do HP</strong> — o filtro Hodrick-Prescott sofre de <em>end-point bias</em>, que afeta justamente as observações recentes; fica registrado como limitação, e a robustez com o hiato da IFI é passo futuro.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="modelagem" class="level2">
-<h2 class="anchored" data-anchor-id="modelagem">4. Modelagem</h2>
-<section id="especificação-de-referência" class="level3">
-<h3 class="anchored" data-anchor-id="especificação-de-referência">4.1 Especificação de referência</h3>
-<p>A Regra de Taylor aumentada, estimada por <strong>OLS</strong> com erros-padrão <strong>HAC (Newey-West)</strong> para lidar com a autocorrelação natural de séries de política monetária:</p>
-<p><span class="math display">\[
-i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma\,\text{hiato}_t\big] + \delta\, S_t + \varepsilon_t
-\]</span></p>
-<p>O desenho experimental compara três especificações aninhadas:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Modelo</th>
-<th>Regressores</th>
-<th>Pergunta</th>
+<th><span class="math inline">\(\hat{\delta}\)</span> (sentimento)</th>
+<th><span class="math inline">\(p\)</span>-valor</th>
+<th><span class="math inline">\(\bar{R}^2\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><strong>M0 — Baseline</strong></td>
-<td><span class="math inline">\(i_{t-1}\)</span>, desvio π, hiato</td>
-<td>Regra de Taylor clássica</td>
+<td>—</td>
+<td>—</td>
+<td>0,9932</td>
 </tr>
 <tr class="even">
 <td><strong>M1 — Aumentada</strong></td>
-<td>M0 <span class="math inline">\(+\ S_t\)</span></td>
-<td><span class="math inline">\(\hat{\delta}\)</span> significante? <span class="math inline">\(\Delta\bar{R}^2 &gt; 0\)</span>?</td>
-</tr>
-<tr class="odd">
-<td><strong>M2 — Antecedente</strong></td>
-<td>ΔSelic<span class="math inline">\(_{t+1} \sim S_t\)</span> + controles</td>
-<td>O tom antecede a decisão?</td>
+<td><strong>+0,283</strong></td>
+<td><span class="math inline">\(&lt; 0{,}001\)</span></td>
+<td><strong>0,9960</strong></td>
 </tr>
 </tbody>
 </table>
+<p>O coeficiente do sentimento padronizado é <strong>+0,283 p.p. por desvio-padrão</strong> (EP HAC 0,056; IC 95% [0,169; 0,396]). O desvio da inflação cai de <span class="math inline">\(\hat\beta = 0{,}669\)</span> para <span class="math inline">\(0{,}415\)</span> quando o tom entra — parte do que se atribuía aos fundamentos observáveis estava, na verdade, na linguagem.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Estado atual — v0.1
+<span class="screen-reader-only">Note</span>Estabilidade temporal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A <strong>base de dados está pronta e auditada</strong> (documento <code>01_base_dados.qmd</code> → PDF, com fontes, checagens de consistência, descritivas e correlações). A <strong>estimação da Regra de Taylor é o próximo bloco do paper</strong> — por isso, os números reportados abaixo são as <strong>correlações da base</strong>, não coeficientes estruturais estimados. Nenhum número aqui é digitado à mão: todos saem de <em>chunks</em> executáveis, seguindo a regra de ouro da skill <code>paper-analise-macro</code>.</p>
+<p>Regressões móveis com janela de 24 reuniões: o coeficiente do sentimento é <strong>positivo em 100% das janelas</strong> e significante a 5% em <strong>95,8%</strong> delas (23 de 24). Com janelas de 28 e 32 reuniões, a proporção significativa vai a <strong>100%</strong>. Não é artefato de subperíodo.</p>
 </div>
 </div>
 </section>
-<section id="evidência-preliminar-da-base" class="level3">
-<h3 class="anchored" data-anchor-id="evidência-preliminar-da-base">4.2 Evidência preliminar da base</h3>
-<p>Antes de qualquer estimação estrutural, a base já revela o padrão que motiva o projeto:</p>
+<section id="antecedência-o-controle-que-desfaz-o-resultado-bruto" class="level3">
+<h3 class="anchored" data-anchor-id="antecedência-o-controle-que-desfaz-o-resultado-bruto">2.2 Antecedência: o controle que desfaz o resultado bruto</h3>
+<p>Sem controlar a decisão corrente, o sentimento parece prever a próxima reunião (<span class="math inline">\(\hat\delta = +0{,}509\)</span>, <span class="math inline">\(p &lt; 0{,}001\)</span>). <strong>Com</strong> o controle, o efeito evapora:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Especificação M2</th>
+<th><span class="math inline">\(\hat{\delta}\)</span></th>
+<th><span class="math inline">\(p\)</span>-valor</th>
+<th><span class="math inline">\(\bar{R}^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>M2a</strong> — sem controlar <span class="math inline">\(\Delta i_t\)</span></td>
+<td>+0,509</td>
+<td><span class="math inline">\(&lt; 0{,}001\)</span></td>
+<td>0,440</td>
+</tr>
+<tr class="even">
+<td><strong>M2b</strong> — dinâmica, com <span class="math inline">\(\Delta i_t\)</span></td>
+<td><strong>+0,045</strong></td>
+<td>0,407</td>
+<td>0,837</td>
+</tr>
+</tbody>
+</table>
+<p>A “antecedência” do índice <strong>agregado</strong> era contemporaneidade disfarçada. TSLS e GMM em dois passos (instrumentando os quatro regressores com defasagens 1 e 2) confirmam: <span class="math inline">\(\hat\delta = -0{,}066\)</span> (<span class="math inline">\(p = 0{,}64\)</span>) e <span class="math inline">\(-0{,}104\)</span> (<span class="math inline">\(p = 0{,}47\)</span>), com o teste J de Hansen não rejeitando as sobreidentificações (<span class="math inline">\(p = 0{,}49\)</span>).</p>
+</section>
+<section id="a-decomposição-resolve-o-enigma" class="level3">
+<h3 class="anchored" data-anchor-id="a-decomposição-resolve-o-enigma">2.3 A decomposição resolve o enigma</h3>
+<p>O índice agregado falha porque <strong>mistura objetos econômicos distintos</strong>. Separando as dimensões na especificação dinâmica (dependente: ΔSelic em <span class="math inline">\(t+1\)</span>; controles: <span class="math inline">\(\Delta i_t\)</span>, desvio de inflação, hiato Kalman):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Dimensão textual</th>
+<th><span class="math inline">\(\hat{\delta}\)</span></th>
+<th>EP HAC</th>
+<th><span class="math inline">\(p\)</span>-valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sentimento legado (agregado)</td>
+<td>+0,045</td>
+<td>0,053</td>
+<td>0,407</td>
+</tr>
+<tr class="even">
+<td>Tom retrospectivo</td>
+<td>+0,102</td>
+<td>0,065</td>
+<td>0,127</td>
+</tr>
+<tr class="odd">
+<td>Orientação prospectiva</td>
+<td>−0,022</td>
+<td>0,046</td>
+<td>0,642</td>
+</tr>
+<tr class="even">
+<td><strong>Balanço de riscos de inflação</strong></td>
+<td><strong>+0,146</strong></td>
+<td>0,042</td>
+<td><strong>0,001</strong></td>
+</tr>
+</tbody>
+</table>
+<p>O conteúdo antecedente está <strong>concentrado no balanço de riscos</strong> — não na orientação prospectiva explícita, que seria o candidato intuitivo. Na especificação decomposta (as três dimensões juntas), o balanço de riscos mantém <strong>+0,129</strong> (<span class="math inline">\(p = 0{,}006\)</span>) e a orientação prospectiva vira <strong>negativa e significante</strong> (−0,101, <span class="math inline">\(p = 0{,}006\)</span>), sugerindo que as duas dimensões capturam informações parcialmente opostas.</p>
+<p><strong>Robustez ao provedor:</strong> o sinal é positivo nos três LLMs, com significância individual para Claude (+0,132, <span class="math inline">\(p = 0{,}002\)</span>) e Gemini (+0,124, <span class="math inline">\(p &lt; 0{,}001\)</span>); OpenAI mantém o sinal (+0,076) mas não a significância (<span class="math inline">\(p = 0{,}148\)</span>).</p>
+</section>
+<section id="validação-cega-por-agentes-independentes" class="level3">
+<h3 class="anchored" data-anchor-id="validação-cega-por-agentes-independentes">2.4 Validação cega por agentes independentes</h3>
+<p>Antes de levar o índice a sério, dois agentes classificaram independentemente 12 atas do piloto, <strong>sem acesso aos scores dos provedores</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Comparação (balanço de riscos)</th>
+<th>Spearman</th>
+<th>Concordância de sinal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Agente A × Agente B</td>
+<td><strong>0,954</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+<tr class="even">
+<td>Consenso dos agentes × <em>ensemble</em> dos LLMs</td>
+<td><strong>0,777</strong></td>
+<td>75%</td>
+</tr>
+</tbody>
+</table>
+<p>Entre os três LLMs no corpus completo (48 atas), o balanço de riscos tem concordância de sinal entre <strong>91,7% e 97,9%</strong> — a dimensão mais estável das quatro.</p>
+</section>
+<section id="o-teste-decisivo-sinalização-ou-surpresa" class="level3">
+<h3 class="anchored" data-anchor-id="o-teste-decisivo-sinalização-ou-surpresa">2.5 O teste decisivo: sinalização ou surpresa?</h3>
+<p>Usando as 42 edições quantitativas do QPC, a decomposição da identidade contábil (coeficientes em pontos-base por desvio-padrão do balanço de riscos, controles macro parcimoniosos, erros HAC):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Componente</th>
+<th>Coeficiente (pb)</th>
+<th><span class="math inline">\(p\)</span>-valor</th>
+<th><span class="math inline">\(\bar{R}^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Decisão realizada</strong></td>
+<td><strong>+12,9</strong></td>
+<td><span class="math inline">\(&lt; 0{,}01\)</span></td>
+<td>0,885</td>
+</tr>
+<tr class="even">
+<td><strong>Expectativa média do QPC</strong></td>
+<td><strong>+13,3</strong></td>
+<td><span class="math inline">\(&lt; 0{,}01\)</span></td>
+<td>0,919</td>
+</tr>
+<tr class="odd">
+<td><strong>Surpresa</strong> (resíduo)</td>
+<td><strong>−0,4</strong></td>
+<td>0,872</td>
+<td>−0,042</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[
+\underbrace{12{,}916}_{\text{decisão realizada}} = \underbrace{13{,}333}_{\text{expectativa QPC}} + \underbrace{(-0{,}417)}_{\text{surpresa}}
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>O resultado central
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>O efeito é integralmente absorvido pela expectativa.</strong> O bootstrap com 5.000 réplicas coloca o efeito sobre a expectativa entre <strong>+5,7 e +20,9 pb</strong> (probabilidade de ser positivo: 99,9%), e todas as estimativas <em>leave-one-out</em> permanecem positivas. Já a surpresa tem IC bootstrap de <strong>[−5,9; +4,5] pb</strong> — indistinguível de zero.</p>
+<p>O índice também <strong>não reduz o desacordo</strong> do mercado: não há efeito significativo sobre a dispersão nem sobre a entropia das respostas do QPC. A comunicação sinaliza a <em>direção</em> da política sem estreitar o consenso — e sem gerar choque monetário autônomo.</p>
+</div>
+</div>
+</section>
+<section id="dinâmica-multivariada-exploratória" class="level3">
+<h3 class="anchored" data-anchor-id="dinâmica-multivariada-exploratória">2.6 Dinâmica multivariada (exploratória)</h3>
+<p>VAR na frequência das reuniões (ordenação recursiva com sentimento por último, 1 defasagem por AIC/BIC/HQIC/FPE, sistema estável, teste de <em>whiteness</em> <span class="math inline">\(p = 0{,}74\)</span>) e VECM em níveis com posto 1 produzem respostas positivas ao choque de sentimento, mas com <strong>intervalos que atravessam zero</strong>. Consistente com a leitura principal: sem evidência de choque autônomo.</p>
+<hr>
+</section>
+</section>
+<section id="discussão" class="level2">
+<h2 class="anchored" data-anchor-id="discussão">3. Discussão</h2>
+<p>Os resultados formam um padrão coerente:</p>
+<ol type="1">
+<li><strong>Associação contemporânea forte e estável</strong> — sob hiato HP e Kalman, e em praticamente todas as janelas móveis.</li>
+<li><strong>Antecedência bruta é ilusória</strong> — desaparece ao controlar a decisão corrente.</li>
+<li><strong>A dimensão importa</strong> — o conteúdo antecedente está no <em>balanço de riscos</em>, não na orientação prospectiva.</li>
+<li><strong>A expectativa absorve o efeito</strong> — +13,3 pb sobre o consenso do QPC.</li>
+<li><strong>Não há previsão da surpresa</strong> — o resíduo é pequeno e impreciso.</li>
+<li><strong>Robustez à endogeneidade</strong> — TSLS e GMM não recuperam coeficiente diferente de zero.</li>
+<li><strong>Dinâmica multivariada imprecisa</strong> — VAR e VECM com IC atravessando zero.</li>
+</ol>
+<p>A leitura econômica: a linguagem do Copom <strong>descreve bem a postura contemporânea</strong> e a assimetria de riscos <strong>carrega sinal sobre a próxima decisão</strong> — mas esse sinal <strong>já está incorporado às expectativas do mercado</strong> antes de a decisão acontecer. É sinalização compartilhada, não informação privada revelada.</p>
+<hr>
+</section>
+<section id="limitações" class="level2">
+<h2 class="anchored" data-anchor-id="limitações">Limitações</h2>
 <ul>
-<li><strong>Correlação sentimento (<em>ensemble</em>) × ΔSelic contemporânea:</strong> <strong>0,70</strong></li>
-<li><strong>Correlação sentimento (<em>ensemble</em>) × ΔSelic da reunião seguinte (<span class="math inline">\(t \to t+1\)</span>):</strong> <strong>0,63</strong></li>
+<li>O <em>score</em> contemporâneo vem de ata publicada <strong>depois</strong> da decisão — associação explicativa, não causalidade.</li>
+<li>A amostra tem <strong>48 reuniões</strong> e atravessa regimes de política monetária muito distintos.</li>
+<li>Hiato e sentimento parecem estacionários; os testes para desvio da inflação e ΔSelic são inconclusivos.</li>
+<li>O <strong>VECM</strong> mistura variáveis com ordens de integração possivelmente diferentes e tem posto de cointegração instável — por isso é apresentado como exploratório.</li>
+<li>Janelas móveis sobrepostas geram coeficientes serialmente dependentes.</li>
+<li>O filtro HP sofre <strong>viés de ponta</strong> (<em>end-point bias</em>); daí o hiato alternativo por Kalman.</li>
+<li>A validação usa <strong>dois agentes independentes</strong>, não avaliadores humanos especialistas — replicação externa permanece desejável.</li>
 </ul>
-<p>A queda modesta da correlação ao defasar (0,70 → 0,63) é o <strong>sinal de antecedência</strong>: o tom da ata carrega informação sobre a decisão que ainda virá. As duas observações mais recentes (reuniões 278 e 279) são cortes de 0,25 p.p. acompanhados de tom <em>hawkish</em> no <em>ensemble</em> (+1,7) — uma tensão que a especificação aumentada deve ajudar a interpretar.</p>
 <hr>
-</section>
-</section>
-<section id="avaliação" class="level2">
-<h2 class="anchored" data-anchor-id="avaliação">5. Avaliação</h2>
-<p>O plano de avaliação segue quatro eixos, aninhados na comparação M0 → M1 → M2:</p>
-<section id="o-sentimento-sobrevive-aos-controles" class="level3">
-<h3 class="anchored" data-anchor-id="o-sentimento-sobrevive-aos-controles">5.1 O sentimento sobrevive aos controles?</h3>
-<p>Teste-<span class="math inline">\(t\)</span> de <span class="math inline">\(\hat{\delta}\)</span> na M1 sob erros HAC. A pergunta empírica: mantidos hiato e desvio de inflação, o coeficiente do tom permanece positivo e significante (<span class="math inline">\(p &lt; 0{,}05\)</span>)?</p>
-</section>
-<section id="quanto-o-sentimento-adiciona" class="level3">
-<h3 class="anchored" data-anchor-id="quanto-o-sentimento-adiciona">5.2 Quanto o sentimento adiciona?</h3>
-<p>Comparação de <span class="math inline">\(\bar{R}^2\)</span> entre M0 e M1. Um <span class="math inline">\(\Delta\bar{R}^2 &gt; 0\)</span> material significa que a <em>linguagem</em> das atas explica variação da Selic não capturada pelos fundamentos observáveis.</p>
-</section>
-<section id="o-tom-antecede-a-decisão" class="level3">
-<h3 class="anchored" data-anchor-id="o-tom-antecede-a-decisão">5.3 O tom antecede a decisão?</h3>
-<p>A especificação antecedente (M2) testa se <span class="math inline">\(S_t\)</span> prevê ΔSelic<span class="math inline">\(_{t+1}\)</span>. A correlação de <strong>0,63</strong> já observada é o ponto de partida — a regressão controla por hiato e desvio de inflação para isolar o componente genuinamente prospectivo do tom.</p>
-</section>
-<section id="a-conclusão-econômica-depende-do-llm" class="level3">
-<h3 class="anchored" data-anchor-id="a-conclusão-econômica-depende-do-llm">5.4 A conclusão econômica depende do LLM?</h3>
-<p>Como os três modelos divergem na <em>intensidade</em> do <em>score</em> (a tese do projeto-mãe: <span class="math inline">\(\hat{\beta}\)</span> de calibração varia de +0,36 a +0,62 p.p. por unidade de <em>score</em>), reestima-se a M1 usando cada LLM como fonte de <span class="math inline">\(S_t\)</span>. Se <span class="math inline">\(\hat{\delta}\)</span> mantém sinal e significância entre Claude, Gemini e OpenAI, a conclusão econômica é <strong>robusta ao provedor de IA</strong> — um requisito para levar o índice a sério como <em>input</em> macro.</p>
-<hr>
-</section>
 </section>
 <section id="estrutura-do-projeto" class="level2">
 <h2 class="anchored" data-anchor-id="estrutura-do-projeto">Estrutura do Projeto</h2>
 <pre><code>Taylor_Sentimento/
 │
-├── taylor_sentimento_IA_base.qmd    # paper técnico reprodutível (echo: true)
-├── 01_base_dados.qmd                # documento de inspeção da base → PDF
-├── referencias.bib                  # bibliografia BibTeX
-├── AM.png                           # logotipo na titlepage
+├── taylor_sentimento_IA_base.qmd    # paper técnico reprodutível
+├── NOVA_ABORDAGEM.md                # desenho do índice prospectivo
+├── referencias.bib · AM.png
 │
 ├── scripts/
-│   └── 01_build_base.py             # montagem da base na frequência de reunião
+│   ├── 01_build_base.py             # base na frequência de reunião
+│   ├── 02_estima_referencia.py      # M0 / M1, OLS + HAC, parâmetros estruturais
+│   ├── 03_estima_m2.py              # antecedente (referência e dinâmica)
+│   ├── 04_robustez_iv_gmm_m2.py     # TSLS e GMM em dois passos
+│   ├── 05_reestima_hiato_kalman.py  # hiato por modelo estrutural
+│   ├── 06_var_irf_sentimento.py     # VAR + IRFs
+│   ├── 07_vecm_irf_sentimento.py    # VECM exploratório
+│   ├── 08_rolling_sentimento.py     # regressões móveis
+│   ├── 09_prepare_forward_texts.py  # corpus A+B integral (sem LLM)
+│   ├── 10–13_*.py                   # escoragem prospectiva, reestimação, validação
+│   └── 14–17_*.py                   # QPC: coleta, surpresa, estimação
 │
 ├── data/
-│   ├── base_taylor.csv              # 48 reuniões × 14 colunas (saída)
-│   └── raw/                         # insumos + caches de API
-│       ├── scores_claude_cache.csv  # sentimento herdado (congelado)
-│       ├── scores_gemini_cache.csv
-│       ├── scores_openai_cache.csv
-│       ├── atas_cache.json          # datas das reuniões
-│       ├── selic_cache.json         # SGS 432
-│       ├── focus_ipca12m_cache.csv  # Focus IPCA 12m suavizada
-│       ├── meta_inflacao_cache.csv  # SGS 13521
-│       └── ibcbr_cache.csv          # SGS 24364
+│   ├── base_taylor.csv              # 48 reuniões
+│   ├── raw/                         # caches de API + corpus + QPC (42 edições)
+│   ├── pilot/                       # piloto, schema e dupla codificação
+│   └── results/                     # CSVs de coeficientes e diagnósticos
 │
-├── CHANGELOG.md                     # histórico de releases (Keep a Changelog)
-├── versions/                        # snapshots por release
-├── _rollback/                       # checkpoints de sessão
-│
-└── portfolio/
-    ├── taylor-sentimento.qmd        # ESTE arquivo (ficha CRISP-DM)
-    └── taylor-sentimento-capa.png   # imagem de capa</code></pre>
+├── figures/                         # IRFs e rolling
+├── CHANGELOG.md · versions/
+└── portfolio/                       # ESTA ficha + capa</code></pre>
 <hr>
 </section>
 <section id="tecnologias" class="level2">
@@ -913,7 +972,7 @@ i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma
 </tr>
 <tr class="even">
 <td><strong>Inferência estatística</strong></td>
-<td><code>statsmodels</code> (OLS, HAC/Newey-West, filtro HP)</td>
+<td><code>statsmodels</code> (OLS, HAC/Newey-West, HP, Kalman/<code>UnobservedComponents</code>, VAR, VECM, GMM)</td>
 </tr>
 <tr class="odd">
 <td><strong>Manipulação de dados</strong></td>
@@ -921,19 +980,19 @@ i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma
 </tr>
 <tr class="even">
 <td><strong>Coleta de dados</strong></td>
-<td><code>python-bcb</code> (SGS, Expectativas/Focus), <code>requests</code></td>
+<td><code>python-bcb</code> (SGS, Focus), <code>requests</code>, <code>openpyxl</code> (QPC)</td>
 </tr>
 <tr class="odd">
+<td><strong>Escoragem por LLM</strong></td>
+<td>LangChain + Pydantic (Claude, Gemini, OpenAI) sob <em>schema</em> estruturado</td>
+</tr>
+<tr class="even">
 <td><strong>Visualização</strong></td>
 <td><code>plotnine</code></td>
 </tr>
-<tr class="even">
-<td><strong>Ambiente</strong></td>
-<td><code>python-dotenv</code></td>
-</tr>
 <tr class="odd">
 <td><strong>Índice de sentimento</strong></td>
-<td>Herdado do <a href="sentimento-copom.html">Sentimento COPOM</a> (LangChain + Pydantic, 3 LLMs)</td>
+<td>Reconstruído a partir do corpus integral; base legada herdada do <a href="sentimento-copom.html">Sentimento COPOM</a></td>
 </tr>
 </tbody>
 </table>
@@ -944,48 +1003,55 @@ i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma
 <section id="pré-requisitos" class="level3">
 <h3 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h3>
 <ul>
-<li>Python 3.11+</li>
-<li>Quarto ≥ 1.4</li>
-<li>TinyTeX / TeX Live (para renderização PDF via xelatex)</li>
+<li>Python 3.11+ · Quarto ≥ 1.4 · TinyTeX / TeX Live (xelatex)</li>
+<li>Chaves de API (Anthropic, Google, OpenAI) <strong>apenas</strong> para reescorar as atas; o fluxo de estimação usa os <em>scores</em> já persistidos.</li>
 </ul>
-<p>Chaves de API de LLM <strong>não são necessárias</strong> no fluxo padrão — os <em>scores</em> de sentimento são insumos congelados herdados do projeto irmão. Só há re-escoragem de atas no Sentimento COPOM.</p>
 </section>
 <section id="instalação" class="level3">
 <h3 class="anchored" data-anchor-id="instalação">Instalação</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="montar-a-base-e-renderizar" class="level3">
-<h3 class="anchored" data-anchor-id="montar-a-base-e-renderizar">Montar a base e renderizar</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Monta data/base_taylor.csv (coleta com cache local em data/raw/)</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/01_build_base.py</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Documento de inspeção da base → PDF</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render 01_base_dados.qmd <span class="at">--to</span> pdf</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Paper técnico (Regra de Taylor aumentada)</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render taylor_sentimento_IA_base.qmd <span class="at">--to</span> pdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="reprocessamento" class="level3">
-<h3 class="anchored" data-anchor-id="reprocessamento">Reprocessamento</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apaga os caches de coleta para forçar novo download do BCB</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (os scores de sentimento em raw/ permanecem — são congelados)</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> data/raw/focus_ipca12m_cache.csv data/raw/meta_inflacao_cache.csv data/raw/ibcbr_cache.csv</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/01_build_base.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Base na frequência de reunião</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/01_build_base.py</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Estimações de referência e robustez</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/02_estima_referencia.py</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/03_estima_m2.py</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/04_robustez_iv_gmm_m2.py</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/05_reestima_hiato_kalman.py</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Dinâmica e estabilidade</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/06_var_irf_sentimento.py</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/07_vecm_irf_sentimento.py</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/08_rolling_sentimento.py</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 4) Índice prospectivo (corpus integral)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/09_prepare_forward_texts.py</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/12_reestimate_forward_index.py</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 5) Surpresa monetária via QPC</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/15_build_qpc_surprise.py</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/16_estimate_qpc_surprise.py</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/17_estimate_qpc_expectation.py</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 6) Paper</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render taylor_sentimento_IA_base.qmd <span class="at">--to</span> pdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
 <section id="próximos-passos" class="level2">
 <h2 class="anchored" data-anchor-id="próximos-passos">Próximos Passos</h2>
 <ol type="1">
-<li><strong>Estimar a Regra de Taylor aumentada</strong> (M0 → M1 → M2) por OLS com erros HAC, exportando as tabelas de regressão em <code>booktabs</code>/<code>threeparttable</code>;</li>
-<li><strong>Robustez ao provedor de LLM</strong> — reestimar a M1 usando Claude, Gemini e OpenAI isoladamente como fonte de <span class="math inline">\(S_t\)</span>;</li>
-<li><strong>Robustez do hiato</strong> — comparar o hiato via HP (com viés de ponta) contra o hiato oficial da IFI (trimestral interpolado);</li>
-<li><strong>Especificação preditiva</strong> — formalizar a regressão antecedente <span class="math inline">\(t \to t+1\)</span> e testar defasagens do sentimento;</li>
-<li><strong>Endogeneidade</strong> — avaliar GMM caso a simultaneidade tom × decisão se mostre relevante;</li>
-<li><strong>Sentimento ortogonalizado</strong> — usar o resíduo do tom (controlando expectativas Focus) como regressor, isolando a surpresa de comunicação;</li>
-<li><strong>Edição do leitor</strong> — criar <code>taylor_sentimento_IA_publico.qmd</code> (<code>echo: false</code>) quando o paper amadurecer.</li>
+<li><strong>Preços intradiários de DI</strong> — separar a surpresa da <em>decisão</em> da surpresa de <em>comunicação</em> em janelas estreitas ao redor da publicação da ata. É a extensão prioritária: sem ela, o teste de surpresa depende do QPC, que é pré-reunião mas não intradiário.</li>
+<li><strong>Projeção local</strong> — estimar a resposta dinâmica por <em>local projections</em>, mais parcimoniosas que VAR/VECM com <span class="math inline">\(n = 48\)</span>.</li>
+<li><strong>Validação com especialistas humanos</strong> — replicar a dupla codificação cega com avaliadores externos.</li>
+<li><strong>Sentimento ortogonalizado</strong> — usar o resíduo do tom (controlando expectativas Focus) para isolar a surpresa de comunicação.</li>
+<li><strong>Hiato oficial da IFI</strong> — robustez adicional contra HP e Kalman.</li>
+<li><strong>Edição do leitor</strong> — <code>taylor_sentimento_IA_publico.qmd</code> (<code>echo: false</code>).</li>
 </ol>
 <hr>
 </section>
@@ -996,6 +1062,9 @@ i_t = \rho\, i_{t-1} + (1-\rho)\big[\alpha + \beta\,(\pi^e_t - \pi^*_t) + \gamma
 <li>Blinder, A. S.; Ehrmann, M.; Fratzscher, M.; De Haan, J.; Jansen, D.-J. (2008). <em>Central Bank Communication and Monetary Policy</em>. <em>Journal of Economic Literature</em>, 46(4), 910–945.</li>
 <li>Hansen, S.; McMahon, M.; Prat, A. (2018). <em>Transparency and Deliberation Within the FOMC: A Computational Linguistics Approach</em>. <em>Quarterly Journal of Economics</em>, 133(2), 801–870.</li>
 <li>Hodrick, R. J.; Prescott, E. C. (1997). <em>Postwar U.S. Business Cycles: An Empirical Investigation</em>. <em>Journal of Money, Credit and Banking</em>, 29(1), 1–16.</li>
+<li>Johansen, S. (1991). <em>Estimation and Hypothesis Testing of Cointegration Vectors in Gaussian Vector Autoregressive Models</em>. <em>Econometrica</em>, 59(6), 1551–1580.</li>
+<li>Newey, W. K.; West, K. D. (1987). <em>A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix</em>. <em>Econometrica</em>, 55(3), 703–708.</li>
+<li>Sims, C. A. (1980). <em>Macroeconomics and Reality</em>. <em>Econometrica</em>, 48(1), 1–48.</li>
 <li>Taylor, J. B. (1993). <em>Discretion versus Policy Rules in Practice</em>. <em>Carnegie-Rochester Conference Series on Public Policy</em>, 39, 195–214.</li>
 <li>Woodford, M. (2003). <em>Interest and Prices: Foundations of a Theory of Monetary Policy</em>. Princeton University Press.</li>
 <li>Wirth, R.; Hipp, J. (2000). <em>CRISP-DM: Towards a Standard Process Model for Data Mining</em>.</li>
