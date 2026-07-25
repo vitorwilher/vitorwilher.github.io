@@ -23,6 +23,8 @@ Uma correção importante em relação à versão anterior desta ficha: as regre
 
 Este projeto testa, seguindo a metodologia **CRISP-DM**, uma pergunta de economia monetária aplicada: **o sentimento da comunicação do Copom, medido por LLMs, tem informação sobre a Selic que os fundamentos macro não capturam?**
 
+> **Repositório:** [github.com/vitorwilher/taylor-sentimento](https://github.com/vitorwilher/taylor-sentimento) — base, scripts de estimação, paper e caches de API versionados.
+
 A resposta encontrada é mais interessante — e mais restritiva — do que a hipótese inicial sugeria. O tom **explica** a Selic contemporânea com folga e o **balanço de riscos de inflação antecipa** a decisão da reunião seguinte. Mas quando se confronta esse conteúdo antecedente com a expectativa do mercado medida **antes** da reunião, o efeito se revela **integralmente absorvido pela expectativa**: a linguagem desloca o consenso, não a surpresa.
 
 ::: {.callout-important}
