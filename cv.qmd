@@ -1,5 +1,7 @@
 ---
 title: "Curriculum Vitae"
+description: "Engenheiro de IA Sênior — agentes de IA em produção, LLMs, RAG, guardrails e observabilidade. Currículo completo, com PDF para download."
+image: images/minhafoto.jpg
 ---
 
 <style>

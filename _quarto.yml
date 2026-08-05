@@ -7,6 +7,8 @@ website:
   site-url: https://vitorwilher.github.io
   description: "Vítor Wilher — Cientista de Dados & Mestre em Economia"
   favicon: images/profile.png
+  open-graph: true
+  twitter-card: true
   navbar:
     left:
       - href: index.qmd
