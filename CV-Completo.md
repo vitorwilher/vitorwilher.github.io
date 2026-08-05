@@ -5,84 +5,95 @@
 
 # **VÍTOR WILHER**
 
-## ***Especialista em IA Generativa e Ciência de Dados***
+## ***Engenheiro de IA Sênior — Agentes, LLMs em Produção e RAG | Professor de IA Generativa (MBA)***
+
+---
 
 # **Contatos**
 
 **Endereço:** Rua Professor Azevedo Marques, 15, Apto 405, Leblon, Rio de Janeiro  
 **E-mail:** [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br)  
 **Telefone:** [+55 (21) 96721-6813](tel:+5521967216813)  
-**Linkedin:** [http://linkedin.com/in/vitorwilher](http://linkedin.com/in/vitorwilher)  
-**Portfólio:** [https://vitorwilher.github.io](https://vitorwilher.github.io)
+**Linkedin:** [linkedin.com/in/vitorwilher](https://linkedin.com/in/vitorwilher)  
+**Portfólio:** [vitorwilher.github.io](https://vitorwilher.github.io)
+
+---
 
 # **Resumo das Habilidades**
 
----
+Engenheiro de IA com formação sólida em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — refinamento técnico, decisões de arquitetura, implementação, *deploy* e sustentação em produção. Constrói **agentes de IA em operação contínua**: *tool use*/**function calling**, *structured outputs* com **JSON Schema**, RAG híbrido (BM25 + denso, fusão RRF e *reranking*), integração com **APIs REST** e sistemas de terceiros, e entrega em canais reais — incluindo **WhatsApp Business (Meta Cloud API)** com *templates* aprovados e **TTS**. Trata qualidade como engenharia: **guardrails** e *gates* ***human-in-the-loop*** contra alucinação, *eval harness* com *golden set* e **LLM-as-judge** que **reprova regressão no CI**, e **observabilidade de custo por token, latência e qualidade por execução**. Opera **multi-provedor** (Anthropic, OpenAI, Google; Amazon Bedrock) escolhendo modelo por qualidade × custo × latência, e publica **servidores MCP (Model Context Protocol)**. Traduz necessidade de negócio em solução técnica e comunica com públicos executivos — é professor de IA Generativa em MBA. Bacharel e Mestre em Economia (UFF), Especialista em Análise de Dados e IA, Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Tecnologia e Dados do SENAC Rio.
 
-Engenheiro de IA e Cientista de Dados com sólida formação em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — da concepção e design de solução à operação em produção. Combina LLMs (Anthropic, OpenAI), agentes com RAG, servidores **MCP (Model Context Protocol)**, ML clássico e validação estatística para resolver problemas de negócio, traduzindo necessidades de áreas não-técnicas em soluções de ponta a ponta. É Bacharel e Mestre em Economia pela Universidade Federal Fluminense, Especialista em Análise de Dados e Inteligência Artificial e Candidato ao PhD em Economia pela EPGE/FGV. Especialista em IA Generativa da Análise Macro e Especialista em Dados do SENAC Rio.
-
-**Hard Skills**: Python (principal), R, SQL, TypeScript, FastAPI, Docker, Git, CI/CD (GitHub Actions), LLMs e API programática (Anthropic, OpenAI, Amazon Bedrock), **MCP (Model Context Protocol)** — construção e publicação de servidores, Agentes e orquestração (LangGraph, LangChain), RAG e Vector Databases (ChromaDB, pgvector/BM25), Prompt Engineering, Avaliação de modelos (LLM-as-judge, *self-consistency*, LangSmith, QA-Eval, evals e testes de regressão), NLP, Machine Learning (Scikit-learn, Pandas, NumPy), Deep Learning, Econometria e Inferência Estatística (OLS/HAC, GMM, VAR/VECM, filtro de Kalman, bootstrap), Desenvolvimento de pacotes R, Cloud Computing (Amazon EC2, AWS Lambda, Amazon S3, Amazon SageMaker AI, Amazon DynamoDB, Amazon Aurora, Amazon Redshift, Cloudflare Workers), PostgreSQL.
+**Hard Skills**: **Python** (principal, orientação a objetos e boas práticas de engenharia), R, SQL, TypeScript, **FastAPI**, **Docker**, Git, **CI/CD (GitHub Actions, GitLab CI)**, testes automatizados e de integração (**pytest**), Clean Code e padrões de projeto; LLMs e API programática (**Anthropic Claude, OpenAI, Google Gemini, Amazon Bedrock**), **agentes e orquestração** (LangChain, Claude Agent SDK, grafos de estado com roteamento dinâmico), ***function calling*/*tool use***, ***structured outputs*/JSON Schema** e validação de respostas, ***prompt caching***, **Prompt e Context Engineering**, fluxos ***human-in-the-loop***; **RAG** e *vector databases* (ChromaDB, pgvector, BM25/embeddings, RRF, *reranking*); **guardrails**, mitigação de alucinação e segurança aplicada a LLMs (*text-to-SQL* seguro, gestão de *secrets*, credenciais de escopo mínimo); **avaliação e observabilidade de LLMs** (*golden set*, LLM-as-judge, *self-consistency*, LangSmith, QA-Eval, *gate* de CI, custo/latência/tokens por *request*); **MCP (Model Context Protocol)** — construção e publicação de servidores; ***fine-tuning* (LoRA/QLoRA)**, NLP, Machine Learning (Scikit-learn, Pandas, NumPy), Deep Learning, ***foundation models* de séries temporais** (Chronos, TimeGPT), Econometria e Inferência Estatística (OLS/HAC, GMM, VAR/VECM, filtro de Kalman, bootstrap); **Cloud** (AWS — EC2, Lambda, S3, SageMaker AI, DynamoDB, Aurora, Redshift, Bedrock; Google Cloud Storage; Cloudflare Workers), **PostgreSQL**, DuckDB, Parquet, orquestração de pipelines e filas.
 
 **Soft Skills:** liderança técnica de projetos, comunicação com públicos técnicos e não-técnicos, mentoria de desenvolvedores, criatividade, trabalho em equipe, bom humor.
 
-**Principal Interesse atual:** engenharia de IA Generativa aplicada à eficiência operacional e à resolução de problemas em economia, finanças e mercado financeiro.
-
-# **Formação Educacional**
+**Principal Interesse atual:** engenharia de agentes de IA em produção — jornadas conversacionais integradas a APIs e sistemas corporativos, com guardrails, avaliação contínua e observabilidade de custo, latência e qualidade — aplicada a economia, finanças e mercado financeiro.
 
 ---
 
+# **Formação Educacional**
+
 **Doutorado em Economia** [**EPGE/FGV** · 2026-2030]{.meta}
 
-* Tese em torno do uso de IA Generativa para previsão de séries econômicas e financeiras.
+* Tese sobre o uso de ***foundation models* para previsão de variáveis macroeconômicas** — capacidade preditiva *zero-shot* de modelos fundacionais de séries temporais (Amazon **Chronos**, Nixtla **TimeGPT**) frente a modelos econométricos e de *machine learning* na previsão de IPCA, câmbio, PIB e Selic;
+* Investiga o ganho marginal de *ensembles* que combinam modelos fundacionais, ML clássico e **sinais textuais extraídos por LLMs** da comunicação do Banco Central, com avaliação estatística formal (Diebold-Mariano, Mincer-Zarnowitz) contra o Boletim Focus;
+* Base empírica implementada e em operação contínua no projeto **Previsão Macro** (previsões publicadas e reavaliadas a cada ciclo desde 2026).
 
 **Pós-Graduação em LLMs e IA Generativa** [**PUC-RIO** · 2025-2026]{.meta}
 
-* Trabalho de Conclusão de Curso em torno do uso de IA Generativa para previsão de séries temporais.
+* Trabalho de Conclusão de Curso sobre o **ROI Diagnóstico** — plataforma de inteligência comercial que integra seis APIs de negócio e camadas de IA Generativa para diagnóstico e decisão em um negócio digital real;
+* O sistema já opera em produção: pipeline diário orquestrado, *data warehouse* analítico em Parquet/DuckDB, agentes de monitoramento que sintetizam desempenho de campanhas com LLM e entregam relatórios automáticos via **WhatsApp Business API**, além de módulos de diagnóstico financeiro (DRE e fluxo de caixa) sobre a operação.
 
 **Mestrado em Economia** [**UFF** · 2013-2015]{.meta}
 
-* Atividades e grupos: Coordenador do Grupo de Estudos sobre Conjuntura Econômica (GECE/UFF);  
-* Tutor da disciplina Conjuntura e Cenários Macroeconômicos;  
+* Atividades e grupos: Coordenador do Grupo de Estudos sobre Conjuntura Econômica (GECE/UFF);
+* Tutor da disciplina Conjuntura e Cenários Macroeconômicos;
 * Dissertação defendida com o título "Clareza da Comunicação do Banco Central e Expectativas de Inflação: evidências para o Brasil" perante banca composta pelos professores Gustavo H. B. Franco, Gabriel Montes Caldas, Luciano Vereda Oliveira e Carlos Enrique Guanziroli.
 
 **Graduação em Economia** [**UFF** · 2010-2012]{.meta}
 
-* Monitor da disciplina Macroeconomia I  
+* Monitor da disciplina Macroeconomia I
 * Monografia de Final de Curso: A nova política monetária brasileira no contexto da grande recessão.
 
 **Graduação em Economia** [**UFRJ** · 2007-2009]{.meta}
 
 **Técnico de Telecomunicações** [**ETE Ferreira Viana** · 1998-2000]{.meta}
 
-# **Experiência Profissional**		
-
 ---
+
+# **Experiência Profissional**
 
 **Especialista em Tecnologia e Dados** [**SENAC RJ** · 2026-Atual]{.meta}
 
-* Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o responsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro.
+* Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o responsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro;
+* Concepção e desenvolvimento do **Agente de Validação Pedagógica de materiais do ETIM**: pipeline agêntico em **Python + API Anthropic (Claude)** com *tool use* (**web search** para checagem de fontes), *structured outputs* (JSON schema), *prompt caching* e *system prompt* versionado, que valida e reescreve materiais didáticos preservando a autoria do conteudista — com **gate *human-in-the-loop*** que impede que conteúdo autorado pela IA vire entrega sem revisão do especialista;
+* ***Eval harness*** do agente com *golden set* (8 pares "insumo → validação humana"), rubrica multicritério por **LLM-as-judge**, controle negativo de preservação e relatório por critério — **evals e testes de regressão** como critério de aceite de cada mudança de prompt, com observabilidade de custo, tokens e latência por execução.
 
 **Professor de IA Generativa** [**Impacta Tecnologia** · Mar 2026-Jul 2026]{.meta}
 
-* Aulas de Transformers e LLMs para a turma de Master em IA;  
-* Aulas de AI Applications para a turma de MBA em IA.
+* **Transformers e LLMs** (Master em IA): arquitetura Transformer e *self-attention*, pré-treino e RLHF, multimodalidade, e a cadeia de valor econômica dos LLMs — do modelo como serviço à decisão de *build vs. buy*;
+* **AI Applications** (MBA em IA): disciplina de fechamento do programa, conduzida como laboratório aplicado — design de soluções de IA orientadas a valor, integração de **ML + LLMs + dados + automação**, prototipagem e **defesa da solução para *stakeholders* executivos**, com entrega final avaliada como produto de ponta a ponta;
+* Tradução de arquitetura técnica de IA para público executivo — competência aplicada diretamente em decisões de custo, risco e viabilidade de soluções.
 
 **Especialista em IA Generativa** [**Análise Macro** · 2015-Atual]{.meta}
 
-* Liderança técnica no ciclo completo de produtos de IA Generativa e ML — da concepção e design de solução à entrega e sustentação em produção —, atuando como interlocutor entre necessidades de negócio e implementação técnica;  
-* Desenvolvimento de agentes de IA com **RAG** (recuperação híbrida BM25 + densa, fusão RRF e reranking), orquestração com LangGraph e engenharia de prompts, servidos como API em **FastAPI** e empacotados em **Docker** — como o serviço de consulta às atas do COPOM, com *eval harness* (*golden set* + LLM-as-judge) e **gate de qualidade que reprova regressões**;  
-* Concepção e publicação do **primeiro servidor MCP (Model Context Protocol) da empresa**, em **TypeScript sobre Cloudflare Workers**: expõe as séries analíticas do IPCA como ferramentas que assistentes de IA (Claude, Cursor, Codex) consomem ao vivo, com atualização mensal automática e sem autenticação para o usuário final;  
-* Construção de sistemas **multi-LLM / multi-agente** para análise de sentimento das atas do COPOM — três LLMs em paralelo (Anthropic, Google e OpenAI), com validação cega por agentes independentes e agregação por *self-consistency*;  
-* Autoria do pacote R **`nucleos`** (código aberto), que reproduz as séries analíticas do IPCA publicadas pelo Banco Central (Nota Técnica 57) com **conformidade verificada em testes automatizados contra a série oficial do SGS**;  
-* Avaliação e observabilidade de modelos e pipelines de IA: *LLM-as-judge*, LangSmith e QA-Eval para *evals* e testes de regressão; validação estatística de previsões (Diebold-Mariano, Mincer-Zarnowitz) contra o Boletim Focus do Banco Central;  
-* Pipelines preditivos combinando **ML clássico** (Scikit-learn) e *foundation models* em *ensembles* para IPCA, câmbio, juros e PIB, com automação e **CI/CD via GitHub Actions**;  
-* Construção e automatização de pipelines de ETL com SQL, Python e R para coleta e tratamento de dados econômico-financeiros de fontes como B3, Banco Central e SIDRA/IBGE, com rastreabilidade das execuções;  
-* Liderança técnica no design e desenvolvimento de mais de 40 cursos e 700+ exercícios avançados (R, Python e SQL) no Clube AM, além de mentoria de equipes — comunicação técnica adaptada a públicos técnicos e não-técnicos;  
+* Liderança técnica no ciclo completo de produtos de IA Generativa e ML — refinamento, decisões de arquitetura, implementação, *deploy* e sustentação em produção —, atuando como interlocutor entre necessidades de negócio e implementação técnica;
+* Desenvolvimento de agentes de IA com **RAG** (recuperação híbrida BM25 + densa, fusão RRF e *reranking*), orquestração com LangChain e engenharia de prompts, servidos como **API REST em FastAPI** e empacotados em **Docker** — como o serviço de consulta às atas do COPOM, com *eval harness* (*golden set* + LLM-as-judge), **gate de qualidade que reprova regressões no CI** e **observabilidade de custo, latência e tokens por *request***;
+* Construção e sustentação de **agentes em produção contínua** que integram LLM a APIs de terceiros e entregam em canais transacionais — pipeline semanal que coleta fontes por **IMAP** e **RSS**, sintetiza com Claude (*streaming*, *adaptive thinking*), renderiza documento e entrega via **WhatsApp Business Cloud API** com *templates* aprovados, mais geração de áudio por **TTS** publicada como *link* — tudo orquestrado em **GitHub Actions**, com execução sob demanda por *workflow dispatch* e **degradação segura** (cada etapa falha isolada, sem quebrar a entrega nem fabricar conteúdo);
+* Concepção e publicação do **primeiro servidor MCP (Model Context Protocol) da empresa**, em **TypeScript sobre Cloudflare Workers**: expõe as séries analíticas do IPCA como ferramentas que assistentes de IA (Claude, Cursor, Codex) consomem ao vivo, com atualização mensal automática e sem autenticação para o usuário final;
+* Construção de sistemas **multi-LLM / multi-agente** para análise de sentimento das atas do COPOM — três provedores em paralelo (**Anthropic, Google e OpenAI**), com validação cega por agentes independentes e agregação por *self-consistency*, seleção de modelo por **qualidade × custo × latência** e saídas validadas contra *schema*;
+* Arquitetura e operação do **ROI Diagnóstico**, plataforma de inteligência comercial que integra **seis APIs REST** de negócio (e-commerce, gateway de pagamento, *ads*, analytics, CRM e e-mail marketing) em pipeline diário orquestrado, com validação de contrato por *schema* (Pandera), **DuckDB sobre Parquet** em nuvem e camada de agentes que sintetiza desempenho com LLM e entrega relatórios recorrentes via **WhatsApp Business API**;
+* Autoria do pacote R **`nucleos`** (código aberto), que reproduz as séries analíticas do IPCA publicadas pelo Banco Central (Nota Técnica 57) com **conformidade verificada em testes automatizados contra a série oficial do SGS**;
+* Avaliação e observabilidade de modelos e pipelines de IA: *LLM-as-judge*, LangSmith e QA-Eval para *evals* e testes de regressão; validação estatística de previsões (Diebold-Mariano, Mincer-Zarnowitz) contra o Boletim Focus do Banco Central;
+* Pipelines preditivos combinando **ML clássico** (Scikit-learn/`skforecast`) e ***foundation models*** (Amazon Chronos, Nixtla TimeGPT) em *ensembles* para IPCA, câmbio, juros e PIB, publicados em *dashboard* com **CI/CD via GitHub Actions** (*cache* de pesos, controle de concorrência) e reavaliados a cada ciclo;
+* Estudos de ***fine-tuning* (LoRA/QLoRA)** de modelos abertos para extração estruturada de indicadores de *releases* do BCB/IBGE, com *benchmark* próprio contra *baselines* *zero-shot* via API — avaliando a troca entre custo de inferência e acurácia em tarefa estreita;
+* Construção e automatização de pipelines de ETL com SQL, Python e R para coleta e tratamento de dados econômico-financeiros de fontes como B3, Banco Central e SIDRA/IBGE, com rastreabilidade das execuções;
+* Liderança técnica e curadoria do acervo do **Clube AM**: mais de 40 cursos e **700 exercícios aplicados publicados** (Python, R e SQL), dos quais **91 dedicados a Inteligência Artificial** — incluindo a trilha de LLMs aplicados a economia e finanças (índice de sentimento do Copom com LLMs, RAG sobre documentos econômicos, agentes de IA e previsão com IA) —, com coordenação e mentoria da equipe de autores;
 * Prestação de consultoria em análise de dados e IA para empresas do mercado financeiro; aplicação de metodologias ágeis para a criação de novos produtos digitais.
 
 **Membro do Comitê de Gestão** [**Instituto Millenium** · 2008-2018]{.meta}
 
-* Atuou como membro do Conselho de Gestão da instituição;  
+* Atuou como membro do Conselho de Gestão da instituição;
 * Ministrou palestras em todo o Brasil sobre perspectivas econômicas e análise de dados.
 
 **Professor** [**Universidade Veiga de Almeida** · 2015-2015]{.meta}
@@ -91,7 +102,7 @@ Engenheiro de IA e Cientista de Dados com sólida formação em Economia e Estat
 
 **Coordenador** [**GECE/UFF** · 2013-2014]{.meta}
 
-* Coordenei alunos de graduação no desenvolvimento de análises de perspectivas econômicas;  
+* Coordenei alunos de graduação no desenvolvimento de análises de perspectivas econômicas;
 * Organizei e apresentei palestras com palestrantes renomados, incluindo o Professor Gustavo Franco e a Professora Monica de Bolle.
 
 **Estagiário Middle Office Comercial** [**Endesa** · 2009-2010]{.meta}
@@ -116,45 +127,51 @@ Trabalhou na Gerência de Redes Nacional da operadora, como especialista na prog
 
 # **Projetos Selecionados**
 
----
+**ROI Diagnóstico** — plataforma de inteligência comercial que sustenta a operação de um negócio digital de ponta a ponta *(repositório privado)*. Integra **seis APIs REST** (WooCommerce, Pagar.me, Meta Ads, Google Analytics 4, CRM e e-mail marketing) em pipeline diário orquestrado por **GitHub Actions**, com validação de contrato por *schema* (**Pandera**), *refresh* incremental com deduplicação, persistência em **Parquet no Google Cloud Storage** e consultas analíticas em **DuckDB** — servido em *dashboard* interativo. Sobre essa base roda uma camada de **agentes de monitoramento** que sintetizam desempenho de campanhas e finanças com LLM e entregam relatórios recorrentes via **WhatsApp Business Cloud API** (*templates* aprovados), além de módulos de **DRE e fluxo de caixa** sobre a operação real. Base do TCC da pós-graduação em LLMs e IA Generativa (PUC-Rio).
+
+**Newsletter Digest Bot** — agente de IA em **produção contínua desde abril/2026**, entregando sem intervenção humana toda semana. Coleta um corpus heterogêneo via **IMAP** e **feeds RSS** (arXiv, RePEc, NBER), sintetiza com **Claude Opus** (*streaming*, *adaptive thinking*, *system prompt* versionado), injeta seções curadas de fontes externas via **MCP**, renderiza PDF e entrega no **WhatsApp Business Cloud API**; um segundo fluxo gera **podcast** com **TTS** multi-voz publicado como *link*. Suporta **execução sob demanda** por *workflow dispatch* (dossiê vertical sobre tema escolhido) e foi projetado para **degradação segura**: cada etapa falha isolada, sem quebrar a entrega e **sem fabricar conteúdo** — com normalização de fontes que corrige links quebrados na origem. Orquestrado em GitHub Actions, credenciais por *secrets* e **deploy key de escopo mínimo** *(repositório privado)*.
+
+**Previsão Macro** — pipeline reprodutível que publica previsões de **IPCA, câmbio, PIB e Selic** em *dashboard* atualizado automaticamente. Combina em *ensemble* modelos econométricos e de ML (`skforecast`/Scikit-learn) com dois ***foundation models* de séries temporais** — Amazon **Chronos** (aberto, *zero-shot*) e Nixtla **TimeGPT** (proprietário, com exógenas e intervalos quantílicos) — e um modelo dedicado à Selic que usa como exógena o **índice de tom das atas do Copom extraído por três LLMs**. Três *workflows* de CI/CD encadeados, com *cache* de pesos e controle de concorrência. Base empírica da tese de doutorado (EPGE/FGV). [`vitorwilher.shinyapps.io/previsao_macro`](https://vitorwilher.shinyapps.io/previsao_macro/)
 
 **MCP Análise Macro** — servidor **MCP** público que leva as séries analíticas do IPCA (Nota Técnica 57 do BCB) para dentro do Claude, Cursor e Codex. TypeScript sobre Cloudflare Workers, sem autenticação, com atualização mensal automática. Primeiro MCP da empresa. [`nucleos-mcp.analisemacro.workers.dev`](https://nucleos-mcp.analisemacro.workers.dev/mcp)
 
 **`nucleos`** — pacote R de código aberto que reproduz as 22 séries analíticas do IPCA do Banco Central, com conformidade verificada em testes automatizados contra a série oficial do SGS. [`github.com/vitorwilher/nucleos`](https://github.com/vitorwilher/nucleos)
 
-**COPOM RAG Service** — RAG sobre as atas do Copom e o Focus servido como API (FastAPI + Docker), com *eval harness* — *golden set*, LLM-as-judge com *self-consistency* e gate que reprova regressões — e observabilidade de custo, latência e tokens por request. [`github.com/vitorwilher/copom-rag-service`](https://github.com/vitorwilher/copom-rag-service)
+**Agente de Validação Pedagógica ETIM** (SENAC RJ) — agente de IA em produção que valida materiais didáticos contra as regras pedagógicas do programa. Python + API Anthropic com *tool use* (web search), *structured outputs* e *prompt caching*; **gate *human-in-the-loop*** e *eval harness* com *golden set* e LLM-as-judge.
+
+**COPOM RAG Service** — RAG sobre as atas do Copom e o Focus servido como **API REST** (FastAPI + Docker), com **recuperação híbrida BM25 + densa, fusão RRF e *reranking***, respostas **com fontes citadas** como *guardrail* contra alucinação numérica, e *eval harness* — *golden set*, LLM-as-judge com *self-consistency* e ***gate* de CI que reprova regressão de qualidade** — além de observabilidade de **custo, latência e tokens por *request***. [`github.com/vitorwilher/copom-rag-service`](https://github.com/vitorwilher/copom-rag-service)
 
 **Sentimento COPOM & Regra de Taylor** — índice de tom *hawkish-dovish* das atas construído com três LLMs em paralelo e validação cega por agentes independentes, usado como regressor em uma Regra de Taylor aumentada (OLS/HAC, GMM, VAR/VECM, filtro de Kalman). [`vitorwilher.github.io`](https://vitorwilher.github.io/projetos/)
 
-# **Idiomas**
-
 ---
 
-**Inglês**
+# **Idiomas**
 
-Nível Avançado
+**Inglês** — Nível Avançado
 
-**Espanhol**
+**Espanhol** — Nível Intermediário
 
-Nível Intermediário
+---
 
 # **Habilidades Principais**
 
----
-
-- Comunicação e Liderança  
-- Python  
-- R  
-- Desenvolvimento de pacotes R  
-- SQL / PostgreSQL  
-- FastAPI e Docker  
-- LLMs e Agentes de IA (LangGraph)  
-- MCP (Model Context Protocol)  
-- RAG (híbrido BM25 + denso, RRF)  
-- Avaliação de Modelos (evals / LLM-as-judge)  
-- Machine Learning (Scikit-learn)  
-- Econometria e Inferência Estatística  
-- NLP  
-- Cloud (AWS) e CI/CD
-
-### 
+- Python (OO, Clean Code, pytest)
+- LLMs em produção (Anthropic, OpenAI, Google, Bedrock)
+- Agentes de IA e orquestração (LangChain, Claude Agent SDK)
+- *Function calling* / *tool use*
+- *Structured outputs* e JSON Schema
+- RAG (híbrido BM25 + denso, RRF, *reranking*)
+- Guardrails e mitigação de alucinação
+- Avaliação de LLMs (*golden set*, LLM-as-judge, gate de CI)
+- Observabilidade (custo/token, latência, qualidade)
+- Prompt e Context Engineering
+- APIs REST (FastAPI) e integrações corporativas
+- WhatsApp Business Cloud API
+- Docker, CI/CD (GitHub Actions, GitLab CI)
+- Cloud (AWS, GCP, Cloudflare Workers)
+- SQL / PostgreSQL / DuckDB
+- MCP (Model Context Protocol)
+- *Foundation models* de séries temporais
+- Machine Learning (Scikit-learn) e *fine-tuning* (LoRA/QLoRA)
+- Econometria e Inferência Estatística
+- Comunicação executiva e liderança técnica
