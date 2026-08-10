@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-08-10">
+<meta name="description" content="Um guia passo a passo, escrito para quem não é desenvolvedor, para conectar o modelo de projeção de inflação ao Claude e produzir cenários macroeconômicos conversando. Você informa as premissas — Selic, câmbio, petróleo — e recebe a tabela e o gráfico pronto.">
 
-<title>Pesquisas – Portfólio do VW</title>
+<title>Como usar o MCP do Modelo de Pequeno Porte – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -37,8 +39,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/profile.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -80,35 +80,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -141,15 +112,17 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Pesquisas – Portfólio do VW">
-<meta property="og:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
+<meta property="og:title" content="Como usar o MCP do Modelo de Pequeno Porte – Portfólio do VW">
+<meta property="og:description" content="Um guia passo a passo, escrito para quem não é desenvolvedor, para conectar o modelo de projeção de inflação ao Claude e produzir cenários macroeconômicos conversando. Você informa as premissas — Selic, câmbio, petróleo — e recebe a tabela e o gráfico pronto.">
+<meta property="og:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="2371">
-<meta property="og:image:width" content="3567">
-<meta name="twitter:title" content="Pesquisas – Portfólio do VW">
-<meta name="twitter:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
-<meta name="twitter:image-height" content="2371">
-<meta name="twitter:image-width" content="3567">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:width" content="1200">
+<meta name="twitter:title" content="Como usar o MCP do Modelo de Pequeno Porte – Portfólio do VW">
+<meta name="twitter:description" content="Um guia passo a passo, escrito para quem não é desenvolvedor, para conectar o modelo de projeção de inflação ao Claude e produzir cenários macroeconômicos conversando. Você informa as premissas — Selic, câmbio, petróleo — e recebe a tabela e o gráfico pronto.">
+<meta name="twitter:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
+<meta name="twitter:image-height" content="1200">
+<meta name="twitter:image-width" content="1200">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -349,7 +322,7 @@ window.Quarto = {
 <span class="menu-text">Cursos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../research/index.html" aria-current="page"> 
+    <a class="nav-link" href="../research/index.html"> 
 <span class="menu-text">Pesquisas</span></a>
   </li>  
   <li class="nav-item">
@@ -389,26 +362,63 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw==">Análise de Texto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V29ya2luZyUyMFBhcGVy">Working Paper <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#passo-1-conectar" id="toc-passo-1-conectar" class="nav-link active" data-scroll-target="#passo-1-conectar">Passo 1 — Conectar</a></li>
+  <li><a href="#passo-2-a-primeira-pergunta" id="toc-passo-2-a-primeira-pergunta" class="nav-link" data-scroll-target="#passo-2-a-primeira-pergunta">Passo 2 — A primeira pergunta</a></li>
+  <li><a href="#passo-3-cenários-com-suas-premissas" id="toc-passo-3-cenários-com-suas-premissas" class="nav-link" data-scroll-target="#passo-3-cenários-com-suas-premissas">Passo 3 — Cenários com suas premissas</a></li>
+  <li><a href="#passo-4-o-gráfico" id="toc-passo-4-o-gráfico" class="nav-link" data-scroll-target="#passo-4-o-gráfico">Passo 4 — O gráfico</a></li>
+  <li><a href="#passo-5-comparar-cenários" id="toc-passo-5-comparar-cenários" class="nav-link" data-scroll-target="#passo-5-comparar-cenários">Passo 5 — Comparar cenários</a></li>
+  <li><a href="#o-detalhe-que-muda-a-interpretação" id="toc-o-detalhe-que-muda-a-interpretação" class="nav-link" data-scroll-target="#o-detalhe-que-muda-a-interpretação">O detalhe que muda a interpretação</a></li>
+  <li><a href="#o-que-este-modelo-não-é" id="toc-o-que-este-modelo-não-é" class="nav-link" data-scroll-target="#o-que-este-modelo-não-é">O que este modelo não é</a></li>
+  <li><a href="#perguntas-frequentes" id="toc-perguntas-frequentes" class="nav-link" data-scroll-target="#perguntas-frequentes">Perguntas frequentes</a></li>
+  <li><a href="#um-roteiro-de-dez-minutos" id="toc-um-roteiro-de-dez-minutos" class="nav-link" data-scroll-target="#um-roteiro-de-dez-minutos">Um roteiro de dez minutos</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pesquisas</h1>
+<h1 class="title">Como usar o MCP do Modelo de Pequeno Porte</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">MCP</div>
+    <div class="quarto-category">Model Context Protocol</div>
+    <div class="quarto-category">Tutorial</div>
+    <div class="quarto-category">Claude</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">Inflação</div>
+    <div class="quarto-category">IPCA</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">Cenários</div>
+    <div class="quarto-category">Python</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Um guia passo a passo, escrito para quem não é desenvolvedor, para conectar o modelo de projeção de inflação ao Claude e produzir cenários macroeconômicos conversando. Você informa as premissas — Selic, câmbio, petróleo — e recebe a tabela e o gráfico pronto.
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 10, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -418,123 +428,217 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDRm91bmRhdGlvbiUyME1vZGVscyUyQ1RpbWVHUFQlMkNDaHJvbm9zJTJDc2Npa2l0LWxlYXJuJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNXb3JraW5nJTIwUGFwZXIlMkNBZ2VudGVzJTIwZGUlMjBJQQ==" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1786389211421" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1459">
-<div class="thumbnail"><a href="../research/previsao-macro.html" class="no-external">
-
-<img loading="lazy" src="../research/previsao_macro_heatmap.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/previsao-macro.html" class="no-external">Pipeline de Previsão Macro com Agentes de IA</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/previsao-macro.html" class="no-external">Arquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic</a>
+<p>Este guia mostra como conectar o <strong>Modelo de Pequeno Porte</strong> — nossa réplica em Python do modelo semiestrutural de projeção de inflação do Banco Central — ao seu assistente de IA, e usá-lo para produzir cenários macroeconômicos apenas conversando.</p>
+<p>Não é preciso saber programar. Não é preciso instalar nada.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">Quarto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Rm91bmRhdGlvbiUyME1vZGVscw=='); return false;">Foundation Models</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZUdQVA=='); return false;">TimeGPT</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q2hyb25vcw=='); return false;">Chronos</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2Npa2l0LWxlYXJu'); return false;">scikit-learn</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdHNtb2RlbHM='); return false;">statsmodels</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V2Fsay1mb3J3YXJk'); return false;">Walk-forward</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGllYm9sZC1NYXJpYW5v'); return false;">Diebold-Mariano</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWluY2VyLVphcm5vd2l0eg=='); return false;">Mincer-Zarnowitz</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QkNC'); return false;">BCB</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('SUJHRQ=='); return false;">IBGE</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QWdlbnRlcyUyMGRlJTIwSUE='); return false;">Agentes de IA</div>
-
-</div>
-<div class="delink listing-description"><a href="../research/previsao-macro.html" class="no-external">
-<p>Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/previsao-macro.html" class="no-external">
-<div class="listing-date">
-May 3, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher
-</div>
-</a>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>O que é um MCP, em uma frase
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTExNcyUyQ05MUCUyQ0FuJUMzJUExbGlzZSUyMGRlJTIwVGV4dG8lMkNNYWNyb2Vjb25vbWlhJTJDV29ya2luZyUyMFBhcGVy" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1786389211427" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1346">
-<div class="thumbnail"><a href="../research/sentimento-copom.html" class="no-external">
-
-<img loading="lazy" src="../research/sentimento_copom_indice.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/sentimento-copom.html" class="no-external">Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/sentimento-copom.html" class="no-external">Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini</a>
-</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFuY28lMjBDZW50cmFs'); return false;">Banco Central</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">NLP</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw=='); return false;">Análise de Texto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-</div>
-<div class="delink listing-description"><a href="../research/sentimento-copom.html" class="no-external">
-<p>Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/sentimento-copom.html" class="no-external">
-<div class="listing-date">
-Apr 26, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher, Luiz Henrique Barbosa Filho
-</div>
-</a>
+<div class="callout-body-container callout-body">
+<p>O <strong>Model Context Protocol</strong> é o padrão aberto que permite a um assistente de IA chamar ferramentas externas. Sem ele, se você pedir uma projeção de inflação ao Claude, ele responde com o que “lembra” — e pode inventar um número plausível. Com ele, o Claude <strong>roda o modelo de verdade</strong> e devolve o resultado.</p>
 </div>
 </div>
+<hr>
+<section id="passo-1-conectar" class="level2">
+<h2 class="anchored" data-anchor-id="passo-1-conectar">Passo 1 — Conectar</h2>
+<p>O servidor está no ar, é <strong>público e gratuito</strong>. Não precisa de senha nem de cadastro.</p>
+<p>No Claude, vá em <strong>Configurações → Connectors → Adicionar conector personalizado</strong> e cole:</p>
+<pre><code>https://mpp-mcp.analisemacro.workers.dev/mcp</code></pre>
+<p>Pronto. Se aparecerem quatro ferramentas com o prefixo <code>mpp_</code>, está funcionando.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Funciona em outros clientes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O mesmo endereço funciona em qualquer cliente que fale MCP — Cursor, Codex, VS Code com a extensão apropriada. A configuração muda de lugar, o endereço é o mesmo.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="passo-2-a-primeira-pergunta" class="level2">
+<h2 class="anchored" data-anchor-id="passo-2-a-primeira-pergunta">Passo 2 — A primeira pergunta</h2>
+<p>Comece pelo mais simples. Peça:</p>
+<blockquote class="blockquote">
+<p><strong>“O que o modelo de pequeno porte projeta para a inflação?”</strong></p>
+</blockquote>
+<p>O Claude vai chamar a ferramenta <code>mpp_projetar</code> sem premissas, o que roda o <strong>cenário de referência</strong> — todas as variáveis exógenas congeladas no último valor observado. A resposta vem como tabela trimestral: IPCA acumulado em quatro trimestres, IPCA do trimestre, preços livres, administrados, hiato do produto, Selic e câmbio.</p>
+<p>Se quiser entender o que está por trás antes de continuar, pergunte:</p>
+<blockquote class="blockquote">
+<p><strong>“Me explica esse modelo e suas limitações.”</strong></p>
+</blockquote>
+<hr>
+</section>
+<section id="passo-3-cenários-com-suas-premissas" class="level2">
+<h2 class="anchored" data-anchor-id="passo-3-cenários-com-suas-premissas">Passo 3 — Cenários com suas premissas</h2>
+<p>Aqui está o ponto do exercício. Você informa hipóteses, o modelo responde.</p>
+<blockquote class="blockquote">
+<p><strong>“Projete a inflação supondo a Selic a 12,5% e o câmbio a R$ 5,60.”</strong></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>“E se o petróleo subir para US$ 110 e o CDS for a 220 pontos?”</strong></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>“Faça a projeção com a Selic caindo gradualmente: 14, 13,5, 13, 12,5 e 12%.”</strong></p>
+</blockquote>
+<p>Note a última: quando você dá uma <strong>lista</strong>, cada valor vale para um trimestre. Um número único vale para todo o horizonte.</p>
+<section id="as-dez-premissas-aceitas" class="level3">
+<h3 class="anchored" data-anchor-id="as-dez-premissas-aceitas">As dez premissas aceitas</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Premissa</th>
+<th>O que é</th>
+<th>Unidade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>selic</code></td>
+<td>Meta da taxa Selic</td>
+<td>% ao ano</td>
+</tr>
+<tr class="even">
+<td><code>cambio</code></td>
+<td>Taxa de câmbio</td>
+<td>R<span class="math inline">\(/US\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>petroleo</code></td>
+<td>Petróleo Brent</td>
+<td>US$/barril</td>
+</tr>
+<tr class="even">
+<td><code>inflacao_eua</code></td>
+<td>Inflação americana</td>
+<td>% no trimestre</td>
+</tr>
+<tr class="odd">
+<td><code>fed_funds</code></td>
+<td>Juro básico americano</td>
+<td>% ao ano</td>
+</tr>
+<tr class="even">
+<td><code>cds</code></td>
+<td>Risco-país (CDS 5 anos)</td>
+<td>pontos-base</td>
+</tr>
+<tr class="odd">
+<td><code>juro_neutro</code></td>
+<td>Juro real neutro</td>
+<td>% ao ano</td>
+</tr>
+<tr class="even">
+<td><code>expectativa_longo_prazo</code></td>
+<td>Âncora de inflação</td>
+<td>%</td>
+</tr>
+<tr class="odd">
+<td><code>cadeias_suprimento</code></td>
+<td>Pressão em cadeias globais</td>
+<td>desvios-padrão</td>
+</tr>
+<tr class="even">
+<td><code>el_nino</code></td>
+<td>Oceanic Niño Index</td>
+<td>°C</td>
+</tr>
+</tbody>
+</table>
+<p>Você não precisa decorar os nomes — basta descrever em português. O Claude traduz.</p>
+<hr>
+</section>
+</section>
+<section id="passo-4-o-gráfico" class="level2">
+<h2 class="anchored" data-anchor-id="passo-4-o-gráfico">Passo 4 — O gráfico</h2>
+<p>Esta é a parte que economiza tempo. Peça:</p>
+<blockquote class="blockquote">
+<p><strong>“Faça um gráfico dessa projeção.”</strong></p>
+</blockquote>
+<p>O servidor devolve um <strong>PNG pronto</strong>, com a identidade visual da Análise Macro, a meta de inflação, o intervalo de tolerância e o crédito da fonte. É só salvar e colar no post, no relatório ou no slide.</p>
+<p>Para mostrar a incerteza em vez de uma linha só:</p>
+<blockquote class="blockquote">
+<p><strong>“Agora faça um gráfico de leque, com as bandas de incerteza.”</strong></p>
+</blockquote>
+<p>E para personalizar:</p>
+<blockquote class="blockquote">
+<p><strong>“Faça um gráfico com o título ‘Cenário de aperto monetário prolongado’.”</strong></p>
+</blockquote>
+<hr>
+</section>
+<section id="passo-5-comparar-cenários" class="level2">
+<h2 class="anchored" data-anchor-id="passo-5-comparar-cenários">Passo 5 — Comparar cenários</h2>
+<p>A pergunta que mais rende:</p>
+<blockquote class="blockquote">
+<p><strong>“Compare um cenário com a Selic a 14% contra outro a 11%.”</strong></p>
+</blockquote>
+<p>A resposta traz as duas trajetórias lado a lado e a <strong>diferença trimestre a trimestre</strong>. No exemplo acima, o modelo mostra a inflação 1,4 p.p. mais alta no cenário de juros mais baixos ao fim de seis trimestres — com o efeito crescendo ao longo do tempo, como a teoria prevê.</p>
+<p>Outras comparações úteis:</p>
+<blockquote class="blockquote">
+<p><strong>“Compare um cenário de câmbio a R$ 5,20 com outro a R$ 6,00.”</strong></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>“O que muda se o risco-país dobrar?”</strong></p>
+</blockquote>
+<hr>
+</section>
+<section id="o-detalhe-que-muda-a-interpretação" class="level2">
+<h2 class="anchored" data-anchor-id="o-detalhe-que-muda-a-interpretação">O detalhe que muda a interpretação</h2>
+<p>Este é o ponto mais importante do tutorial, e vale ler com atenção.</p>
+<p><strong>Selic e câmbio são variáveis endógenas do modelo.</strong> Se você não informar nada, o modelo as <strong>projeta sozinho</strong> — a Selic por uma regra de Taylor estimada, o câmbio por paridade descoberta de juros. Elas aparecem na tabela como <em>resultado</em>.</p>
+<p>Quando você <strong>informa</strong> uma trajetória de Selic, está <strong>suspendendo</strong> a regra de Taylor. O que sai não é mais “o que o modelo prevê”, e sim “o que aconteceria com a inflação <strong>se</strong> a Selic seguisse esse caminho”. É um cenário condicional.</p>
+<p>A distinção importa na hora de comunicar. Um exemplo concreto: se você impuser uma Selic mais baixa do que a regra de Taylor estimada recomendaria, o modelo devolve inflação mais alta e crescente — não porque esteja errado, mas porque você pediu exatamente isso.</p>
+<hr>
+</section>
+<section id="o-que-este-modelo-não-é" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-este-modelo-não-é">O que este modelo não é</h2>
+<p>Vale ser explícito, porque a tentação de apresentar o resultado como “a projeção do Banco Central” é real — e seria incorreto.</p>
+<ul>
+<li><strong>Não é o modelo oficial do BCB.</strong> É uma réplica da linhagem metodológica anterior a 2020, reconstruída a partir de uma implementação didática em EViews.</li>
+<li><strong>Não tem variáveis latentes.</strong> Desde 2020 o Banco Central estima o hiato do produto e o juro real neutro por filtro de Kalman, sobre quatro observáveis. Aqui o hiato vem de filtro Hodrick-Prescott.</li>
+<li><strong>Não tem curvas de Phillips setoriais</strong>, o que faz o repasse cambial ser subestimado frente ao oficial.</li>
+<li><strong>As projeções não são as do Banco Central</strong> e não devem ser apresentadas como tais.</li>
+</ul>
+<p>Dito isso, a aderência é boa: comparado ao Relatório de Política Monetária de junho de 2026, o erro absoluto médio ficou em <strong>0,47 p.p.</strong> ao longo de doze trimestres, e a projeção oficial cai <strong>dentro do leque do modelo em todos os trimestres comparados</strong>.</p>
+<hr>
+</section>
+<section id="perguntas-frequentes" class="level2">
+<h2 class="anchored" data-anchor-id="perguntas-frequentes">Perguntas frequentes</h2>
+<p><strong>Preciso pagar alguma coisa?</strong> Não. O servidor é público e gratuito.</p>
+<p><strong>Até quando vão os dados?</strong> Pergunte <code>"até quando vão os dados do modelo?"</code> — a ferramenta <code>mpp_info</code> responde. Na publicação deste guia, até o segundo trimestre de 2026.</p>
+<p><strong>Posso usar os gráficos comercialmente?</strong> Sim, com o crédito que já vem impresso no rodapé da imagem.</p>
+<p><strong>O modelo erra?</strong> Erra, como todo modelo. O valor dele não está em acertar a inflação de daqui a três anos, e sim em tornar explícito <strong>como as premissas se traduzem em resultado</strong> — que é justamente para isso que os bancos centrais usam modelos semiestruturais.</p>
+<p><strong>Como sei que os números estão certos?</strong> O solver que roda no servidor foi validado contra a implementação em Python, com erro máximo de 5×10⁻⁵. E o modelo em Python foi validado contra as identidades internas do EViews original e contra os multiplicadores publicados pelo Banco Central.</p>
+<hr>
+</section>
+<section id="um-roteiro-de-dez-minutos" class="level2">
+<h2 class="anchored" data-anchor-id="um-roteiro-de-dez-minutos">Um roteiro de dez minutos</h2>
+<p>Se quiser sentir o modelo funcionando, siga esta sequência:</p>
+<ol type="1">
+<li><em>“O que o modelo de pequeno porte projeta para a inflação?”</em></li>
+<li><em>“Me explica esse modelo e suas limitações.”</em></li>
+<li><em>“Projete com a Selic a 12,5% e o câmbio a R$ 5,60.”</em></li>
+<li><em>“Faça um gráfico de leque dessa projeção.”</em></li>
+<li><em>“Compare esse cenário com um de Selic a 15%.”</em></li>
+<li><em>“Por que a inflação sobe quando a Selic cai nesse modelo?”</em></li>
+</ol>
+<p>A última pergunta é a mais interessante: o Claude tem acesso à descrição das equações e consegue explicar o mecanismo de transmissão — juro real menor, hiato mais aberto, pressão na curva de Phillips — em vez de apenas repetir números.</p>
+<hr>
+<p>Detalhes técnicos da construção do modelo estão na ficha do projeto: <a href="../projetos/mpp-bcb.html"><strong>Replicando em Python o modelo de projeção de inflação do Banco Central</strong></a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

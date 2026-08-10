@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-08-10">
+<meta name="description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo do zero em Python — sete equações, base recoletada das fontes primárias, dados até 2026Q2 — e comparamos com as projeções oficiais do Relatório de Política Monetária. O erro absoluto médio ficou em 0,47 p.p., e a projeção do BCB cai dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP: você informa as premissas, ele devolve o gráfico.">
 
-<title>Pesquisas – Portfólio do VW</title>
+<title>Replicando em Python o modelo de projeção de inflação do Banco Central – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,6 +28,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -37,8 +74,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/profile.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -80,35 +115,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -141,15 +147,17 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Pesquisas – Portfólio do VW">
-<meta property="og:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
+<meta property="og:title" content="Replicando em Python o modelo de projeção de inflação do Banco Central – Portfólio do VW">
+<meta property="og:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo do zero em Python — sete equações, base recoletada das fontes primárias, dados até 2026Q2 — e comparamos com as projeções oficiais do Relatório de Política Monetária. O erro absoluto médio ficou em 0,47 p.p., e a projeção do BCB cai dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP: você informa as premissas, ele devolve o gráfico.">
+<meta property="og:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="2371">
-<meta property="og:image:width" content="3567">
-<meta name="twitter:title" content="Pesquisas – Portfólio do VW">
-<meta name="twitter:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
-<meta name="twitter:image-height" content="2371">
-<meta name="twitter:image-width" content="3567">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:width" content="1200">
+<meta name="twitter:title" content="Replicando em Python o modelo de projeção de inflação do Banco Central – Portfólio do VW">
+<meta name="twitter:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo do zero em Python — sete equações, base recoletada das fontes primárias, dados até 2026Q2 — e comparamos com as projeções oficiais do Relatório de Política Monetária. O erro absoluto médio ficou em 0,47 p.p., e a projeção do BCB cai dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP: você informa as premissas, ele devolve o gráfico.">
+<meta name="twitter:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
+<meta name="twitter:image-height" content="1200">
+<meta name="twitter:image-width" content="1200">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -349,7 +357,7 @@ window.Quarto = {
 <span class="menu-text">Cursos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../research/index.html" aria-current="page"> 
+    <a class="nav-link" href="../research/index.html"> 
 <span class="menu-text">Pesquisas</span></a>
   </li>  
   <li class="nav-item">
@@ -389,26 +397,73 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw==">Análise de Texto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V29ya2luZyUyMFBhcGVy">Working Paper <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#o-problema" id="toc-o-problema" class="nav-link active" data-scroll-target="#o-problema">O problema</a></li>
+  <li><a href="#o-que-foi-feito" id="toc-o-que-foi-feito" class="nav-link" data-scroll-target="#o-que-foi-feito">O que foi feito</a></li>
+  <li><a href="#o-modelo" id="toc-o-modelo" class="nav-link" data-scroll-target="#o-modelo">O modelo</a></li>
+  <li><a href="#a-base-de-dados" id="toc-a-base-de-dados" class="nav-link" data-scroll-target="#a-base-de-dados">A base de dados</a></li>
+  <li><a href="#os-resultados" id="toc-os-resultados" class="nav-link" data-scroll-target="#os-resultados">Os resultados</a></li>
+  <li><a href="#a-distância-honesta" id="toc-a-distância-honesta" class="nav-link" data-scroll-target="#a-distância-honesta">A distância honesta</a></li>
+  <li><a href="#o-servidor-mcp" id="toc-o-servidor-mcp" class="nav-link" data-scroll-target="#o-servidor-mcp">O servidor MCP</a></li>
+  <li><a href="#arquitetura" id="toc-arquitetura" class="nav-link" data-scroll-target="#arquitetura">Arquitetura</a></li>
+  <li><a href="#como-atualizar" id="toc-como-atualizar" class="nav-link" data-scroll-target="#como-atualizar">Como atualizar</a></li>
+  <li><a href="#reprodutibilidade" id="toc-reprodutibilidade" class="nav-link" data-scroll-target="#reprodutibilidade">Reprodutibilidade</a></li>
+  <li><a href="#próximos-passos" id="toc-próximos-passos" class="nav-link" data-scroll-target="#próximos-passos">Próximos passos</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pesquisas</h1>
+<h1 class="title">Replicando em Python o modelo de projeção de inflação do Banco Central</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">MCP</div>
+    <div class="quarto-category">Model Context Protocol</div>
+    <div class="quarto-category">TypeScript</div>
+    <div class="quarto-category">Cloudflare Workers</div>
+    <div class="quarto-category">Macroeconomia</div>
+    <div class="quarto-category">Inflação</div>
+    <div class="quarto-category">IPCA</div>
+    <div class="quarto-category">Banco Central</div>
+    <div class="quarto-category">Política Monetária</div>
+    <div class="quarto-category">Econometria</div>
+    <div class="quarto-category">Modelo Semiestrutural</div>
+    <div class="quarto-category">Curva de Phillips</div>
+    <div class="quarto-category">Regra de Taylor</div>
+    <div class="quarto-category">EViews</div>
+    <div class="quarto-category">Engenharia Reversa</div>
+    <div class="quarto-category">Reprodutibilidade</div>
+    <div class="quarto-category">Quarto</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo do zero em Python — sete equações, base recoletada das fontes primárias, dados até 2026Q2 — e comparamos com as projeções oficiais do Relatório de Política Monetária. O erro absoluto médio ficou em 0,47 p.p., e a projeção do BCB cai dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP: você informa as premissas, ele devolve o gráfico.
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 10, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -418,123 +473,330 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDRm91bmRhdGlvbiUyME1vZGVscyUyQ1RpbWVHUFQlMkNDaHJvbm9zJTJDc2Npa2l0LWxlYXJuJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNXb3JraW5nJTIwUGFwZXIlMkNBZ2VudGVzJTIwZGUlMjBJQQ==" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1786389211421" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1459">
-<div class="thumbnail"><a href="../research/previsao-macro.html" class="no-external">
-
-<img loading="lazy" src="../research/previsao_macro_heatmap.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/previsao-macro.html" class="no-external">Pipeline de Previsão Macro com Agentes de IA</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/previsao-macro.html" class="no-external">Arquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic</a>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mpp-bcb-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Leque de projeções do modelo replicado e a projeção oficial do Banco Central</figcaption>
+</figure>
 </div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">Quarto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Rm91bmRhdGlvbiUyME1vZGVscw=='); return false;">Foundation Models</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZUdQVA=='); return false;">TimeGPT</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q2hyb25vcw=='); return false;">Chronos</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2Npa2l0LWxlYXJu'); return false;">scikit-learn</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdHNtb2RlbHM='); return false;">statsmodels</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V2Fsay1mb3J3YXJk'); return false;">Walk-forward</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGllYm9sZC1NYXJpYW5v'); return false;">Diebold-Mariano</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWluY2VyLVphcm5vd2l0eg=='); return false;">Mincer-Zarnowitz</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QkNC'); return false;">BCB</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('SUJHRQ=='); return false;">IBGE</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QWdlbnRlcyUyMGRlJTIwSUE='); return false;">Agentes de IA</div>
-
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="delink listing-description"><a href="../research/previsao-macro.html" class="no-external">
-<p>Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/previsao-macro.html" class="no-external">
-<div class="listing-date">
-May 3, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher
-</div>
-</a>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experimente agora
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTExNcyUyQ05MUCUyQ0FuJUMzJUExbGlzZSUyMGRlJTIwVGV4dG8lMkNNYWNyb2Vjb25vbWlhJTJDV29ya2luZyUyMFBhcGVy" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1786389211427" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1346">
-<div class="thumbnail"><a href="../research/sentimento-copom.html" class="no-external">
-
-<img loading="lazy" src="../research/sentimento_copom_indice.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/sentimento-copom.html" class="no-external">Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/sentimento-copom.html" class="no-external">Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini</a>
-</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFuY28lMjBDZW50cmFs'); return false;">Banco Central</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">NLP</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw=='); return false;">Análise de Texto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-</div>
-<div class="delink listing-description"><a href="../research/sentimento-copom.html" class="no-external">
-<p>Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/sentimento-copom.html" class="no-external">
-<div class="listing-date">
-Apr 26, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher, Luiz Henrique Barbosa Filho
-</div>
-</a>
+<div class="callout-body-container callout-body">
+<p>O servidor MCP está no ar, é <strong>público e gratuito</strong>. Cole esta URL como conector personalizado no Claude (Configurações → Connectors) e peça <em>“projete a inflação com a Selic a 12,5% e o câmbio a R$ 5,60”</em>:</p>
+<pre><code>https://mpp-mcp.analisemacro.workers.dev/mcp</code></pre>
+<p>Tutorial passo a passo, escrito para quem não é desenvolvedor: <a href="../projetos/mpp-mcp-tutorial.html"><strong>Como usar o MCP do Modelo de Pequeno Porte</strong></a>.</p>
 </div>
 </div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+<section id="o-problema" class="level2">
+<h2 class="anchored" data-anchor-id="o-problema">O problema</h2>
+<p>O Banco Central projeta a inflação com um conjunto de modelos. O mais transparente deles é o <strong>Modelo de Pequeno Porte</strong> (MPP): um modelo semiestrutural deliberadamente parcimonioso, cuja função é menos prever com máxima acurácia do que organizar de forma clara o raciocínio condicional que sustenta a decisão de política monetária.</p>
+<p>O BCB publica a estrutura das equações nos boxes dos Relatórios de Inflação e, desde 2020, as tabelas de parâmetros estimados. Mas <strong>não publica o código nem a base de dados</strong>. Para quem quer entender o modelo por dentro — e não apenas ler suas projeções —, isso é uma parede.</p>
+<p>Este projeto atravessa essa parede: reconstrói o modelo do zero, em Python, e mede o quão perto se chega.</p>
+<hr>
+</section>
+<section id="o-que-foi-feito" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-foi-feito">O que foi feito</h2>
+<p>A regra do trabalho foi <strong>não presumir nada</strong>. Cada equação, cada defasagem, cada transformação teve de ser rastreada até uma fonte documental — e, onde a fonte era silenciosa, isso foi registrado como lacuna, não preenchido com palpite.</p>
+<p>O ponto de partida foi uma implementação funcional em <strong>EViews</strong>, do curso de modelos de bancos centrais. Duas etapas de engenharia reversa foram necessárias:</p>
+<ol type="1">
+<li><strong>Recuperar as fórmulas das séries derivadas</strong> — hiato do produto, hiato de juros, juro neutro — que não estavam em nenhum script, mas no histórico de comandos gravado dentro do workfile.</li>
+<li><strong>Decodificar o formato binário <code>.wf1</code></strong> para extrair as séries numéricas. O formato é proprietário e não documentado; foi preciso mapear a estrutura de registros byte a byte.</li>
+</ol>
+<p>A validação dessa etapa foi feita contra as próprias identidades internas do EViews, com <strong>erro nulo ou da ordem da precisão de máquina</strong>.</p>
+<hr>
+</section>
+<section id="o-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="o-modelo">O modelo</h2>
+<p>Sete equações estimadas e treze identidades contábeis, em frequência trimestral.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bloco</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Curva IS</strong></td>
+<td>Hiato do produto responde ao juro real</td>
+</tr>
+<tr class="even">
+<td><strong>Curva de Phillips</strong></td>
+<td>Inflação de livres, com verticalidade imposta</td>
+</tr>
+<tr class="odd">
+<td><strong>Expectativas</strong></td>
+<td>Ancoradas na tendência de longo prazo</td>
+</tr>
+<tr class="even">
+<td><strong>Regra de Taylor</strong></td>
+<td>Selic reage ao desvio das expectativas</td>
+</tr>
+<tr class="odd">
+<td><strong>Paridade de juros</strong></td>
+<td>Câmbio reage ao diferencial de juros</td>
+</tr>
+<tr class="even">
+<td><strong>Preços administrados</strong></td>
+<td>Repasse do petróleo em reais</td>
+</tr>
+<tr class="odd">
+<td><strong>Sazonalidade</strong></td>
+<td>Dessazonalização dos preços livres</td>
+</tr>
+</tbody>
+</table>
+<p>O que distingue esta versão: <strong>Selic, câmbio e preços administrados são endógenos</strong>. Isso cria um bloco simultâneo dentro do trimestre — as expectativas dependem do hiato, o hiato do juro real, o juro real da Selic, a Selic das expectativas, o câmbio do diferencial de juros — resolvido por iteração de ponto fixo.</p>
+<p>A consequência econômica é direta: um aperto monetário passa a <strong>apreciar o câmbio</strong>, e a apreciação realimenta a inflação. O canal cambial de transmissão, ausente quando o câmbio é exógeno, torna-se operante.</p>
+<hr>
+</section>
+<section id="a-base-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="a-base-de-dados">A base de dados</h2>
+<p>Toda a base foi <strong>recoletada das fontes primárias</strong> — SGS e Olinda do Banco Central, SIDRA do IBGE, FRED, NOAA e Federal Reserve de Nova York — replicando as transformações originais. Isso torna o exercício reproduzível e, mais importante, <strong>atualizável</strong>: três comandos e o modelo roda com os dados de hoje.</p>
+<p>Duas regras de agregação merecem nota por serem contraintuitivas e por divergirem entre si na fonte original:</p>
+<ul>
+<li><strong>IPCA e componentes</strong>: variações mensais agregadas ao trimestre por <strong>soma aritmética</strong>, não por composição.</li>
+<li><strong>IPA agrícola e industrial</strong>: agregados por <strong>acumulação multiplicativa</strong>.</li>
+</ul>
+<p>A aderência da recoleta à base original:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Série</th>
+<th>Erro médio absoluto</th>
+<th>Correlação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Câmbio médio</td>
+<td><strong>0,0000</strong></td>
+<td><strong>1,000000</strong></td>
+</tr>
+<tr class="even">
+<td>Fed Funds</td>
+<td><strong>0,0000</strong></td>
+<td><strong>1,000000</strong></td>
+</tr>
+<tr class="odd">
+<td>CPI Estados Unidos</td>
+<td>0,0041</td>
+<td>0,999973</td>
+</tr>
+<tr class="even">
+<td>IPCA cheio</td>
+<td>0,0105</td>
+<td>0,999972</td>
+</tr>
+<tr class="odd">
+<td>Hiato do produto</td>
+<td>0,0453</td>
+<td>0,999360</td>
+</tr>
+<tr class="even">
+<td>Expectativa Focus 12m</td>
+<td>0,0425</td>
+<td>0,999264</td>
+</tr>
+</tbody>
+</table>
+<p>Reprodução <strong>exata</strong> para câmbio e Fed Funds; correlação acima de 0,999 nas demais. Os resíduos são atribuíveis a revisões do IBGE e à escolha do dia útil de referência — não há divergência estrutural.</p>
+<hr>
+</section>
+<section id="os-resultados" class="level2">
+<h2 class="anchored" data-anchor-id="os-resultados">Os resultados</h2>
+<section id="validação-econômica" class="level3">
+<h3 class="anchored" data-anchor-id="validação-econômica">Validação econômica</h3>
+<p>O teste mais exigente disponível é comparar os multiplicadores do modelo com os que o Banco Central publica:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Choque</th>
+<th>Modelo</th>
+<th>BCB (jun/2024)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Selic +1 p.p. por 4 trimestres</td>
+<td><strong>−0,37 p.p.</strong></td>
+<td>−0,27 p.p.</td>
+</tr>
+<tr class="even">
+<td>Depreciação cambial de 10%</td>
+<td><strong>+0,79 p.p.</strong></td>
+<td>+0,96 p.p.</td>
+</tr>
+<tr class="odd">
+<td>Coeficiente de Taylor (θ₃)</td>
+<td><strong>1,66</strong></td>
+<td>1,30 – 2,03</td>
+</tr>
+</tbody>
+</table>
+<p>O multiplicador de juros <strong>cerca</strong> a estimativa oficial, com o perfil temporal correto — resposta negativa, gradual, com pico no quinto trimestre. O coeficiente de Taylor cai dentro da faixa publicada pelo BCB, satisfazendo o princípio de Taylor.</p>
+</section>
+<section id="comparação-com-as-projeções-oficiais" class="level3">
+<h3 class="anchored" data-anchor-id="comparação-com-as-projeções-oficiais">Comparação com as projeções oficiais</h3>
+<p>Confrontando com o <strong>Relatório de Política Monetária de junho de 2026</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Erro absoluto médio (12 trimestres)</td>
+<td><strong>0,47 p.p.</strong></td>
+</tr>
+<tr class="even">
+<td>Diferença no primeiro trimestre</td>
+<td><strong>0,03 p.p.</strong></td>
+</tr>
+<tr class="odd">
+<td>Viés médio</td>
+<td>+0,21 p.p.</td>
+</tr>
+</tbody>
+</table>
+<p>E o resultado que mais importa: <strong>a projeção oficial do Banco Central situa-se dentro do leque estocástico do nosso modelo em todos os onze trimestres comparados</strong> — em sete deles, dentro da banda de 50% ou mais estreita. É o que a figura de capa mostra: a linha vermelha atravessa o interior do leque azul do começo ao fim.</p>
+<p>As duas trajetórias não são, portanto, estatisticamente incompatíveis — apesar de os modelos subjacentes serem estruturalmente distintos.</p>
+</section>
+<section id="as-diferenças-que-são-o-mais-interessante" class="level3">
+<h3 class="anchored" data-anchor-id="as-diferenças-que-são-o-mais-interessante">As diferenças, que são o mais interessante</h3>
+<p>A divergência concentra-se no horizonte distante e <strong>decompõe-se em causas identificáveis</strong>:</p>
+<ul>
+<li><strong>Preços livres</strong> ficam cerca de 1 p.p. abaixo do BCB, porque o modelo agregado não tem as curvas de Phillips setoriais — o BCB estima repasse cambial muito maior em alimentação no domicílio.</li>
+<li><strong>Preços administrados</strong> ficam acima, porque o BCB usa modelos satélites item a item, com informação regulatória que um modelo agregado não possui.</li>
+<li><strong>No longo prazo</strong>, o cenário oficial supõe fechamento do hiato do produto para −0,5%, pressão desinflacionária que o modelo não reproduz.</li>
+</ul>
+<p>Nenhuma dessas diferenças é ruído. Todas apontam para componentes ausentes e nomeáveis — o que é, do ponto de vista de aprendizado, mais valioso que o acerto.</p>
+<hr>
+</section>
+</section>
+<section id="a-distância-honesta" class="level2">
+<h2 class="anchored" data-anchor-id="a-distância-honesta">A distância honesta</h2>
+<p>Cabe uma ressalva que o projeto documenta em detalhe. <strong>Este não é o modelo vigente do Banco Central.</strong></p>
+<p>Em setembro de 2020 houve uma ruptura metodológica: o BCB passou a estimar o hiato do produto e o juro real neutro como <strong>variáveis latentes</strong>, por filtro de Kalman, com estimação bayesiana sobre a verossimilhança do sistema. O modelo aqui replicado pertence à linhagem <strong>anterior</strong> a essa ruptura.</p>
+<p>Uma auditoria item a item contra a especificação vigente (boxe de junho de 2024):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Cobertura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parâmetros do modelo agregado</td>
+<td>~40–45%</td>
+</tr>
+<tr class="even">
+<td>Sistema completo (agregado + desagregado)</td>
+<td>~25–30%</td>
+</tr>
+<tr class="odd">
+<td><strong>Arquitetura econométrica</strong></td>
+<td><strong>0%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A última linha é a que importa. Não estamos a alguns ajustes do modelo vigente — estamos do outro lado de uma mudança de paradigma. As três maiores lacunas, em ordem de impacto: o bloco de variáveis latentes, as expectativas consistentes com o modelo, e as curvas de Phillips setoriais.</p>
+<hr>
+</section>
+<section id="o-servidor-mcp" class="level2">
+<h2 class="anchored" data-anchor-id="o-servidor-mcp">O servidor MCP</h2>
+<p>O motor do modelo está exposto como <strong>servidor MCP</strong> — o padrão aberto que permite a um assistente de IA chamar ferramentas externas. Na prática: você conversa com o Claude, informa as premissas, e ele devolve a projeção e o <strong>gráfico pronto</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Ferramenta</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mpp_projetar</code></td>
+<td>Roda o modelo sob as premissas; devolve a tabela trimestral</td>
+</tr>
+<tr class="even">
+<td><code>mpp_grafico</code></td>
+<td>Gera o PNG (linha ou leque de incerteza)</td>
+</tr>
+<tr class="odd">
+<td><code>mpp_cenarios</code></td>
+<td>Compara dois conjuntos de premissas lado a lado</td>
+</tr>
+<tr class="even">
+<td><code>mpp_info</code></td>
+<td>Explica o modelo, as premissas e as limitações</td>
+</tr>
+</tbody>
+</table>
+<p>Dez premissas são aceitas — <code>selic</code>, <code>cambio</code>, <code>petroleo</code>, <code>inflacao_eua</code>, <code>fed_funds</code>, <code>cds</code>, <code>juro_neutro</code>, <code>expectativa_longo_prazo</code>, <code>cadeias_suprimento</code>, <code>el_nino</code> —, cada uma como número único (constante) ou lista (um valor por trimestre). O que não for informado segue o cenário de referência.</p>
+<section id="o-detalhe-que-muda-a-leitura" class="level3">
+<h3 class="anchored" data-anchor-id="o-detalhe-que-muda-a-leitura">O detalhe que muda a leitura</h3>
+<p><strong>Selic e câmbio são endógenos.</strong> Sem premissa, o modelo os projeta pela regra de Taylor e pela paridade de juros: eles aparecem como <em>resultado</em>. Informá-los <strong>suspende</strong> essas equações — o que sai é um cenário condicional, não uma previsão do modelo. O servidor avisa disso sozinho.</p>
+</section>
+<section id="como-roda" class="level3">
+<h3 class="anchored" data-anchor-id="como-roda">Como roda</h3>
+<p>O modelo é resolvido <strong>dentro do Worker</strong>. Os coeficientes vêm da estimação em Python, exportados como snapshot; o solver foi reescrito em TypeScript e <strong>validado contra o Python com erro máximo de 5×10⁻⁵</strong>. O gráfico é montado em SVG e rasterizado por <code>resvg</code> compilado em WebAssembly.</p>
+<p>Uma nota de implementação que custou tempo: importar o WASM no topo do módulo estoura o limite de inicialização do Worker e derruba o Durable Object. A solução é carregamento sob demanda — o WASM só entra quando alguém pede um gráfico.</p>
+<hr>
+</section>
+</section>
+<section id="arquitetura" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura">Arquitetura</h2>
+<pre><code>src/data/            coleta das fontes externas e construção da base
+src/estimation/      as sete equações, com as restrições não lineares
+src/models/          sistema completo: solução, estocástica, choques
+src/visualization/   Tabela 2.2.1, Gráfico 2.2.9, IRFs, peças de divulgação
+mcp/                 servidor MCP em Cloudflare Workers
+paper/               paper Quarto reprodutível (21 páginas)
+docs/                especificação, versões, auditoria de lacunas</code></pre>
+<p>Três das sete equações têm coeficientes <strong>restritos</strong>, escritos no EViews como expressões dos próprios parâmetros — por exemplo, o multiplicador <span class="math inline">\((1 - 4c_1 - 4c_2)\)</span> da inércia na curva de Phillips, que impõe a verticalidade de longo prazo. Isso impede o uso direto de mínimos quadrados; a solução foi uma formulação geral em que um <em>offset</em> absorve a parte não paramétrica da restrição.</p>
+</section>
+<section id="como-atualizar" class="level2">
+<h2 class="anchored" data-anchor-id="como-atualizar">Como atualizar</h2>
+<p>O ciclo é automatizado e leva três comandos:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/data/fetch_current.py          <span class="co"># coleta das fontes externas</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/data/build_current_dataset.py  <span class="co"># reconstrói a base de estimação</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/data/export_workbook.py        <span class="co"># regera a planilha .xlsx</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>O modelo se ajusta sozinho ao novo fim de amostra.</p>
+<hr>
+</section>
+<section id="reprodutibilidade" class="level2">
+<h2 class="anchored" data-anchor-id="reprodutibilidade">Reprodutibilidade</h2>
+<p>Nenhum número do paper é digitado à mão: todos vêm de um objeto de artefatos gerado pelos módulos de <code>src/</code>. As estimativas de referência ficam versionadas como JSON, permitindo detectar alterações não intencionais de comportamento entre execuções.</p>
+<p>A planilha com toda a base de estimação — 4 abas, incluindo dicionário de dados com 52 variáveis e suas fontes — acompanha o projeto.</p>
+<hr>
+</section>
+<section id="próximos-passos" class="level2">
+<h2 class="anchored" data-anchor-id="próximos-passos">Próximos passos</h2>
+<p>A fronteira é o <strong>bloco de variáveis latentes</strong>: escrever o sistema em espaço de estados e estimar o hiato do produto como ciclo comum a quatro observáveis (PIB, Nuci, desocupação e Caged), por filtro de Kalman. É o que separa a linhagem replicada da linhagem vigente — e é também o pré-requisito das outras duas lacunas maiores.</p>
+<p>Em breve, um curso novo mostrando essa reconstrução por dentro.</p>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
