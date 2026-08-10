@@ -1,5 +1,20 @@
 [
   {
+    "listing": "/projetos/index.html",
+    "items": [
+      "/projetos/nucleos-mcp.html",
+      "/projetos/taylor-sentimento.html",
+      "/projetos/copom-rag-service.html",
+      "/projetos/projeto-boletim-focus.html",
+      "/projetos/previsao-macro.html",
+      "/projetos/modelagem-corretora-bolsa-valores.html",
+      "/projetos/sentimento-copom.html",
+      "/projetos/metodologia.html",
+      "/projetos/newsletter-digest-bot.html",
+      "/projetos/roi-diagnostico.html"
+    ]
+  },
+  {
     "listing": "/research/index.html",
     "items": [
       "/research/previsao-macro.html",
@@ -13,23 +28,6 @@
       "/teaching/imersao-claude-code.html",
       "/teaching/workflow-portfolio.html",
       "/teaching/transformers-llms.html"
-    ]
-  },
-  {
-    "listing": "/projetos/index.html",
-    "items": [
-      "/projetos/mpp-bcb.html",
-      "/projetos/mpp-mcp-tutorial.html",
-      "/projetos/nucleos-mcp.html",
-      "/projetos/taylor-sentimento.html",
-      "/projetos/copom-rag-service.html",
-      "/projetos/projeto-boletim-focus.html",
-      "/projetos/previsao-macro.html",
-      "/projetos/modelagem-corretora-bolsa-valores.html",
-      "/projetos/sentimento-copom.html",
-      "/projetos/metodologia.html",
-      "/projetos/newsletter-digest-bot.html",
-      "/projetos/roi-diagnostico.html"
     ]
   }
 ]
