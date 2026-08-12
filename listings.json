@@ -1,5 +1,12 @@
 [
   {
+    "listing": "/research/index.html",
+    "items": [
+      "/research/previsao-macro.html",
+      "/research/sentimento-copom.html"
+    ]
+  },
+  {
     "listing": "/teaching/index.html",
     "items": [
       "/teaching/ai-applications.html",
@@ -9,15 +16,9 @@
     ]
   },
   {
-    "listing": "/research/index.html",
-    "items": [
-      "/research/previsao-macro.html",
-      "/research/sentimento-copom.html"
-    ]
-  },
-  {
     "listing": "/projetos/index.html",
     "items": [
+      "/projetos/sintese-cartas-gestoras.html",
       "/projetos/mpp-bcb.html",
       "/projetos/nucleos-mcp.html",
       "/projetos/taylor-sentimento.html",

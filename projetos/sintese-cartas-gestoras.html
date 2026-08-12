@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-08-12">
+<meta name="description" content="Pipeline incremental que monitora 12 gestoras brasileiras, extrai novas cartas em cinco arquiteturas web, compara teses e riscos com Claude e entrega uma síntese semanal em PDF pelo WhatsApp.">
 
-<title>Pesquisas – Portfólio do VW</title>
+<title>Síntese das Cartas das Gestoras — Engenharia de Dados + IA no WhatsApp – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,6 +28,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -37,8 +74,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/profile.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -80,76 +115,23 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Pesquisas – Portfólio do VW">
-<meta property="og:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
+<meta property="og:title" content="Síntese das Cartas das Gestoras — Engenharia de Dados + IA no WhatsApp – Portfólio do VW">
+<meta property="og:description" content="Pipeline incremental que monitora 12 gestoras brasileiras, extrai novas cartas em cinco arquiteturas web, compara teses e riscos com Claude e entrega uma síntese semanal em PDF pelo WhatsApp.">
+<meta property="og:image" content="https://vitorwilher.github.io/projetos/sintese-cartas-gestoras-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="2371">
-<meta property="og:image:width" content="3567">
-<meta name="twitter:title" content="Pesquisas – Portfólio do VW">
-<meta name="twitter:image" content="https://vitorwilher.github.io/research/previsao_macro_heatmap.png">
-<meta name="twitter:image-height" content="2371">
-<meta name="twitter:image-width" content="3567">
+<meta property="og:image:height" content="1350">
+<meta property="og:image:width" content="1080">
+<meta name="twitter:title" content="Síntese das Cartas das Gestoras — Engenharia de Dados + IA no WhatsApp – Portfólio do VW">
+<meta name="twitter:description" content="Pipeline incremental que monitora 12 gestoras brasileiras, extrai novas cartas em cinco arquiteturas web, compara teses e riscos com Claude e entrega uma síntese semanal em PDF pelo WhatsApp.">
+<meta name="twitter:image" content="https://vitorwilher.github.io/projetos/sintese-cartas-gestoras-capa.png">
+<meta name="twitter:image-height" content="1350">
+<meta name="twitter:image-width" content="1080">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -349,7 +331,7 @@ window.Quarto = {
 <span class="menu-text">Cursos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../research/index.html" aria-current="page"> 
+    <a class="nav-link" href="../research/index.html"> 
 <span class="menu-text">Pesquisas</span></a>
   </li>  
   <li class="nav-item">
@@ -389,26 +371,59 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw==">Análise de Texto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V29ya2luZyUyMFBhcGVy">Working Paper <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#visão-geral" id="toc-visão-geral" class="nav-link active" data-scroll-target="#visão-geral">Visão geral</a></li>
+  <li><a href="#o-problema-de-engenharia" id="toc-o-problema-de-engenharia" class="nav-link" data-scroll-target="#o-problema-de-engenharia">O problema de engenharia</a></li>
+  <li><a href="#arquitetura" id="toc-arquitetura" class="nav-link" data-scroll-target="#arquitetura">Arquitetura</a></li>
+  <li><a href="#decisões-técnicas-centrais" id="toc-decisões-técnicas-centrais" class="nav-link" data-scroll-target="#decisões-técnicas-centrais">Decisões técnicas centrais</a></li>
+  <li><a href="#o-que-a-síntese-entrega" id="toc-o-que-a-síntese-entrega" class="nav-link" data-scroll-target="#o-que-a-síntese-entrega">O que a síntese entrega</a></li>
+  <li><a href="#operação-semanal" id="toc-operação-semanal" class="nav-link" data-scroll-target="#operação-semanal">Operação semanal</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pesquisas</h1>
+<h1 class="title">Síntese das Cartas das Gestoras — Engenharia de Dados + IA no WhatsApp</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">Engenharia de Dados</div>
+    <div class="quarto-category">Claude API</div>
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">GitHub Actions</div>
+    <div class="quarto-category">Meta Graph API</div>
+    <div class="quarto-category">WhatsApp</div>
+    <div class="quarto-category">Automação</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Pipeline incremental que monitora 12 gestoras brasileiras, extrai novas cartas em cinco arquiteturas web, compara teses e riscos com Claude e entrega uma síntese semanal em PDF pelo WhatsApp.
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 12, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -418,123 +433,128 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDRm91bmRhdGlvbiUyME1vZGVscyUyQ1RpbWVHUFQlMkNDaHJvbm9zJTJDc2Npa2l0LWxlYXJuJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNXb3JraW5nJTIwUGFwZXIlMkNBZ2VudGVzJTIwZGUlMjBJQQ==" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1786542822702" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1459">
-<div class="thumbnail"><a href="../research/previsao-macro.html" class="no-external">
-
-<img loading="lazy" src="../research/previsao_macro_heatmap.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/previsao-macro.html" class="no-external">Pipeline de Previsão Macro com Agentes de IA</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/previsao-macro.html" class="no-external">Arquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic</a>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="sintese-cartas-gestoras-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>A engenharia por trás da síntese das gestoras</figcaption>
+</figure>
 </div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">Quarto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Rm91bmRhdGlvbiUyME1vZGVscw=='); return false;">Foundation Models</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZUdQVA=='); return false;">TimeGPT</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q2hyb25vcw=='); return false;">Chronos</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2Npa2l0LWxlYXJu'); return false;">scikit-learn</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdHNtb2RlbHM='); return false;">statsmodels</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V2Fsay1mb3J3YXJk'); return false;">Walk-forward</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGllYm9sZC1NYXJpYW5v'); return false;">Diebold-Mariano</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWluY2VyLVphcm5vd2l0eg=='); return false;">Mincer-Zarnowitz</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QkNC'); return false;">BCB</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('SUJHRQ=='); return false;">IBGE</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QWdlbnRlcyUyMGRlJTIwSUE='); return false;">Agentes de IA</div>
+<section id="visão-geral" class="level2">
+<h2 class="anchored" data-anchor-id="visão-geral">Visão geral</h2>
+<p>Este projeto transforma um processo editorial trabalhoso — acompanhar as cartas das principais gestoras brasileiras e comparar suas leituras de cenário — em um pipeline semanal, incremental e rastreável.</p>
+<p>O sistema monitora <strong>12 gestoras</strong>, detecta somente as publicações novas desde a última execução, extrai documentos em PDF ou HTML, normaliza o corpus e usa o Claude para produzir uma leitura comparativa de <strong>teses, mudanças de posicionamento e riscos</strong>. O resultado é renderizado em PDF com Quarto e enviado automaticamente pelo WhatsApp.</p>
+<blockquote class="blockquote">
+<p><strong>Repositório:</strong> <a href="https://github.com/vitorwilher/cartas-de-gestoras">github.com/vitorwilher/cartas-de-gestoras</a> · <strong>Síntese de exemplo:</strong> <a href="https://github.com/vitorwilher/cartas-de-gestoras/blob/main/digests/resumo/resumo-2026-08-11.pdf">PDF de 11 de agosto de 2026</a></p>
+</blockquote>
+</section>
+<section id="o-problema-de-engenharia" class="level2">
+<h2 class="anchored" data-anchor-id="o-problema-de-engenharia">O problema de engenharia</h2>
+<p>As fontes não oferecem uma interface uniforme. Entre as 12 gestoras há APIs REST do WordPress, feeds RSS, páginas HTML, endpoints AJAX, cartas inline e PDFs com URLs pouco previsíveis. A periodicidade também varia: dez fontes são mensais e duas publicam ensaios em cadência irregular; algumas mantêm mais de uma série de cartas simultaneamente.</p>
+<p>Por isso, o pipeline não depende de uma “data do mês”. Ele mantém um marcador de estado por gestora e por série, descobre o delta real e trata a ausência de novas cartas como uma saída válida. Uma mudança de layout ou indisponibilidade em uma fonte é isolada e não interrompe as demais.</p>
+</section>
+<section id="arquitetura" class="level2">
+<h2 class="anchored" data-anchor-id="arquitetura">Arquitetura</h2>
+<div class="cell" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  GH["GitHub Actions&lt;br/&gt;terça · 07:00 BRT"] --&gt; FONTES["12 gestoras"]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  FONTES --&gt; REST["WordPress REST"]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  FONTES --&gt; RSS["RSS"]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  FONTES --&gt; HTML["HTML"]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  FONTES --&gt; AJAX["AJAX"]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  FONTES --&gt; URL["URL previsível"]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  REST --&gt; DELTA{"Carta nova?"}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  RSS --&gt; DELTA</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  HTML --&gt; DELTA</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  AJAX --&gt; DELTA</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  URL --&gt; DELTA</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  DELTA --&gt;|sim| EXT["Extração PDF + HTML"]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  DELTA --&gt;|não| SIL["Silêncio"]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  EXT --&gt; NORM["Normalização"]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  NORM --&gt; LLM["Claude&lt;br/&gt;síntese comparativa"]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  LLM --&gt; PDF["Quarto + XeLaTeX&lt;br/&gt;PDF"]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  PDF --&gt; WA["WhatsApp Cloud API&lt;br/&gt;template UTILITY"]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  PDF --&gt; STATE["Commit do digest&lt;br/&gt;+ novo estado"]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
 
 </div>
-<div class="delink listing-description"><a href="../research/previsao-macro.html" class="no-external">
-<p>Working paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/previsao-macro.html" class="no-external">
-<div class="listing-date">
-May 3, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTExNcyUyQ05MUCUyQ0FuJUMzJUExbGlzZSUyMGRlJTIwVGV4dG8lMkNNYWNyb2Vjb25vbWlhJTJDV29ya2luZyUyMFBhcGVy" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1786542822709" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1346">
-<div class="thumbnail"><a href="../research/sentimento-copom.html" class="no-external">
-
-<img loading="lazy" src="../research/sentimento_copom_indice.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../research/sentimento-copom.html" class="no-external">Mesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../research/sentimento-copom.html" class="no-external">Comparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini</a>
-</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh'); return false;">Política Monetária</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFuY28lMjBDZW50cmFs'); return false;">Banco Central</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">NLP</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QW4lQzMlQTFsaXNlJTIwZGUlMjBUZXh0bw=='); return false;">Análise de Texto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('V29ya2luZyUyMFBhcGVy'); return false;">Working Paper</div>
-
-</div>
-<div class="delink listing-description"><a href="../research/sentimento-copom.html" class="no-external">
-<p>Working paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../research/sentimento-copom.html" class="no-external">
-<div class="listing-date">
-Apr 26, 2026
-</div>
-<div class="listing-author">
-Vitor Wilher, Luiz Henrique Barbosa Filho
-</div>
-</a>
+<p></p></figure><p></p>
 </div>
 </div>
 </div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</section>
+<section id="decisões-técnicas-centrais" class="level2">
+<h2 class="anchored" data-anchor-id="decisões-técnicas-centrais">Decisões técnicas centrais</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Implementação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Orquestração</td>
+<td>GitHub Actions, cron semanal e disparo manual</td>
+</tr>
+<tr class="even">
+<td>Coleta</td>
+<td><code>httpx</code> + BeautifulSoup, com cinco estratégias específicas</td>
+</tr>
+<tr class="odd">
+<td>Estado</td>
+<td><code>gestoras.yml</code>, versionado por fonte e série</td>
+</tr>
+<tr class="even">
+<td>Extração</td>
+<td><code>pdfplumber</code> para PDF e parser HTML para cartas inline</td>
+</tr>
+<tr class="odd">
+<td>Síntese</td>
+<td>Anthropic Claude com streaming e <em>adaptive thinking</em></td>
+</tr>
+<tr class="even">
+<td>Documento</td>
+<td>Quarto + XeLaTeX, com identidade da Análise Macro</td>
+</tr>
+<tr class="odd">
+<td>Entrega</td>
+<td>WhatsApp Cloud API, documento no cabeçalho de template <code>UTILITY</code></td>
+</tr>
+<tr class="even">
+<td>Qualidade</td>
+<td>testes unitários e isolamento de falhas por gestora</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="o-que-a-síntese-entrega" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-a-síntese-entrega">O que a síntese entrega</h2>
+<p>Em vez de apenas resumir cada documento, a análise preserva a fonte como unidade de leitura e termina com uma comparação transversal. Isso permite responder:</p>
+<ul>
+<li>qual é a tese central de cada gestora;</li>
+<li>o que mudou em relação à carta anterior;</li>
+<li>quais riscos cada casa considera mais relevantes;</li>
+<li>onde há convergência de cenário;</li>
+<li>onde o consenso se rompe.</li>
+</ul>
+<p>Os links das cartas originais permanecem no documento, mantendo a análise auditável. Os PDFs brutos não são versionados: pertencem às respectivas gestoras.</p>
+</section>
+<section id="operação-semanal" class="level2">
+<h2 class="anchored" data-anchor-id="operação-semanal">Operação semanal</h2>
+<p>Toda terça-feira, às 07:00 BRT, a automação testa o código, consulta as fontes e processa somente o delta. Havendo novidades, gera o PDF, envia pelo WhatsApp com um resumo específico da edição e persiste o novo estado no repositório. Sem carta nova, não produz ruído nem mensagem vazia.</p>
+<p>Esse desenho combina coleta heterogênea, processamento documental, LLM, geração de relatório e mensageria em um fluxo observável e reproduzível — a parte de “engenharia” que fica invisível quando se olha apenas para o PDF final.</p>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
