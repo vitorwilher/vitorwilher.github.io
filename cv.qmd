@@ -28,7 +28,7 @@ image: images/minhafoto.jpg
 
 ## Resumo das Habilidades
 
-Engenheiro de IA com formação sólida em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — refinamento técnico, decisões de arquitetura, implementação, *deploy* e sustentação em produção. Constrói **agentes de IA em operação contínua**: *tool use*/**function calling**, *structured outputs* com **JSON Schema**, RAG híbrido (BM25 + denso, fusão RRF e *reranking*), integração com **APIs REST** e sistemas de terceiros, e entrega em canais reais — incluindo **WhatsApp Business (Meta Cloud API)** com *templates* aprovados e **TTS**. Trata qualidade como engenharia: **guardrails** e *gates* ***human-in-the-loop*** contra alucinação, *eval harness* com *golden set* e **LLM-as-judge** que **reprova regressão no CI**, e **observabilidade de custo por token, latência e qualidade por execução**. Opera **multi-provedor** (Anthropic, OpenAI, Google; Amazon Bedrock) escolhendo modelo por qualidade × custo × latência, e publica **servidores MCP (Model Context Protocol)**. Traduz necessidade de negócio em solução técnica e comunica com públicos executivos — é professor de IA Generativa em MBA. Bacharel e Mestre em Economia (UFF), Especialista em Análise de Dados e IA, Candidato ao PhD em Economia pela EPGE/FGV. Líder Técnico de IA Generativa da Análise Macro e Especialista em Tecnologia e Dados do SENAC Rio.
+Engenheiro de IA com formação sólida em Economia e Estatística, atuando no ciclo completo de produtos de IA Generativa — refinamento técnico, decisões de arquitetura, implementação, *deploy* e sustentação em produção. Constrói **agentes de IA em operação contínua**: *tool use*/**function calling**, *structured outputs* com **JSON Schema**, RAG híbrido (BM25 + denso, fusão RRF e *reranking*), integração com **APIs REST** e sistemas de terceiros, e entrega em canais reais — incluindo **WhatsApp Business (Meta Cloud API)** com *templates* aprovados e **TTS**. Trata qualidade como engenharia: **guardrails** e *gates* ***human-in-the-loop*** contra alucinação, *eval harness* com *golden set* e **LLM-as-judge** que **reprova regressão no CI**, e **observabilidade de custo por token, latência e qualidade por execução**. Opera **multi-provedor** (Anthropic, OpenAI, Google; Amazon Bedrock) escolhendo modelo por qualidade × custo × latência, e publica **servidores MCP (Model Context Protocol)**. Traduz necessidade de negócio em solução técnica e comunica com públicos executivos — é professor de IA Generativa em MBA. Bacharel e Mestre em Economia (UFF), Especialista em Análise de Dados e IA, Candidato ao PhD em Economia pela EPGE/FGV. Líder Técnico de IA Generativa da Análise Macro e Professor de IA Generativa na Impacta Tecnologia.
 
 **Hard Skills**: **Python** (principal, orientação a objetos e boas práticas de engenharia), R, SQL, TypeScript, **FastAPI**, **Docker**, Git, **CI/CD (GitHub Actions, GitLab CI)**, testes automatizados e de integração (**pytest**), Clean Code e padrões de projeto; LLMs e API programática (**Anthropic Claude, OpenAI, Google Gemini, Amazon Bedrock**), **agentes e orquestração** (LangChain, Claude Agent SDK, grafos de estado com roteamento dinâmico), ***function calling*/*tool use***, ***structured outputs*/JSON Schema** e validação de respostas, ***prompt caching***, **Prompt e Context Engineering**, fluxos ***human-in-the-loop***; **RAG** e *vector databases* (ChromaDB, pgvector, BM25/embeddings, RRF, *reranking*); **guardrails**, mitigação de alucinação e segurança aplicada a LLMs (*text-to-SQL* seguro, gestão de *secrets*, credenciais de escopo mínimo); **avaliação e observabilidade de LLMs** (*golden set*, LLM-as-judge, *self-consistency*, LangSmith, QA-Eval, *gate* de CI, custo/latência/tokens por *request*); **MCP (Model Context Protocol)** — construção e publicação de servidores; ***fine-tuning* (LoRA/QLoRA)**, NLP, Machine Learning (Scikit-learn, Pandas, NumPy), Deep Learning, ***foundation models* de séries temporais** (Chronos, TimeGPT), Econometria e Inferência Estatística (OLS/HAC, GMM, VAR/VECM, filtro de Kalman, bootstrap); **Cloud** (AWS — EC2, Lambda, S3, SageMaker AI, DynamoDB, Aurora, Redshift, Bedrock; Google Cloud Storage; Cloudflare Workers), **PostgreSQL**, DuckDB, Parquet, orquestração de pipelines e filas.
 
@@ -51,6 +51,10 @@ Engenheiro de IA com formação sólida em Economia e Estatística, atuando no c
 * Trabalho de Conclusão de Curso sobre o **ROI Diagnóstico** — plataforma de inteligência comercial que integra seis APIs de negócio e camadas de IA Generativa para diagnóstico e decisão em um negócio digital real;
 * O sistema já opera em produção: pipeline diário orquestrado, *data warehouse* analítico em Parquet/DuckDB, agentes de monitoramento que sintetizam desempenho de campanhas com LLM e entregam relatórios automáticos via **WhatsApp Business API**, além de módulos de diagnóstico financeiro (DRE e fluxo de caixa) sobre a operação.
 
+**Graduação em Engenharia de Software** [**Instituto Infnet** · 2026-2030]{.meta}
+
+* Ênfase em Inteligência Artificial.
+
 **Mestrado em Economia** [**UFF** · 2013-2015]{.meta}
 
 * Atividades e grupos: Coordenador do Grupo de Estudos sobre Conjuntura Econômica (GECE/UFF);
@@ -70,17 +74,17 @@ Engenheiro de IA com formação sólida em Economia e Estatística, atuando no c
 
 ## Experiência Profissional
 
-**Especialista em Tecnologia e Dados** [**SENAC RJ** · 2026-Atual]{.meta}
-
-* Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o responsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro;
-* Concepção e desenvolvimento do **Agente de Validação Pedagógica de materiais do ETIM**: pipeline agêntico em **Python + API Anthropic (Claude)** com *tool use* (**web search** para checagem de fontes), *structured outputs* (JSON schema), *prompt caching* e *system prompt* versionado, que valida e reescreve materiais didáticos preservando a autoria do conteudista — com **gate *human-in-the-loop*** que impede que conteúdo autorado pela IA vire entrega sem revisão do especialista;
-* ***Eval harness*** do agente com *golden set* (8 pares "insumo → validação humana"), rubrica multicritério por **LLM-as-judge**, controle negativo de preservação e relatório por critério — **evals e testes de regressão** como critério de aceite de cada mudança de prompt, com observabilidade de custo, tokens e latência por execução.
-
-**Professor de IA Generativa** [**Impacta Tecnologia** · Mar 2026-Jul 2026]{.meta}
+**Professor de IA Generativa** [**Impacta Tecnologia** · Mar 2026-Atual]{.meta}
 
 * **Transformers e LLMs** (Master em IA): arquitetura Transformer e *self-attention*, pré-treino e RLHF, multimodalidade, e a cadeia de valor econômica dos LLMs — do modelo como serviço à decisão de *build vs. buy*;
 * **AI Applications** (MBA em IA): disciplina de fechamento do programa, conduzida como laboratório aplicado — design de soluções de IA orientadas a valor, integração de **ML + LLMs + dados + automação**, prototipagem e **defesa da solução para *stakeholders* executivos**, com entrega final avaliada como produto de ponta a ponta;
 * Tradução de arquitetura técnica de IA para público executivo — competência aplicada diretamente em decisões de custo, risco e viabilidade de soluções.
+
+**Especialista em Tecnologia e Dados** [**SENAC RJ** · Mai 2026-Ago 2026]{.meta}
+
+* Especialista em Dados e IA Generativa com atuação na Célula de Inovação do SENAC, sendo o responsável pelo portfólio de Cursos e Projetos em engenharia, ciência, análise de dados, IA Generativa e Cloud para todo o Estado do Rio de Janeiro;
+* Concepção e desenvolvimento do **Agente de Validação Pedagógica de materiais do ETIM**: pipeline agêntico em **Python + API Anthropic (Claude)** com *tool use* (**web search** para checagem de fontes), *structured outputs* (JSON schema), *prompt caching* e *system prompt* versionado, que valida e reescreve materiais didáticos preservando a autoria do conteudista — com **gate *human-in-the-loop*** que impede que conteúdo autorado pela IA vire entrega sem revisão do especialista;
+* ***Eval harness*** do agente com *golden set* (8 pares "insumo → validação humana"), rubrica multicritério por **LLM-as-judge**, controle negativo de preservação e relatório por critério — **evals e testes de regressão** como critério de aceite de cada mudança de prompt, com observabilidade de custo, tokens e latência por execução.
 
 **Líder Técnico de IA Generativa** [**Análise Macro** · 2023-Atual]{.meta}
 
