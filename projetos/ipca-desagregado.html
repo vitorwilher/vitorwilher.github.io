@@ -475,7 +475,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td><strong>Avaliação</strong></td>
-<td>Walk-forward com janela expansiva, alvos de jan/2024 a set/2026; Diebold-Mariano com correção HLN contra o Focus; IPCA mensal, em 12 meses e do ano-calendário</td>
+<td>Walk-forward com janela expansiva, alvos de jan/2024 a set/2026; Diebold-Mariano com correção HLN contra o Focus</td>
 </tr>
 <tr class="even">
 <td><strong>Incerteza</strong></td>
@@ -488,7 +488,6 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="o-que-se-encontrou">O que se encontrou</h2>
 <ul>
 <li><strong>IPCA do mês:</strong> o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença estatisticamente significativa.</li>
-<li><strong>IPCA em 12 meses:</strong> previsto um ano antes, o ensemble errou menos que o Focus 12 meses no período, também sem significância estatística; no ano-calendário, ganhou em 2024 e perdeu em 2025.</li>
 <li><strong>Onde o erro sobra:</strong> poucos preços explicam a maior parte — passagem aérea, gasolina e alimentos in natura no mês seguinte; energia elétrica a 3 meses. De 4 meses em diante, os preços administrados respondem por cerca de 60% do erro.</li>
 <li><strong>Incerteza:</strong> os intervalos construídos com os erros passados ficam perto da cobertura nominal e superam as distribuições nativas dos modelos, que são largas demais. A correção de viés estimada em tempo real piorou a previsão.</li>
 </ul>
@@ -496,7 +495,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="previsão-atual-e-operação" class="level2">
 <h2 class="anchored" data-anchor-id="previsão-atual-e-operação">Previsão atual e operação</h2>
 <p>A cada divulgação do IPCA, um único script refaz a coleta, roda os nove modelos só na origem nova, aplica os ajustes, recalcula o ensemble e os intervalos, atualiza o paper (com todos os números gerados a partir das saídas) e publica o dashboard. Cada rodada é gravada num registro que só recebe acréscimos: o histórico das previsões feitas em tempo real, separado do backtest.</p>
-<p>O dashboard tem menus para a previsão atual, o erro mês a mês contra o Focus, o IPCA em 12 meses e do ano, a calibração da incerteza, a decomposição do erro por subitem e segmento, o registro das rodadas e a metodologia.</p>
+<p>O dashboard tem menus para a previsão atual (o IPCA do próximo mês e a trajetória do IPCA em 12 meses), o desempenho contra o Focus, a calibração da incerteza, a decomposição do erro por subitem e segmento, o registro das rodadas e a metodologia.</p>
 </section>
 <section id="ferramentas" class="level2">
 <h2 class="anchored" data-anchor-id="ferramentas">Ferramentas</h2>
