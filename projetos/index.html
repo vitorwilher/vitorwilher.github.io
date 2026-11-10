@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -41,18 +41,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-447e42e69aaa9833c0ba1b986f430b20.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-3e9b1289f5f353c49b617ce48ad2bc38.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-580205f46218c55e9753e010642e58aa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-3e9b1289f5f353c49b617ce48ad2bc38.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8d3ad9c781c51ccd60b292c95058b2c2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-9f42d590332006069f96efcb7a01c1c5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8d3ad9c781c51ccd60b292c95058b2c2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,12 +103,6 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
   </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
@@ -142,18 +137,16 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Projetos – Portfólio do VW">
-<meta property="og:image" content="https://vitorwilher.github.io/projetos/sintese-cartas-gestoras-capa.png">
+<meta property="og:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="1350">
-<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1800">
+<meta property="og:image:width" content="2800">
 <meta name="twitter:title" content="Projetos – Portfólio do VW">
-<meta name="twitter:image" content="https://vitorwilher.github.io/projetos/sintese-cartas-gestoras-capa.png">
-<meta name="twitter:image-height" content="1350">
-<meta name="twitter:image-width" content="1080">
+<meta name="twitter:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -176,6 +169,7 @@ window.Quarto = {
       for (let i=0; i < toggles.length; i++) {
         const toggle = toggles[i];
         if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
           if (alternate) {
             toggle.classList.add("alternate");
           } else {
@@ -205,13 +199,19 @@ window.Quarto = {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -305,6 +305,7 @@ window.Quarto = {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -319,15 +320,14 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Portfólio do VW</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -383,8 +383,9 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -394,9 +395,9 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div><div class="category" data-category="QWdlbnRl">Agente <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(4)</span></div><div class="category" data-category="QW50aHJvcGljJTIwQ2xhdWRl">Anthropic Claude <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QXV0b21hJUMzJUE3JUMzJUEzbw==">Automação <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(5)</span></div><div class="category" data-category="QmFuY28lMjBkZSUyMERhZG9z">Banco de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Qk0yNQ==">BM25 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sZXRpbSUyMEZvY3Vz">Boletim Focus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sc2ElMjBkZSUyMFZhbG9yZXM=">Bolsa de Valores <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QyVDMyVBMm1iaW8=">Câmbio <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2VuJUMzJUExcmlvcw==">Cenários <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb21h">Chroma <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q0k=">CI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQVBJ">Claude API <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q2xhdWRlJTIwQ29kZQ==">Claude Code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q2xvdWRmbGFyZSUyMFdvcmtlcnM=">Cloudflare Workers <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q1JN">CRM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RERM">DDL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RG9ja2Vy">Docker <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RHVja0RC">DuckDB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RS1tYWls">E-mail <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5nZW5oYXJpYSUyMGRlJTIwRGFkb3M=">Engenharia de Dados <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RmFzdEFQSQ==">FastAPI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmlsdHJvJTIwZGUlMjBLYWxtYW4=">Filtro de Kalman <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0NT">GCS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2l0SHViJTIwQWN0aW9ucw==">GitHub Actions <span class="quarto-category-count">(6)</span></div><div class="category" data-category="R01N">GMM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R29vZ2xlJTIwR2VtaW5p">Google Gemini <span class="quarto-category-count">(2)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SU1BUA==">IMAP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SW5mbGElQzMlQTclQzMlQTNv">Inflação <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SVBDQQ==">IPCA <span class="quarto-category-count">(3)</span></div><div class="category" data-category="TGFuZ0NoYWlu">LangChain <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TGFuZ0dyYXBo">LangGraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(6)</span></div><div class="category" data-category="TExNLWFzLWp1ZGdl">LLM-as-judge <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(7)</span></div><div class="category" data-category="TWFya2V0aW5n">Marketing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TUNQ">MCP <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWV0YSUyMEdyYXBoJTIwQVBJ">Meta Graph API <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWwlMjBDb250ZXh0JTIwUHJvdG9jb2w=">Model Context Protocol <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwZGUlMjBEYWRvcw==">Modelagem de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwRVI=">Modelagem ER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxvJTIwU2VtaWVzdHJ1dHVyYWw=">Modelo Semiestrutural <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tml4dGxh">Nixtla <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TiVDMyVCQWNsZW9zJTIwZGUlMjBJbmZsYSVDMyVBNyVDMyVBM28=">Núcleos de Inflação <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T2JzZXJ2YWJpbGl0eQ==">Observability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T0xT">OLS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbkFJ">OpenAI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFjb3RlJTIwUg==">Pacote R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UElC">PIB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UEwlMkZwZ1NRTA==">PL/pgSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(5)</span></div><div class="category" data-category="UG9zdGdyZVNRTA==">PostgreSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHJvamUlQzMlQTclQzMlQTNv">Projeção <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHlkYW50aWM=">Pydantic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(10)</span></div><div class="category" data-category="cHl0aG9uLWJjYg==">python-bcb <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UkFH">RAG <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UmVncmElMjBkZSUyMFRheWxvcg==">Regra de Taylor <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVwcm9kdXRpYmlsaWRhZGU=">Reprodutibilidade <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVyYW5raW5n">Reranking <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Um91dGluZQ==">Routine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UlJG">RRF <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2ElQzMlQkFkZQ==">Saúde <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsZi1jb25zaXN0ZW5jeQ==">Self-consistency <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsaWM=">Selic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UyVDMyVBOXJpZXMlMjBUZW1wb3JhaXM=">Séries Temporais <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U0dT">SGS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2hpbnlhcHBzLmlv">shinyapps.io <span class="quarto-category-count">(2)</span></div><div class="category" data-category="U0lEUkE=">SIDRA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2tmb3JlY2FzdA==">skforecast <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U01UUA==">SMTP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1FM">SQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(3)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJpZ2dlcg==">Trigger <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHlwZVNjcmlwdA==">TypeScript <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VkFS">VAR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2hhdHNBcHA=">WhatsApp <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(13)</span></div><div class="category" data-category="QWdlbnRl">Agente <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QWdlbnRlcyUyMGRlJTIwSUE=">Agentes de IA <span class="quarto-category-count">(5)</span></div><div class="category" data-category="QW50aHJvcGljJTIwQ2xhdWRl">Anthropic Claude <span class="quarto-category-count">(2)</span></div><div class="category" data-category="QXV0b21hJUMzJUE3JUMzJUEzbw==">Automação <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QmFuY28lMjBDZW50cmFs">Banco Central <span class="quarto-category-count">(6)</span></div><div class="category" data-category="QmFuY28lMjBkZSUyMERhZG9z">Banco de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkNC">BCB <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Qk0yNQ==">BM25 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sZXRpbSUyMEZvY3Vz">Boletim Focus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qm9sc2ElMjBkZSUyMFZhbG9yZXM=">Bolsa de Valores <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QyVDMyVBMm1iaW8=">Câmbio <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2VuJUMzJUExcmlvcw==">Cenários <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb21h">Chroma <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hyb25vcw==">Chronos <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q0k=">CI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2xhdWRlJTIwQVBJ">Claude API <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q2xhdWRlJTIwQ29kZQ==">Claude Code <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Q2xvdWRmbGFyZSUyMFdvcmtlcnM=">Cloudflare Workers <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q1JN">CRM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q1JQUw==">CRPS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RERM">DDL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGllYm9sZC1NYXJpYW5v">Diebold-Mariano <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RG9ja2Vy">Docker <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RHVja0RC">DuckDB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RS1tYWls">E-mail <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW5nZW5oYXJpYSUyMGRlJTIwRGFkb3M=">Engenharia de Dados <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RmFzdEFQSQ==">FastAPI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmlsdHJvJTIwZGUlMjBLYWxtYW4=">Filtro de Kalman <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm9jdXM=">Focus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rm91bmRhdGlvbiUyME1vZGVscw==">Foundation Models <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R0NT">GCS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2l0SHViJTIwQWN0aW9ucw==">GitHub Actions <span class="quarto-category-count">(6)</span></div><div class="category" data-category="R01N">GMM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R29vZ2xlJTIwR2VtaW5p">Google Gemini <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R3Jhbml0ZQ==">Granite <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SUJHRQ==">IBGE <span class="quarto-category-count">(2)</span></div><div class="category" data-category="SU1BUA==">IMAP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SW5mbGElQzMlQTclQzMlQTNv">Inflação <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SVBDQQ==">IPCA <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TGFuZ0NoYWlu">LangChain <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TGFuZ0dyYXBo">LangGraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExN">LLM <span class="quarto-category-count">(6)</span></div><div class="category" data-category="TExNLWFzLWp1ZGdl">LLM-as-judge <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWFjcm9lY29ub21pYQ==">Macroeconomia <span class="quarto-category-count">(8)</span></div><div class="category" data-category="TWFya2V0aW5n">Marketing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TUNQ">MCP <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWV0YSUyMEdyYXBoJTIwQVBJ">Meta Graph API <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWluY2VyLVphcm5vd2l0eg==">Mincer-Zarnowitz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWwlMjBDb250ZXh0JTIwUHJvdG9jb2w=">Model Context Protocol <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwZGUlMjBEYWRvcw==">Modelagem de Dados <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxhZ2VtJTIwRVI=">Modelagem ER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9kZWxvJTIwU2VtaWVzdHJ1dHVyYWw=">Modelo Semiestrutural <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9pcmFp">Moirai <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tml4dGxh">Nixtla <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TiVDMyVCQWNsZW9zJTIwZGUlMjBJbmZsYSVDMyVBNyVDMyVBM28=">Núcleos de Inflação <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T2JzZXJ2YWJpbGl0eQ==">Observability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T0xT">OLS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbkFJ">OpenAI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFjb3RlJTIwUg==">Pacote R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UElC">PIB <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UEwlMkZwZ1NRTA==">PL/pgSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlh">Política Monetária <span class="quarto-category-count">(5)</span></div><div class="category" data-category="UG9zdGdyZVNRTA==">PostgreSQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHJvamUlQzMlQTclQzMlQTNv">Projeção <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHlkYW50aWM=">Pydantic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(11)</span></div><div class="category" data-category="cHl0aG9uLWJjYg==">python-bcb <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UkFH">RAG <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UmVncmElMjBkZSUyMFRheWxvcg==">Regra de Taylor <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVwcm9kdXRpYmlsaWRhZGU=">Reprodutibilidade <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVyYW5raW5n">Reranking <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Um91dGluZQ==">Routine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UlJG">RRF <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2ElQzMlQkFkZQ==">Saúde <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2Npa2l0LWxlYXJu">scikit-learn <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsZi1jb25zaXN0ZW5jeQ==">Self-consistency <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VsaWM=">Selic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UyVDMyVBOXJpZXMlMjBUZW1wb3JhaXM=">Séries Temporais <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U0dT">SGS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c2hpbnlhcHBzLmlv">shinyapps.io <span class="quarto-category-count">(3)</span></div><div class="category" data-category="U0lEUkE=">SIDRA <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2tmb3JlY2FzdA==">skforecast <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U01UUA==">SMTP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1FM">SQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdHNtb2RlbHM=">statsmodels <span class="quarto-category-count">(3)</span></div><div class="category" data-category="VGltZUdQVA==">TimeGPT <span class="quarto-category-count">(2)</span></div><div class="category" data-category="VGltZXNGTQ==">TimesFM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGlSZXg=">TiRex <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VG90bw==">Toto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHJpZ2dlcg==">Trigger <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHlwZVNjcmlwdA==">TypeScript <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VkFS">VAR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2Fsay1mb3J3YXJk">Walk-forward <span class="quarto-category-count">(2)</span></div><div class="category" data-category="V2hhdHNBcHA=">WhatsApp <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content column-page-left" id="quarto-document-content" tabindex="-1">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -449,8 +450,81 @@ window.Quarto = {
     </div>
 </div>
 <div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDRW5nZW5oYXJpYSUyMGRlJTIwRGFkb3MlMkNDbGF1ZGUlMjBBUEklMkNMTE0lMkNRdWFydG8lMkNHaXRIdWIlMjBBY3Rpb25zJTJDTWV0YSUyMEdyYXBoJTIwQVBJJTJDV2hhdHNBcHAlMkNBdXRvbWElQzMlQTclQzMlQTNv" data-listing-date-sort="1786492800000" data-listing-file-modified-sort="1790003835869" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="542">
-<a href="../projetos/sintese-cartas-gestoras.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDU2hpbnklMkNGb3VuZGF0aW9uJTIwTW9kZWxzJTJDQ2hyb25vcyUyQ1RpbWVzRk0lMkNUaVJleCUyQ01vaXJhaSUyQ1RvdG8lMkNHcmFuaXRlJTJDVGltZUdQVCUyQ1dhbGstZm9yd2FyZCUyQ0RpZWJvbGQtTWFyaWFubyUyQ0NSUFMlMkNJUENBJTJDRm9jdXMlMkNCYW5jbyUyMENlbnRyYWwlMkNJQkdFJTJDU0lEUkElMkNNYWNyb2Vjb25vbWlhJTJDUXVhcnRvJTJDc2hpbnlhcHBzLmlvJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNDbGF1ZGUlMjBDb2Rl" data-listing-date-sort="1794268800000" data-listing-file-modified-sort="1794347801416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="630">
+<a href="../projetos/ipca-desagregado.html" class="quarto-grid-link no-external-icon">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="../projetos/ipca-desagregado-capa.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil
+</h5>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U2hpbnk='); return false;">Shiny</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Rm91bmRhdGlvbiUyME1vZGVscw=='); return false;">Foundation Models</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q2hyb25vcw=='); return false;">Chronos</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGltZXNGTQ=='); return false;">TimesFM</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGlSZXg='); return false;">TiRex</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TW9pcmFp'); return false;">Moirai</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VG90bw=='); return false;">Toto</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('R3Jhbml0ZQ=='); return false;">Granite</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGltZUdQVA=='); return false;">TimeGPT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2Fsay1mb3J3YXJk'); return false;">Walk-forward</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('RGllYm9sZC1NYXJpYW5v'); return false;">Diebold-Mariano</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1JQUw=='); return false;">CRPS</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SVBDQQ=='); return false;">IPCA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Rm9jdXM='); return false;">Focus</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QmFuY28lMjBDZW50cmFs'); return false;">Banco Central</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SUJHRQ=='); return false;">IBGE</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U0lEUkE='); return false;">SIDRA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">Quarto</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2hpbnlhcHBzLmlv'); return false;">shinyapps.io</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QWdlbnRlcyUyMGRlJTIwSUE='); return false;">Agentes de IA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q2xhdWRlJTIwQ29kZQ=='); return false;">Claude Code</div>
+
+</div>
+<div class="card-text listing-description">
+<p>Nove modelos de fundação de séries temporais preveem, sem treino, os 377 subitens do IPCA; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP)…</p>
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+
+</div>
+<div class="listing-date">
+Nov 10, 2026
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="UHl0aG9uJTJDRW5nZW5oYXJpYSUyMGRlJTIwRGFkb3MlMkNDbGF1ZGUlMjBBUEklMkNMTE0lMkNRdWFydG8lMkNHaXRIdWIlMjBBY3Rpb25zJTJDTWV0YSUyMEdyYXBoJTIwQVBJJTJDV2hhdHNBcHAlMkNBdXRvbWElQzMlQTclQzMlQTNv" data-listing-date-sort="1786492800000" data-listing-file-modified-sort="1794347801422" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="542">
+<a href="../projetos/sintese-cartas-gestoras.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/sintese-cartas-gestoras-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -480,7 +554,7 @@ Síntese das Cartas das Gestoras — Engenharia de Dados + IA no WhatsApp
 <div class="listing-category" onclick="window.quartoListingCategory('QXV0b21hJUMzJUE3JUMzJUEzbw=='); return false;">Automação</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Pipeline incremental que monitora 12 gestoras brasileiras, extrai novas cartas em cinco arquiteturas web, compara teses e riscos com Claude e entrega uma síntese semanal em…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -494,8 +568,8 @@ Aug 12, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="UHl0aG9uJTJDTUNQJTJDTW9kZWwlMjBDb250ZXh0JTIwUHJvdG9jb2wlMkNNYWNyb2Vjb25vbWlhJTJDSW5mbGElQzMlQTclQzMlQTNvJTJDSVBDQSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ01vZGVsbyUyMFNlbWllc3RydXR1cmFsJTJDQ2VuJUMzJUExcmlvcyUyQ1Byb2plJUMzJUE3JUMzJUEzbyUyQ0FnZW50ZXMlMjBkZSUyMElB" data-listing-date-sort="1786320000000" data-listing-file-modified-sort="1790003835862" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1360">
-<a href="../projetos/mpp-bcb.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="2" data-categories="UHl0aG9uJTJDTUNQJTJDTW9kZWwlMjBDb250ZXh0JTIwUHJvdG9jb2wlMkNNYWNyb2Vjb25vbWlhJTJDSW5mbGElQzMlQTclQzMlQTNvJTJDSVBDQSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ01vZGVsbyUyMFNlbWllc3RydXR1cmFsJTJDQ2VuJUMzJUExcmlvcyUyQ1Byb2plJUMzJUE3JUMzJUEzbyUyQ0FnZW50ZXMlMjBkZSUyMElB" data-listing-date-sort="1786320000000" data-listing-file-modified-sort="1794347801418" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1360">
+<a href="../projetos/mpp-bcb.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/mpp-bcb-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -531,7 +605,7 @@ Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP
 <div class="listing-category" onclick="window.quartoListingCategory('QWdlbnRlcyUyMGRlJTIwSUE='); return false;">Agentes de IA</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e comparamos com as projeções…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -545,8 +619,8 @@ Aug 10, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="UiUyQ01DUCUyQ01vZGVsJTIwQ29udGV4dCUyMFByb3RvY29sJTJDVHlwZVNjcmlwdCUyQ0Nsb3VkZmxhcmUlMjBXb3JrZXJzJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNQYWNvdGUlMjBSJTJDSVBDQSUyQ04lQzMlQkFjbGVvcyUyMGRlJTIwSW5mbGElQzMlQTclQzMlQTNvJTJDQmFuY28lMjBDZW50cmFsJTJDTWFjcm9lY29ub21pYSUyQ1NJRFJBJTJDU0dTJTJDUmVwcm9kdXRpYmlsaWRhZGUlMkNHaXRIdWIlMjBBY3Rpb25z" data-listing-date-sort="1784851200000" data-listing-file-modified-sort="1790003835864" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2553">
-<a href="../projetos/nucleos-mcp.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="3" data-categories="UiUyQ01DUCUyQ01vZGVsJTIwQ29udGV4dCUyMFByb3RvY29sJTJDVHlwZVNjcmlwdCUyQ0Nsb3VkZmxhcmUlMjBXb3JrZXJzJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNQYWNvdGUlMjBSJTJDSVBDQSUyQ04lQzMlQkFjbGVvcyUyMGRlJTIwSW5mbGElQzMlQTclQzMlQTNvJTJDQmFuY28lMjBDZW50cmFsJTJDTWFjcm9lY29ub21pYSUyQ1NJRFJBJTJDU0dTJTJDUmVwcm9kdXRpYmlsaWRhZGUlMkNHaXRIdWIlMjBBY3Rpb25z" data-listing-date-sort="1784851200000" data-listing-file-modified-sort="1794347801419" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2553">
+<a href="../projetos/nucleos-mcp.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/nucleos-mcp-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -588,7 +662,7 @@ MCP Análise Macro — os núcleos de inflação do IPCA dentro do Claude
 <div class="listing-category" onclick="window.quartoListingCategory('R2l0SHViJTIwQWN0aW9ucw=='); return false;">GitHub Actions</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>O primeiro MCP da Análise Macro: um servidor remoto e sem autenticação que coloca as 23 séries analíticas do IPCA — os 9 núcleos de inflação da Nota Técnica 57 do BCB…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -602,8 +676,8 @@ Jul 24, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDc3RhdHNtb2RlbHMlMkNPTFMlMkNHTU0lMkNWQVIlMkNGaWx0cm8lMjBkZSUyMEthbG1hbiUyQ1JlZ3JhJTIwZGUlMjBUYXlsb3IlMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNCYW5jbyUyMENlbnRyYWwlMkNNYWNyb2Vjb25vbWlhJTJDUyVDMyVBOXJpZXMlMjBUZW1wb3JhaXMlMkNweXRob24tYmNi" data-listing-date-sort="1784764800000" data-listing-file-modified-sort="1790003835870" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3188">
-<a href="../projetos/taylor-sentimento.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="4" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDc3RhdHNtb2RlbHMlMkNPTFMlMkNHTU0lMkNWQVIlMkNGaWx0cm8lMjBkZSUyMEthbG1hbiUyQ1JlZ3JhJTIwZGUlMjBUYXlsb3IlMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNCYW5jbyUyMENlbnRyYWwlMkNNYWNyb2Vjb25vbWlhJTJDUyVDMyVBOXJpZXMlMjBUZW1wb3JhaXMlMkNweXRob24tYmNi" data-listing-date-sort="1784764800000" data-listing-file-modified-sort="1794347801423" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3188">
+<a href="../projetos/taylor-sentimento.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/taylor-sentimento-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -643,7 +717,7 @@ Regra de Taylor com Sentimento do Copom — o balanço de riscos antecipa a Seli
 <div class="listing-category" onclick="window.quartoListingCategory('cHl0aG9uLWJjYg=='); return false;">python-bcb</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>A comunicação do Copom decomposta por três LLMs em diagnóstico retrospectivo, orientação prospectiva e balanço de riscos, com validação cega por agentes independentes. O…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -657,8 +731,8 @@ Jul 23, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="UHl0aG9uJTJDRmFzdEFQSSUyQ0RvY2tlciUyQ1JBRyUyQ0xMTSUyQ0FudGhyb3BpYyUyMENsYXVkZSUyQ0JNMjUlMkNSUkYlMkNSZXJhbmtpbmclMkNMTE0tYXMtanVkZ2UlMkNTZWxmLWNvbnNpc3RlbmN5JTJDQ0klMkNPYnNlcnZhYmlsaXR5JTJDUG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTWFjcm9lY29ub21pYQ==" data-listing-date-sort="1784678400000" data-listing-file-modified-sort="1790003835857" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4726">
-<a href="../projetos/copom-rag-service.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="5" data-categories="UHl0aG9uJTJDRmFzdEFQSSUyQ0RvY2tlciUyQ1JBRyUyQ0xMTSUyQ0FudGhyb3BpYyUyMENsYXVkZSUyQ0JNMjUlMkNSUkYlMkNSZXJhbmtpbmclMkNMTE0tYXMtanVkZ2UlMkNTZWxmLWNvbnNpc3RlbmN5JTJDQ0klMkNPYnNlcnZhYmlsaXR5JTJDUG9sJUMzJUFEdGljYSUyME1vbmV0JUMzJUExcmlhJTJDQmFuY28lMjBDZW50cmFsJTJDTWFjcm9lY29ub21pYQ==" data-listing-date-sort="1784678400000" data-listing-file-modified-sort="1794347801413" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4726">
+<a href="../projetos/copom-rag-service.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/copom-rag-service-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -702,7 +776,7 @@ COPOM RAG Service — RAG sobre Atas do Copom + Focus, Servido como API com Eval
 <div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Serviço de RAG sobre 48 atas do Copom e o Focus (862 chunks), exposto como API (FastAPI + Docker), com eval harness — golden set + LLM-as-judge com self-consistency + gate…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -716,8 +790,8 @@ Jul 22, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQ29kZSUyQ1JvdXRpbmUlMkNBZ2VudGVzJTIwZGUlMjBJQSUyQ0JDQiUyQ0JvbGV0aW0lMjBGb2N1cyUyQ01hY3JvZWNvbm9taWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDQXV0b21hJUMzJUE3JUMzJUEzbyUyQ0UtbWFpbCUyQ1NNVFAlMkNJUENBJTJDU2VsaWMlMkNQSUIlMkNDJUMzJUEybWJpbw==" data-listing-date-sort="1781222400000" data-listing-file-modified-sort="1790003835865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="910">
-<a href="../projetos/projeto-boletim-focus.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="6" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQ29kZSUyQ1JvdXRpbmUlMkNBZ2VudGVzJTIwZGUlMjBJQSUyQ0JDQiUyQ0JvbGV0aW0lMjBGb2N1cyUyQ01hY3JvZWNvbm9taWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDQXV0b21hJUMzJUE3JUMzJUEzbyUyQ0UtbWFpbCUyQ1NNVFAlMkNJUENBJTJDU2VsaWMlMkNQSUIlMkNDJUMzJUEybWJpbw==" data-listing-date-sort="1781222400000" data-listing-file-modified-sort="1794347801420" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="910">
+<a href="../projetos/projeto-boletim-focus.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/focus-email-capa.jpg" class="thumbnail-image card-img" style="height: 150px;">
@@ -759,7 +833,7 @@ Projeto Boletim Focus — resumo executivo escrito por um agente e enviado por e
 <div class="listing-category" onclick="window.quartoListingCategory('QyVDMyVBMm1iaW8='); return false;">Câmbio</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Automação semanal que baixa o PDF do Boletim Focus do Banco Central, extrai o texto e — numa routine agendada do Claude Code — gera um resumo executivo que é enviado por…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -773,8 +847,8 @@ Jun 12, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="6" data-categories="UHl0aG9uJTJDU2hpbnklMkNzY2lraXQtbGVhcm4lMkNza2ZvcmVjYXN0JTJDTml4dGxhJTJDVGltZUdQVCUyQ0Nocm9ub3MlMkNGb3VuZGF0aW9uJTIwTW9kZWxzJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDc2hpbnlhcHBzLmlvJTJDUXVhcnRvJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNDbGF1ZGUlMjBDb2Rl" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1790003835865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3172">
-<a href="../projetos/previsao-macro.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="7" data-categories="UHl0aG9uJTJDU2hpbnklMkNzY2lraXQtbGVhcm4lMkNza2ZvcmVjYXN0JTJDTml4dGxhJTJDVGltZUdQVCUyQ0Nocm9ub3MlMkNGb3VuZGF0aW9uJTIwTW9kZWxzJTJDc3RhdHNtb2RlbHMlMkNXYWxrLWZvcndhcmQlMkNEaWVib2xkLU1hcmlhbm8lMkNNaW5jZXItWmFybm93aXR6JTJDQkNCJTJDSUJHRSUyQ01hY3JvZWNvbm9taWElMkNQb2wlQzMlQUR0aWNhJTIwTW9uZXQlQzMlQTFyaWElMkNHaXRIdWIlMjBBY3Rpb25zJTJDc2hpbnlhcHBzLmlvJTJDUXVhcnRvJTJDQWdlbnRlcyUyMGRlJTIwSUElMkNDbGF1ZGUlMjBDb2Rl" data-listing-date-sort="1777766400000" data-listing-file-modified-sort="1794347801420" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3172">
+<a href="../projetos/previsao-macro.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/previsao-macro-capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -828,7 +902,7 @@ Previsão Macro — Pipeline com Agentes de IA para IPCA, Câmbio, PIB e Selic
 <div class="listing-category" onclick="window.quartoListingCategory('Q2xhdWRlJTIwQ29kZQ=='); return false;">Claude Code</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Pipeline reprodutível em Python que coleta séries macro via APIs (BCB, IBGE, IPEADATA, FRED), gera previsões quinzenais de IPCA, câmbio, PIB e Selic com ensemble de 10…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -842,8 +916,8 @@ May 3, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="U1FMJTJDUG9zdGdyZVNRTCUyQ01vZGVsYWdlbSUyMEVSJTJDTW9kZWxhZ2VtJTIwZGUlMjBEYWRvcyUyQ0JhbmNvJTIwZGUlMjBEYWRvcyUyQ0JvbHNhJTIwZGUlMjBWYWxvcmVzJTJDRERMJTJDVHJpZ2dlciUyQ1BMJTJGcGdTUUw=" data-listing-date-sort="1777334400000" data-listing-file-modified-sort="1790003835861" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2709">
-<a href="../projetos/modelagem-corretora-bolsa-valores.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="8" data-categories="U1FMJTJDUG9zdGdyZVNRTCUyQ01vZGVsYWdlbSUyMEVSJTJDTW9kZWxhZ2VtJTIwZGUlMjBEYWRvcyUyQ0JhbmNvJTIwZGUlMjBEYWRvcyUyQ0JvbHNhJTIwZGUlMjBWYWxvcmVzJTJDRERMJTJDVHJpZ2dlciUyQ1BMJTJGcGdTUUw=" data-listing-date-sort="1777334400000" data-listing-file-modified-sort="1794347801417" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2709">
+<a href="../projetos/modelagem-corretora-bolsa-valores.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/modelagem-corretora-bolsa-valores_capa.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -873,7 +947,7 @@ Modelagem de Corretora de Bolsa de Valores
 <div class="listing-category" onclick="window.quartoListingCategory('UEwlMkZwZ1NRTA=='); return false;">PL/pgSQL</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Modelagem de dados fim a fim (conceitual → lógico → físico) de um sistema de negociação em bolsa para uma corretora, materializada em PostgreSQL 13+ com trigger de…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -887,8 +961,8 @@ Apr 28, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="8" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDTkxQJTJDTGFuZ0NoYWluJTJDUHlkYW50aWMlMkNHb29nbGUlMjBHZW1pbmklMkNBbnRocm9waWMlMjBDbGF1ZGUlMkNPcGVuQUklMkNzdGF0c21vZGVscyUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ01hY3JvZWNvbm9taWE=" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1790003835865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3359">
-<a href="../projetos/sentimento-copom.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="9" data-categories="UHl0aG9uJTJDUXVhcnRvJTJDTExNJTJDTkxQJTJDTGFuZ0NoYWluJTJDUHlkYW50aWMlMkNHb29nbGUlMjBHZW1pbmklMkNBbnRocm9waWMlMjBDbGF1ZGUlMkNPcGVuQUklMkNzdGF0c21vZGVscyUyQ1BvbCVDMyVBRHRpY2ElMjBNb25ldCVDMyVBMXJpYSUyQ0JhbmNvJTIwQ2VudHJhbCUyQ01hY3JvZWNvbm9taWE=" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1794347801420" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3359">
+<a href="../projetos/sentimento-copom.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/sentimento_copom_indice.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -926,7 +1000,7 @@ Sentimento COPOM — Índice de Tom das Atas do Copom com Múltiplos LLMs
 <div class="listing-category" onclick="window.quartoListingCategory('TWFjcm9lY29ub21pYQ=='); return false;">Macroeconomia</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Pipeline reprodutível em Python que constrói um Índice de Tom hawkish/dovish das atas do Copom usando três LLMs em paralelo (Gemini Flash Lite, Claude Haiku 4.5 e…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -940,8 +1014,8 @@ Apr 26, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="9" data-categories="UHl0aG9uJTJDR29vZ2xlJTIwR2VtaW5pJTJDTExNJTJDUkFHJTJDTGFuZ0dyYXBoJTJDTGFuZ0NoYWluJTJDQ2hyb21hJTJDU2hpbnklMkNzaGlueWFwcHMuaW8lMkNBZ2VudGUlMkNTYSVDMyVCQWRl" data-listing-date-sort="1776988800000" data-listing-file-modified-sort="1790003835859" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1318">
-<a href="../projetos/metodologia.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="10" data-categories="UHl0aG9uJTJDR29vZ2xlJTIwR2VtaW5pJTJDTExNJTJDUkFHJTJDTGFuZ0dyYXBoJTJDTGFuZ0NoYWluJTJDQ2hyb21hJTJDU2hpbnklMkNzaGlueWFwcHMuaW8lMkNBZ2VudGUlMkNTYSVDMyVCQWRl" data-listing-date-sort="1776988800000" data-listing-file-modified-sort="1794347801416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1318">
+<a href="../projetos/metodologia.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/metodologia_agentes_ia.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -975,7 +1049,7 @@ Agente de IA da Saúde — RAG sobre Relatórios Epidemiológicos da ECDC
 <div class="listing-category" onclick="window.quartoListingCategory('U2ElQzMlQkFkZQ=='); return false;">Saúde</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Agente conversacional ReAct (LangGraph + Gemini 2.5 Flash) sobre relatórios epidemiológicos da ECDC — recuperação contextual via Chroma e UI Shiny publicada em shinyapps.io.</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -989,8 +1063,8 @@ Apr 24, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="10" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQVBJJTJDTExNJTJDUXVhcnRvJTJDR2l0SHViJTIwQWN0aW9ucyUyQ01ldGElMjBHcmFwaCUyMEFQSSUyQ1doYXRzQXBwJTJDSU1BUCUyQ0F1dG9tYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1776902400000" data-listing-file-modified-sort="1790003835863" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2950">
-<a href="../projetos/newsletter-digest-bot.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="11" data-categories="UHl0aG9uJTJDQ2xhdWRlJTIwQVBJJTJDTExNJTJDUXVhcnRvJTJDR2l0SHViJTIwQWN0aW9ucyUyQ01ldGElMjBHcmFwaCUyMEFQSSUyQ1doYXRzQXBwJTJDSU1BUCUyQ0F1dG9tYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1776902400000" data-listing-file-modified-sort="1794347801418" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2950">
+<a href="../projetos/newsletter-digest-bot.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/newsletter_digest_pipeline.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -1020,7 +1094,7 @@ Newsletter Digest Bot — Resumo Semanal Automatizado para o Boletim AM
 <div class="listing-category" onclick="window.quartoListingCategory('QXV0b21hJUMzJUE3JUMzJUEzbw=='); return false;">Automação</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Pipeline que coleta newsletters via IMAP, gera resumo temático com Claude Opus 4.7, renderiza PDF e entrega no WhatsApp toda manhã de domingo — alimentando a redação do…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -1034,8 +1108,8 @@ Apr 23, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="11" data-categories="UHl0aG9uJTJDU2hpbnklMkNFbmdlbmhhcmlhJTIwZGUlMjBEYWRvcyUyQ0R1Y2tEQiUyQ0dDUyUyQ0dpdEh1YiUyMEFjdGlvbnMlMkNNYXJrZXRpbmclMkNDUk0=" data-listing-date-sort="1776816000000" data-listing-file-modified-sort="1790003835865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2931">
-<a href="../projetos/roi-diagnostico.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="12" data-categories="UHl0aG9uJTJDU2hpbnklMkNFbmdlbmhhcmlhJTIwZGUlMjBEYWRvcyUyQ0R1Y2tEQiUyQ0dDUyUyQ0dpdEh1YiUyMEFjdGlvbnMlMkNNYXJrZXRpbmclMkNDUk0=" data-listing-date-sort="1776816000000" data-listing-file-modified-sort="1794347801420" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2931">
+<a href="../projetos/roi-diagnostico.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="../projetos/architecture_pipeline.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -1063,7 +1137,7 @@ ROI Diagnóstico — Plataforma de Inteligência Comercial
 <div class="listing-category" onclick="window.quartoListingCategory('Q1JN'); return false;">CRM</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Arquitetura de dados ponta a ponta que integra seis APIs comerciais, pipeline de ingestão incremental orquestrado via GitHub Actions, armazenamento em Google Cloud Storage e…</p>
 </div>
 <div class="card-attribution card-text-small justify">
@@ -1084,15 +1158,50 @@ Apr 22, 2026
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
       const i = window.document.createElement("i");
       i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
     }
     setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
@@ -1171,7 +1280,8 @@ Apr 22, 2026
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1180,8 +1290,69 @@ Apr 22, 2026
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1195,6 +1366,7 @@ Apr 22, 2026
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1357,44 +1529,54 @@ Apr 22, 2026
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1492,6 +1674,9 @@ Apr 22, 2026
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">
