@@ -39,16 +39,13 @@ usa apenas a informação disponível na data.
 | **Modelos** | Chronos-2 (com e sem aprendizado entre séries), TimesFM 2.5 e 3, TiRex, Moirai 2.0, Toto, Granite TTM e TimeGPT-1, todos zero-shot, um ambiente Python por família |
 | **Ajustes** | Combustíveis pelo levantamento semanal da ANP; energia elétrica pela bandeira tarifária e pelos créditos de Itaipu, só depois de anunciados; mistura com a média sazonal; parâmetros escolhidos apenas com 2023 |
 | **Combinação** | Ensemble ponderado pelo inverso do RMSE dos erros já conhecidos, por horizonte; Top3 recursivo do Banco Central como alternativa testada |
-| **Avaliação** | Walk-forward com janela expansiva, alvos de jan/2024 a set/2026; Diebold-Mariano com correção HLN contra o Focus; IPCA mensal, em 12 meses e do ano-calendário |
+| **Avaliação** | Walk-forward com janela expansiva, alvos de jan/2024 a set/2026; Diebold-Mariano com correção HLN contra o Focus |
 | **Incerteza** | Intervalos gaussianos com a dispersão dos erros passados, crescente no horizonte (WP 561 do BCB), calibrados no backtest; quantis nativos dos modelos avaliados por CRPS |
 
 ## O que se encontrou
 
 - **IPCA do mês:** o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a
   12 meses à frente, sem diferença estatisticamente significativa.
-- **IPCA em 12 meses:** previsto um ano antes, o ensemble errou menos que o Focus 12 meses no
-  período, também sem significância estatística; no ano-calendário, ganhou em 2024 e perdeu
-  em 2025.
 - **Onde o erro sobra:** poucos preços explicam a maior parte — passagem aérea, gasolina e
   alimentos in natura no mês seguinte; energia elétrica a 3 meses. De 4 meses em diante, os
   preços administrados respondem por cerca de 60% do erro.
@@ -63,9 +60,9 @@ nova, aplica os ajustes, recalcula o ensemble e os intervalos, atualiza o paper 
 números gerados a partir das saídas) e publica o dashboard. Cada rodada é gravada num registro
 que só recebe acréscimos: o histórico das previsões feitas em tempo real, separado do backtest.
 
-O dashboard tem menus para a previsão atual, o erro mês a mês contra o Focus, o IPCA em 12
-meses e do ano, a calibração da incerteza, a decomposição do erro por subitem e segmento, o
-registro das rodadas e a metodologia.
+O dashboard tem menus para a previsão atual (o IPCA do próximo mês e a trajetória do IPCA em
+12 meses), o desempenho contra o Focus, a calibração da incerteza, a decomposição do erro por
+subitem e segmento, o registro das rodadas e a metodologia.
 
 ## Ferramentas
 
