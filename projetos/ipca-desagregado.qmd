@@ -9,6 +9,12 @@ execute:
   echo: true
 ---
 
+::: {.callout-note}
+## 📄 Working paper
+
+Esta é a **ficha técnica do projeto**. Para o *working paper* completo, com resumo, estrutura, como citar e PDF para download, veja [**Modelos de Fundação para Previsão no Brasil**](../research/ipca-desagregado.html).
+:::
+
 ![Trajetória prevista do IPCA em 12 meses, com intervalos de 50% e 80%, meta e Focus](ipca-desagregado-capa.png){width=100%}
 
 ::: {.callout-note}
