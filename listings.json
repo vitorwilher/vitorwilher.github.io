@@ -2,6 +2,7 @@
   {
     "listing": "/research/index.html",
     "items": [
+      "/research/ipca-desagregado.html",
       "/research/previsao-macro.html",
       "/research/sentimento-copom.html"
     ]

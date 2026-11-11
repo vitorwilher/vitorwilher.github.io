@@ -910,11 +910,46 @@
     "text": "Habilidades Principais\n\nPython (OO, Clean Code, pytest)\nLLMs em produção (Anthropic, OpenAI, Google, Bedrock)\nAgentes de IA e orquestração (LangChain, Claude Agent SDK)\nFunction calling / tool use\nStructured outputs e JSON Schema\nRAG (híbrido BM25 + denso, RRF, reranking)\nGuardrails e mitigação de alucinação\nAvaliação de LLMs (golden set, LLM-as-judge, gate de CI)\nObservabilidade (custo/token, latência, qualidade)\nPrompt e Context Engineering\nAPIs REST (FastAPI) e integrações corporativas\nWhatsApp Business Cloud API\nDocker, CI/CD (GitHub Actions, GitLab CI)\nCloud (AWS, GCP, Cloudflare Workers)\nSQL / PostgreSQL / DuckDB\nMCP (Model Context Protocol)\nFoundation models de séries temporais\nMachine Learning (Scikit-learn) e fine-tuning (LoRA/QLoRA)\nEconometria e Inferência Estatística\nComunicação executiva e liderança técnica"
   },
   {
+    "objectID": "research/ipca-desagregado.html",
+    "href": "research/ipca-desagregado.html",
+    "title": "Modelos de Fundação para Previsão no Brasil",
+    "section": "",
+    "text": "NoteWorking paper · versão 2.0 · resultados exploratórios\n\n\n\nO paper conta o percurso da pesquisa decisão a decisão, à luz da literatura: a história do IPCA, a dos modelos de fundação, os nove modelos usados e os resultados num walk-forward com datas de divulgação do IBGE e de publicação do Focus auditadas. Comentários e críticas são muito bem-vindos: escreva para vitorwilher@analisemacro.com.br."
+  },
+  {
+    "objectID": "research/ipca-desagregado.html#resumo",
+    "href": "research/ipca-desagregado.html#resumo",
+    "title": "Modelos de Fundação para Previsão no Brasil",
+    "section": "Resumo",
+    "text": "Resumo\nO IPCA é um índice agregado de 377 subitens. Este trabalho testa se nove modelos de fundação de séries temporais, usados sem treino, conseguem prever esses subitens bem o bastante para que a soma ponderada compita com o Focus, e conta o percurso da pesquisa decisão a decisão, à luz da literatura. Os modelos preveem os 377 subitens; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e créditos de Itaipu), misturadas à média sazonal e combinadas num ensemble ponderado pelo inverso do RMSE passado. Num walk-forward com informação datada, o ensemble tem erro igual ao do Focus no mês seguinte (razão de RMSE 1,009) e de 0,911 a 0,998 do erro do Focus de 2 a 12 meses à frente, sem diferença significativa. Intervalos gaussianos construídos com os erros já conhecidos em cada data ficam perto da cobertura nominal, mas a correção de viés em tempo real piora a previsão. Com dados até set/2026, o ensemble projeta o IPCA em 12 meses em 5,14% em dez/2026 e 4,55% em set/2027, acima do teto da meta.\nPalavras-chave: inflação; modelos de fundação; previsão desagregada; Focus; IPCA."
+  },
+  {
+    "objectID": "research/ipca-desagregado.html#estrutura-do-paper",
+    "href": "research/ipca-desagregado.html#estrutura-do-paper",
+    "title": "Modelos de Fundação para Previsão no Brasil",
+    "section": "Estrutura do paper",
+    "text": "Estrutura do paper\n\nIntrodução\nO IPCA: um índice agregado — breve história, como o índice é construído e por que prever pelos componentes\nModelos de fundação para séries temporais — das redes recorrentes à atenção, o que é um modelo de fundação, a chegada às séries temporais e a previsão probabilística\nOs nove modelos usados — Chronos-2 (isolado e com aprendizado entre séries), TimesFM 2.5, TimesFM 3.0, TiRex, Moirai 2.0, Toto, Granite TTM r2 e TimeGPT-1\nDados e desenho — SIDRA/IBGE (tabela 7060, jan/2020 a set/2026) e Focus/BCB por vintage\nO percurso da pesquisa — modelos puros, ganho da desagregação, diagnóstico do erro, informação institucional (combustíveis e energia), combinação, auditoria das datas e medida da incerteza\nResultados — IPCA do mês, onde o erro sobra e incerteza\nPrevisão atual\nLimitações e Conclusão"
+  },
+  {
+    "objectID": "research/ipca-desagregado.html#como-citar",
+    "href": "research/ipca-desagregado.html#como-citar",
+    "title": "Modelos de Fundação para Previsão no Brasil",
+    "section": "Como citar",
+    "text": "Como citar\n@unpublished{wilher_2026_ipca_desagregado,\n  author    = {Wilher, Vitor},\n  title     = {Ensemble de Modelos de Funda\\c{c}\\~ao para Previs\\~ao\n               da Infla\\c{c}\\~ao no Brasil},\n  note      = {Working paper, vers\\~ao 2.0},\n  year      = {2026},\n  month     = {nov},\n  url       = {https://vitorwilher.github.io/research/ipca-desagregado.html}\n}"
+  },
+  {
+    "objectID": "research/ipca-desagregado.html#veja-também",
+    "href": "research/ipca-desagregado.html#veja-também",
+    "title": "Modelos de Fundação para Previsão no Brasil",
+    "section": "Veja também",
+    "text": "Veja também\n\n🛠️ Ficha técnica do projeto: IPCA Desagregado — projeto\n📊 Dashboard ao vivo: analisemacro.shinyapps.io/ipca-desagregado\n📄 Paper online (versão mais recente): analisemacro.shinyapps.io/ipca-desagregado/paper.pdf\n\n\nDados: SIDRA/IBGE (tabela 7060) e API Olinda de expectativas do BCB (Focus). O código é mantido em repositório privado da Análise Macro."
+  },
+  {
     "objectID": "research/index.html",
     "href": "research/index.html",
     "title": "Pesquisas",
     "section": "",
-    "text": "Pipeline de Previsão Macro com Agentes de IA\n\n\nArquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic\n\n\n\nPython\n\nQuarto\n\nFoundation Models\n\nTimeGPT\n\nChronos\n\nscikit-learn\n\nstatsmodels\n\nWalk-forward\n\nDiebold-Mariano\n\nMincer-Zarnowitz\n\nBCB\n\nIBGE\n\nMacroeconomia\n\nPolítica Monetária\n\nWorking Paper\n\nAgentes de IA\n\n\n\n\nWorking paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.\n\n\n\n\n\n\nMay 3, 2026\n\n\nVitor Wilher\n\n\n\n\n\n\n\n\n\n\n\n\nMesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs\n\n\nComparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini\n\n\n\nPolítica Monetária\n\nBanco Central\n\nLLMs\n\nNLP\n\nAnálise de Texto\n\nMacroeconomia\n\nWorking Paper\n\n\n\n\nWorking paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).\n\n\n\n\n\n\nApr 26, 2026\n\n\nVitor Wilher, Luiz Henrique Barbosa Filho\n\n\n\n\n\nNo matching items"
+    "text": "Modelos de Fundação para Previsão no Brasil\n\n\nPrevisão dos 377 subitens do IPCA, agregação com os pesos do IBGE e comparação com o Focus\n\n\n\nPython\n\nQuarto\n\nFoundation Models\n\nChronos\n\nTimesFM\n\nTiRex\n\nMoirai\n\nToto\n\nGranite\n\nTimeGPT\n\nWalk-forward\n\nDiebold-Mariano\n\nCRPS\n\nIPCA\n\nFocus\n\nIBGE\n\nInflação\n\nMacroeconomia\n\nWorking Paper\n\n\n\n\nWorking paper que testa se nove modelos de fundação de séries temporais, usados sem treino nos 377 subitens do IPCA e agregados com os pesos do IBGE, competem com o Focus. Num walk-forward com informação datada, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença significativa.\n\n\n\n\n\n\nNov 11, 2026\n\n\nVitor Wilher\n\n\n\n\n\n\n\n\n\n\n\n\nPipeline de Previsão Macro com Agentes de IA\n\n\nArquitetura, validação estatística e operacionalização contínua de um sistema reprodutível para IPCA, Câmbio, PIB e Selic\n\n\n\nPython\n\nQuarto\n\nFoundation Models\n\nTimeGPT\n\nChronos\n\nscikit-learn\n\nstatsmodels\n\nWalk-forward\n\nDiebold-Mariano\n\nMincer-Zarnowitz\n\nBCB\n\nIBGE\n\nMacroeconomia\n\nPolítica Monetária\n\nWorking Paper\n\nAgentes de IA\n\n\n\n\nWorking paper que documenta a arquitetura, a metodologia e a operação contínua do projeto previsao_macro — pipeline reprodutível em Python para previsão quinzenal de IPCA, câmbio, PIB e Selic, mantido por agentes de IA via GitHub Actions, com validação estatística honesta de 10 estratégias de ensemble contra o Boletim Focus do BCB.\n\n\n\n\n\n\nMay 3, 2026\n\n\nVitor Wilher\n\n\n\n\n\n\n\n\n\n\n\n\nMesmo Sinal, Calibrações Diferentes: Um Índice de Tom das Atas do Copom com Múltiplos LLMs\n\n\nComparação entre Gemini Flash Lite, Claude Haiku 4.5 e GPT-4.1-mini\n\n\n\nPolítica Monetária\n\nBanco Central\n\nLLMs\n\nNLP\n\nAnálise de Texto\n\nMacroeconomia\n\nWorking Paper\n\n\n\n\nWorking paper sobre Índice de Tom hawkish-dovish das atas do Copom utilizando três LLMs em paralelo, calibrado em pontos percentuais da Selic e validado em três camadas (in-sample, holdout, walk-forward).\n\n\n\n\n\n\nApr 26, 2026\n\n\nVitor Wilher, Luiz Henrique Barbosa Filho\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projetos/projeto-boletim-focus.html",
@@ -1180,7 +1215,7 @@
     "href": "projetos/ipca-desagregado.html",
     "title": "IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil",
     "section": "",
-    "text": "Trajetória prevista do IPCA em 12 meses, com intervalos de 50% e 80%, meta e Focus"
+    "text": "Note📄 Working paper\n\n\n\nEsta é a ficha técnica do projeto. Para o working paper completo, com resumo, estrutura, como citar e PDF para download, veja Modelos de Fundação para Previsão no Brasil."
   },
   {
     "objectID": "projetos/ipca-desagregado.html#a-pergunta",
