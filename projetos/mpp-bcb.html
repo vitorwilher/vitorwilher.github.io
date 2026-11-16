@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-08-10">
-<meta name="description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e comparamos com as projeções oficiais do Relatório de Política Monetária: erro absoluto médio de 0,47 p.p., com a projeção do BCB caindo dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP — você informa as premissas conversando com a IA, ele devolve a projeção e o gráfico pronto.">
+<meta name="description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
 
 <title>Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW</title>
 <style>
@@ -114,13 +114,13 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW">
-<meta property="og:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e comparamos com as projeções oficiais do Relatório de Política Monetária: erro absoluto médio de 0,47 p.p., com a projeção do BCB caindo dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP — você informa as premissas conversando com a IA, ele devolve a projeção e o gráfico pronto.">
+<meta property="og:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
 <meta property="og:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="1200">
-<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1800">
+<meta property="og:image:width" content="3200">
 <meta name="twitter:title" content="Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW">
-<meta name="twitter:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e comparamos com as projeções oficiais do Relatório de Política Monetária: erro absoluto médio de 0,47 p.p., com a projeção do BCB caindo dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP — você informa as premissas conversando com a IA, ele devolve a projeção e o gráfico pronto.">
+<meta name="twitter:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
 <meta name="twitter:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -382,7 +382,7 @@ window.Quarto = {
   <li><a href="#os-resultados" id="toc-os-resultados" class="nav-link" data-scroll-target="#os-resultados">Os resultados</a></li>
   <li><a href="#a-distância-honesta" id="toc-a-distância-honesta" class="nav-link" data-scroll-target="#a-distância-honesta">A distância honesta</a></li>
   <li><a href="#usando-o-mcp" id="toc-usando-o-mcp" class="nav-link" data-scroll-target="#usando-o-mcp">Usando o MCP</a></li>
-  <li><a href="#em-breve" id="toc-em-breve" class="nav-link" data-scroll-target="#em-breve">Em breve</a></li>
+  <li><a href="#o-curso" id="toc-o-curso" class="nav-link" data-scroll-target="#o-curso">O curso</a></li>
   </ul>
 </nav>
     </div>
@@ -411,7 +411,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e comparamos com as projeções oficiais do Relatório de Política Monetária: erro absoluto médio de 0,47 p.p., com a projeção do BCB caindo dentro do leque do nosso modelo em todos os trimestres. O motor está exposto como servidor MCP — você informa as premissas conversando com a IA, ele devolve a projeção e o gráfico pronto.
+    O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.
   </div>
 </div>
 
@@ -426,6 +426,12 @@ window.Quarto = {
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">November 16, 2026</p>
+    </div>
+  </div>
     
   </div>
   
@@ -437,9 +443,10 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="mpp-bcb-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Leque de projeções do modelo replicado e a projeção oficial do Banco Central</figcaption>
+<figcaption>Leque de inflação do modelo com as premissas da ata da 282ª reunião do Copom (novembro de 2026) e a projeção oficial do Copom</figcaption>
 </figure>
 </div>
+<p><em>Atualizado em 16/11/2026 com as premissas da ata da 282ª reunião do Copom.</em></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -464,8 +471,12 @@ window.Quarto = {
 </section>
 <section id="o-modelo" class="level2">
 <h2 class="anchored" data-anchor-id="o-modelo">O modelo</h2>
-<p>Sete equações estimadas e treze identidades contábeis, em frequência trimestral.</p>
+<p>Sete equações estimadas, ligadas por identidades contábeis, em frequência trimestral.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Bloco</th>
@@ -483,11 +494,11 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><strong>Expectativas</strong></td>
-<td>Formação das expectativas de inflação</td>
+<td>Inércia, inflação passada e a projeção do próprio modelo, ancoradas na meta</td>
 </tr>
 <tr class="even">
 <td><strong>Regra de Taylor</strong></td>
-<td>Selic reage ao desvio das expectativas</td>
+<td>Selic reage ao desvio das expectativas em relação à meta</td>
 </tr>
 <tr class="odd">
 <td><strong>Paridade de juros</strong></td>
@@ -503,7 +514,8 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>O que distingue esta versão: <strong>Selic, câmbio e preços administrados são endógenos</strong>. Isso significa que o modelo os projeta sozinho, em vez de recebê-los como hipótese — e cria um bloco simultâneo dentro do trimestre, em que as expectativas dependem do hiato, o hiato do juro real, o juro real da Selic, a Selic das expectativas, e o câmbio do diferencial de juros.</p>
+<p>O que distingue esta versão: <strong>Selic, câmbio e preços administrados são endógenos</strong>. Isso significa que o modelo os projeta sozinho, em vez de recebê-los como hipótese — e cria um bloco simultâneo dentro do trimestre, em que o hiato depende do juro real, o juro real da Selic e das expectativas, a Selic das expectativas, e o câmbio do diferencial de juros.</p>
+<p>As expectativas seguem a forma que o Banco Central descreve nos seus boxes: em desvio da meta, com inércia, com a inflação passada e com a inflação que o próprio modelo projeta. A inércia estimada aqui, 0,77, é praticamente a do BCB, 0,75.</p>
 <p>A consequência econômica é direta: um aperto monetário passa a <strong>apreciar o câmbio</strong>, e a apreciação realimenta a inflação. O canal cambial de transmissão, ausente quando o câmbio é exógeno, torna-se operante.</p>
 <p>A base é recoletada das fontes primárias — Banco Central, IBGE, FRED, NOAA —, o que torna o exercício <strong>atualizável</strong>: o modelo roda com os dados de hoje.</p>
 <hr>
@@ -512,76 +524,110 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="os-resultados">Os resultados</h2>
 <section id="validação-econômica" class="level3">
 <h3 class="anchored" data-anchor-id="validação-econômica">Validação econômica</h3>
-<p>O teste mais exigente disponível é comparar os multiplicadores do modelo com os que o Banco Central publica:</p>
+<p>O teste mais exigente disponível é comparar o modelo com o que o Banco Central publica sobre o seu:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Choque</th>
+<th>Medida</th>
 <th>Modelo</th>
-<th>BCB (jun/2024)</th>
+<th>BCB</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Selic +1 p.p. por 4 trimestres</td>
-<td><strong>−0,37 p.p.</strong></td>
-<td>−0,27 p.p.</td>
+<td>Selic +1 p.p. por 4 trimestres, depois a regra de Taylor</td>
+<td><strong>−0,24 p.p.</strong>, no 5º trimestre</td>
+<td>−0,27 (agregado) e −0,24 (desagregado), no 4º</td>
 </tr>
 <tr class="even">
-<td>Depreciação cambial de 10%</td>
-<td><strong>+0,79 p.p.</strong></td>
-<td>+0,96 p.p.</td>
+<td>Inércia das expectativas</td>
+<td><strong>0,77</strong></td>
+<td>0,75</td>
 </tr>
 <tr class="odd">
-<td>Coeficiente de reação da Taylor</td>
-<td><strong>1,66</strong></td>
+<td>Reação da Selic ao desvio das expectativas</td>
+<td><strong>1,71</strong></td>
 <td>1,30 – 2,03</td>
 </tr>
 </tbody>
 </table>
-<p>O multiplicador de juros <strong>cerca</strong> a estimativa oficial, com o perfil temporal correto — resposta negativa, gradual, com pico no quinto trimestre. O coeficiente da regra de Taylor cai dentro da faixa publicada pelo BCB.</p>
+<p>O experimento de juros é o padrão dos boxes do BCB: a Selic sobe um ponto por quatro trimestres e depois volta a seguir a regra de Taylor. O efeito máximo no IPCA em doze meses cai dentro da faixa publicada, e o caminho passa pelos mesmos canais: hiato, câmbio e expectativas que cedem devagar.</p>
 </section>
-<section id="comparação-com-as-projeções-oficiais" class="level3">
-<h3 class="anchored" data-anchor-id="comparação-com-as-projeções-oficiais">Comparação com as projeções oficiais</h3>
-<p>Confrontando com o <strong>Relatório de Política Monetária de junho de 2026</strong>:</p>
+<section id="com-as-premissas-do-relatório-de-setembro" class="level3">
+<h3 class="anchored" data-anchor-id="com-as-premissas-do-relatório-de-setembro">Com as premissas do Relatório de setembro</h3>
+<p>O Apêndice metodológico do Relatório de Política Monetária descreve os condicionantes: Selic da pesquisa Focus, câmbio pela paridade do poder de compra, petróleo, inflação externa e juro neutro de 5%. Com eles, e com o primeiro trimestre fixado pela projeção do BCB, como ele faz no curto prazo:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Métrica</th>
-<th>Valor</th>
+<th>IPCA em 4 trimestres</th>
+<th>2026</th>
+<th>2027</th>
+<th>1º tri/2028</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Erro absoluto médio (12 trimestres)</td>
-<td><strong>0,47 p.p.</strong></td>
+<td>BCB (RPM set/2026)</td>
+<td>5,2%</td>
+<td>3,9%</td>
+<td>3,2%</td>
 </tr>
 <tr class="even">
-<td>Diferença no primeiro trimestre</td>
-<td><strong>0,03 p.p.</strong></td>
-</tr>
-<tr class="odd">
-<td>Viés médio</td>
-<td>+0,21 p.p.</td>
+<td>Modelo</td>
+<td>5,2%</td>
+<td>4,0%</td>
+<td>3,6%</td>
 </tr>
 </tbody>
 </table>
-<p>E o resultado que mais importa: <strong>a projeção oficial do Banco Central situa-se dentro do leque estocástico do nosso modelo em todos os onze trimestres comparados</strong> — em sete deles, dentro da banda de 50% ou mais estreita. É o que a figura de capa mostra: a linha vermelha atravessa o interior do leque azul do começo ao fim.</p>
-<p>As duas trajetórias não são, portanto, estatisticamente incompatíveis — apesar de os modelos subjacentes serem estruturalmente distintos.</p>
+<p>O erro absoluto médio nos dez trimestres da tabela oficial é de <strong>0,19 ponto</strong>, com viés praticamente nulo. As probabilidades de o IPCA passar do teto ficam próximas das publicadas: 37% em 2027 e 18% em 2028 no modelo, contra 33% e 16% no Relatório.</p>
 </section>
-<section id="as-diferenças-que-são-o-mais-interessante" class="level3">
-<h3 class="anchored" data-anchor-id="as-diferenças-que-são-o-mais-interessante">As diferenças, que são o mais interessante</h3>
-<p>A divergência se concentra no horizonte distante e <strong>tem causas identificáveis</strong>: o modelo agregado não separa a inflação por setores, como faz o BCB; os preços administrados oficiais vêm de modelos específicos item a item; e o cenário do BCB supõe um fechamento do hiato do produto que o nosso não reproduz.</p>
-<p>Nenhuma dessas diferenças é ruído. Todas apontam para componentes ausentes e nomeáveis — o que é, do ponto de vista de aprendizado, mais valioso que o acerto.</p>
+<section id="depois-da-ata-da-282ª-reunião-do-copom" class="level3">
+<h3 class="anchored" data-anchor-id="depois-da-ata-da-282ª-reunião-do-copom">Depois da ata da 282ª reunião do Copom</h3>
+<p>Em novembro, o Copom atualizou o cenário: câmbio partindo de R$ 5,20, Selic do Focus mais alta e petróleo em queda. A ata publica três pontos da projeção:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>IPCA em 4 trimestres</th>
+<th>2026</th>
+<th>2027</th>
+<th>2º tri/2028</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Copom (ata 282ª)</td>
+<td>5,6%</td>
+<td>4,7%</td>
+<td>3,5%</td>
+</tr>
+<tr class="even">
+<td>Modelo</td>
+<td>5,6%</td>
+<td>4,5%</td>
+<td>3,8%</td>
+</tr>
+</tbody>
+</table>
+<p>O ano de 2026 coincide por construção. Em 2027 o modelo fica 0,2 ponto abaixo, e no horizonte relevante, 0,3 ponto acima. Pelo leque, a chance de o IPCA passar do teto é de 52% em 2027 e de 21% em 2028.</p>
+</section>
+<section id="o-el-niño-decide-boa-parte-do-número" class="level3">
+<h3 class="anchored" data-anchor-id="o-el-niño-decide-boa-parte-do-número">O El Niño decide boa parte do número</h3>
+<p>O episódio de 2026 é intenso, e o seu efeito é a premissa mais sensível. Estimado só com os nossos dados, ele leva o IPCA a 5,4% em 2027; sem o choque, a 4,2%. A versão do gráfico calibra o efeito pela evidência que o próprio BCB publicou: no Questionário Pré-Copom, a mediana dos analistas é de 0,85 ponto em dois anos para um El Niño como o de 2014-15.</p>
 <hr>
 </section>
 </section>
 <section id="a-distância-honesta" class="level2">
 <h2 class="anchored" data-anchor-id="a-distância-honesta">A distância honesta</h2>
 <p>Cabe uma ressalva, porque a tentação de apresentar o resultado como “a projeção do Banco Central” é real — e seria incorreto.</p>
-<p><strong>Este não é o modelo vigente do BCB.</strong> Em setembro de 2020 houve uma ruptura metodológica: o Banco Central passou a estimar o hiato do produto e o juro real neutro como <strong>variáveis latentes</strong>, com estimação bayesiana. O modelo aqui replicado pertence à linhagem <strong>anterior</strong> a essa ruptura.</p>
-<p>Não estamos a alguns ajustes do modelo vigente — estamos do outro lado de uma mudança de paradigma econométrico. As projeções produzidas aqui <strong>não são</strong> as do Banco Central e não devem ser apresentadas como tais.</p>
-<p>Dito isso, a aderência medida acima mostra que a linhagem replicada ainda captura bem o essencial do mecanismo de transmissão.</p>
+<p><strong>Este não é o modelo vigente do BCB.</strong> Desde 2020, o Banco Central estima o hiato do produto e o juro real neutro como <strong>variáveis latentes</strong>, com estimação bayesiana do sistema inteiro. Aqui, as equações são estimadas uma a uma, e o hiato e o neutro vêm de filtros estatísticos. A estrutura das equações é a do modelo atual; a estimação é a da tradição anterior.</p>
+<p>Três escolhas também são nossas, e não do BCB: o primeiro trimestre fixado pela projeção oficial, o tamanho do efeito do El Niño e o método do leque e das probabilidades, que o Banco Central não publica.</p>
+<p>As projeções produzidas aqui <strong>não são</strong> as do Banco Central e não devem ser apresentadas como tais. A proximidade medida acima mostra que a estrutura captura o essencial do mecanismo de transmissão.</p>
 <hr>
 </section>
 <section id="usando-o-mcp" class="level2">
@@ -706,10 +752,10 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="em-breve" class="level2">
-<h2 class="anchored" data-anchor-id="em-breve">Em breve</h2>
-<p>A reconstrução completa — a arqueologia das equações, a recuperação da base, a estimação e a validação, passo a passo — será material de um <strong>curso novo</strong>.</p>
-<p>Se você trabalha com projeção macroeconômica e quer saber quando abrir, <a href="https://analisemacro.com.br">entre em contato</a>.</p>
+<section id="o-curso" class="level2">
+<h2 class="anchored" data-anchor-id="o-curso">O curso</h2>
+<p>A leitura de um modelo como este — de onde vem cada premissa, o que significa um leque, por que as expectativas demoram a ceder e o que mudou no BCB em 2020 — é o assunto do curso <strong>Modelos do Banco Central</strong>, com turma ao vivo a partir de 5 de dezembro de 2026.</p>
+<p><a href="https://analisemacro.com.br/curso/modelos-do-banco-central/?utm_source=portfolio&amp;utm_medium=projeto&amp;utm_campaign=modelos-bc&amp;utm_content=mpp-bcb">Conheça o curso</a></p>
 
 
 </section>
