@@ -89,7 +89,7 @@ publica sobre o seu:
 
 | Medida | Modelo | BCB |
 |---|---|---|
-| Selic +1 p.p. por 4 trimestres, depois a regra de Taylor | **−0,24 p.p.**, no 5º trimestre | −0,27 (agregado) e −0,24 (desagregado), no 4º |
+| Selic +1 p.p. por 4 trimestres, depois a regra de Taylor | **−0,27 p.p.**, no 5º trimestre | −0,27 (agregado) e −0,24 (desagregado), no 4º |
 | Inércia das expectativas | **0,77** | 0,75 |
 | Reação da Selic ao desvio das expectativas | **1,71** | 1,30 – 2,03 |
 
