@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-08-10">
-<meta name="description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
+<meta name="description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python, com a curva de Phillips e os preços administrados na forma do BC, e rodamos com as premissas do próprio Banco Central: com os condicionantes da ata da 282ª reunião do Copom, o modelo projeta 4,5% para 2027 e 3,5% para o horizonte relevante, contra 4,7% e 3,5% do Copom. Painel interativo e paper publicados.">
 
-<title>Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW</title>
+<title>Modelo de Pequeno Porte do Banco Central em Python – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -51,9 +51,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8d3ad9c781c51ccd60b292c95058b2c2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-9f42d590332006069f96efcb7a01c1c5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-8d3ad9c781c51ccd60b292c95058b2c2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-cb61c712ca1a7fe70a83faed8e4da2d7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-abf9a93bbb6856683e7af915afb35eee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-cb61c712ca1a7fe70a83faed8e4da2d7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,45 +82,16 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW">
-<meta property="og:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
+<meta property="og:title" content="Modelo de Pequeno Porte do Banco Central em Python – Portfólio do VW">
+<meta property="og:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python, com a curva de Phillips e os preços administrados na forma do BC, e rodamos com as premissas do próprio Banco Central: com os condicionantes da ata da 282ª reunião do Copom, o modelo projeta 4,5% para 2027 e 3,5% para o horizonte relevante, contra 4,7% e 3,5% do Copom. Painel interativo e paper publicados.">
 <meta property="og:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
-<meta property="og:image:height" content="1800">
-<meta property="og:image:width" content="3200">
-<meta name="twitter:title" content="Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP – Portfólio do VW">
-<meta name="twitter:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.">
+<meta property="og:image:height" content="829">
+<meta property="og:image:width" content="1627">
+<meta name="twitter:title" content="Modelo de Pequeno Porte do Banco Central em Python – Portfólio do VW">
+<meta name="twitter:description" content="O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python, com a curva de Phillips e os preços administrados na forma do BC, e rodamos com as premissas do próprio Banco Central: com os condicionantes da ata da 282ª reunião do Copom, o modelo projeta 4,5% para 2027 e 3,5% para o horizonte relevante, contra 4,7% e 3,5% do Copom. Painel interativo e paper publicados.">
 <meta name="twitter:image" content="https://vitorwilher.github.io/projetos/mpp-bcb-capa.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -381,7 +352,6 @@ window.Quarto = {
   <li><a href="#o-modelo" id="toc-o-modelo" class="nav-link" data-scroll-target="#o-modelo">O modelo</a></li>
   <li><a href="#os-resultados" id="toc-os-resultados" class="nav-link" data-scroll-target="#os-resultados">Os resultados</a></li>
   <li><a href="#a-distância-honesta" id="toc-a-distância-honesta" class="nav-link" data-scroll-target="#a-distância-honesta">A distância honesta</a></li>
-  <li><a href="#usando-o-mcp" id="toc-usando-o-mcp" class="nav-link" data-scroll-target="#usando-o-mcp">Usando o MCP</a></li>
   <li><a href="#o-curso" id="toc-o-curso" class="nav-link" data-scroll-target="#o-curso">O curso</a></li>
   </ul>
 </nav>
@@ -392,11 +362,9 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelo de Pequeno Porte do Banco Central em Python e exposto como MCP</h1>
+<h1 class="title">Modelo de Pequeno Porte do Banco Central em Python</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
-    <div class="quarto-category">MCP</div>
-    <div class="quarto-category">Model Context Protocol</div>
     <div class="quarto-category">Macroeconomia</div>
     <div class="quarto-category">Inflação</div>
     <div class="quarto-category">IPCA</div>
@@ -405,13 +373,14 @@ window.Quarto = {
     <div class="quarto-category">Modelo Semiestrutural</div>
     <div class="quarto-category">Cenários</div>
     <div class="quarto-category">Projeção</div>
-    <div class="quarto-category">Agentes de IA</div>
+    <div class="quarto-category">Câmbio</div>
+    <div class="quarto-category">Shiny</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python e rodamos com as premissas do próprio Banco Central: no Relatório de Política Monetária de setembro de 2026, o erro absoluto médio contra a projeção oficial foi de 0,19 ponto; com as premissas da ata da 282ª reunião do Copom, o modelo fica a 0,2-0,3 ponto da projeção oficial em 2027 e no horizonte relevante. O motor está exposto como servidor MCP.
+    O Banco Central publica a estrutura das equações do seu Modelo de Pequeno Porte, mas não o código nem a base. Reconstruímos o modelo em Python, com a curva de Phillips e os preços administrados na forma do BC, e rodamos com as premissas do próprio Banco Central: com os condicionantes da ata da 282ª reunião do Copom, o modelo projeta 4,5% para 2027 e 3,5% para o horizonte relevante, contra 4,7% e 3,5% do Copom. Painel interativo e paper publicados.
   </div>
 </div>
 
@@ -429,7 +398,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 16, 2026</p>
+      <p class="date-modified">November 19, 2026</p>
     </div>
   </div>
     
@@ -443,35 +412,36 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="mpp-bcb-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Leque de inflação do modelo com as premissas da ata da 282ª reunião do Copom (novembro de 2026) e a projeção oficial do Copom</figcaption>
+<figcaption>Leque de inflação do modelo com as premissas da ata da 282ª reunião do Copom (novembro de 2026) e a projeção do Copom</figcaption>
 </figure>
 </div>
-<p><em>Atualizado em 16/11/2026 com as premissas da ata da 282ª reunião do Copom.</em></p>
+<p><em>Atualizado em 19/11/2026: versão 4 do modelo, com as premissas da ata da 282ª reunião do Copom.</em></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Experimente agora
+<span class="screen-reader-only">Tip</span>Experimente
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O servidor MCP está no ar, é <strong>público e gratuito</strong>. Cole esta URL como conector personalizado no Claude (Configurações → Connectors) e peça <em>“projete a inflação com a Selic a 12,5% e o câmbio a R$ 5,60”</em>:</p>
-<pre><code>https://mpp-mcp.analisemacro.workers.dev/mcp</code></pre>
-<p>O passo a passo está na <a href="#usando-o-mcp">seção final desta página</a>.</p>
+<ul>
+<li><strong>Painel interativo:</strong> escolha o câmbio, a Selic, o petróleo e o El Niño e veja a projeção e o leque de inflação: <a href="https://analisemacro.shinyapps.io/mpp-analise-macro/">analisemacro.shinyapps.io/mpp-analise-macro</a></li>
+<li><strong>Paper (PDF):</strong> as equações, a estimação e a comparação com o Banco Central: <a href="https://analisemacro.shinyapps.io/mpp-analise-macro/paper.pdf">baixar o paper</a></li>
+</ul>
 </div>
 </div>
 <section id="o-problema" class="level2">
 <h2 class="anchored" data-anchor-id="o-problema">O problema</h2>
 <p>O Banco Central projeta a inflação com um conjunto de modelos. O mais transparente deles é o <strong>Modelo de Pequeno Porte</strong> (MPP): um modelo semiestrutural deliberadamente parcimonioso, cuja função é menos prever com máxima acurácia do que organizar de forma clara o raciocínio condicional que sustenta a decisão de política monetária.</p>
-<p>O BCB publica a estrutura das equações nos boxes dos Relatórios de Inflação e, desde 2020, as tabelas de parâmetros estimados. Mas <strong>não publica o código nem a base de dados</strong>. Para quem quer usar o modelo — e não apenas ler suas projeções — isso é uma parede.</p>
-<p>Este projeto atravessa essa parede: reconstrói o modelo em Python, mede o quão perto se chega das projeções oficiais, e expõe o motor como uma ferramenta que qualquer pessoa pode usar conversando com uma IA.</p>
+<p>O BCB publica a estrutura das equações nos boxes dos Relatórios e, desde 2020, as tabelas de parâmetros estimados. Mas <strong>não publica o código nem a base de dados</strong>. Para quem quer usar o modelo, e não apenas ler suas projeções, isso é uma parede.</p>
+<p>Este projeto atravessa essa parede: reconstrói o modelo em Python, mede o quão perto se chega das projeções oficiais e põe o modelo num painel em que qualquer pessoa muda as premissas e vê a projeção.</p>
 <hr>
 </section>
 <section id="o-modelo" class="level2">
 <h2 class="anchored" data-anchor-id="o-modelo">O modelo</h2>
-<p>Sete equações estimadas, ligadas por identidades contábeis, em frequência trimestral.</p>
+<p>Equações estimadas uma a uma, ligadas por identidades, em frequência trimestral.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -486,45 +456,70 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td><strong>Curva IS</strong></td>
-<td>Hiato do produto responde ao juro real</td>
+<td>Hiato do produto responde ao juro real acima do neutro</td>
 </tr>
 <tr class="even">
-<td><strong>Curva de Phillips</strong></td>
-<td>Inflação de preços livres</td>
+<td><strong>Curva de Phillips dos livres</strong></td>
+<td>Na forma do modelo agregado do BC (RI jun/2024): inércia dos livres e do IPCA, expectativas, commodities em reais (IC-Br), câmbio contra a paridade, hiato, cadeias de suprimento e El Niño</td>
 </tr>
 <tr class="odd">
-<td><strong>Expectativas</strong></td>
-<td>Inércia, inflação passada e a projeção do próprio modelo, ancoradas na meta</td>
+<td><strong>Preços administrados</strong></td>
+<td>Na ponderação do modelo de administrados do BC (RPM jun/2025): petróleo em reais, Itaipu, remédios e inflação passada</td>
 </tr>
 <tr class="even">
+<td><strong>Expectativas</strong></td>
+<td>Em desvio da meta, com inércia, inflação passada e a inflação que o próprio modelo projeta</td>
+</tr>
+<tr class="odd">
 <td><strong>Regra de Taylor</strong></td>
 <td>Selic reage ao desvio das expectativas em relação à meta</td>
 </tr>
-<tr class="odd">
-<td><strong>Paridade de juros</strong></td>
-<td>Câmbio reage ao diferencial de juros</td>
-</tr>
 <tr class="even">
-<td><strong>Preços administrados</strong></td>
-<td>Repasse do petróleo em reais</td>
-</tr>
-<tr class="odd">
-<td><strong>Sazonalidade</strong></td>
-<td>Dessazonalização dos preços livres</td>
+<td><strong>Câmbio</strong></td>
+<td>Paridade de juros e paridade do poder de compra</td>
 </tr>
 </tbody>
 </table>
-<p>O que distingue esta versão: <strong>Selic, câmbio e preços administrados são endógenos</strong>. Isso significa que o modelo os projeta sozinho, em vez de recebê-los como hipótese — e cria um bloco simultâneo dentro do trimestre, em que o hiato depende do juro real, o juro real da Selic e das expectativas, a Selic das expectativas, e o câmbio do diferencial de juros.</p>
-<p>As expectativas seguem a forma que o Banco Central descreve nos seus boxes: em desvio da meta, com inércia, com a inflação passada e com a inflação que o próprio modelo projeta. A inércia estimada aqui, 0,77, é praticamente a do BCB, 0,75.</p>
-<p>A consequência econômica é direta: um aperto monetário passa a <strong>apreciar o câmbio</strong>, e a apreciação realimenta a inflação. O canal cambial de transmissão, ausente quando o câmbio é exógeno, torna-se operante.</p>
-<p>A base é recoletada das fontes primárias — Banco Central, IBGE, FRED, NOAA —, o que torna o exercício <strong>atualizável</strong>: o modelo roda com os dados de hoje.</p>
+<p><strong>Selic, câmbio e preços administrados são endógenos</strong>: o modelo os projeta sozinho, em vez de recebê-los como hipótese. Um aperto monetário aprecia o câmbio, e a apreciação realimenta a inflação: o canal cambial de transmissão fica operante.</p>
+<p>Estimados só com os nossos dados, os coeficientes chegam perto dos publicados pelo BC:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parâmetro</th>
+<th style="text-align: right;">Modelo</th>
+<th style="text-align: right;">BC (RI jun/2024)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Commodities em reais na curva de Phillips</td>
+<td style="text-align: right;">0,023</td>
+<td style="text-align: right;">0,023</td>
+</tr>
+<tr class="even">
+<td>Câmbio contra a paridade na curva de Phillips</td>
+<td style="text-align: right;">0,008</td>
+<td style="text-align: right;">0,011</td>
+</tr>
+<tr class="odd">
+<td>Inércia das expectativas</td>
+<td style="text-align: right;">0,77</td>
+<td style="text-align: right;">0,75</td>
+</tr>
+<tr class="even">
+<td>Reação da Selic ao desvio das expectativas</td>
+<td style="text-align: right;">1,71</td>
+<td style="text-align: right;">2,03</td>
+</tr>
+</tbody>
+</table>
+<p>A base é recoletada das fontes primárias (Banco Central, IBGE, FRED, NOAA), o que torna o exercício <strong>atualizável</strong>: o modelo roda com os dados de hoje, até o 3º trimestre de 2026.</p>
 <hr>
 </section>
 <section id="os-resultados" class="level2">
 <h2 class="anchored" data-anchor-id="os-resultados">Os resultados</h2>
-<section id="validação-econômica" class="level3">
-<h3 class="anchored" data-anchor-id="validação-econômica">Validação econômica</h3>
-<p>O teste mais exigente disponível é comparar o modelo com o que o Banco Central publica sobre o seu:</p>
+<section id="os-experimentos-dos-boxes-do-bc" class="level3">
+<h3 class="anchored" data-anchor-id="os-experimentos-dos-boxes-do-bc">Os experimentos dos boxes do BC</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -533,228 +528,104 @@ window.Quarto = {
 </colgroup>
 <thead>
 <tr class="header">
-<th>Medida</th>
+<th>Experimento</th>
 <th>Modelo</th>
-<th>BCB</th>
+<th>BC</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Selic +1 p.p. por 4 trimestres, depois a regra de Taylor</td>
-<td><strong>−0,27 p.p.</strong>, no 5º trimestre</td>
-<td>−0,27 (agregado) e −0,24 (desagregado), no 4º</td>
+<td>Selic +1 p.p. por 4 trimestres, depois a regra de Taylor: efeito máximo no IPCA em 12 meses</td>
+<td><strong>−0,29 p.p.</strong>, no 4º trimestre</td>
+<td>−0,27 p.p. no 4º (agregado, RI jun/2024)</td>
 </tr>
 <tr class="even">
-<td>Inércia das expectativas</td>
-<td><strong>0,77</strong></td>
-<td>0,75</td>
-</tr>
-<tr class="odd">
-<td>Reação da Selic ao desvio das expectativas</td>
-<td><strong>1,71</strong></td>
-<td>1,30 – 2,03</td>
+<td>Depreciação permanente de 10% do real: efeito máximo no IPCA em 12 meses</td>
+<td><strong>1,08 p.p.</strong></td>
+<td>0,96 (RI jun/2024) e 1,0 (RPM jun/2025)</td>
 </tr>
 </tbody>
 </table>
-<p>O experimento de juros é o padrão dos boxes do BCB: a Selic sobe um ponto por quatro trimestres e depois volta a seguir a regra de Taylor. O efeito máximo no IPCA em doze meses cai dentro da faixa publicada, e o caminho passa pelos mesmos canais: hiato, câmbio e expectativas que cedem devagar.</p>
-</section>
-<section id="com-as-premissas-do-relatório-de-setembro" class="level3">
-<h3 class="anchored" data-anchor-id="com-as-premissas-do-relatório-de-setembro">Com as premissas do Relatório de setembro</h3>
-<p>O Apêndice metodológico do Relatório de Política Monetária descreve os condicionantes: Selic da pesquisa Focus, câmbio pela paridade do poder de compra, petróleo, inflação externa e juro neutro de 5%. Com eles, e com o primeiro trimestre fixado pela projeção do BCB, como ele faz no curto prazo:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>IPCA em 4 trimestres</th>
-<th>2026</th>
-<th>2027</th>
-<th>1º tri/2028</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>BCB (RPM set/2026)</td>
-<td>5,2%</td>
-<td>3,9%</td>
-<td>3,2%</td>
-</tr>
-<tr class="even">
-<td>Modelo</td>
-<td>5,2%</td>
-<td>4,0%</td>
-<td>3,6%</td>
-</tr>
-</tbody>
-</table>
-<p>O erro absoluto médio nos dez trimestres da tabela oficial é de <strong>0,19 ponto</strong>, com viés praticamente nulo. As probabilidades de o IPCA passar do teto ficam próximas das publicadas: 37% em 2027 e 18% em 2028 no modelo, contra 33% e 16% no Relatório.</p>
+<p>No repasse, o total fica perto do BC, mas a composição não: os administrados sobem mais no modelo (2,15 p.p. contra 1,65) e os livres, menos (0,62 contra 0,72).</p>
 </section>
 <section id="depois-da-ata-da-282ª-reunião-do-copom" class="level3">
 <h3 class="anchored" data-anchor-id="depois-da-ata-da-282ª-reunião-do-copom">Depois da ata da 282ª reunião do Copom</h3>
-<p>Em novembro, o Copom atualizou o cenário: câmbio partindo de R$ 5,20, Selic do Focus mais alta e petróleo em queda. A ata publica três pontos da projeção:</p>
+<p>Em novembro, o Copom atualizou o cenário: câmbio partindo de R$ 5,20, Selic do Focus e petróleo em queda. A ata publica três pontos da projeção:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>IPCA em 4 trimestres</th>
-<th>2026</th>
-<th>2027</th>
-<th>2º tri/2028</th>
+<th style="text-align: right;">2026</th>
+<th style="text-align: right;">2027</th>
+<th style="text-align: right;">2º tri/2028</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Copom (ata 282ª)</td>
-<td>5,6%</td>
-<td>4,7%</td>
-<td>3,5%</td>
+<td style="text-align: right;">5,6%</td>
+<td style="text-align: right;">4,7%</td>
+<td style="text-align: right;">3,5%</td>
 </tr>
 <tr class="even">
 <td>Modelo</td>
-<td>5,6%</td>
-<td>4,5%</td>
-<td>3,8%</td>
+<td style="text-align: right;">5,6%</td>
+<td style="text-align: right;">4,5%</td>
+<td style="text-align: right;">3,5%</td>
 </tr>
 </tbody>
 </table>
-<p>O ano de 2026 coincide por construção. Em 2027 o modelo fica 0,2 ponto abaixo, e no horizonte relevante, 0,3 ponto acima. Pelo leque, a chance de o IPCA passar do teto é de 52% em 2027 e de 21% em 2028.</p>
+<p>O ano de 2026 coincide por construção: o primeiro trimestre da projeção segue o curto prazo do BC. Pelo leque, a chance de o IPCA passar do teto da meta é de 52% em 2027 e de 15% em 2028.</p>
 </section>
-<section id="o-el-niño-decide-boa-parte-do-número" class="level3">
-<h3 class="anchored" data-anchor-id="o-el-niño-decide-boa-parte-do-número">O El Niño decide boa parte do número</h3>
-<p>O episódio de 2026 é intenso, e o seu efeito é a premissa mais sensível. Estimado só com os nossos dados, ele leva o IPCA a 5,4% em 2027; sem o choque, a 4,2%. A versão do gráfico calibra o efeito pela evidência que o próprio BCB publicou: no Questionário Pré-Copom, a mediana dos analistas é de 0,85 ponto em dois anos para um El Niño como o de 2014-15.</p>
+<section id="com-as-premissas-do-relatório-de-setembro" class="level3">
+<h3 class="anchored" data-anchor-id="com-as-premissas-do-relatório-de-setembro">Com as premissas do Relatório de setembro</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>IPCA em 4 trimestres</th>
+<th style="text-align: right;">2026</th>
+<th style="text-align: right;">2027</th>
+<th style="text-align: right;">1º tri/2028</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BCB (RPM set/2026)</td>
+<td style="text-align: right;">5,2%</td>
+<td style="text-align: right;">3,9%</td>
+<td style="text-align: right;">3,2%</td>
+</tr>
+<tr class="even">
+<td>Modelo</td>
+<td style="text-align: right;">5,2%</td>
+<td style="text-align: right;">3,8%</td>
+<td style="text-align: right;">3,4%</td>
+</tr>
+</tbody>
+</table>
+<p>Até o início de 2028 o modelo acompanha o Relatório. Daí em diante fica abaixo: 2,4% no fim de 2028 e 2,3% no início de 2029, contra 3,1% do BC. No conjunto dos dez trimestres da tabela oficial, o erro absoluto médio é de 0,37 ponto.</p>
+</section>
+<section id="o-dólar-depois-da-eleição" class="level3">
+<h3 class="anchored" data-anchor-id="o-dólar-depois-da-eleição">O dólar depois da eleição</h3>
+<p>A ata usou câmbio de R$ 5,20. Rodando o modelo com o câmbio de antes da eleição (R$ 5,04) e com o de meados de novembro (R$ 5,79), a diferença no IPCA em quatro trimestres é de <strong>+0,3 ponto em 2026, +1,3 em 2027 e +1,0 no 2º trimestre de 2028</strong>. O canal mais forte é o petróleo em reais, seguido das commodities, das expectativas e da indexação dos administrados.</p>
+</section>
+<section id="o-el-niño-pesa-no-número" class="level3">
+<h3 class="anchored" data-anchor-id="o-el-niño-pesa-no-número">O El Niño pesa no número</h3>
+<p>O episódio de 2026 é intenso, e o seu efeito é a premissa mais sensível. O modelo calibra o efeito líquido pela evidência que o próprio BC publicou: no Questionário Pré-Copom, a mediana dos analistas é de 0,85 ponto no IPCA em dois anos para um El Niño como o de 2014-15. Parte da alta é devolvida um ano depois, quando os preços dos alimentos se normalizam.</p>
 <hr>
 </section>
 </section>
 <section id="a-distância-honesta" class="level2">
 <h2 class="anchored" data-anchor-id="a-distância-honesta">A distância honesta</h2>
-<p>Cabe uma ressalva, porque a tentação de apresentar o resultado como “a projeção do Banco Central” é real — e seria incorreto.</p>
+<p>Cabe uma ressalva, porque a tentação de apresentar o resultado como “a projeção do Banco Central” é real, e seria incorreto.</p>
 <p><strong>Este não é o modelo vigente do BCB.</strong> Desde 2020, o Banco Central estima o hiato do produto e o juro real neutro como <strong>variáveis latentes</strong>, com estimação bayesiana do sistema inteiro. Aqui, as equações são estimadas uma a uma, e o hiato e o neutro vêm de filtros estatísticos. A estrutura das equações é a do modelo atual; a estimação é a da tradição anterior.</p>
 <p>Três escolhas também são nossas, e não do BCB: o primeiro trimestre fixado pela projeção oficial, o tamanho do efeito do El Niño e o método do leque e das probabilidades, que o Banco Central não publica.</p>
 <p>As projeções produzidas aqui <strong>não são</strong> as do Banco Central e não devem ser apresentadas como tais. A proximidade medida acima mostra que a estrutura captura o essencial do mecanismo de transmissão.</p>
 <hr>
 </section>
-<section id="usando-o-mcp" class="level2">
-<h2 class="anchored" data-anchor-id="usando-o-mcp">Usando o MCP</h2>
-<p>O motor do modelo está exposto como <strong>servidor MCP</strong> — o padrão aberto que permite a um assistente de IA chamar ferramentas externas. Na prática: você conversa com o Claude, informa as premissas, e ele devolve a projeção e o <strong>gráfico pronto</strong> para colar no relatório.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Por que isso importa
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Sem MCP, se você pedir uma projeção de inflação ao Claude, ele responde com o que “lembra” — e pode inventar um número plausível. Com ele, o Claude <strong>roda o modelo de verdade</strong> e devolve o resultado.</p>
-</div>
-</div>
-<section id="conectar" class="level3">
-<h3 class="anchored" data-anchor-id="conectar">Conectar</h3>
-<p>No Claude, vá em <strong>Configurações → Connectors → Adicionar conector personalizado</strong> e cole:</p>
-<pre><code>https://mpp-mcp.analisemacro.workers.dev/mcp</code></pre>
-<p>Se aparecerem quatro ferramentas com o prefixo <code>mpp_</code>, está funcionando. Não precisa de senha, cadastro nem instalação. O mesmo endereço funciona em qualquer cliente que fale MCP — Cursor, Codex, VS Code.</p>
-</section>
-<section id="o-que-dá-para-pedir" class="level3">
-<h3 class="anchored" data-anchor-id="o-que-dá-para-pedir">O que dá para pedir</h3>
-<p>Comece pelo simples, para ver o cenário de referência:</p>
-<blockquote class="blockquote">
-<p><em>“O que o modelo de pequeno porte projeta para a inflação?”</em></p>
-</blockquote>
-<p>Depois informe suas próprias hipóteses — que é o ponto do exercício:</p>
-<blockquote class="blockquote">
-<p><em>“Projete a inflação supondo a Selic a 12,5% e o câmbio a R$ 5,60.”</em></p>
-</blockquote>
-<blockquote class="blockquote">
-<p><em>“E se o petróleo subir para US$ 110 e o risco-país for a 220 pontos?”</em></p>
-</blockquote>
-<blockquote class="blockquote">
-<p><em>“Faça a projeção com a Selic caindo gradualmente: 14, 13,5, 13, 12,5 e 12%.”</em></p>
-</blockquote>
-<p>Note a última: quando você dá uma <strong>lista</strong>, cada valor vale para um trimestre. Um número único vale para todo o horizonte.</p>
-<p>Para o gráfico:</p>
-<blockquote class="blockquote">
-<p><em>“Faça um gráfico de leque dessa projeção.”</em></p>
-</blockquote>
-<p>E para comparar cenários:</p>
-<blockquote class="blockquote">
-<p><em>“Compare um cenário com a Selic a 14% contra outro a 11%.”</em></p>
-</blockquote>
-</section>
-<section id="as-premissas-aceitas" class="level3">
-<h3 class="anchored" data-anchor-id="as-premissas-aceitas">As premissas aceitas</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Premissa</th>
-<th>Unidade</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Selic</td>
-<td>% ao ano</td>
-</tr>
-<tr class="even">
-<td>Câmbio</td>
-<td>R<span class="math inline">\(/US\)</span></td>
-</tr>
-<tr class="odd">
-<td>Petróleo Brent</td>
-<td>US$/barril</td>
-</tr>
-<tr class="even">
-<td>Inflação americana</td>
-<td>% no trimestre</td>
-</tr>
-<tr class="odd">
-<td>Juro básico americano</td>
-<td>% ao ano</td>
-</tr>
-<tr class="even">
-<td>Risco-país (CDS 5 anos)</td>
-<td>pontos-base</td>
-</tr>
-<tr class="odd">
-<td>Juro real neutro</td>
-<td>% ao ano</td>
-</tr>
-<tr class="even">
-<td>Âncora de inflação de longo prazo</td>
-<td>%</td>
-</tr>
-<tr class="odd">
-<td>Pressão em cadeias globais</td>
-<td>desvios-padrão</td>
-</tr>
-<tr class="even">
-<td>Oceanic Niño Index</td>
-<td>°C</td>
-</tr>
-</tbody>
-</table>
-<p>Você não precisa decorar os nomes — basta descrever em português. O que não for informado segue o cenário de referência.</p>
-</section>
-<section id="o-detalhe-que-muda-a-interpretação" class="level3">
-<h3 class="anchored" data-anchor-id="o-detalhe-que-muda-a-interpretação">O detalhe que muda a interpretação</h3>
-<p>Este é o ponto mais importante para quem for usar.</p>
-<p><strong>Selic e câmbio são variáveis endógenas.</strong> Se você não informar nada, o modelo as <strong>projeta sozinho</strong> e elas aparecem como <em>resultado</em>. Quando você <strong>informa</strong> uma trajetória de Selic, está <strong>suspendendo</strong> a regra de Taylor: o que sai não é mais “o que o modelo prevê”, e sim “o que aconteceria com a inflação <strong>se</strong> a Selic seguisse esse caminho”.</p>
-<p>A distinção importa na hora de comunicar. Um exemplo concreto: se você impuser uma Selic mais baixa do que a regra estimada recomendaria, o modelo devolve inflação mais alta e crescente — não porque esteja errado, mas porque você pediu exatamente isso.</p>
-</section>
-<section id="um-roteiro-de-dez-minutos" class="level3">
-<h3 class="anchored" data-anchor-id="um-roteiro-de-dez-minutos">Um roteiro de dez minutos</h3>
-<ol type="1">
-<li><em>“O que o modelo de pequeno porte projeta para a inflação?”</em></li>
-<li><em>“Me explica esse modelo e suas limitações.”</em></li>
-<li><em>“Projete com a Selic a 12,5% e o câmbio a R$ 5,60.”</em></li>
-<li><em>“Faça um gráfico de leque dessa projeção.”</em></li>
-<li><em>“Compare esse cenário com um de Selic a 15%.”</em></li>
-<li><em>“Por que a inflação sobe quando a Selic cai nesse modelo?”</em></li>
-</ol>
-<p>A última pergunta é a mais interessante: o assistente consegue explicar o mecanismo de transmissão — juro real menor, hiato mais aberto, pressão na curva de Phillips — em vez de apenas repetir números.</p>
-<hr>
-</section>
-</section>
 <section id="o-curso" class="level2">
 <h2 class="anchored" data-anchor-id="o-curso">O curso</h2>
-<p>A leitura de um modelo como este — de onde vem cada premissa, o que significa um leque, por que as expectativas demoram a ceder e o que mudou no BCB em 2020 — é o assunto do curso <strong>Modelos do Banco Central</strong>, com turma ao vivo a partir de 5 de dezembro de 2026.</p>
+<p>A leitura e a construção de um modelo como este (de onde vem cada premissa, o que significa um leque, por que as expectativas demoram a ceder, como o câmbio passa para os preços e o que mudou no BCB em 2020) são o assunto do curso <strong>Modelos do Banco Central</strong>, com turma ao vivo a partir de 5 de dezembro de 2026 e trilha de implementação em R ou Python.</p>
 <p><a href="https://analisemacro.com.br/curso/modelos-do-banco-central/?utm_source=portfolio&amp;utm_medium=projeto&amp;utm_campaign=modelos-bc&amp;utm_content=mpp-bcb">Conheça o curso</a></p>
 
 
