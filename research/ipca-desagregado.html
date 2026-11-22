@@ -8,9 +8,9 @@
 
 <meta name="author" content="Vitor Wilher">
 <meta name="dcterms.date" content="2026-11-11">
-<meta name="description" content="Working paper que testa se nove modelos de fundação de séries temporais, usados sem treino nos 377 subitens do IPCA e agregados com os pesos do IBGE, competem com o Focus. Num walk-forward com informação datada, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença significativa.">
+<meta name="description" content="Working paper que descreve a Previsão Agêntica do IPCA: média ponderada de sete famílias (modelos de fundação, estatísticos e ML nos 377 subitens; estatísticos no índice cheio; inflação implícita da B3; MPP; Focus Top 5), com pesos por horizonte pela aderência recente e um pipeline orientado a eventos. Com alvos desde 2024, o erro quadrático é 0,77 do da mediana do Focus no mês seguinte e fica entre 0,70 e 0,89 no IPCA em 12 meses, sem diferença significativa a 5%.">
 
-<title>Modelos de Fundação para Previsão no Brasil – Portfólio do VW</title>
+<title>Previsão Agêntica do IPCA – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -120,14 +120,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Modelos de Fundação para Previsão no Brasil – Portfólio do VW">
-<meta property="og:description" content="Working paper que testa se nove modelos de fundação de séries temporais, usados sem treino nos 377 subitens do IPCA e agregados com os pesos do IBGE, competem com o Focus. Num walk-forward com informação datada, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença significativa.">
+<meta property="og:title" content="Previsão Agêntica do IPCA – Portfólio do VW">
+<meta property="og:description" content="Working paper que descreve a Previsão Agêntica do IPCA: média ponderada de sete famílias (modelos de fundação, estatísticos e ML nos 377 subitens; estatísticos no índice cheio; inflação implícita da B3; MPP; Focus Top 5), com pesos por horizonte pela aderência recente e um pipeline orientado a eventos. Com alvos desde 2024, o erro quadrático é 0,77 do da mediana do Focus no mês seguinte e fica entre 0,70 e 0,89 no IPCA em 12 meses, sem diferença significativa a 5%.">
 <meta property="og:image" content="https://vitorwilher.github.io/research/ipca_desagregado_previsao_12m.png">
 <meta property="og:site_name" content="Portfólio do VW">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:width" content="2800">
-<meta name="twitter:title" content="Modelos de Fundação para Previsão no Brasil – Portfólio do VW">
-<meta name="twitter:description" content="Working paper que testa se nove modelos de fundação de séries temporais, usados sem treino nos 377 subitens do IPCA e agregados com os pesos do IBGE, competem com o Focus. Num walk-forward com informação datada, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença significativa.">
+<meta name="twitter:title" content="Previsão Agêntica do IPCA – Portfólio do VW">
+<meta name="twitter:description" content="Working paper que descreve a Previsão Agêntica do IPCA: média ponderada de sete famílias (modelos de fundação, estatísticos e ML nos 377 subitens; estatísticos no índice cheio; inflação implícita da B3; MPP; Focus Top 5), com pesos por horizonte pela aderência recente e um pipeline orientado a eventos. Com alvos desde 2024, o erro quadrático é 0,77 do da mediana do Focus no mês seguinte e fica entre 0,70 e 0,89 no IPCA em 12 meses, sem diferença significativa a 5%.">
 <meta name="twitter:image" content="https://vitorwilher.github.io/research/ipca_desagregado_previsao_12m.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -387,6 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#resumo" id="toc-resumo" class="nav-link active" data-scroll-target="#resumo">Resumo</a></li>
   <li><a href="#estrutura-do-paper" id="toc-estrutura-do-paper" class="nav-link" data-scroll-target="#estrutura-do-paper">Estrutura do paper</a></li>
   <li><a href="#como-citar" id="toc-como-citar" class="nav-link" data-scroll-target="#como-citar">Como citar</a></li>
+  <li><a href="#versões-anteriores" id="toc-versões-anteriores" class="nav-link" data-scroll-target="#versões-anteriores">Versões anteriores</a></li>
   <li><a href="#veja-também" id="toc-veja-também" class="nav-link" data-scroll-target="#veja-também">Veja também</a></li>
   </ul>
 </nav>
@@ -397,22 +398,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelos de Fundação para Previsão no Brasil</h1>
-<p class="subtitle lead">Previsão dos 377 subitens do IPCA, agregação com os pesos do IBGE e comparação com o Focus</p>
+<h1 class="title">Previsão Agêntica do IPCA</h1>
+<p class="subtitle lead">Uma previsão da inflação que se atualiza a cada nova informação: sete famílias de modelos, mercado e pesquisa combinadas por horizonte</p>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Quarto</div>
     <div class="quarto-category">Foundation Models</div>
-    <div class="quarto-category">Chronos</div>
-    <div class="quarto-category">TimesFM</div>
-    <div class="quarto-category">TiRex</div>
-    <div class="quarto-category">Moirai</div>
-    <div class="quarto-category">Toto</div>
-    <div class="quarto-category">Granite</div>
-    <div class="quarto-category">TimeGPT</div>
+    <div class="quarto-category">Combinação de Previsões</div>
+    <div class="quarto-category">Nowcasting</div>
+    <div class="quarto-category">Agentes de IA</div>
     <div class="quarto-category">Walk-forward</div>
     <div class="quarto-category">Diebold-Mariano</div>
-    <div class="quarto-category">CRPS</div>
     <div class="quarto-category">IPCA</div>
     <div class="quarto-category">Focus</div>
     <div class="quarto-category">IBGE</div>
@@ -424,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    Working paper que testa se nove modelos de fundação de séries temporais, usados sem treino nos 377 subitens do IPCA e agregados com os pesos do IBGE, competem com o Focus. Num walk-forward com informação datada, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença significativa.
+    Working paper que descreve a Previsão Agêntica do IPCA: média ponderada de sete famílias (modelos de fundação, estatísticos e ML nos 377 subitens; estatísticos no índice cheio; inflação implícita da B3; MPP; Focus Top 5), com pesos por horizonte pela aderência recente e um pipeline orientado a eventos. Com alvos desde 2024, o erro quadrático é 0,77 do da mediana do Focus no mês seguinte e fica entre 0,70 e 0,89 no IPCA em 12 meses, sem diferença significativa a 5%.
   </div>
 </div>
 
@@ -452,6 +448,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">November 22, 2026</p>
+    </div>
+  </div>
     
   </div>
   
@@ -466,41 +468,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Working paper · versão 2.0 · resultados exploratórios
+<span class="screen-reader-only">Note</span>Working paper · versão 3.1 · 22/11/2026
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O paper conta o percurso da pesquisa decisão a decisão, à luz da literatura: a história do IPCA, a dos modelos de fundação, os nove modelos usados e os resultados num <em>walk-forward</em> com datas de divulgação do IBGE e de publicação do Focus auditadas. <strong>Comentários e críticas são muito bem-vindos</strong>: escreva para <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a>.</p>
+<p>O paper descreve a metodologia da previsão publicada (sete famílias) e do pipeline de atualização: as famílias de modelos, o bloco institucional comum, a regra de combinação por horizonte, o respaldo na literatura e a operação agêntica. <strong>Comentários e críticas são muito bem-vindos</strong>: escreva para <a href="mailto:vitorwilher@analisemacro.com.br">vitorwilher@analisemacro.com.br</a>.</p>
 </div>
 </div>
 <div style="text-align: center; margin: 2em 0;">
-<p><a href="ipca_desagregado_modelos_fundacao.pdf" class="btn btn-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📄 Baixar PDF (versão 2.0)</strong></a> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/" class="btn btn-outline-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📊 Dashboard ao vivo</strong></a></p>
+<p><a href="previsao_agentica_ipca.pdf" class="btn btn-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📄 Baixar PDF (versão 3.1)</strong></a> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/" class="btn btn-outline-primary" role="button" style="font-size: 1.1em; padding: 0.8em 2em;"><strong>📊 Painel ao vivo</strong></a></p>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="ipca_desagregado_previsao_12m.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Trajetória prevista do IPCA em 12 meses, com intervalos de 50% e 80%, meta e Focus</figcaption>
+<figcaption>IPCA em 12 meses realizado e previsão publicada até out/2027, com intervalos de 50% e 80% e a meta (último IPCA: out/2026; previsão de 22/11/2026)</figcaption>
 </figure>
 </div>
 <hr>
 <section id="resumo" class="level2">
 <h2 class="anchored" data-anchor-id="resumo">Resumo</h2>
-<p>O IPCA é um índice agregado de 377 subitens. Este trabalho testa se nove modelos de fundação de séries temporais, usados sem treino, conseguem prever esses subitens bem o bastante para que a soma ponderada compita com o Focus, e conta o percurso da pesquisa decisão a decisão, à luz da literatura. Os modelos preveem os 377 subitens; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e créditos de Itaipu), misturadas à média sazonal e combinadas num ensemble ponderado pelo inverso do RMSE passado. Num <em>walk-forward</em> com informação datada, o ensemble tem erro igual ao do Focus no mês seguinte (razão de RMSE 1,009) e de 0,911 a 0,998 do erro do Focus de 2 a 12 meses à frente, sem diferença significativa. Intervalos gaussianos construídos com os erros já conhecidos em cada data ficam perto da cobertura nominal, mas a correção de viés em tempo real piora a previsão. Com dados até set/2026, o ensemble projeta o IPCA em 12 meses em 5,14% em dez/2026 e 4,55% em set/2027, acima do teto da meta.</p>
-<p><strong>Palavras-chave:</strong> inflação; modelos de fundação; previsão desagregada; Focus; IPCA.</p>
+<p>Este trabalho descreve a Previsão Agêntica do IPCA, a previsão da inflação brasileira publicada pela Análise Macro, que se atualiza sozinha a cada informação nova. A previsão é a média ponderada de sete famílias: modelos de fundação de séries temporais e modelos estatísticos aplicados aos 377 subitens do IPCA; um modelo de aprendizado de máquina global por subitem com câmbio, commodities e atividade; modelos estatísticos no índice cheio, inclusive os do boxe de aprendizado de máquina do Banco Central; a inflação implícita nas curvas da B3; o modelo semiestrutural da Análise Macro (MPP), reestimado só com o que se sabia em cada data; e o Focus Top 5. A mediana do Focus é a régua de avaliação, não um insumo. Três decisões definem o método. Primeiro, as famílias por subitem recebem o mesmo bloco institucional de preços administrados, e as que só olham preços recebem o repasse da depreciação recente estimado pelo MPP. Segundo, os pesos de cada horizonte seguem o inverso do quadrado do erro recente de cada família, com meia-vida de 12 meses — um caso da regra de Stock e Watson (2004). Terceiro, um pipeline orientado a eventos detecta cada divulgação, recalcula só o que ela afeta, passa por portões de qualidade e publica; um agente (Claude) escreve o comentário diário com cada número conferido. Num <em>walk-forward</em> com informação datada, com alvos desde 2024, o erro quadrático da previsão do mês é 0,77 do da mediana do Focus no mês seguinte e 0,84 doze meses à frente, com empate em dois e três meses; no IPCA em 12 meses, fica entre 0,70 e 0,89 de três a doze meses à frente. Nenhuma diferença é significativa a 5%, a amostra é curta e parte do desenho foi escolhida olhando esse período.</p>
+<p><strong>Palavras-chave:</strong> inflação; previsão autoral; modelos de fundação; combinação de previsões; <em>nowcasting</em>; agentes de IA; IPCA.</p>
 <hr>
 </section>
 <section id="estrutura-do-paper" class="level2">
 <h2 class="anchored" data-anchor-id="estrutura-do-paper">Estrutura do paper</h2>
 <ol type="1">
 <li><strong>Introdução</strong></li>
-<li><strong>O IPCA: um índice agregado</strong> — breve história, como o índice é construído e por que prever pelos componentes</li>
-<li><strong>Modelos de fundação para séries temporais</strong> — das redes recorrentes à atenção, o que é um modelo de fundação, a chegada às séries temporais e a previsão probabilística</li>
-<li><strong>Os nove modelos usados</strong> — Chronos-2 (isolado e com aprendizado entre séries), TimesFM 2.5, TimesFM 3.0, TiRex, Moirai 2.0, Toto, Granite TTM r2 e TimeGPT-1</li>
-<li><strong>Dados e desenho</strong> — SIDRA/IBGE (tabela 7060, jan/2020 a set/2026) e Focus/BCB por <em>vintage</em></li>
-<li><strong>O percurso da pesquisa</strong> — modelos puros, ganho da desagregação, diagnóstico do erro, informação institucional (combustíveis e energia), combinação, auditoria das datas e medida da incerteza</li>
-<li><strong>Resultados</strong> — IPCA do mês, onde o erro sobra e incerteza</li>
-<li><strong>Previsão atual</strong></li>
-<li><strong>Limitações</strong> e <strong>Conclusão</strong></li>
+<li><strong>O IPCA: um índice agregado</strong> — breve história, regime de metas e como o índice é construído</li>
+<li><strong>Dados e regra de não vazamento</strong></li>
+<li><strong>As sete famílias</strong> — modelos de fundação nos subitens, estatísticos por subitem, aprendizado de máquina por subitem com informação externa, estatísticos no índice cheio, inflação implícita, MPP mês a mês, Focus Top 5 e o repasse cambial</li>
+<li><strong>Bloco institucional comum</strong> — os preços administrados</li>
+<li><strong>A previsão publicada: combinação por horizonte</strong> — regra de combinação, por que famílias e não modelos, como se chegou às sete famílias e desempenho</li>
+<li><strong>Respaldo na literatura</strong></li>
+<li><strong>Pipeline de atualização: a previsão agêntica</strong> — eventos e sensores, rodada incremental, <em>nowcast</em> do mês, véspera com o IPCA-15, IPC-S, radar das pressões, o agente e os portões de qualidade</li>
+<li><strong>O modelo estrutural no painel</strong></li>
+<li><strong>Previsão atual</strong>, <strong>Limitações e próximos passos</strong> e <strong>Conclusão</strong></li>
 </ol>
 <hr>
 </section>
@@ -508,24 +511,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="como-citar">Como citar</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">@unpublished</span>{<span class="ot">wilher_2026_ipca_desagregado</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span>    = {Wilher, Vitor},</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>     = {Ensemble de Modelos de Funda<span class="ch">\c</span>{c}<span class="ch">\~</span>ao para Previs<span class="ch">\~</span>ao</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               da Infla<span class="ch">\c</span>{c}<span class="ch">\~</span>ao no Brasil},</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>      = {Working paper, vers<span class="ch">\~</span>ao 2.0},</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>      = {2026},</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">month</span>     = {nov},</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">url</span>       = {https://vitorwilher.github.io/research/ipca-desagregado.html}</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>     = {Previs<span class="ch">\~</span>ao Ag<span class="ch">\^</span>entica do {IPCA}},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>      = {Working paper, vers<span class="ch">\~</span>ao 3.1},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>      = {2026},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">month</span>     = {nov},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">url</span>       = {https://vitorwilher.github.io/research/ipca-desagregado.html}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="versões-anteriores" class="level2">
+<h2 class="anchored" data-anchor-id="versões-anteriores">Versões anteriores</h2>
+<ul>
+<li><strong>Versão 2.0 (11/11/2026):</strong> <a href="ipca_desagregado_modelos_fundacao.pdf">Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil (PDF)</a> — nove modelos de fundação nos 377 subitens, com ajustes para combustíveis e energia, combinados num ensemble contra o Focus.</li>
+</ul>
 <hr>
 </section>
 <section id="veja-também" class="level2">
 <h2 class="anchored" data-anchor-id="veja-também">Veja também</h2>
 <ul>
-<li>🛠️ <strong>Ficha técnica do projeto</strong>: <a href="../projetos/ipca-desagregado.html">IPCA Desagregado — projeto</a></li>
-<li>📊 <strong>Dashboard ao vivo</strong>: <a href="https://analisemacro.shinyapps.io/ipca-desagregado/">analisemacro.shinyapps.io/ipca-desagregado</a></li>
+<li>🛠️ <strong>Ficha técnica do projeto</strong>: <a href="../projetos/ipca-desagregado.html">Previsão Agêntica do IPCA — projeto</a></li>
+<li>📊 <strong>Painel ao vivo</strong>: <a href="https://analisemacro.shinyapps.io/ipca-desagregado/">analisemacro.shinyapps.io/ipca-desagregado</a></li>
 <li>📄 <strong>Paper online (versão mais recente)</strong>: <a href="https://analisemacro.shinyapps.io/ipca-desagregado/paper.pdf">analisemacro.shinyapps.io/ipca-desagregado/paper.pdf</a></li>
 </ul>
 <div class="text-muted" style="font-size: 0.85em;">
-<p><em>Dados: SIDRA/IBGE (tabela 7060) e API Olinda de expectativas do BCB (Focus). O código é mantido em repositório privado da Análise Macro.</em></p>
+<p><em>Dados: SIDRA/IBGE (tabela 7060 e IPCA), BCB (SGS e API Olinda de expectativas do Focus), B3, ANP, ANEEL, FGV (IPC-S) e IPEADATA. O código é mantido em repositório privado da Análise Macro.</em></p>
 </div>
 
 

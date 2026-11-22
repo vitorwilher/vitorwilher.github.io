@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-11-10">
-<meta name="description" content="Nove modelos de fundação de séries temporais preveem, sem treino, os 377 subitens do IPCA; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e Itaipu) e combinadas num ensemble. Num walk-forward com datas de divulgação e de publicação do Focus auditadas, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente. Inclui previsão atual da trajetória do IPCA em 12 meses contra a meta, com intervalos calibrados, dashboard e paper.">
+<meta name="description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
 
-<title>IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil – Portfólio do VW</title>
+<title>Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -84,14 +84,14 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil – Portfólio do VW">
-<meta property="og:description" content="Nove modelos de fundação de séries temporais preveem, sem treino, os 377 subitens do IPCA; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e Itaipu) e combinadas num ensemble. Num walk-forward com datas de divulgação e de publicação do Focus auditadas, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente. Inclui previsão atual da trajetória do IPCA em 12 meses contra a meta, com intervalos calibrados, dashboard e paper.">
+<meta property="og:title" content="Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW">
+<meta property="og:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
 <meta property="og:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:width" content="2800">
-<meta name="twitter:title" content="IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil – Portfólio do VW">
-<meta name="twitter:description" content="Nove modelos de fundação de séries temporais preveem, sem treino, os 377 subitens do IPCA; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e Itaipu) e combinadas num ensemble. Num walk-forward com datas de divulgação e de publicação do Focus auditadas, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente. Inclui previsão atual da trajetória do IPCA em 12 meses contra a meta, com intervalos calibrados, dashboard e paper.">
+<meta name="twitter:title" content="Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW">
+<meta name="twitter:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
 <meta name="twitter:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -349,9 +349,11 @@ ul.task-list li input[type="checkbox"] {
    
   <ul class="collapse">
   <li><a href="#a-pergunta" id="toc-a-pergunta" class="nav-link active" data-scroll-target="#a-pergunta">A pergunta</a></li>
-  <li><a href="#como-foi-feito" id="toc-como-foi-feito" class="nav-link" data-scroll-target="#como-foi-feito">Como foi feito</a></li>
+  <li><a href="#como-funciona" id="toc-como-funciona" class="nav-link" data-scroll-target="#como-funciona">Como funciona</a></li>
+  <li><a href="#pipeline-agêntico" id="toc-pipeline-agêntico" class="nav-link" data-scroll-target="#pipeline-agêntico">Pipeline agêntico</a></li>
   <li><a href="#o-que-se-encontrou" id="toc-o-que-se-encontrou" class="nav-link" data-scroll-target="#o-que-se-encontrou">O que se encontrou</a></li>
-  <li><a href="#previsão-atual-e-operação" id="toc-previsão-atual-e-operação" class="nav-link" data-scroll-target="#previsão-atual-e-operação">Previsão atual e operação</a></li>
+  <li><a href="#previsão-atual-22112026-último-ipca-out2026" id="toc-previsão-atual-22112026-último-ipca-out2026" class="nav-link" data-scroll-target="#previsão-atual-22112026-último-ipca-out2026">Previsão atual (22/11/2026, último IPCA: out/2026)</a></li>
+  <li><a href="#ressalvas" id="toc-ressalvas" class="nav-link" data-scroll-target="#ressalvas">Ressalvas</a></li>
   <li><a href="#ferramentas" id="toc-ferramentas" class="nav-link" data-scroll-target="#ferramentas">Ferramentas</a></li>
   </ul>
 </nav>
@@ -362,29 +364,30 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">IPCA Desagregado — Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil</h1>
+<h1 class="title">Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Shiny</div>
     <div class="quarto-category">Foundation Models</div>
     <div class="quarto-category">Chronos</div>
     <div class="quarto-category">TimesFM</div>
-    <div class="quarto-category">TiRex</div>
-    <div class="quarto-category">Moirai</div>
-    <div class="quarto-category">Toto</div>
-    <div class="quarto-category">Granite</div>
-    <div class="quarto-category">TimeGPT</div>
+    <div class="quarto-category">LightGBM</div>
+    <div class="quarto-category">ARIMA</div>
+    <div class="quarto-category">MPP</div>
+    <div class="quarto-category">Combinação de Previsões</div>
+    <div class="quarto-category">Nowcasting</div>
     <div class="quarto-category">Walk-forward</div>
     <div class="quarto-category">Diebold-Mariano</div>
-    <div class="quarto-category">CRPS</div>
     <div class="quarto-category">IPCA</div>
     <div class="quarto-category">Focus</div>
+    <div class="quarto-category">B3</div>
     <div class="quarto-category">Banco Central</div>
     <div class="quarto-category">IBGE</div>
     <div class="quarto-category">SIDRA</div>
     <div class="quarto-category">Macroeconomia</div>
-    <div class="quarto-category">Quarto</div>
-    <div class="quarto-category">shinyapps.io</div>
+    <div class="quarto-category">GitHub Actions</div>
+    <div class="quarto-category">Cloud Run</div>
+    <div class="quarto-category">MCP</div>
     <div class="quarto-category">Agentes de IA</div>
     <div class="quarto-category">Claude Code</div>
   </div>
@@ -392,7 +395,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Nove modelos de fundação de séries temporais preveem, sem treino, os 377 subitens do IPCA; as previsões são agregadas com os pesos do IBGE, ajustadas para combustíveis (ANP) e energia (bandeira e Itaipu) e combinadas num ensemble. Num walk-forward com datas de divulgação e de publicação do Focus auditadas, o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente. Inclui previsão atual da trajetória do IPCA em 12 meses contra a meta, com intervalos calibrados, dashboard e paper.
+    Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.
   </div>
 </div>
 
@@ -407,6 +410,12 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">November 22, 2026</p>
+    </div>
+  </div>
     
   </div>
   
@@ -425,15 +434,16 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Esta é a <strong>ficha técnica do projeto</strong>. Para o <em>working paper</em> completo, com resumo, estrutura, como citar e PDF para download, veja <a href="../research/ipca-desagregado.html"><strong>Modelos de Fundação para Previsão no Brasil</strong></a>.</p>
+<p>Esta é a <strong>ficha técnica do projeto</strong>. Para o <em>working paper</em> completo, com resumo, estrutura, como citar e PDF para download, veja <a href="../research/ipca-desagregado.html"><strong>Previsão Agêntica do IPCA</strong></a>.</p>
 </div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="ipca-desagregado-capa.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Trajetória prevista do IPCA em 12 meses, com intervalos de 50% e 80%, meta e Focus</figcaption>
+<figcaption>IPCA em 12 meses realizado e previsão publicada até out/2027, com intervalos de 50% e 80% e a meta (último IPCA: out/2026; previsão de 22/11/2026)</figcaption>
 </figure>
 </div>
+<p><em>Atualizado em 22/11/2026: versão 3.1, previsão publicada com sete famílias. Números com dados até o IPCA de out/2026.</em></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -445,19 +455,20 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><strong>Dashboard:</strong> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/">analisemacro.shinyapps.io/ipca-desagregado</a></li>
-<li><strong>Paper (PDF):</strong> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/paper.pdf">Ensemble de Modelos de Fundação para Previsão da Inflação no Brasil</a></li>
+<li><strong>Painel ao vivo:</strong> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/">analisemacro.shinyapps.io/ipca-desagregado</a> — previsão atual, comentário do dia, composição por família, desempenho contra o Focus e metodologia</li>
+<li><strong>Paper (PDF, versão 3.1):</strong> <a href="https://analisemacro.shinyapps.io/ipca-desagregado/paper.pdf">Previsão Agêntica do IPCA</a></li>
 <li>Código em repositório privado da Análise Macro.</li>
 </ul>
 </div>
 </div>
 <section id="a-pergunta" class="level2">
 <h2 class="anchored" data-anchor-id="a-pergunta">A pergunta</h2>
-<p>O IPCA é a média ponderada de centenas de variações de preço. Prever o índice pelos componentes é natural, mas exige modelar centenas de séries curtas e heterogêneas, e a literatura brasileira registra ganhos modestos da desagregação. Os <strong>modelos de fundação</strong> de séries temporais, redes pré-treinadas aplicadas sem estimação, mudam esse custo: prever os 377 subitens passa a ser uma única chamada por mês.</p>
-<p>O projeto testa se essa previsão desagregada, agregada com os pesos do IBGE, compete com a mediana do <strong>Boletim Focus</strong> em horizontes de 1 a 12 meses, num desenho em que cada previsão usa apenas a informação disponível na data.</p>
+<p>O projeto começou com uma pergunta de pesquisa: modelos de fundação de séries temporais, aplicados sem treino aos 377 subitens do IPCA e agregados com os pesos do IBGE, preveem o índice melhor que o Focus? A primeira versão terminou num empate, e o diagnóstico do erro mostrou por quê: no curto prazo, o que separa uma previsão da outra é <strong>informação</strong> — combustíveis, bandeira tarifária, reajustes regulados, a prévia do IPCA-15 —; do segundo trimestre em diante, pesam os <strong>modelos</strong>.</p>
+<p>A versão atual muda o objetivo: a <strong>melhor previsão fora da amostra</strong> do IPCA de cada mês e do acumulado em 12 meses, feita com tudo o que estava disponível na data — modelos, preços de mercado e a pesquisa Focus no recorte dos analistas que mais acertam. A <strong>mediana do Focus</strong> fica de fora da combinação: é a régua a bater.</p>
 </section>
-<section id="como-foi-feito" class="level2">
-<h2 class="anchored" data-anchor-id="como-foi-feito">Como foi feito</h2>
+<section id="como-funciona" class="level2">
+<h2 class="anchored" data-anchor-id="como-funciona">Como funciona</h2>
+<p>A previsão publicada é a <strong>média ponderada de sete famílias</strong>; cada família é resumida pela mediana dos seus modelos.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -465,55 +476,115 @@ ul.task-list li input[type="checkbox"] {
 </colgroup>
 <thead>
 <tr class="header">
-<th>Etapa</th>
-<th>O que entra</th>
+<th>Família</th>
+<th>O que é</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Dados</strong></td>
-<td>IPCA por subitem (SIDRA/IBGE, tabela 7060, POF 2017-18, desde jan/2020); IPCA em 12 meses (SGS 13522); expectativas Focus da API Olinda, do relatório publicado logo após cada IPCA, com datas de publicação auditadas</td>
+<td><strong>Modelos de fundação</strong></td>
+<td>Nove modelos (Chronos-2, TimesFM, TiRex, Moirai, Toto, Granite, TimeGPT), sem treino específico, nos 377 subitens, agregados com os pesos do IBGE</td>
 </tr>
 <tr class="even">
-<td><strong>Modelos</strong></td>
-<td>Chronos-2 (com e sem aprendizado entre séries), TimesFM 2.5 e 3, TiRex, Moirai 2.0, Toto, Granite TTM e TimeGPT-1, todos zero-shot, um ambiente Python por família</td>
+<td><strong>Estatísticos por subitem</strong></td>
+<td>ARIMA, ETS, Theta, ingênuo sazonal e média sazonal nos 377 subitens</td>
 </tr>
 <tr class="odd">
-<td><strong>Ajustes</strong></td>
-<td>Combustíveis pelo levantamento semanal da ANP; energia elétrica pela bandeira tarifária e pelos créditos de Itaipu, só depois de anunciados; mistura com a média sazonal; parâmetros escolhidos apenas com 2023</td>
+<td><strong>ML por subitem com informação externa</strong></td>
+<td>Um LightGBM global para os 377 subitens, um por horizonte, com câmbio, IC-Br, Brent, IBC-Br e desemprego, cada série com o seu atraso de publicação</td>
 </tr>
 <tr class="even">
-<td><strong>Combinação</strong></td>
-<td>Ensemble ponderado pelo inverso do RMSE dos erros já conhecidos, por horizonte; Top3 recursivo do Banco Central como alternativa testada</td>
+<td><strong>Estatísticos no índice cheio</strong></td>
+<td>Passeio aleatório, ARMA, VAR e curvas de Phillips: réplica do boxe de <em>machine learning</em> do RPM de dez/2025</td>
 </tr>
 <tr class="odd">
-<td><strong>Avaliação</strong></td>
-<td>Walk-forward com janela expansiva, alvos de jan/2024 a set/2026; Diebold-Mariano com correção HLN contra o Focus</td>
+<td><strong>Inflação implícita</strong></td>
+<td>Curvas PRE e DIC da B3, com a sazonalidade do IPCA</td>
 </tr>
 <tr class="even">
-<td><strong>Incerteza</strong></td>
-<td>Intervalos gaussianos com a dispersão dos erros passados, crescente no horizonte (WP 561 do BCB), calibrados no backtest; quantis nativos dos modelos avaliados por CRPS</td>
+<td><strong>MPP</strong></td>
+<td>Modelo semiestrutural da Análise Macro, reestimado a cada trimestre com o câmbio da data</td>
+</tr>
+<tr class="odd">
+<td><strong>Focus Top 5</strong></td>
+<td>Mediana dos cinco melhores do Focus disponível na data</td>
 </tr>
 </tbody>
 </table>
+<p>Três decisões definem o método:</p>
+<ul>
+<li><strong>Mesma informação para todos.</strong> As famílias por subitem recebem o mesmo bloco institucional para os 37 preços administrados (energia com bandeira e Itaipu, combustíveis pela ANP, planos de saúde, remédios, regras de reajuste), e as que só olham preços recebem o repasse da depreciação recente estimado pelo MPP. A comparação passa a medir o modelo, não a informação.</li>
+<li><strong>Pesos por horizonte, pela aderência.</strong> Em cada horizonte, peso ∝ (1/EQM)², só com erros já conhecidos na data e meia-vida de 12 meses — um caso da regra de Stock e Watson (2004). Na origem out/2026, no mês seguinte pesam mais a fundação (31%), o Top 5 (23%) e os estatísticos por subitem (21%); a 12 meses, o MPP (26%) e os estatísticos no índice cheio (21%).</li>
+<li><strong>Atualização a cada informação.</strong> Os três primeiros meses passam por um <strong>nowcast incremental</strong>: cada dado novo (ANP, bandeira, bônus de Itaipu, IPCA-15 por subitem, IPC-S de fim de mês) entra com o peso do subitem e fica registrado, com data e fonte, na trilha do mês.</li>
+</ul>
+</section>
+<section id="pipeline-agêntico" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-agêntico">Pipeline agêntico</h2>
+<ul>
+<li><strong>Sensores</strong> verificam IBGE, BCB, ANP, ANEEL e o calendário oficial do IBGE; cada informação nova dispara uma rodada no <strong>GitHub Actions</strong> que refaz só o que depende dela (grafo de etapas com impressão digital das entradas).</li>
+<li><strong>Portões de qualidade</strong> (painel completo, frescor dos dados, tamanho da revisão) antes de publicar; um vigia re-executa rodadas que falharam e um agente de diagnóstico (Claude) lê o log e abre <em>issue</em> ou <em>pull request</em> com a correção.</li>
+<li><strong>Coletor no Cloud Run</strong> (São Paulo) espelha ANP e ANEEL, que recusam os servidores do GitHub.</li>
+<li><strong>Comentário diário</strong> escrito pelo Claude a partir só das evidências calculadas; cada número do texto é conferido antes de sair.</li>
+<li><strong>Publicação</strong> atômica no painel Shiny e no servidor MCP da Análise Macro.</li>
+</ul>
 </section>
 <section id="o-que-se-encontrou" class="level2">
 <h2 class="anchored" data-anchor-id="o-que-se-encontrou">O que se encontrou</h2>
+<p>Walk-forward com informação datada, 47 origens (dez/2022 a out/2026), alvos desde jan/2024; erro quadrático médio da previsão publicada dividido pelo da mediana do Focus:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Horizonte (meses)</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>6</th>
+<th>9</th>
+<th>12</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>IPCA do mês</strong></td>
+<td>0,77</td>
+<td>1,05</td>
+<td>0,99</td>
+<td>0,90</td>
+<td>0,92</td>
+<td>0,84</td>
+</tr>
+<tr class="even">
+<td><strong>IPCA em 12 meses</strong></td>
+<td>—</td>
+<td>—</td>
+<td>0,89</td>
+<td>0,79</td>
+<td>0,70</td>
+<td>0,82</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>IPCA do mês:</strong> o ensemble empata com o Focus no mês seguinte e erra até 9% menos de 2 a 12 meses à frente, sem diferença estatisticamente significativa.</li>
-<li><strong>Onde o erro sobra:</strong> poucos preços explicam a maior parte — passagem aérea, gasolina e alimentos in natura no mês seguinte; energia elétrica a 3 meses. De 4 meses em diante, os preços administrados respondem por cerca de 60% do erro.</li>
-<li><strong>Incerteza:</strong> os intervalos construídos com os erros passados ficam perto da cobertura nominal e superam as distribuições nativas dos modelos, que são largas demais. A correção de viés estimada em tempo real piorou a previsão.</li>
+<li>A previsão erra menos que o Focus no mês seguinte e empata a dois e três meses; no IPCA em 12 meses, fica abaixo do Focus de três a doze meses à frente. <strong>Nenhuma diferença é significativa a 5%</strong> (Diebold-Mariano com correção HLN).</li>
+<li>O bloco institucional mudou o quadro dos modelos que só olhavam preços: no mês seguinte, a mediana do ML caiu de 3,16 para 0,89 do erro do Focus, e a dos estatísticos, de 3,12 para 1,27. A desvantagem desses modelos era informação, não método.</li>
+<li>Escolher entre os 103 modelos individuais pelo erro passado (o Top3 do BC) foi testado e perdeu para a combinação por famílias.</li>
 </ul>
 </section>
-<section id="previsão-atual-e-operação" class="level2">
-<h2 class="anchored" data-anchor-id="previsão-atual-e-operação">Previsão atual e operação</h2>
-<p>A cada divulgação do IPCA, um único script refaz a coleta, roda os nove modelos só na origem nova, aplica os ajustes, recalcula o ensemble e os intervalos, atualiza o paper (com todos os números gerados a partir das saídas) e publica o dashboard. Cada rodada é gravada num registro que só recebe acréscimos: o histórico das previsões feitas em tempo real, separado do backtest.</p>
-<p>O dashboard tem menus para a previsão atual (o IPCA do próximo mês e a trajetória do IPCA em 12 meses), o desempenho contra o Focus, a calibração da incerteza, a decomposição do erro por subitem e segmento, o registro das rodadas e a metodologia.</p>
+<section id="previsão-atual-22112026-último-ipca-out2026" class="level2">
+<h2 class="anchored" data-anchor-id="previsão-atual-22112026-último-ipca-out2026">Previsão atual (22/11/2026, último IPCA: out/2026)</h2>
+<ul>
+<li><strong>IPCA do mês:</strong> 0,44% em nov/2026, 0,54% em dez/2026 e 0,37% em jan/2027.</li>
+<li><strong>IPCA em 12 meses:</strong> 5,12% em dez/2026 e 5,30% em out/2027, com intervalo de 80% de 4,16% a 6,43%. O centro da previsão fica acima do teto da meta (4,5%) em toda a trajetória.</li>
+</ul>
+</section>
+<section id="ressalvas" class="level2">
+<h2 class="anchored" data-anchor-id="ressalvas">Ressalvas</h2>
+<p>Amostra curta (34 a 47 origens) e janelas sobrepostas; parte do desenho foi escolhida olhando 2024–26. O backtest do MPP usa dados revisados, o que o favorece. O Focus Top 5 entra como insumo: a combinação é de modelos e pesquisa, não só de modelos.</p>
 </section>
 <section id="ferramentas" class="level2">
 <h2 class="anchored" data-anchor-id="ferramentas">Ferramentas</h2>
-<p>Python (pandas, PyTorch e as bibliotecas de cada modelo), Quarto e LaTeX para o paper, Shiny for Python com plotnine no dashboard (shinyapps.io), e Claude Code como agente de desenvolvimento, com regras de projeto que proíbem número sem fonte e informação do futuro.</p>
-<p><em>Pesquisa exploratória: amostra curta, parte do desenho definida depois de observar 2024–26. Não é recomendação de investimento.</em></p>
+<p>Python (pandas, PyTorch e as bibliotecas de cada modelo, statsforecast, LightGBM), Quarto e LaTeX para o paper, Shiny for Python no painel (shinyapps.io), GitHub Actions e Google Cloud Run no pipeline, e Claude Code como agente de desenvolvimento, com regras de projeto que proíbem número sem fonte e informação do futuro.</p>
+<p><em>Pesquisa aplicada. Não é recomendação de investimento.</em></p>
 
 
 </section>
