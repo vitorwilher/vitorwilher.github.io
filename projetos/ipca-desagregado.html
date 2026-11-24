@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-11-10">
-<meta name="description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
+<meta name="description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Nos três primeiros meses entram preços coletados antes do IBGE (atacado das Ceasas, tarifas de ônibus e gasolina anunciadas). Um pipeline agêntico refaz a previsão a cada informação nova e um agente, medido por uma eval com juiz, escreve o comentário diário. Desde 2024 (34 meses), o erro quadrático fica em 0,56 do da mediana do Focus no mês seguinte, com diferença significativa a 5%, e entre 0,71 e 0,84 no IPCA em 12 meses, de 3 a 12 meses à frente, sem significância. Painel, MCP e paper.">
 
 <title>Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW</title>
 <style>
@@ -85,13 +85,13 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW">
-<meta property="og:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
+<meta property="og:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Nos três primeiros meses entram preços coletados antes do IBGE (atacado das Ceasas, tarifas de ônibus e gasolina anunciadas). Um pipeline agêntico refaz a previsão a cada informação nova e um agente, medido por uma eval com juiz, escreve o comentário diário. Desde 2024 (34 meses), o erro quadrático fica em 0,56 do da mediana do Focus no mês seguinte, com diferença significativa a 5%, e entre 0,71 e 0,84 no IPCA em 12 meses, de 3 a 12 meses à frente, sem significância. Painel, MCP e paper.">
 <meta property="og:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta property="og:site_name" content="Portfólio do VW">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:width" content="2800">
 <meta name="twitter:title" content="Previsão Agêntica do IPCA — Sete Famílias de Modelos, Mercado e Pesquisa Combinadas por Horizonte – Portfólio do VW">
-<meta name="twitter:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.">
+<meta name="twitter:description" content="Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Nos três primeiros meses entram preços coletados antes do IBGE (atacado das Ceasas, tarifas de ônibus e gasolina anunciadas). Um pipeline agêntico refaz a previsão a cada informação nova e um agente, medido por uma eval com juiz, escreve o comentário diário. Desde 2024 (34 meses), o erro quadrático fica em 0,56 do da mediana do Focus no mês seguinte, com diferença significativa a 5%, e entre 0,71 e 0,84 no IPCA em 12 meses, de 3 a 12 meses à frente, sem significância. Painel, MCP e paper.">
 <meta name="twitter:image" content="https://vitorwilher.github.io/projetos/ipca-desagregado-capa.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -395,7 +395,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Um pipeline agêntico refaz a previsão a cada informação nova e um agente escreve o comentário diário. Desde 2024, o erro quadrático fica em 0,77 do da mediana do Focus no mês seguinte e entre 0,70 e 0,89 no IPCA em 12 meses, de 3 a 12 meses à frente, sem diferença significativa a 5%. Painel, MCP e paper.
+    Previsão do IPCA do mês e em 12 meses publicada como média ponderada de sete famílias — modelos de fundação nos 377 subitens, estatísticos e ML por subitem, estatísticos no índice cheio, inflação implícita da B3, MPP com o câmbio da data e Focus Top 5 —, com pesos por horizonte pela aderência recente. Nos três primeiros meses entram preços coletados antes do IBGE (atacado das Ceasas, tarifas de ônibus e gasolina anunciadas). Um pipeline agêntico refaz a previsão a cada informação nova e um agente, medido por uma eval com juiz, escreve o comentário diário. Desde 2024 (34 meses), o erro quadrático fica em 0,56 do da mediana do Focus no mês seguinte, com diferença significativa a 5%, e entre 0,71 e 0,84 no IPCA em 12 meses, de 3 a 12 meses à frente, sem significância. Painel, MCP e paper.
   </div>
 </div>
 
@@ -413,7 +413,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 22, 2026</p>
+      <p class="date-modified">November 24, 2026</p>
     </div>
   </div>
     
@@ -546,9 +546,9 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><strong>IPCA do mês</strong></td>
-<td>0,77</td>
-<td>1,05</td>
-<td>0,99</td>
+<td>0,56</td>
+<td>1,01</td>
+<td>0,95</td>
 <td>0,90</td>
 <td>0,92</td>
 <td>0,84</td>
@@ -557,15 +557,16 @@ ul.task-list li input[type="checkbox"] {
 <td><strong>IPCA em 12 meses</strong></td>
 <td>—</td>
 <td>—</td>
-<td>0,89</td>
-<td>0,79</td>
-<td>0,70</td>
 <td>0,82</td>
+<td>0,76</td>
+<td>0,72</td>
+<td>0,84</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>A previsão erra menos que o Focus no mês seguinte e empata a dois e três meses; no IPCA em 12 meses, fica abaixo do Focus de três a doze meses à frente. <strong>Nenhuma diferença é significativa a 5%</strong> (Diebold-Mariano com correção HLN).</li>
+<li>A previsão erra menos que o Focus no mês seguinte, com <strong>diferença significativa a 5%</strong> (p = 0,038, Diebold-Mariano com correção HLN), e empata a dois e três meses; no IPCA em 12 meses, fica abaixo do Focus de três a doze meses à frente, sem significância a 5% (menor p = 0,07).</li>
+<li>Parte do ganho no mês seguinte vem de preços coletados antes do IBGE (atacado das Ceasas, tarifas de ônibus e gasolina anunciadas), cujo desenho foi escolhido olhando esses mesmos meses: o teste que vale é o registro ao vivo, que começou em novembro de 2026.</li>
 <li>O bloco institucional mudou o quadro dos modelos que só olhavam preços: no mês seguinte, a mediana do ML caiu de 3,16 para 0,89 do erro do Focus, e a dos estatísticos, de 3,12 para 1,27. A desvantagem desses modelos era informação, não método.</li>
 <li>Escolher entre os 103 modelos individuais pelo erro passado (o Top3 do BC) foi testado e perdeu para a combinação por famílias.</li>
 </ul>
