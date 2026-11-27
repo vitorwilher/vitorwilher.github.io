@@ -1,0 +1,48 @@
+---
+title: "Incerteza Fiscal, Curva de Juros e Dispersão das Expectativas no Brasil"
+subtitle: "Um índice de mídia construído com o GDELT e o Focus como medidas complementares"
+date: "2026-11-27"
+author:
+  - name: Vitor Wilher
+    affiliation: Análise Macro
+    email: vitorwilher@analisemacro.com.br
+categories: [Política Fiscal, Curva de Juros, Expectativas, Focus, GDELT, Análise de Texto, Macroeconomia, Working Paper]
+description: "Working paper que mede a incerteza fiscal no Brasil com um índice de notícias (GDELT) e com o Focus, e estima seus efeitos sobre a curva de juros e sobre a dispersão das expectativas. Formatado nas normas da Revista Brasileira de Economia."
+image: "incerteza_fiscal_indice.png"
+---
+
+::: {.callout-note}
+## Working paper · versão 0.1
+
+Primeira versão, formatada nas normas da **Revista Brasileira de Economia** (ABNT). Os números do texto são gerados por código a partir de dados abertos (GDELT, Focus/BCB, B3 e Tesouro Direto). **Comentários e críticas são muito bem-vindos**: escreva para [vitorwilher@analisemacro.com.br](mailto:vitorwilher@analisemacro.com.br).
+:::
+
+<div style="text-align: center; margin: 2em 0;">
+[**📄 Baixar PDF (versão atual — v0.1)**](incerteza_fiscal_rbe.pdf){.btn .btn-primary role="button" style="font-size: 1.1em; padding: 0.8em 2em;"}
+</div>
+
+---
+
+## Resumo
+
+Este trabalho mede a incerteza fiscal no Brasil de duas formas e estima seus efeitos sobre a curva de juros e sobre a dispersão das expectativas do Focus. A primeira medida é um índice de incerteza fiscal na mídia, construído a partir de 1.641.969 trechos de notícias brasileiras do GDELT entre 01/01/2020 e 25/11/2026. O índice conta as matérias sobre finanças públicas do Brasil que trazem palavra de incerteza, no formato de Baker, Bloom e Davis. A segunda é o índice de incerteza fiscal do Focus, que combina desacordo entre previsores e revisões não antecipadas, como em Almeida, Corrêa e Lopes. As duas medidas têm correlação 0,00. Até 2019, uma revisão não antecipada que piora o resultado fiscal no Focus eleva a taxa prefixada de 9 anos em 0,43 p.p. em 26 semanas (*p* < 0,001). Depois de 2020, o Focus não acusa os choques fiscais, e a mídia acusa: nos 13 dias de maior atenção fiscal, o DI de 10 anos sobe 0,138 p.p. no próprio dia (*p* = 0,011), depois de já ter subido 0,30 p.p. nos cinco dias anteriores. Num VAR semanal, a incerteza fiscal na mídia eleva a parte intermediária da curva e a achata. Na dispersão das expectativas, testada só com a mídia para evitar circularidade, a incerteza fiscal acompanha uma dispersão maior das projeções de IPCA, Selic e PIB e abre, com algumas semanas de defasagem, a dispersão do resultado primário; os efeitos dinâmicos não sobrevivem à correção para testes múltiplos.
+
+**Palavras-chave:** incerteza fiscal; curva de juros; dispersão de expectativas; GDELT; Focus.
+
+**Códigos JEL:** E43, E62, H63, G12, D84.
+
+---
+
+## Abstract
+
+We measure fiscal uncertainty in Brazil with a news index built from GDELT and with the Focus survey. Until 2019, unanticipated revisions that worsen the fiscal balance in Focus raise the 9-year rate by 0.43 p.p. over 26 weeks. After 2020, Focus no longer captures the shocks and the media dates them: on days of peak fiscal attention, the 10-year DI rate rises 0.138 p.p. and the curve then flattens. Fiscal uncertainty in the news comes with wider dispersion of inflation, interest-rate and growth forecasts, but dynamic effects do not survive multiple-testing corrections.
+
+**Keywords:** fiscal uncertainty; yield curve; forecast dispersion; text as data; event study; Brazil.
+
+---
+
+## Histórico de versões
+
+### [v0.1] — 27 de novembro de 2026
+
+Primeira versão: índice de incerteza fiscal na mídia (GDELT), validação do filtro de tema em 500 trechos rotulados, índice de incerteza fiscal do Focus, projeções locais (2012–2026), estudo de eventos diário com o DI de fechamento, VAR semanal e efeito sobre a dispersão das expectativas.
