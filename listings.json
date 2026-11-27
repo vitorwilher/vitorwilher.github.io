@@ -2,18 +2,10 @@
   {
     "listing": "/research/index.html",
     "items": [
+      "/research/incerteza-fiscal.html",
       "/research/ipca-desagregado.html",
       "/research/previsao-macro.html",
       "/research/sentimento-copom.html"
-    ]
-  },
-  {
-    "listing": "/teaching/index.html",
-    "items": [
-      "/teaching/ai-applications.html",
-      "/teaching/imersao-claude-code.html",
-      "/teaching/workflow-portfolio.html",
-      "/teaching/transformers-llms.html"
     ]
   },
   {
@@ -32,6 +24,15 @@
       "/projetos/metodologia.html",
       "/projetos/newsletter-digest-bot.html",
       "/projetos/roi-diagnostico.html"
+    ]
+  },
+  {
+    "listing": "/teaching/index.html",
+    "items": [
+      "/teaching/ai-applications.html",
+      "/teaching/imersao-claude-code.html",
+      "/teaching/workflow-portfolio.html",
+      "/teaching/transformers-llms.html"
     ]
   }
 ]
